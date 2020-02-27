@@ -3,15 +3,18 @@
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+  /* height: 40vmin;
+  pointer-events: none; */
+  height: 57px;
+  /* background: rgba(255, 255, 255, 0.2); */
+  margin: 20px
 }
 
-@media (prefers-reduced-motion: no-preference) {
+/* @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
-}
+} */
 
 /*.logo {
   max-width: 100px;

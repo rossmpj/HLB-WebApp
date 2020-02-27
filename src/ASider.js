@@ -1,19 +1,25 @@
 import React from 'react';
 import { Layout, Menu, Icon } from 'antd'; 
+import './App.css';
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
-const state = {
-  collapsed: false,
-};
 
-function onCollapse(collapsed) {
-  console.log(collapsed);
-};
+class ASider extends React.Component {
+    state = {
+      collapsed: false,
+    };
+  
+    onCollapse = collapsed => {
+      console.log(collapsed);
+      this.setState({ collapsed });
+    };
 
-function ASider() {
+
+  render() {
   return (
-    <Sider collapsible collapsed={state.collapsed} onCollapse={onCollapse(state.collapsed)}>
+    <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
+      <img className="App-logo" src={"./logo.png"} alt="e" />
       <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
         <Menu.Item key="11">
           <Icon type="home" />
@@ -48,6 +54,7 @@ function ASider() {
       </Menu>
     </Sider>
   );
+}
 }
 
 export default ASider;

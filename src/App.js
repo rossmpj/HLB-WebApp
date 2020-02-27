@@ -102,26 +102,27 @@ const data = [
 function App() {
   return (
     <Layout>
-      <Header >   
-      
-       <img className="logo" src={"./logo.png"} /> 
-{/*      <Menu
-          theme="dark"
-        mode="horizontal"
-        defaultSelectedKeys={['2']}
-        style={{ lineHeight: '64px' }}
-      >
-        
-        
- 
-        <Menu.Item key="1">nav 1</Menu.Item>
-        <Menu.Item key="2">nav 2</Menu.Item>
-        <Menu.Item key="3">nav 3</Menu.Item> 
-      </Menu>*/}
-     {/* <Title>Inventario de equipos</Title> */}
-    </Header>
+      <ASider></ASider>
         <Layout>
-        <ASider></ASider>
+        <Header style={{ background: '#fff', padding: 0 }} >   
+      
+      
+{/*      <Menu
+         theme="dark"
+       mode="horizontal"
+       defaultSelectedKeys={['2']}
+       style={{ lineHeight: '64px' }}
+     >
+       
+       
+
+       <Menu.Item key="1">nav 1</Menu.Item>
+       <Menu.Item key="2">nav 2</Menu.Item>
+       <Menu.Item key="3">nav 3</Menu.Item> 
+     </Menu>*/}
+    {/* <Title>Inventario de equipos</Title> */}
+   </Header>
+        
         <Content style={{
             // background: '#fff',
             padding: 24, 
@@ -156,8 +157,9 @@ function App() {
              </div>
                   
           </Content>
+          <Footer className="App">Inventario Hospital León Becerra ©2020 Created by EasySoft</Footer>
         </Layout>
-      <Footer className="App">Inventario Hospital León Becerra ©2020 Created by EasySoft</Footer>
+      
     </Layout>
   );
 }
