@@ -1,167 +1,78 @@
 import React from 'react';
-import ASider from './ASider.js';
-//import 'antd/dist/antd.css';
-import './custom-antd.css'; // or 'antd/dist/antd.less' 'antd/dist/antd.css'
-import { Layout, Table, Tag } from 'antd';
-import { Typography } from 'antd';
-import { Input } from 'antd';
-import { Button, message } from 'antd';
-import { Row, Col } from 'antd';
-import ButtonGroup from 'antd/lib/button/button-group';
+import { Menu, Icon } from 'antd'; 
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import './custom-antd.css'; //lessc --js mytheme.less ../../../src/custom-antd.css @import "./antd.less"; @primary-color: #0081C3;  
+import { Layout } from 'antd';
+import HomeRouter from './Router/HomeRouter';
+import FormRouter from './Router/FormularioRouter';
+import Impresora from './Inventario_Impresora/FormularioImpresora';
 
-function handleButtonClick(e) {
-  message.info('Click on left button.');
-  console.log('click left button', e);
-}
-
-function handleMenuClick(e) {
-  message.info('Click on menu item.');
-  console.log('click', e);
-}
-
-const { Search } = Input;
-
-const { Title } = Typography;
-
+const { Sider } = Layout;
+const { SubMenu } = Menu;
 const { Header, Footer, Content } = Layout;
 
-const columns = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    render: text => <a>{text}</a>,
-  },
-  {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
-  },
-  {
-    title: 'Tags',
-    key: 'tags',
-    dataIndex: 'tags',
-    render: tags => (
-      <span>
-        {tags.map(tag => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
-          if (tag === 'loser') {
-            color = 'volcano';
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </span>
-    ),
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: (text, record) => (
-      <div style={{ margin:'5px'}}>
-        <Button type="success" icon="eye" />
-        <Button type="info" icon="edit" />
-        <Button type="error" icon="delete" />
-      </div>
-    ),
-  },
-];
+class App extends React.Component {
+  state = {
+    collapsed: false,
+  };
 
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-];
+  onCollapse = collapsed => {
+    console.log(collapsed);
+    this.setState({ collapsed });
+  };
 
-function App() {
-  return (
-    <Layout>
-      <ASider></ASider>
-        <Layout>
-        <Header style={{ background: '#fff', padding: 0 }} >   
-      
-      
-{/*      <Menu
-         theme="dark"
-       mode="horizontal"
-       defaultSelectedKeys={['2']}
-       style={{ lineHeight: '64px' }}
-     >
-       
-       
+  render(){
+    return (
+      <Router>
+        <Layout style={{ minHeight: '100vh' }}>
+          <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
+            <img className="App-logo" src={"./hlb.jpg"} alt="e" />
+            <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+              <Menu.Item key="11">
+                <Icon type="home" />
+                <span>Inicio</span>
+              </Menu.Item>
+              <SubMenu
+                key="sub1"
+                title={
+                  <span>
+                    <Icon type="database" />
+                    <span>Inventario</span>
+                  </span>
+                }
+              >
+                <Menu.Item key="1"><Icon type="desktop" />Desktop
 
-       <Menu.Item key="1">nav 1</Menu.Item>
-       <Menu.Item key="2">nav 2</Menu.Item>
-       <Menu.Item key="3">nav 3</Menu.Item> 
-     </Menu>*/}
-    {/* <Title>Inventario de equipos</Title> */}
-   </Header>
-        
-        <Content style={{
-            // background: '#fff',
-            padding: 24, 
-            margin: 0,
-            minHeight: 610,
-          }}>
-            
-            
-            <div style={{ padding: 24, background: '#fff', minHeight: 360 }}> 
-            <Title>Inventario</Title>
-            <div> 
-              <Row>
-                <Col offset={18} span={4}>
-                  <Search placeholder="input search text" onSearch={value => console.log(value)} enterButton />
-                </Col>
-                <Col span={2}>
-                  <ButtonGroup  value="large" >
-                    <Button type="primary" icon="import" />
-                    <Button type="primary" icon="cloud-download" />
-                  </ButtonGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col offset={20} span={4}>
-                  <Button type="primary" icon="plus">Agregar nuevo</Button>
-                </Col>
-              </Row>
-            </div>
-             {/* <br /><br /> */}
-             <Table columns={columns} dataSource={data}></Table> 
-    
-             </div>
-                  
-          </Content>
-          <Footer className="App">Inventario Hospital León Becerra ©2020 Created by EasySoft</Footer>
+                </Menu.Item>
+                <Menu.Item key="2"><Icon type="laptop" />Laptop
+
+                </Menu.Item>
+                <Menu.Item key="3"><Icon type="wifi" />Router
+                  <Link to="/router" /> 
+                </Menu.Item>
+                <Menu.Item key="4"><Icon type="printer" />Impresora
+                  <Link to="/impresora" /> 
+                </Menu.Item>
+                <Menu.Item key="5"><Icon type="appstore" />Otros equipos</Menu.Item>
+                <Menu.Item key="6"><Icon type="cluster" />IP</Menu.Item>
+              </SubMenu>
+            </Menu>
+          </Sider>
+          <Layout className="site-layout">
+            <Header className="site-layout-background" style={{ padding: 0 }} >   
+            </Header>
+            <Content style={{ margin: '16px' }}>
+              <Route exact path='/router' component={HomeRouter} />
+              <Route exact path='/formrouter' component={FormRouter} />
+              <Route exact path='/impresora' component={Impresora} />      
+            </Content>
+            <Footer className="App" style={{ background: 'linear-gradient(#0081C3, #39CCCC)', color: '#fff', fontWeight: "bold"}}>
+              Inventario Hospital León Becerra ©2020 Creado por EasySoft [ESPOL]
+            </Footer>
+          </Layout>
         </Layout>
-      
-    </Layout>
-  );
-}
+      </Router>
+    );
+  }}
 
 export default App;

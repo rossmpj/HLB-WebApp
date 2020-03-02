@@ -1,27 +1,18 @@
 import React from 'react';
-import ASider from '../ASider';
 import '../custom-antd.css';
 //import './style.css'
-import { Layout, Form, Input, Typography, Button } from 'antd';
-const { Header, Footer, Content } = Layout;
+import { Form, Input, Typography, Button } from 'antd';
+
 const { Title } = Typography;
 const tailLayout = {
     wrapperCol: { offset: 12, span: 4 },
   };
-class FormularioImpresora extends React.Component {
-    render() {
+function FormularioImpresora() {
         return (
-            <Layout>
-                <ASider></ASider>
-                <Layout>
-                    <Header style={{ background: '#fff', padding: 0 }} ></Header>
-                    <Content style={{
-                        padding: 24,
-                        margin: 0,
-                        minHeight: 610,
-                    }}>
+            
+                    
                         <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
-                            <Title>Inventario</Title>
+                            <Title>Inventario Impresora</Title>
                             <div  >
                                 <Form
                                     labelCol={{ span:6  }}
@@ -64,16 +55,11 @@ class FormularioImpresora extends React.Component {
                                     </Form.Item>
                                 </Form>
                             </div>
-                        </div>
-
-                    </Content>
-                    <Footer className="App">Inventario Hospital León Becerra ©2020 Created by EasySoft</Footer>
-                </Layout>
-
-            </Layout>
+                            </div>
+                       
         )
 
     }
-}
+
 
 export default FormularioImpresora;

@@ -5,10 +5,22 @@
 .App-logo {
   /* height: 40vmin;
   pointer-events: none; */
-  height: 57px;
+  /* max-width: 57px;
   /* background: rgba(255, 255, 255, 0.2); */
-  margin: 20px
+  padding: 20px ; 
+  max-width: 100%;
+  height: auto;
 }
+
+#components-layout-demo-side .logo {
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px;
+}
+
+/* .site-layout .site-layout-background {
+  background: #0081C3;
+} */
 
 /* @media (prefers-reduced-motion: no-preference) {
   .App-logo {
@@ -24,6 +36,19 @@
   margin: 1px 10px 1px 20px;
   
 }*/
+#components-form-demo-control-hooks .ant-btn {
+  margin-right: 8px;
+}
+
+
+.color { 
+  /*background: linear-gradient(#0081C3, #39CCCC);*/
+  border-top-style: solid;
+  border-top-color: #39CCCC;
+  border-width: 5px;
+  border-top-width: 7px;
+  border-radius: 3px;
+}
 
 .App-header {
   background-color: #F95F62;
