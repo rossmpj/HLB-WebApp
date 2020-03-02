@@ -3,8 +3,8 @@ import { Menu, Icon } from 'antd';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './custom-antd.css'; //lessc --js mytheme.less ../../../src/custom-antd.css @import "./antd.less"; @primary-color: #0081C3;  
 import { Layout } from 'antd';
-import HomeRouter from './Router/HomeRouter';
-import FormRouter from './Router/FormularioRouter';
+import HomeRouter from './Inventario_Router/HomeRouter';
+import HomeLaptop from './Inventario_Laptop/HomeLaptop';
 import Impresora from './Inventario_Impresora/FormularioImpresora';
 
 const { Sider } = Layout;
@@ -45,7 +45,7 @@ class App extends React.Component {
 
                 </Menu.Item>
                 <Menu.Item key="2"><Icon type="laptop" />Laptop
-
+                  <Link to="/laptop" />
                 </Menu.Item>
                 <Menu.Item key="3"><Icon type="wifi" />Router
                   <Link to="/router" /> 
@@ -63,8 +63,8 @@ class App extends React.Component {
             </Header>
             <Content style={{ margin: '16px' }}>
               <Route exact path='/router' component={HomeRouter} />
-              <Route exact path='/formrouter' component={FormRouter} />
               <Route exact path='/impresora' component={Impresora} />      
+              <Route exact path='/laptop' component={HomeLaptop} />   
             </Content>
             <Footer className="App" style={{ background: 'linear-gradient(#0081C3, #39CCCC)', color: '#fff', fontWeight: "bold"}}>
               Inventario Hospital León Becerra ©2020 Creado por EasySoft [ESPOL]
