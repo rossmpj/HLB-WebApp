@@ -21,41 +21,62 @@ const layout = {
     wrapperCol: { span: 14 },
 };
 
+function InputComponent(props) {
+    return (
+        <Form.Item
+            label={props.label}>
+            {getFieldDecorator(`${props.name}`, {
+                rules: [{ required: true, message: 'Debe completar este campo' }],
+            })(
+                <Input
+                />
+            )}
+        </Form.Item>
+    )
+}
 
 class FormularioImpresora extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             tipo: "",
-            
+
         };
-      //  this.guardar = this.guardar.bind(this);
+        this.handle_guardar = this.handle_guardar.bind(this);
+        //this.handle_onChange = this.handle_onChange.bind(this);
     }
 
-/*
-    guardar = e => {
+    handle_guardar = e => {
         e.preventDefault();
-        this.props.form.setFieldsValue((err, values) => {
-            console.log(err);
-        })
-    }*/
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                console.log('Received values of form: ', values);
+            }
+        });
+        console.log(e)
+    }
+
+
 
     render() {
+        const { getFieldDecorator } = this.props.form;
         return (
-            <Content style={{ margin: '0px 200px' }}>
+            <Content style={{ margin: '0px 200px' }} >
                 <div className="color" >
                     <div style={{ padding: 40, background: '#fff', minHeight: 360 }}>
                         <div>
                             <Form {...layout}
                                 layout="horizontal"
-                                
+                                onFinish
                             >
                                 <Form.Item
-                                    label="Número de serie"
-                                    name="nserie"
-                                    rules={[{ required: true, message: 'Debe ingresar el número de serie' }]}
-                                >
-                                    <Input />
+                                    label="Número de serie">
+                                    {getFieldDecorator('nserie', {
+                                        rules: [{ required: true, message: 'Debe ingresar el nùmero de serie' }],
+                                    })(
+                                        <Input
+                                        />
+                                    )}
                                 </Form.Item>
 
                                 <Form.Item label="Tipo">
@@ -80,10 +101,8 @@ class FormularioImpresora extends React.Component {
 
                                 <Form.Item
                                     label="Código"
-                                    name="codigo"
-                                    rules={[{ required: true, message: 'Debe ingresar el código de la impresora' }]}
                                 >
-                                    <Input />
+
                                 </Form.Item>
 
                                 <Form.Item label="Estado">
@@ -97,9 +116,13 @@ class FormularioImpresora extends React.Component {
 
                                 <Form.Item
                                     label="Modelo"
-                                    name="modelo"
-                                    rules={[{ required: true, message: 'Debe ingresar el modelo de la impresora' }]}
                                 >
+                                    {getFieldDecorator('modelo', {
+                                        rules: [{ required: true, message: 'Debe ingresar el modelo' }],
+                                    })(
+                                        <Input
+                                        />
+                                    )}
                                     <Input />
                                 </Form.Item>
 
@@ -120,22 +143,22 @@ class FormularioImpresora extends React.Component {
                                 {
                                     this.state.tipo === "matricial" ?
                                         <div>
-
-                                            <Form.Item
+                                            <InputComponent label="Cinta" name="cinta" />
+                                            {/* <Form.Item
                                                 label="Cinta"
                                                 name="cinta"
                                                 rules={[{ required: true, message: 'Debe ingresar la cinta' }]}
                                             >
                                                 <Input />
-                                            </Form.Item>
-
-                                            <Form.Item
+                                            </Form.Item> */}
+                                            <InputComponent label="Cartucho" name="cartucho" />
+                                            {/*  <Form.Item
                                                 label="Cartucho"
                                                 name="cartucho"
                                                 rules={[{ required: true, message: 'Debe ingresar el cartucho' }]}
                                             >
                                                 <Input />
-                                            </Form.Item>
+                                            </Form.Item> */}
 
                                         </div>
                                         : null
@@ -146,21 +169,23 @@ class FormularioImpresora extends React.Component {
                                 {
                                     this.state.tipo === "impresora" ?
                                         <div>
-                                            <Form.Item
+                                            <InputComponent label="Tinta" name="tinta" />
+                                            {/*  <Form.Item
                                                 label="Tinta"
                                                 name="tinta"
                                                 rules={[{ required: true, message: 'Debe ingresar el cartucho' }]}
                                             >
                                                 <Input />
                                             </Form.Item>
-
-                                            <Form.Item
+                                            */}
+                                            <InputComponent label="Cartucho" name="cartucho" />
+                                            {/*  <Form.Item
                                                 label="Cartucho"
                                                 name="cartucho"
                                                 rules={[{ required: true, message: 'Debe ingresar el código de la impresora' }]}
                                             >
                                                 <Input />
-                                            </Form.Item>
+                                            </Form.Item> */}
                                         </div>
                                         : null
 
@@ -169,37 +194,38 @@ class FormularioImpresora extends React.Component {
                                 {
                                     this.state.tipo === "brazalete" ?
                                         <div>
-                                            <Form.Item
+                                            <InputComponent label="Rollo-Brazalete" name="rolloBrazalete" />
+                                            {/*  <Form.Item
                                                 label="Rollo-Brazalete"
                                                 name="rolloBrazalete"
                                                 rules={[{ required: true, message: 'Debe ingresar el cartucho' }]}
                                             >
                                                 <Input />
-                                            </Form.Item>
-
-                                            <Form.Item
+                                            </Form.Item> */}
+                                            <InputComponent label="Tinta" name="tinta" />
+                                            {/* <Form.Item
                                                 label="Tinta"
                                                 name="tinta"
                                                 rules={[{ required: true, message: 'Debe ingresar la tinta' }]}
                                             >
                                                 <Input />
-                                            </Form.Item>
-
-                                            <Form.Item
+                                            </Form.Item> */}
+                                            <InputComponent label="Cartucho" name="cartucho" />
+                                            {/*  <Form.Item
                                                 label="Cartucho"
                                                 name="cartucho"
                                                 rules={[{ required: true, message: 'Debe ingresar el código de la impresora' }]}
                                             >
                                                 <Input />
-                                            </Form.Item>
-
-                                            <Form.Item
+                                            </Form.Item> */}
+                                            <InputComponent label="Toner" name="toner" />
+                                            {/* <Form.Item
                                                 label="Toner"
                                                 name="toner"
                                                 rules={[{ required: true, message: 'Debe ingresar el toner de la impresora' }]}
                                             >
                                                 <Input />
-                                            </Form.Item>
+                                            </Form.Item> */}
 
                                         </div>
                                         : null
@@ -207,14 +233,14 @@ class FormularioImpresora extends React.Component {
 
                                 {
                                     this.state.tipo === "escaner" ?
-
-                                        <Form.Item
-                                            label="Rodillo"
-                                            name="rodillo"
-                                            rules={[{ required: true, message: 'Debe ingresar el rodillo' }]}
-                                        >
-                                            <Input />
-                                        </Form.Item>
+                                        <InputComponent label="Rodillo" name="rodillo" />
+                                        /*  <Form.Item
+                                             label="Rodillo"
+                                             name="rodillo"
+                                             rules={[{ required: true, message: 'Debe ingresar el rodillo' }]}
+                                         >
+                                             <Input />
+                                         </Form.Item> */
                                         : null
 
                                 }
@@ -222,21 +248,23 @@ class FormularioImpresora extends React.Component {
                                 {
                                     this.state.tipo === "Impresora" ?
                                         <div>
-                                            <Form.Item
+                                            <InputComponent label="Tinta" name="tinta" />
+                                            {/* <Form.Item
                                                 label="tinta"
                                                 name="tinta"
                                                 rules={[{ required: true, message: 'Debe ingresar la tinta' }]}
                                             >
                                                 <Input />
-                                            </Form.Item>
-                                            <Form.Item
+                                            </Form.Item> */}
+                                            <InputComponent label="Cartucho" name="cartucho" />
+                                            {/* <Form.Item
                                                 label="Cartucho"
                                                 name="cartucho"
                                                 rules={[{ required: true, message: 'Debe ingresar el cartucho' }]}
                                             >
                                                 <Input />
                                             </Form.Item>
-
+ */}
                                         </div>
 
 
@@ -247,14 +275,17 @@ class FormularioImpresora extends React.Component {
                                 {
                                     this.state.tipo === "multifuncional" ?
                                         <div>
-                                            <Form.Item
+                                            <InputComponent label="Cartucho" name="cartucho" />
+                                            <InputComponent label="Toner" name="toner" />
+                                            <InputComponent label="Rodillo" name="rodillo" />
+                                            {/* <Form.Item
                                                 label="Cartucho"
                                                 name="cartucho"
                                                 rules={[{ required: true, message: 'Debe ingresar el código de la impresora' }]}
                                             >
                                                 <Input />
                                             </Form.Item>
-
+                                                    
                                             <Form.Item
                                                 label="Toner"
                                                 name="toner"
@@ -269,7 +300,7 @@ class FormularioImpresora extends React.Component {
                                                 rules={[{ required: true, message: 'Debe ingresar el rodillo' }]}
                                             >
                                                 <Input />
-                                            </Form.Item>
+                                            </Form.Item> */}
 
                                         </div>
                                         : null
@@ -283,9 +314,8 @@ class FormularioImpresora extends React.Component {
                         </div>
                     </div>
                 </div>
-            </Content>
+            </Content >
         );
     }
 }
-
 export default FormularioImpresora;
