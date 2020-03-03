@@ -205,11 +205,11 @@ class TablaRouter extends React.Component{
 
     render() {
       return (
-      <div style={{padding: 40 , background: '#fff' }} >
+      <div className="div-container">
       <div >
         <Row>
-          <Col style={{ align: 'right' }} offset={19} span={5}>
-            <ButtonGroup style={{ align: 'right' }} size="large">
+          <Col className='flexbox'>
+            <ButtonGroup size="medium">
               <Button type="primary" icon="import">Importar</Button>
               <Button type="primary" icon="cloud-download">Exportar</Button>
             </ButtonGroup>

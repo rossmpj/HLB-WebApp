@@ -9,7 +9,6 @@ import TablaLaptop from './TablaLaptop';
 import FormularioLaptop from './FormularioLaptop';
 const { Title } = Typography;
 
-
 //DESKTOP
  //codigo, (monitor, teclado, parlantes, mouse): codigo, marca,modelo, numero serie, descripcion
  //<<<CPU>>>
@@ -20,59 +19,61 @@ const { Title } = Typography;
  //tarjeta de red, case, fuente de poder: codigo, marca, modelo, numero de serie, descripcion
  //<<<descripcion general>>>
 
+// LAPTOP
+//   codigo, marca, modelo, nserie, ram soportada, numero de slots para ram, frecuencia del procesador, nnucleos del procesador, descripcion
+//   memoria ram: codigo, marca, modelo, numero de serie,  descripcion, capacidad, tipo (add more)
+//   disco duro:codigo, marca, modelo. numero de serie, descripcion, capacidad de almacenamiento, tipo (add more)
 
-//LAPTOP
-  //codigo, marca, modelo, nserie, ram soportada, numero de slots para ram, frecuencia del procesador, nnucleos del procesador, descripcion
-  ////memoria ram: codigo, marca, modelo, numero de serie,  descripcion, capacidad, tipo (add more)
- //disco duro:codigo, marca, modelo. numero de serie, descripcion, capacidad de almacenamiento, tipo (add more)
+// CONSIDERACIONES GENERALES
+//   Cargar ips con estado libre para poder asignarlas y cambiar este estado a en uso, ideal con toggle button
 
- //CONSIDERACIONES GENERALES
- //Cargar ips con estado libre para poder asignarlas y cambiar este estado a en uso, ideal con toggle button
-
-class HomeRouter extends React.Component{
+class HomeLaptop extends React.Component{
   constructor(props) {
     super(props);
+
     this.state = {
       showComponent: false,
       showTable:true,
       showButton: true,
       showTitle:true,
     };
-    this.handleClick = this.handleClick.bind(this);
-    
-    this.handleClick2 = this.handleClick2.bind(this);
-    }
-    handleClick() {
-      this.setState({
-        showComponent: true,
-        showTable: false,
-        showButton: false,
-        showTitle:false,
-      });     
-    }
-    handleClick2() {
-      this.setState({
-        showComponent: false,
-        showTable: true,
-        showButton: true,
-        showTitle:true,
-      });     
-    }
 
-    render() {
-      return (
-      <div style={{ padding: 24, minHeight: 360 }}>     
-      <Row>
-        <Col span={12}>
-          {this.state.showTitle ? <Title>Inventario de laptops</Title> : <Title >Nueva laptop</Title>}
-        </Col>
-        <Col style={{ align: 'right' }} offset={7} span={5}>
-          {this.state.showButton ? 
-             <Button onClick={this.handleClick} type="primary" size="large" icon="plus">Agregar un nueva laptop</Button>
-           : <Button onClick={this.handleClick2} type="primary" size="large" icon="left">Volver</Button>
-          }
-        </Col>
-      </Row>
+    this.handleClick = this.handleClick.bind(this);
+    this.handleClick2 = this.handleClick2.bind(this);
+  }
+
+  handleClick() {
+    this.setState({
+      showComponent: true,
+      showTable: false,
+      showButton: false,
+      showTitle:false,
+    });     
+  }
+
+  handleClick2() {
+    this.setState({
+      showComponent: false,
+      showTable: true,
+      showButton: true,
+      showTitle:true,
+    });     
+  }
+
+  render() {
+    return (
+      <div className="div-container-title">     
+        <Row>
+          <Col span={12}>
+            {this.state.showTitle ? <Title level={2}>Inventario de laptops</Title> : <Title level={2}>Nueva laptop</Title>}
+          </Col>
+          <Col className='flexbox'>
+            {this.state.showButton ? 
+              <Button onClick={this.handleClick} type="primary" size="medium" icon="plus">Agregar un nueva laptop</Button>
+            : <Button onClick={this.handleClick2} type="primary" size="medium" icon="left">Volver</Button>
+            }
+          </Col>
+        </Row>
         {this.state.showComponent ? <FormularioLaptop /> : null}
         {this.state.showTable ? <TablaLaptop /> : null}
     </div> 
@@ -80,4 +81,4 @@ class HomeRouter extends React.Component{
   }
 }
 
-export default HomeRouter;
+export default HomeLaptop;

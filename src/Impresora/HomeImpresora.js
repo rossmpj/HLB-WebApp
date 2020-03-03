@@ -42,15 +42,15 @@ class HomeImpresora extends React.Component {
 
     render() {
         return (
-            <div style={{ padding: 24, minHeight: 360 }}>
+            <div className="div-container-title">
                 <Row>
                     <Col span={12}>
-                        {this.state.showTitle ? <Title>Inventario de routers</Title> : <Title >Nueva Impresora</Title>}
+                        {this.state.showTitle ? <Title level={2}>Inventario de impresoras</Title> : <Title level={2}>Nueva Impresora</Title>}
                     </Col>
-                    <Col style={{ align: 'right' }} offset={7} span={5}>
+                    <Col className='flexbox'>
                         {this.state.showButton ?
-                            <Button onClick={this.handleClick} type="primary" size="large" icon="plus">Agregar una nueva Impresora</Button>
-                            : <Button onClick={this.handleClick2} type="primary" size="large" icon="left">Volver</Button>
+                            <Button onClick={this.handleClick} type="primary" size="medium" icon="plus">Agregar una nueva Impresora</Button>
+                            : <Button onClick={this.handleClick2} type="primary" size="medium" icon="left">Volver</Button>
                         }
                     </Col>
                 </Row>
