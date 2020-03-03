@@ -187,7 +187,7 @@ const data = [
   // },
 ];
 
-class TablaLaptop extends React.Component{
+class TablaDesktop extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
@@ -223,4 +223,4 @@ class TablaLaptop extends React.Component{
   }
 }
 
-export default TablaLaptop;
+export default TablaDesktop;

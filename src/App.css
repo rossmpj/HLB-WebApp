@@ -54,3 +54,13 @@
   display: inline-block;
   width: calc(50% - 12px);
 }
+
+.button-container{
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
+}
+
+.space-buttons{
+  margin: 7px;
+}

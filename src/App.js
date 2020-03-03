@@ -7,6 +7,7 @@ import { Layout } from 'antd';
 import Impresora from './Impresora/HomeImpresora';
 import HomeRouter from './Inventario_Router/HomeRouter';
 import HomeLaptop from './Inventario_Laptop/HomeLaptop';
+import HomeDesktop from './Inventario_Desktop/HomeDesktop';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -64,7 +65,8 @@ class App extends React.Component {
             <Content style={{ margin: '16px' }}>
               <Route exact path='/router' component={HomeRouter} />
               <Route exact path='/impresora' component={Impresora} />      
-              <Route exact path='/laptop' component={HomeLaptop} />   
+              <Route exact path='/laptop' component={HomeLaptop} />  
+              <Route exact path='/desktop' component={HomeDesktop} />   
             </Content>
             <Footer className="style-footer">Inventario Hospital León Becerra ©2020 Creado por EasySoft [ESPOL]</Footer>
           </Layout>

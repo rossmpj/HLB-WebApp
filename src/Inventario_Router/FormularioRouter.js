@@ -15,7 +15,7 @@ const { Content } = Layout;
 const { TextArea } = Input;
 
 const tailLayout = {
-  wrapperCol: { offset: 11, span: 4 }
+  wrapperCol: { offset: 9, span: 5 }
 };
 
 const layout = {
@@ -89,8 +89,8 @@ class FormularioRouter extends React.Component {
                   </Form.Item>
                 </Skeleton> 
                 <Form.Item {...tailLayout}>
-                  <Button type="primary" htmlType="submit">Guardar</Button>   
-                  {/* <Button type="primary" htmlType="cancel">Cancelar</Button>        */}
+                  <Button style={{marginRight: 7}} type="primary" htmlType="submit">Guardar</Button>   
+                  <Button type="primary" htmlType="cancel">Cancelar</Button>
                 </Form.Item> 
               </Form>
           </div>  
