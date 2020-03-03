@@ -7,6 +7,7 @@ import { Layout } from 'antd';
 import Impresora from './Impresora/HomeImpresora';
 import HomeRouter from './Inventario_Router/HomeRouter';
 import HomeLaptop from './Inventario_Laptop/HomeLaptop';
+import HomeDesktop from './Inventario_Desktop/HomeDesktop';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -27,7 +28,7 @@ class App extends React.Component {
       <Router>
         <Layout style={{ minHeight: '100vh' }}>
           <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
-            <img className="App-logo" src={"./hlb.jpg"} alt="e" />
+          {this.state.collapsed ? <img className="App-logo" src={"./BotonBSPI.png"} alt="icon" /> : <img className="App-logo" src={"./BSPI.png"} alt="logo" />}
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
               <Menu.Item key="11">
                 <Icon type="home" />
@@ -43,7 +44,7 @@ class App extends React.Component {
                 }
               >
                 <Menu.Item key="1"><Icon type="desktop" />Desktop
-
+                  <Link to="/desktop" />
                 </Menu.Item>
                 <Menu.Item key="2"><Icon type="laptop" />Laptop
                   <Link to="/laptop" />
@@ -60,17 +61,14 @@ class App extends React.Component {
             </Menu>
           </Sider>
           <Layout className="site-layout">
-            <Header className="site-layout-background" style={{ padding: 0 }} >
-            </Header>
+            <Header className="site-layout-background"></Header>
             <Content style={{ margin: '16px' }}>
               <Route exact path='/router' component={HomeRouter} />
               <Route exact path='/impresora' component={Impresora} />      
-              <Route exact path='/laptop' component={HomeLaptop} />   
-
+              <Route exact path='/laptop' component={HomeLaptop} />  
+              <Route exact path='/desktop' component={HomeDesktop} />   
             </Content>
-            <Footer className="App" style={{ background: 'linear-gradient(#0081C3, #39CCCC)', color: '#fff', fontWeight: "bold" }}>
-              Inventario Hospital León Becerra ©2020 Creado por EasySoft [ESPOL]
-            </Footer>
+            <Footer className="style-footer">Inventario Hospital León Becerra ©2020 Creado por EasySoft [ESPOL]</Footer>
           </Layout>
         </Layout>
       </Router>

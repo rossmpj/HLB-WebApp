@@ -30,7 +30,7 @@ const layout = {
   wrapperCol: { span: 14 },
 };
 
-class FormularioLaptop extends React.Component {    
+class FormularioDesktop extends React.Component {    
   state = {
     loading: true,
   };
@@ -140,25 +140,25 @@ class FormularioLaptop extends React.Component {
               </Collapse>
 
               <Divider orientation="left">DATOS DE DISCO DURO</Divider>
-              <Form.Item className="form-item-2columns"  label="Código">
+              <Form.Item className="form-item-2columns" label="Código">
                 <Input />
               </Form.Item>
-              <Form.Item className="form-item-2columns"  label="Nombre">
+              <Form.Item className="form-item-2columns" label="Nombre">
                 <Input />
               </Form.Item>
-              <Form.Item className="form-item-2columns"  label="Marca">
+              <Form.Item className="form-item-2columns" label="Marca">
                 <Select>
                   <Select.Option value="demo">LG</Select.Option>
                   <Select.Option value="dmo">Xiaomi</Select.Option>
                 </Select>
               </Form.Item>
-              <Form.Item className="form-item-2columns"  label="Modelo">
+              <Form.Item className="form-item-2columns" label="Modelo">
                 <Input />
               </Form.Item>
-              <Form.Item className="form-item-2columns"  label="Número de serie">
+              <Form.Item className="form-item-2columns" label="Número de serie">
                 <Input />
               </Form.Item>
-              <Form.Item className="form-item-2columns"  label="Capacidad">
+              <Form.Item className="form-item-2columns" label="Capacidad">
                 <InputNumber />
                 <Select style={{ width: 80 }} >
                   <Option value="rmb">MB</Option>
@@ -166,14 +166,14 @@ class FormularioLaptop extends React.Component {
                   <Option value="dollar">TB</Option>
                 </Select>
               </Form.Item>
-              <Form.Item className="form-item-2columns"  label="Tipo">
+              <Form.Item className="form-item-2columns" label="Tipo">
                 <Input />
               </Form.Item>
-              <Form.Item className="form-item-2columns"  label="Descripción">
+              <Form.Item className="form-item-2columns" label="Descripción">
                 <TextArea />
               </Form.Item>
               <Form.Item {...tailLayout}>
-                <Button style={{marginRight: 7}} type="primary" size="medium" htmlType="submit">Guardar</Button>   
+                <Button style={{marginRight: 7}} type="primary"htmlType="submit">Guardar</Button>   
                 <Button type="primary" htmlType="cancel">Cancelar</Button>
               </Form.Item> 
             </Form>
@@ -184,4 +184,4 @@ class FormularioLaptop extends React.Component {
   }
 }
 
-export default FormularioLaptop;
+export default FormularioDesktop;
