@@ -9,40 +9,15 @@ import ButtonGroup from 'antd/lib/button/button-group';
 
 const columns = [
     {
-        title: 'Número de serie',
-        dataIndex: 'nserie',
-        key: 'nserie',
-        render: text => <a href="/#">{text}</a>
-    },
-    {
-        title: 'BSPI Punto',
-        dataIndex: 'bspi',
-        key: 'bspi',
-    },
-    {
-        title: 'Usuario',
-        dataIndex: 'usuario',
-        key: 'usuario',
-    },
-    {
-        title: 'Departamento Custodia',
-        dataIndex: 'dpto',
-        key: 'dpto',
-    },
-    {
-        title: 'Tipo',
-        dataIndex: 'tipo',
-        key: 'tipo'
-    },
-    {
-        title: 'Marca',
-        dataIndex: 'marca',
-        key: 'marca'
+        title: 'Id',
+        dataIndex: 'id_equipo',
+        key: 'id_equipo'
     },
     {
         title: 'Código',
         dataIndex: 'codigo',
-        key: 'codigo'
+        key: 'codigo',
+        render: text => <a href="/#">{text}</a>
     },
     {
         title: 'Estado',
@@ -50,44 +25,56 @@ const columns = [
         key: 'estado'
     },
     {
+        title: 'Número de serie',
+        dataIndex: 'nserie',
+        key: 'nserie'
+    },
+    {
+        title: 'Tipo',
+        dataIndex: 'tipo',
+        key: 'tipo'
+    },
+    {
         title: 'Modelo',
         dataIndex: 'modelo',
         key: 'modelo'
     },
+    
     {
-        title: 'Tinta',
-        dataIndex: 'tinta',
-        key: 'tinta'
+        title: 'Marca',
+        dataIndex: 'marca',
+        key: 'marca'
     },
     {
-        title: 'Cartucho',
-        dataIndex: 'cartucho',
-        key: 'cartucho'
+        title: 'Ip',
+        dataIndex: 'ip',
+        key: 'ip'
+    },
+    {
+        title: 'Componente principal',
+        dataIndex: 'componente',
+        key: 'componente',
+        render: text => <a href="/#">{text}</a>
+    },
+    {
+        title: 'Asignado',
+        dataIndex: 'asignado',
+        key: 'asignado'
+    },
+    {
+        title: 'Encargado',
+        dataIndex: 'encargado',
+        key: 'encargado'
+    },
+    {
+        title: 'Fecha registro',
+        dataIndex: 'registro',
+        key: 'registro'
     },
     {
         title: 'Descripción',
         dataIndex: 'descripcion',
         key: 'descripcion'
-    },
-    {
-        title: 'Toner',
-        dataIndex: 'toner',
-        key: 'toner'
-    },
-    {
-        title: 'Rodillo',
-        dataIndex: 'rodillo',
-        key: 'rodillo'
-    },
-    {
-        title: 'Cinta',
-        dataIndex: 'cinta',
-        key: 'cinta'
-    },
-    {
-        title: 'Rollo/Brazalete',
-        dataIndex: 'rolloBrazalete',
-        key: 'rolloBrazalete'
     },
     {
         title: 'Acción',
@@ -103,7 +90,7 @@ const columns = [
 ];
 
 
-class TablaImpresora extends React.Component {
+class TablaEquipo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -139,4 +126,4 @@ class TablaImpresora extends React.Component {
     }
 }
 
-export default TablaImpresora;
+export default TablaEquipo;
