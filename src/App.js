@@ -4,10 +4,11 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './custom-antd.css'; //lessc --js mytheme.less ../../../src/custom-antd.css @import "./antd.less"; @primary-color: #0081C3;  
 import { Layout } from 'antd';
 
-import Impresora from './Impresora/HomeImpresora';
+import Impresora from './Inventario_Impresora/HomeImpresora';
 import HomeRouter from './Inventario_Router/HomeRouter';
 import HomeLaptop from './Inventario_Laptop/HomeLaptop';
 import HomeDesktop from './Inventario_Desktop/HomeDesktop';
+import HomeIp from './Inventario_Ip/HomeIp';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -56,7 +57,9 @@ class App extends React.Component {
                   <Link to="/impresora" />
                 </Menu.Item>
                 <Menu.Item key="5"><Icon type="appstore" />Otros equipos</Menu.Item>
-                <Menu.Item key="6"><Icon type="cluster" />IP</Menu.Item>
+                <Menu.Item key="6"><Icon type="cluster" />IP
+                <Link to="/ip" />
+                </Menu.Item>
               </SubMenu>
             </Menu>
           </Sider>
@@ -66,7 +69,8 @@ class App extends React.Component {
               <Route exact path='/router' component={HomeRouter} />
               <Route exact path='/impresora' component={Impresora} />      
               <Route exact path='/laptop' component={HomeLaptop} />  
-              <Route exact path='/desktop' component={HomeDesktop} />   
+              <Route exact path='/desktop' component={HomeDesktop} /> 
+              <Route exact path='/ip' component={HomeIp} />   
             </Content>
             <Footer className="style-footer">Inventario Hospital León Becerra ©2020 Creado por EasySoft [ESPOL]</Footer>
           </Layout>
