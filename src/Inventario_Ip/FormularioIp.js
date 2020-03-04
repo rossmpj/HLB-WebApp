@@ -5,11 +5,11 @@ import {
     Select,
     Input,
     Button,
-    Layout
+    Layout,
+    InputNumber
 } from 'antd';
 import '../custom-antd.css';
 import InputComponent from '../Componentes/InputComponent'
-import IpSelect from '../Componentes/IpSelect'
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -23,7 +23,7 @@ const layout = {
     wrapperCol: { span: 14 },
 };
 
-class FormularioImpresora extends React.Component {
+class FormularioIp extends React.Component {
 
     constructor(props) {
         super(props);
@@ -38,7 +38,7 @@ class FormularioImpresora extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-               console.log(values)
+                console.log(values)
             }
         });
     }
@@ -54,107 +54,25 @@ class FormularioImpresora extends React.Component {
                             layout="horizontal"
                             onSubmit={this.handle_guardar}
                         >
-                            <InputComponent label="Número de serie" name="nserie" decorator={getFieldDecorator} />
-
-                            <Form.Item label="Tipo">
-                                {getFieldDecorator('tipo', {
-                                    rules: [{ required: true, message: 'Debe seleccionar el tipo de impresora' }],
-                                })(
-                                    <Select
-                                        onChange={(value) => {
-                                            this.setState({ tipo: value });
-                                        }}>
-                                        <Select.Option value="multifuncional">Multifuncional</Select.Option>
-                                        <Select.Option value="matricial">Matricial</Select.Option>
-                                        <Select.Option value="brazalete">Brazalete</Select.Option>
-                                        <Select.Option value="impresora">Impresora</Select.Option>
-                                        <Select.Option value="escaner">Escaner</Select.Option>
-                                    </Select>
-                                )}
-                            </Form.Item>
-
-                            <Form.Item label="Marca">
-                                {getFieldDecorator('marca', {
-                                    rules: [{ required: true, message: 'Debe seleccionar la marca de la impresora' }],
-                                })(
-                                    <Select>
-                                        <Select.Option value="demo">LG</Select.Option>
-                                        <Select.Option value="dmo">Xiaomi</Select.Option>
-                                    </Select>
-                                )}
-                            </Form.Item>
-
-                            <InputComponent label="Código" name="codigo" decorator={getFieldDecorator} />
+                            <InputComponent label="Ip" name="ip" decorator={getFieldDecorator} />
 
                             <Form.Item label="Estado">
                                 {getFieldDecorator('estado', {
                                     rules: [{ required: true, message: 'Debe seleccionar el estado' }],
                                 })(
                                     <Select>
-                                        <Select.Option value="disponible">Disponible</Select.Option>
-                                        <Select.Option value="revision">En revisión</Select.Option>
-                                        <Select.Option value="reparado">Reparado</Select.Option>
-                                        <Select.Option value="baja">De baja</Select.Option>
+                                        <Select.Option value="en uso">En uso</Select.Option>
+                                        <Select.Option value="libre">Libre</Select.Option>
                                     </Select>
                                 )}
                             </Form.Item>
 
-                            <InputComponent label="Modelo" name="modelo" decorator={getFieldDecorator} />
+                            <InputComponent label="Hostname" name="hostname" decorator={getFieldDecorator} />
+                            <InputComponent label="Subred" name="subred" decorator={getFieldDecorator} />
 
-                            {
-                                this.state.tipo === "matricial" ?
-                                    <div>
-                                        <InputComponent label="Cinta" name="cinta" decorator={getFieldDecorator} />
-                                        <InputComponent label="Cartucho" name="cartucho" decorator={getFieldDecorator} />
-                                    </div>
-                                    : null
-                            }
+                            <InputComponent label="Fortigate" name="fortigate" decorator={getFieldDecorator} />
 
-                            {
-                                this.state.tipo === "impresora" ?
-                                    <div>
-                                        <InputComponent label="Tinta" name="tinta" decorator={getFieldDecorator} />
-                                        <InputComponent label="Cartucho" name="cartucho" decorator={getFieldDecorator} />
-                                    </div>
-                                    : null
-                            }
-
-                            {
-                                this.state.tipo === "brazalete" ?
-                                    <div>
-                                        <InputComponent label="Rollo-Brazalete" name="rolloBrazalete" decorator={getFieldDecorator} />
-                                        <InputComponent label="Tinta" name="tinta" decorator={getFieldDecorator} />
-                                        <InputComponent label="Cartucho" name="cartucho" decorator={getFieldDecorator} />
-                                        <InputComponent label="Toner" name="toner" decorator={getFieldDecorator} />
-                                    </div>
-                                    : null
-                            }
-
-                            {
-                                this.state.tipo === "escaner" ?
-                                    <div>
-                                        <InputComponent label="Rodillo" name="rodillo" decorator={getFieldDecorator} />
-                                    </div>
-                                    : null
-                            }
-
-                            {
-                                this.state.tipo === "multifuncional" ?
-                                    <div>
-                                        <InputComponent label="Cartucho" name="cartucho" decorator={getFieldDecorator} />
-                                        <InputComponent label="Toner" name="toner" decorator={getFieldDecorator} />
-                                        <InputComponent label="Rodillo" name="rodillo" decorator={getFieldDecorator} />
-                                    </div>
-                                    : null
-                            }
-
-                            <Form.Item label="Dirección IP">
-                                {getFieldDecorator('ip')(
-                                    <IpSelect></IpSelect>
-                                )}
-                            </Form.Item>
-
-                            <Form.Item label="Asignado a">
+                            {/*  <Form.Item label="Asignado a">
                                 {getFieldDecorator('asignado')(
                                     <Select>
                                         <Select.Option value="">---------------</Select.Option>
@@ -162,11 +80,19 @@ class FormularioImpresora extends React.Component {
                                         <Select.Option value="b">Alicia Gris</Select.Option>
                                     </Select>
                                 )}
+                            </Form.Item> */}
+
+                            <Form.Item label="Observación">
+                                {getFieldDecorator('observacion')(
+                                    <TextArea />
+                                )}
                             </Form.Item>
 
-                            <Form.Item label="Descripción">
-                                {getFieldDecorator('descripcion')(
-                                    <TextArea />
+                            <Form.Item label="Máquinas adicionales">
+                                {getFieldDecorator('maquinas')(
+                                    <InputNumber
+                                        min={0}
+                                    />
                                 )}
                             </Form.Item>
 
@@ -181,5 +107,5 @@ class FormularioImpresora extends React.Component {
         );
     }
 }
-FormularioImpresora = Form.create({})(FormularioImpresora);
-export default FormularioImpresora;
+FormularioIp = Form.create({})(FormularioIp);
+export default FormularioIp;

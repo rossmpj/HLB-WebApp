@@ -11,22 +11,20 @@ class IpSelect extends React.Component {
     }
 
     componentDidMount = () => {
-        var ips= ["192.168.175.0","192.178.0.1"];
-        this.setState({ ip: ips});
+        var ips = ["192.168.175.0", "192.178.0.1"];
+        this.setState({ ip: ips });
     }
 
     render() {
         return (
             <Select>
-                <Select.Option key="0" value="">---------------</Select.Option>
+                {/* <Select.Option key="0" value="">---------------</Select.Option> */}
                 {
-                    this.state.ip.map(dato => {
-                        return (
-                        <Select.Option key={dato} value={dato} >{dato}</Select.Option>
-                        )
-                    })
+                    this.state.ip.map((dato,i) => 
+                        <Select.Option key={i} value={dato}>{dato}</Select.Option>
+                    )
                 }
-            </Select >
+            </Select>
         )
     }
 }
