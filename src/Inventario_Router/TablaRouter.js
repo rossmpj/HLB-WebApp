@@ -59,9 +59,9 @@ const columns = [
     key: 'accion',
     render: (text, record) => (
       <div>
-        <Button style= {{marginRight: '7px'}} size="medium" type="success" icon="eye" />
-        <Button style= {{marginRight: '7px'}} size="medium" type="info" icon="edit" />
-        <Button size="medium" type="error" icon="delete" />
+        <Button style= {{marginRight: '7px'}} type="success" icon="eye" />
+        <Button style= {{marginRight: '7px'}} type="info" icon="edit" />
+        <Button type="error" icon="delete" />
       </div>
     ),
   },
@@ -79,27 +79,28 @@ const data = [
   //   num_serie: 23, 
   //   descripcion: 'muy bueno'
   // },
-  {
-    codigo: '2',
-    nombre: 'Jim Green',
-    pass: 42,
-    usuario: 'admin', 
-    clave: '1234',
-    marca: 'LG',
-    modelo: 'ergr',
-    num_serie: 23, 
-    descripcion: 'muy bueno'
-  },{
-    codigo: '1',
-    nombre: 'John Brown',
-    pass: 32,
-    usuario: 'admin', 
-    clave: '345',
-    marca: 'LG',
-    modelo: 'ergr',
-    num_serie: 23, 
-    descripcion: 'muy bueno'
-  },
+  // {
+  //   codigo: '2',
+  //   nombre: 'Jim Green',
+  //   pass: 42,
+  //   usuario: 'admin', 
+  //   clave: '1234',
+  //   marca: 'LG',
+  //   modelo: 'ergr',
+  //   num_serie: 23, 
+  //   descripcion: 'muy bueno'
+  // }
+  // ,{
+  //   codigo: '1',
+  //   nombre: 'John Brown',
+  //   pass: 32,
+  //   usuario: 'admin', 
+  //   clave: '345',
+  //   marca: 'LG',
+  //   modelo: 'ergr',
+  //   num_serie: 23, 
+  //   descripcion: 'muy bueno'
+  // },
   // {
   //   codigo: '2',
   //   nombre: 'Jim Green',
@@ -209,7 +210,7 @@ class TablaRouter extends React.Component{
       <div >
         <Row>
           <Col className='flexbox'>
-            <ButtonGroup size="medium">
+            <ButtonGroup>
               <Button type="primary" icon="import">Importar</Button>
               <Button type="primary" icon="cloud-download">Exportar</Button>
             </ButtonGroup>
@@ -217,7 +218,7 @@ class TablaRouter extends React.Component{
         </Row>
       </div>
       <br />
-      <Table size="medium" columns={columns} dataSource={data}></Table>
+      <Table columns={columns} dataSource={data}></Table>
     </div>
     );
   }

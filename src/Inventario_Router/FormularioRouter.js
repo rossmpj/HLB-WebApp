@@ -10,6 +10,7 @@ import {
   Switch,
 } from 'antd';
 import '../custom-antd.css';
+import InputComponent from '../Componentes/InputComponent'
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -24,6 +25,23 @@ const layout = {
 };
 
 class FormularioRouter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+        tipo: ""
+    };
+    this.handle_guardar = this.handle_guardar.bind(this);
+  }
+
+  handle_guardar = e => {
+      e.preventDefault();
+      this.props.form.validateFields((err, values) => {
+          if (!err) {
+            console.log(values)
+          }
+      });
+  }
+
   state = {
     loading: true,
   };
@@ -34,63 +52,65 @@ class FormularioRouter extends React.Component {
 
   render() {
     const { loading } = this.state;
+    const { getFieldDecorator } = this.props.form;
     return (
       <Content> 
         <div className="div-border-top" >
           <div className="div-container"> 
               <Form {...layout} 
                 layout="horizontal" 
+                onSubmit={this.handle_guardar}
               >
-                <Form.Item 
-                  rules={[{ required: true, message: 'Código is required!' }]}
-                  label="Código"
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item label="Nombre">
-                  <Input />
-                </Form.Item>
-                <Form.Item label="Pass">
-                  <Input.Password />
-                </Form.Item>
-                <Form.Item label="Usuario">
-                  <Input />
-                </Form.Item>
-                <Form.Item label="Clave">
-                  <Input.Password />
-                </Form.Item>
+              <InputComponent label="Código" name="codigo" decorator={getFieldDecorator} />
+              <InputComponent label="Nombre" name="nombre" decorator={getFieldDecorator} />  
+              <InputComponent label="Pass" name="pass" decorator={getFieldDecorator} />
+              <InputComponent label="Usuario" name="usuario" decorator={getFieldDecorator} />  
+              <InputComponent label="Clave" name="clave" decorator={getFieldDecorator} />
                 <Form.Item label="Marca">
+                {getFieldDecorator('marca', {
+                    rules: [{ required: true, message: 'Debe completar este campo' }],
+                })(
                   <Select>
                     <Select.Option value="demo">LG</Select.Option>
                     <Select.Option value="dmo">Xiaomi</Select.Option>
                   </Select>
+                )}
                 </Form.Item>
-                <Form.Item label="Modelo">
-                  <Input />
-                </Form.Item>
-                <Form.Item label="Número de serie">
-                  <Input />
-                </Form.Item>
+              <InputComponent label="Modelo" name="modelo" decorator={getFieldDecorator} /> 
+              <InputComponent label="Número de serie" name="nserie" decorator={getFieldDecorator} /> 
                 <Form.Item label="Descripción">
-                  <TextArea />
+                  {getFieldDecorator("descripcion")(
+                    <TextArea />
+                  )}
+                  
                 </Form.Item>
                 <Form.Item label="¿Asignar una dirección IP?">
                   <Switch checkedChildren="Si" unCheckedChildren="No" checked={!loading} onChange={this.onChange} />
                 </Form.Item>
                 <Skeleton loading={loading}> 
                   <Form.Item label="Dirección IP">
-                  <Select>
+                  {getFieldDecorator('marca', {
+                    rules: [{ required: !loading, message: 'Debe completar este campo' }],
+                  })(
+                    <Select>
                     <Select.Option value="demo">192.168.1.1</Select.Option>
                     <Select.Option value="dem">0.0.0.0</Select.Option>
                   </Select>
+                  )}
+                  
                   </Form.Item>
                   <Form.Item label="Puerta de enlace">
+                  {getFieldDecorator('marca', {
+                    rules: [{ required: !loading, message: 'Debe completar este campo' }],
+                  })(
                     <Input />
+                    
+                  )}
                   </Form.Item>
                 </Skeleton> 
                 <Form.Item {...tailLayout}>
                   <Button style={{marginRight: 7}} type="primary" htmlType="submit">Guardar</Button>   
-                  <Button type="primary" htmlType="cancel">Cancelar</Button>
+                  <Button type="primary">Cancelar</Button>
                 </Form.Item> 
               </Form>
           </div>  
@@ -99,5 +119,5 @@ class FormularioRouter extends React.Component {
     );
   }
 }
-
+FormularioRouter = Form.create({})(FormularioRouter);
 export default FormularioRouter;

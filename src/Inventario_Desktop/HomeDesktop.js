@@ -64,8 +64,8 @@ class HomeDesktop extends React.Component{
           </Col>
           <Col className='flexbox'>
             {this.state.showButton ? 
-              <Button onClick={this.handleClick} type="primary" size="medium" icon="plus">Agregar computadora</Button>
-            : <Button onClick={this.handleClick2} type="primary" size="medium" icon="left">Volver</Button>
+              <Button onClick={this.handleClick} type="primary" icon="plus">Agregar computadora</Button>
+            : <Button onClick={this.handleClick2} type="primary" icon="left">Volver</Button>
             }
           </Col>
         </Row>
