@@ -8,7 +8,8 @@ import {
   Layout,
   InputNumber,
   Divider,
-  Icon
+  Icon,
+  Switch
 } from 'antd';
 import '../custom-antd.css';
 import { Collapse } from 'antd';
@@ -132,9 +133,6 @@ class FormularioDesktop extends React.Component {
           <Form.Item className="form-item-2columns" label="Código">
             <Input />
           </Form.Item>
-          <Form.Item className="form-item-2columns" label="Nombre">
-            <Input />
-          </Form.Item>
           <Form.Item className="form-item-2columns" label="Marca">
             <Select>
               <Select.Option value="demo">LG</Select.Option>
@@ -176,10 +174,58 @@ class FormularioDesktop extends React.Component {
               <Form.Item className="form-item-2columns" label="Código">
                 <Input />
               </Form.Item>
+              <Form.Item className="form-item-2columns" label="Empleado">
+                <Select>
+                  <Select.Option value="demo">LG</Select.Option>
+                  <Select.Option value="dmo">Xiaomi</Select.Option>
+                </Select>
+              </Form.Item>
+              <Form.Item className="form-item-2columns" label="Dirección IP">
+                <Select>
+                  <Select.Option value="demo">LG</Select.Option>
+                  <Select.Option value="dmo">Xiaomi</Select.Option>
+                </Select>
+              </Form.Item>
+              <Form.Item className="form-item-2columns" label="Nombre PC">
+                <Input />
+              </Form.Item>
+              <Form.Item className="form-item-2columns" label="Usuario-PC">
+                <Input />
+              </Form.Item>
+              <Form.Item className="form-item-2columns" label="Estado" >
+                <Select>
+                  <Select.Option value="demo">LG</Select.Option>
+                  <Select.Option value="dmo">Xiaomi</Select.Option>
+                </Select>
+              </Form.Item>
               <Form.Item className="form-item-2columns" label="Descripción general">
                   <TextArea />
               </Form.Item>
-                     
+
+              <Divider orientation="left">SISTEMA OPERATIVO</Divider>
+              <Form.Item className="form-item-2columns" label="SO">
+                <Select>
+                  <Select.Option value="demo">LG</Select.Option>
+                  <Select.Option value="dmo">Xiaomi</Select.Option>
+                </Select>
+              </Form.Item>
+              <Form.Item className="form-item-2columns" label="Service pack">
+                <Select>
+                  <Select.Option value="demo">LG</Select.Option>
+                  <Select.Option value="dmo">Xiaomi</Select.Option>
+                </Select>
+              </Form.Item>
+              <Form.Item className="form-item-2columns" label="Licencia">
+                <Switch checkedChildren="Si" unCheckedChildren="No" />
+              </Form.Item>
+              <Form.Item className="form-item-2columns" label="Tipo de SO">
+                <Select style={{ width: 80 }} >
+                  <Option value="rmb">x32</Option>
+                  <Option value="dollar">x64</Option>
+                </Select>
+                bits
+              </Form.Item>
+
               <Divider orientation="left">PERIFÉRICOS</Divider>
               <Collapse >
                 <Panel header="Monitor" key="1">
@@ -228,7 +274,7 @@ class FormularioDesktop extends React.Component {
               </Collapse>
               <br />
               <Collapse >
-                <Panel header="Parlantes" key="3">
+                <Panel header="UPS" key="3">
                   <Form.Item className="form-item-2columns" label="Código">
                     <Input />
                   </Form.Item>

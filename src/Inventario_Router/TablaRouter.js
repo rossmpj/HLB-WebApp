@@ -12,7 +12,7 @@ const columns = [
     title: 'Código',
     dataIndex: 'codigo',
     key: 'codigo',
-    render: text => <a>{text}</a>,
+    render: text => <a href="!#">{text}</a>,
   },
   {
     title: 'Punto',
@@ -79,7 +79,7 @@ const columns = [
 
 const data = [
   // {
-  //   codigo: '1',
+  //   codigo: 1,
   //   nombre: 'John Brown',
   //   pass: 32,
   //   usuario: 'admin', 

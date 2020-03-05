@@ -132,9 +132,6 @@ class FormularioDesktop extends React.Component {
           <Form.Item className="form-item-2columns" label="Código">
             <Input />
           </Form.Item>
-          <Form.Item className="form-item-2columns" label="Nombre">
-            <Input />
-          </Form.Item>
           <Form.Item className="form-item-2columns" label="Marca">
             <Select>
               <Select.Option value="demo">LG</Select.Option>
@@ -174,9 +171,6 @@ class FormularioDesktop extends React.Component {
             >
               <Divider orientation="left">DATOS GENERALES</Divider>
               <Form.Item className="form-item-2columns" label="Código">
-                <Input />
-              </Form.Item>
-              <Form.Item className="form-item-2columns" label="Nombre">
                 <Input />
               </Form.Item>
               <Form.Item className="form-item-2columns" label="Marca">
@@ -228,9 +222,6 @@ class FormularioDesktop extends React.Component {
 
               <Divider orientation="left">DATOS DE DISCO DURO</Divider>
               <Form.Item className="form-item-2columns" label="Código">
-                <Input />
-              </Form.Item>
-              <Form.Item className="form-item-2columns" label="Nombre">
                 <Input />
               </Form.Item>
               <Form.Item className="form-item-2columns" label="Marca">

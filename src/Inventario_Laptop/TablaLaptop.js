@@ -12,7 +12,7 @@ const columns = [
     title: 'Código',
     dataIndex: 'codigo',
     key: 'codigo',
-    render: text => <a>{text}</a>,
+    render: text => <a href="!#">{text}</a>,
   },
   {
     title: 'Marca',
@@ -59,9 +59,9 @@ const columns = [
     key: 'accion',
     render: (text, record) => (
       <div>
-        <Button style= {{marginRight: '7px'}} size="medium" type="success" icon="eye" />
-        <Button style= {{marginRight: '7px'}} size="medium" type="info" icon="edit" />
-        <Button size="medium" type="error" icon="delete" />
+        <Button style= {{marginRight: '7px'}} type="success" icon="eye" />
+        <Button style= {{marginRight: '7px'}} type="info" icon="edit" />
+        <Button type="error" icon="delete" />
       </div>
     ),
   },
@@ -69,7 +69,7 @@ const columns = [
 
 const data = [
   // {
-  //   codigo: '1',
+  //   codigo: 1,
   //   nombre: 'John Brown',
   //   pass: 32,
   //   usuario: 'admin', 
@@ -209,7 +209,7 @@ class TablaLaptop extends React.Component{
       <div >
         <Row>
           <Col className='flexbox'>
-            <ButtonGroup size="medium">
+            <ButtonGroup>
               <Button type="primary" icon="import">Importar</Button>
               <Button type="primary" icon="cloud-download">Exportar</Button>
             </ButtonGroup>
@@ -217,7 +217,7 @@ class TablaLaptop extends React.Component{
         </Row>
       </div>
       <br />
-      <Table size="medium" columns={columns} dataSource={data}></Table>
+      <Table columns={columns} dataSource={data}></Table>
     </div>
     );
   }

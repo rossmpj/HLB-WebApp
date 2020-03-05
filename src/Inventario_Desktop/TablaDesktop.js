@@ -8,10 +8,11 @@ import {
 import ButtonGroup from 'antd/lib/button/button-group';
 
 const columns = [
-  {
-    title: 'Departamento',
-    dataIndex: 'dpto',
-    key: 'dpto',
+    {
+    title: 'Código',
+    dataIndex: 'codigo',
+    key: 'codigo',
+    render: text => <a href="!#" >{text}</a>,
   },
   {
     title: 'Empleado',
@@ -19,10 +20,24 @@ const columns = [
     key: 'empleado',
   },
   {
-    title: 'Código',
-    dataIndex: 'codigo',
-    key: 'codigo',
-    render: text => <a>{text}</a>,
+    title: 'Dirección IP',
+    dataIndex: 'ip',
+    key: 'ip',
+  },
+  {
+    title: 'Nombre PC',
+    dataIndex: 'name_pc',
+    key: 'name_pc',
+  },
+  {
+    title: 'Usuario PC',
+    dataIndex: 'user_pc',
+    key: 'user_pc',
+  },
+  {
+    title: 'Estado',
+    dataIndex: 'estado',
+    key: 'estado',
   },
   {
     title: 'Marca',
@@ -38,12 +53,6 @@ const columns = [
     title: 'Número de serie',
     dataIndex: 'num_serie',
     key: 'num_serie',
-  },
-  {
-    title: 'Dirección IP',
-    dataIndex: 'ip',
-    key: 'ip',
-    render: text => <a>{text}</a>,
   },
   {
     title: 'Tarjeta madre',
@@ -87,24 +96,9 @@ const columns = [
     key: 'dd',
   },
   {
-    title: 'Nombre PC',
-    dataIndex: 'name_pc',
-    key: 'name_pc',
-  },
-  {
-    title: 'Usuario PC',
-    dataIndex: 'user_pc',
-    key: 'user_pc',
-  },
-  {
     title: 'Office',
     dataIndex: 'office',
     key: 'office',
-  },
-  {
-    title: 'Estado',
-    dataIndex: 'estado',
-    key: 'estado',
   },
   {
     title: 'UPS',
@@ -137,26 +131,26 @@ const columns = [
     key: 'accion',
     render: (text, record) => (
       <div>
-        <Button style= {{marginRight: '7px'}} size="medium" type="success" icon="eye" />
-        <Button style= {{marginRight: '7px'}} size="medium" type="info" icon="edit" />
-        <Button size="medium" type="error" icon="delete" />
+        <Button style= {{marginRight: '7px'}} type="success" icon="eye" />
+        <Button style= {{marginRight: '7px'}} type="info" icon="edit" />
+        <Button type="error" icon="delete" />
       </div>
     ),
   },
 ];
 
 const data = [
-  // {
-  //   codigo: '1',
-  //   nombre: 'John Brown',
-  //   pass: 32,
-  //   usuario: 'admin', 
-  //   clave: '345',
-  //   marca: 'LG',
-  //   modelo: 'ergr',
-  //   num_serie: 23, 
-  //   descripcion: 'muy bueno'
-  // },
+  //  {
+  //    codigo: 1,
+  //    nombre: 'John Brown',
+  //    pass: 32,
+  //    usuario: 'admin', 
+  //    clave: '345',
+  //    marca: 'LG',
+  //    modelo: 'ergr',
+  //    num_serie: 23, 
+  //    descripcion: 'muy bueno'
+  //  },
   // {
   //   codigo: '2',
   //   nombre: 'Jim Green',
