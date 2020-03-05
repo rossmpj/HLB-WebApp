@@ -40,32 +40,6 @@ const columns = [
     key: 'estado',
   },
   {
-    title: 'Marca',
-    dataIndex: 'marca',
-    key: 'marca',
-  },
-  {
-    title: 'Modelo',
-    dataIndex: 'modelo',
-    key: 'modelo',
-  }, 
-  {
-    title: 'Número de serie',
-    dataIndex: 'num_serie',
-    key: 'num_serie',
-  },
-  {
-    title: 'Tarjeta madre',
-    dataIndex: 'mainboard',
-    key: 'mainboard',
-  }, 
-  {
-    title: 'RAM Soportada',
-    dataIndex: 'ram',
-    key: 'ram',
-  },  
-  //importante
-  {
     title: 'Sistema operativo',
     dataIndex: 'so',
     key: 'so',
@@ -86,40 +60,64 @@ const columns = [
     key: 'so_type',
   }, 
   {
-    title: 'Procesador',
-    dataIndex: 'procesador',
-    key: 'procesador',
-  }, 
-  {
-    title: 'Disco duro',
-    dataIndex: 'dd',
-    key: 'dd',
-  },
-  {
     title: 'Office',
     dataIndex: 'office',
     key: 'office',
   },
   {
+    title: 'Monitor',
+    dataIndex: 'monitor',
+    key: 'monitor',
+  },
+  {
+    title: 'Teclado',
+    dataIndex: 'teclado',
+    key: 'teclado',
+  }, 
+  {
     title: 'UPS',
     dataIndex: 'ups',
     key: 'ups',
   },
-  //considerar
   {
-    title: 'Número de slots para RAM',
-    dataIndex: 'slots_ram',
-    key: 'slots_ram',
+    title: 'Mouse',
+    dataIndex: 'mouse',
+    key: 'mouse',
   },
   {
-    title: 'Frecuencia del procesador',
-    dataIndex: 'frecuencia',
-    key: 'frecuencia',
+    title: 'Tarjeta madre',
+    dataIndex: 'mainboard',
+    key: 'mainboard',
   }, 
   {
-    title: 'Núcleos del prcesador',
-    dataIndex: 'clave',
-    key: 'clave',
+    title: 'RAM',
+    dataIndex: 'ram',
+    key: 'ram',
+  },  
+  {
+    title: 'Disco duro',
+    dataIndex: 'dd',
+    key: 'dd',
+  }, 
+  {
+    title: 'Procesador',
+    dataIndex: 'procesador',
+    key: 'procesador',
+  }, 
+  {
+    title: 'Tarjeta de red',
+    dataIndex: 'tarj_red',
+    key: 'tarj_red',
+  },
+  {
+    title: 'Case',
+    dataIndex: 'case',
+    key: 'case',
+  }, 
+  {
+    title: 'Fuente de poder',
+    dataIndex: 'f_poder',
+    key: 'f_poder',
   },
   {
     title: 'Descripción',
