@@ -15,6 +15,16 @@ const columns = [
     render: text => <a>{text}</a>,
   },
   {
+    title: 'Punto',
+    dataIndex: 'punto',
+    key: 'punto',
+  },  
+  {
+    title: 'Departamento',
+    dataIndex: 'dpto',
+    key: 'dpto',
+  },
+  {
     title: 'Nombre',
     dataIndex: 'nombre',
     key: 'nombre',

@@ -9,6 +9,16 @@ import ButtonGroup from 'antd/lib/button/button-group';
 
 const columns = [
   {
+    title: 'Departamento',
+    dataIndex: 'dpto',
+    key: 'dpto',
+  },
+  {
+    title: 'Empleado',
+    dataIndex: 'empleado',
+    key: 'empleado',
+  },
+  {
     title: 'Código',
     dataIndex: 'codigo',
     key: 'codigo',
@@ -30,10 +40,78 @@ const columns = [
     key: 'num_serie',
   },
   {
+    title: 'Dirección IP',
+    dataIndex: 'ip',
+    key: 'ip',
+    render: text => <a>{text}</a>,
+  },
+  {
+    title: 'Tarjeta madre',
+    dataIndex: 'mainboard',
+    key: 'mainboard',
+  }, 
+  {
     title: 'RAM Soportada',
     dataIndex: 'ram',
     key: 'ram',
   },  
+  //importante
+  {
+    title: 'Sistema operativo',
+    dataIndex: 'so',
+    key: 'so',
+  }, 
+  {
+    title: 'Service Pack',
+    dataIndex: 'servpack',
+    key: 'servpack',
+  }, 
+  {
+    title: 'Licencia',
+    dataIndex: 'licencia',
+    key: 'licencia',
+  }, 
+  {
+    title: 'Tipo de SO',
+    dataIndex: 'so_type',
+    key: 'so_type',
+  }, 
+  {
+    title: 'Procesador',
+    dataIndex: 'procesador',
+    key: 'procesador',
+  }, 
+  {
+    title: 'Disco duro',
+    dataIndex: 'dd',
+    key: 'dd',
+  },
+  {
+    title: 'Nombre PC',
+    dataIndex: 'name_pc',
+    key: 'name_pc',
+  },
+  {
+    title: 'Usuario PC',
+    dataIndex: 'user_pc',
+    key: 'user_pc',
+  },
+  {
+    title: 'Office',
+    dataIndex: 'office',
+    key: 'office',
+  },
+  {
+    title: 'Estado',
+    dataIndex: 'estado',
+    key: 'estado',
+  },
+  {
+    title: 'UPS',
+    dataIndex: 'ups',
+    key: 'ups',
+  },
+  //considerar
   {
     title: 'Número de slots para RAM',
     dataIndex: 'slots_ram',
