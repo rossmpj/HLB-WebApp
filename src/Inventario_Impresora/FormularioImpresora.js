@@ -9,6 +9,7 @@ import {
 } from 'antd';
 import '../custom-antd.css';
 import InputComponent from '../Componentes/InputComponent'
+/* import SelectComponent from '../Componentes/SelectComponent' */
 import IpSelect from '../Componentes/IpSelect'
 
 const { Content } = Layout;
@@ -34,11 +35,12 @@ class FormularioImpresora extends React.Component {
     }
 
 
+
     handle_guardar = e => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-               console.log(values)
+                console.log(values)
             }
         });
     }
@@ -148,11 +150,8 @@ class FormularioImpresora extends React.Component {
                                     : null
                             }
 
-                            <Form.Item label="Dirección IP">
-                                {getFieldDecorator('ip')(
-                                    <IpSelect></IpSelect>
-                                )}
-                            </Form.Item>
+                            {/* <SelectComponent decorator={getFieldDecorator} datos={this.state.ip}></SelectComponent> */}
+                            <IpSelect decorator={getFieldDecorator}></IpSelect>
 
                             <Form.Item label="Asignado a">
                                 {getFieldDecorator('asignado')(

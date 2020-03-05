@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select } from 'antd';
+import SelectComponent from './SelectComponent'
 
 class IpSelect extends React.Component {
 
@@ -17,14 +17,7 @@ class IpSelect extends React.Component {
 
     render() {
         return (
-            <Select>
-                {/* <Select.Option key="0" value="">---------------</Select.Option> */}
-                {
-                    this.state.ip.map((dato,i) => 
-                        <Select.Option key={i} value={dato}>{dato}</Select.Option>
-                    )
-                }
-            </Select>
+           <SelectComponent decorator={this.props.decorator} datos={this.state.ip}></SelectComponent>
         )
     }
 }
