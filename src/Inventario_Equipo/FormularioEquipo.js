@@ -9,7 +9,13 @@ import {
 } from 'antd';
 import '../custom-antd.css';
 import InputComponent from '../Componentes/InputComponent'
+import AsignarSelect from '../Componentes/AsignarSelect'
+import MarcaSelect from '../Componentes/MarcaSelect'
 import IpSelect from '../Componentes/IpSelect'
+import ComponentePrincipal from '../Componentes/ComponentePrincipal'
+import TipoSelect from '../Componentes/TipoSelect'
+
+
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -73,68 +79,18 @@ class FormularioEquipo extends React.Component {
 
                             <InputComponent label="Número de serie" name="nserie" decorator={getFieldDecorator} />
 
-                            <Form.Item label="Tipo">
-                                {getFieldDecorator('tipo', {
-                                    rules: [{ required: true, message: 'Debe seleccionar el tipo de impresora' }],
-                                })(
-                                    <Select
-                                        onChange={(value) => {
-                                            this.setState({ tipo: value });
-                                        }}>
-                                        <Select.Option value="Parlante">Parlante</Select.Option>
-                                        <Select.Option value="Teclado">Teclado</Select.Option>
-                                        <Select.Option value="UPS">UPS</Select.Option>
-                                        <Select.Option value="Switch">Switch</Select.Option>
-                                        <Select.Option value="Servidor">Servidor</Select.Option>
-                                    </Select>
-                                )}
-                            </Form.Item>
+                            <TipoSelect required={true} decorator={getFieldDecorator} />
 
                             <InputComponent label="Modelo" name="modelo" decorator={getFieldDecorator} />
 
-                            <Form.Item label="Marca">
-                                {getFieldDecorator('marca', {
-                                    rules: [{ required: true, message: 'Debe seleccionar la marca de la impresora' }],
-                                })(
-                                    <Select>
-                                        <Select.Option value="demo">HP</Select.Option>
-                                        <Select.Option value="dmo">Samsung</Select.Option>
-                                    </Select>
-                                )}
-                            </Form.Item>
+                            <MarcaSelect required={true} decorator={getFieldDecorator} />
 
-                            <Form.Item label="Dirección IP">
-                                {getFieldDecorator('ip')(
-                                    <IpSelect></IpSelect>
-                                )}
-                            </Form.Item>
+                            <IpSelect required={false} decorator={getFieldDecorator}></IpSelect>
 
-                            <Form.Item label="Componente principal">
-                                {getFieldDecorator('componente')(
-                                    <Select
-                                    >
-                                        <Select.Option value="">---------------</Select.Option>
-                                        <Select.Option value="a">000001</Select.Option>
-                                        <Select.Option value="b">000002</Select.Option>
-                                    </Select>
-                                )}
-                            </Form.Item>
+                            <ComponentePrincipal required={false} decorator={getFieldDecorator}></ComponentePrincipal>
 
-                            <Form.Item label="Asignar a">
-                                {getFieldDecorator('asignar')(
-                                    <Select
-                                        showSearch
-                                        optionFilterProp="children"
-                                        filterOption={(input, option) =>
-                                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                        }
-                                    >
-                                        <Select.Option value="">---------------</Select.Option>
-                                        <Select.Option value="a">David Martín</Select.Option>
-                                        <Select.Option value="b">Alicia Gris</Select.Option>
-                                    </Select>
-                                )}
-                            </Form.Item>
+                            <AsignarSelect required={false} decorator={getFieldDecorator}></AsignarSelect>
+
                             <Form.Item label="Descripción">
                                 {getFieldDecorator('descripcion')(
                                     <TextArea />

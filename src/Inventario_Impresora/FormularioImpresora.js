@@ -9,8 +9,12 @@ import {
 } from 'antd';
 import '../custom-antd.css';
 import InputComponent from '../Componentes/InputComponent'
-/* import SelectComponent from '../Componentes/SelectComponent' */
+import AsignarSelect from '../Componentes/AsignarSelect'
+import MarcaSelect from '../Componentes/MarcaSelect'
 import IpSelect from '../Componentes/IpSelect'
+import ComponentePrincipal from '../Componentes/ComponentePrincipal'
+
+
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -75,17 +79,7 @@ class FormularioImpresora extends React.Component {
                                 )}
                             </Form.Item>
 
-                            <Form.Item label="Marca">
-                                {getFieldDecorator('marca', {
-                                    rules: [{ required: true, message: 'Debe seleccionar la marca de la impresora' }],
-                                })(
-                                    <Select>
-                                        <Select.Option value="demo">LG</Select.Option>
-                                        <Select.Option value="dmo">Xiaomi</Select.Option>
-                                    </Select>
-                                )}
-                            </Form.Item>
-
+                            <MarcaSelect required={true} decorator={getFieldDecorator} />
                             <InputComponent label="Código" name="codigo" decorator={getFieldDecorator} />
 
                             <Form.Item label="Estado">
@@ -150,18 +144,11 @@ class FormularioImpresora extends React.Component {
                                     : null
                             }
 
-                            {/* <SelectComponent decorator={getFieldDecorator} datos={this.state.ip}></SelectComponent> */}
-                            <IpSelect decorator={getFieldDecorator}></IpSelect>
+                            <IpSelect required={false} decorator={getFieldDecorator}></IpSelect>
 
-                            <Form.Item label="Asignado a">
-                                {getFieldDecorator('asignado')(
-                                    <Select>
-                                        <Select.Option value="">---------------</Select.Option>
-                                        <Select.Option value="a">David Martín</Select.Option>
-                                        <Select.Option value="b">Alicia Gris</Select.Option>
-                                    </Select>
-                                )}
-                            </Form.Item>
+                            <ComponentePrincipal required={false} decorator={getFieldDecorator}></ComponentePrincipal>
+
+                            <AsignarSelect required={false} decorator={getFieldDecorator}></AsignarSelect>
 
                             <Form.Item label="Descripción">
                                 {getFieldDecorator('descripcion')(

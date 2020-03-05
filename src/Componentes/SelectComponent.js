@@ -7,17 +7,25 @@ import {
 function SelectComponent(props) {
     return (
         <Form.Item
-            label="Dirección IP">
-            {props.decorator('ip')(
-                <Select>
+            label={props.label}>
+            {props.decorator(`${props.name}`, {
+                rules: [{ required: props.required, message: 'Debe completar este campo' }]
+            })(
+                <Select
+                    showSearch
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                        option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                >
                     {
                         props.datos.map(dato =>
                             <Select.Option key={dato} value={dato}>{dato}</Select.Option>
                         )
                     }
                 </Select>
-            )}
-        </Form.Item>
+            )
+            }
+        </Form.Item >
     )
 }
 export default SelectComponent;
