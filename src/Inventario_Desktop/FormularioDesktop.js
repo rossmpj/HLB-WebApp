@@ -176,43 +176,166 @@ class FormularioDesktop extends React.Component {
               <Form.Item className="form-item-2columns" label="Código">
                 <Input />
               </Form.Item>
-              <Form.Item className="form-item-2columns" label="Nombre">
-                <Input />
-              </Form.Item>
-              <Form.Item className="form-item-2columns" label="Marca">
-                <Select>
-                  <Select.Option value="demo">LG</Select.Option>
-                  <Select.Option value="dmo">Xiaomi</Select.Option>
-                </Select>
-              </Form.Item >
-              <Form.Item className="form-item-2columns" label="Modelo">
-                <Input />
-              </Form.Item>
-              <Form.Item className="form-item-2columns" label="Número de serie">
-                <Input />
-              </Form.Item>
-              <Form.Item className="form-item-2columns" label="Descripción">
+              <Form.Item className="form-item-2columns" label="Descripción general">
                   <TextArea />
               </Form.Item>
-              
-              <Divider orientation="left">DATOS DEL PROCESADOR</Divider>
-              <Form.Item className="form-item-2columns" label="Frecuencia">
-                <InputNumber />
-              </Form.Item>
-              <Form.Item className="form-item-2columns" label="Núcleos">
-                <InputNumber />
-              </Form.Item>
-          
-              <Divider orientation="left">DATOS GENERALES DE MEMORIA RAM</Divider>
-              <Form.Item className="form-item-2columns" label="RAM Soportada">
-                <InputNumber />
-              </Form.Item>
-              <Form.Item className="form-item-2columns" label="Número de slots">
-                <InputNumber />
-              </Form.Item>
+                     
+              <Divider orientation="left">PERIFÉRICOS</Divider>
+              <Collapse >
+                <Panel header="Monitor" key="1">
+                  <Form.Item className="form-item-2columns" label="Código">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Marca">
+                    <Select>
+                      <Select.Option value="demo">LG</Select.Option>
+                      <Select.Option value="dmo">Xiaomi</Select.Option>
+                    </Select>
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Modelo">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Número de serie">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Descripción">
+                    <TextArea />
+                  </Form.Item>
+                </Panel>
+              </Collapse>
+              <br />
+              <Collapse >
+                <Panel header="Teclado" key="2">
+                  <Form.Item className="form-item-2columns" label="Código">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Marca">
+                    <Select>
+                      <Select.Option value="demo">LG</Select.Option>
+                      <Select.Option value="dmo">Xiaomi</Select.Option>
+                    </Select>
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Modelo">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Número de serie">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Descripción">
+                    <TextArea />
+                  </Form.Item>
+                </Panel>
+              </Collapse>
+              <br />
+              <Collapse >
+                <Panel header="Parlantes" key="3">
+                  <Form.Item className="form-item-2columns" label="Código">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Marca">
+                    <Select>
+                      <Select.Option value="demo">LG</Select.Option>
+                      <Select.Option value="dmo">Xiaomi</Select.Option>
+                    </Select>
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Modelo">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Número de serie">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Descripción">
+                    <TextArea />
+                  </Form.Item>
+                </Panel>
+              </Collapse>
+              <br />
+              <Collapse >
+                <Panel header="Mouse" key="4">
+                  <Form.Item className="form-item-2columns" label="Código">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Marca">
+                    <Select>
+                      <Select.Option value="demo">LG</Select.Option>
+                      <Select.Option value="dmo">Xiaomi</Select.Option>
+                    </Select>
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Modelo">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Número de serie">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Descripción">
+                    <TextArea />
+                  </Form.Item>
+                </Panel>
+              </Collapse>
+              <br />
+              <Divider orientation="left">CPU</Divider>
+              <Collapse >
+                <Panel header="Tarjeta Madre" key="1">
+                  <Form.Item className="form-item-2columns" label="Código">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Marca">
+                    <Select>
+                      <Select.Option value="demo">LG</Select.Option>
+                      <Select.Option value="dmo">Xiaomi</Select.Option>
+                    </Select>
+                  </Form.Item >
+                  <Form.Item className="form-item-2columns" label="Modelo">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Número de serie">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="RAM Soportada">
+                    <InputNumber />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Número de slots">
+                    <InputNumber />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Conexiones para Disco Duro">
+                    <InputNumber />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Descripción">
+                    <TextArea />
+                  </Form.Item>                  
+                </Panel>
+              </Collapse>
+              <br/>
               <Collapse>
-                <Panel header="Memorias RAM" key="1">
+                <Panel header="Memoria RAM" key="2">
                   {formItems}
+                  {/*<Form.Item className="form-item-2columns" label="Código">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Marca">
+                    <Select>
+                      <Select.Option value="demo">LG</Select.Option>
+                      <Select.Option value="dmo">Xiaomi</Select.Option>
+                    </Select>
+                  </Form.Item >
+                  <Form.Item className="form-item-2columns" label="Modelo">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Número de serie">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Capacidad">
+                    <InputNumber />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Tipo">
+                    <Select>
+                      <Select.Option value="demo">LG</Select.Option>
+                      <Select.Option value="dmo">Xiaomi</Select.Option>
+                    </Select>
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Descripción">
+                    <TextArea />
+                  </Form.Item>*/}
                   <Form.Item {...buttonItemLayout}>
                     <Button
                       type="dashed"
@@ -224,41 +347,140 @@ class FormularioDesktop extends React.Component {
                     </Button>
                   </Form.Item>
                 </Panel>
+              </Collapse> 
+              <br/>
+              <Collapse>
+                <Panel header="Disco duro" key="3">
+                  <Form.Item className="form-item-2columns" label="Código">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Marca">
+                    <Select>
+                      <Select.Option value="demo">LG</Select.Option>
+                      <Select.Option value="dmo">Xiaomi</Select.Option>
+                    </Select>
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Modelo">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Número de serie">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Capacidad">
+                    <InputNumber />
+                    <Select style={{ width: 80 }} >
+                      <Option value="rmb">MB</Option>
+                      <Option value="dollar">GB</Option>
+                      <Option value="dollar">TB</Option>
+                    </Select>
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Tipo">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Descripción">
+                    <TextArea />
+                  </Form.Item>
+                </Panel>
               </Collapse>
-
-              <Divider orientation="left">DATOS DE DISCO DURO</Divider>
-              <Form.Item className="form-item-2columns" label="Código">
-                <Input />
-              </Form.Item>
-              <Form.Item className="form-item-2columns" label="Nombre">
-                <Input />
-              </Form.Item>
-              <Form.Item className="form-item-2columns" label="Marca">
-                <Select>
-                  <Select.Option value="demo">LG</Select.Option>
-                  <Select.Option value="dmo">Xiaomi</Select.Option>
-                </Select>
-              </Form.Item>
-              <Form.Item className="form-item-2columns" label="Modelo">
-                <Input />
-              </Form.Item>
-              <Form.Item className="form-item-2columns" label="Número de serie">
-                <Input />
-              </Form.Item>
-              <Form.Item className="form-item-2columns" label="Capacidad">
-                <InputNumber />
-                <Select style={{ width: 80 }} >
-                  <Option value="rmb">MB</Option>
-                  <Option value="dollar">GB</Option>
-                  <Option value="dollar">TB</Option>
-                </Select>
-              </Form.Item>
-              <Form.Item className="form-item-2columns" label="Tipo">
-                <Input />
-              </Form.Item>
-              <Form.Item className="form-item-2columns" label="Descripción">
-                <TextArea />
-              </Form.Item>
+              <br />              
+              <Collapse>
+                <Panel header="Procesador" key="4">
+                  <Form.Item className="form-item-2columns" label="Código">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Marca">
+                    <Select>
+                      <Select.Option value="demo">LG</Select.Option>
+                      <Select.Option value="dmo">Xiaomi</Select.Option>
+                    </Select>
+                  </Form.Item >
+                  <Form.Item className="form-item-2columns" label="Modelo">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Número de serie">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Frecuencia">
+                    <InputNumber />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Número de núcleos">
+                    <InputNumber />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Descripción">
+                    <TextArea />
+                  </Form.Item>
+                </Panel>
+              </Collapse>
+              <br />              
+              <Collapse>
+                <Panel header="Tarjeta de red" key="5">
+                  <Form.Item className="form-item-2columns" label="Código">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Marca">
+                    <Select>
+                      <Select.Option value="demo">LG</Select.Option>
+                      <Select.Option value="dmo">Xiaomi</Select.Option>
+                    </Select>
+                  </Form.Item >
+                  <Form.Item className="form-item-2columns" label="Modelo">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Número de serie">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Descripción">
+                    <TextArea />
+                  </Form.Item>
+                </Panel>
+              </Collapse>  
+              <br />              
+              <Collapse>
+                <Panel header="Case" key="6">
+                  <Form.Item className="form-item-2columns" label="Código">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Marca">
+                    <Select>
+                      <Select.Option value="demo">LG</Select.Option>
+                      <Select.Option value="dmo">Xiaomi</Select.Option>
+                    </Select>
+                  </Form.Item >
+                  <Form.Item className="form-item-2columns" label="Modelo">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Número de serie">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Descripción">
+                    <TextArea />
+                  </Form.Item>
+                </Panel>
+              </Collapse> 
+              <br />              
+              <Collapse>
+                <Panel header="Fuente de poder" key="7">
+                  <Form.Item className="form-item-2columns" label="Código">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Marca">
+                    <Select>
+                      <Select.Option value="demo">LG</Select.Option>
+                      <Select.Option value="dmo">Xiaomi</Select.Option>
+                    </Select>
+                  </Form.Item >
+                  <Form.Item className="form-item-2columns" label="Modelo">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Número de serie">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className="form-item-2columns" label="Descripción">
+                    <TextArea />
+                  </Form.Item>
+                </Panel>
+              </Collapse> 
+              <br />
               <Form.Item {...tailLayout}>
                 <Button style={{marginRight: 7}} type="primary" htmlType="submit">Guardar</Button>   
                 <Button type="primary">Cancelar</Button>
