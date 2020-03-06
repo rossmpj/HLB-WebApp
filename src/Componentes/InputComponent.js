@@ -10,7 +10,7 @@ function InputComponent(props) {
             label={props.label}
             className= {props.class!=="" ? `${props.class}` : null}
             >
-            {props.decorator(`${props.name}`, {
+            {props.decorator(`${props.id}`, {
                 rules: [{ required: true, message: 'Debe completar este campo' }],
             })(
                 <Input

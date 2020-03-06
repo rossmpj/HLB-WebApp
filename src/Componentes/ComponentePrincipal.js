@@ -20,6 +20,7 @@ class ComponentePrincipal extends React.Component {
             <SelectComponent
                 label="Asignar componente principal"
                 name="componente"
+                class={this.props.class}
                 required={this.props.required}
                 decorator={this.props.decorator}
                 datos={this.state.componentes}></SelectComponent>

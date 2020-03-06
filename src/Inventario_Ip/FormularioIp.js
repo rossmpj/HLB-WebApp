@@ -54,7 +54,11 @@ class FormularioIp extends React.Component {
                             layout="horizontal"
                             onSubmit={this.handle_guardar}
                         >
-                            <InputComponent class="" label="Ip" name="ip" decorator={getFieldDecorator} />
+                            <InputComponent 
+                            class="" 
+                            label="Ip" 
+                            id="ip" 
+                            decorator={getFieldDecorator} />
 
                             <Form.Item label="Estado">
                                 {getFieldDecorator('estado', {
@@ -67,10 +71,23 @@ class FormularioIp extends React.Component {
                                 )}
                             </Form.Item>
 
-                            <InputComponent class="" label="Hostname" name="hostname" decorator={getFieldDecorator} />
-                            <InputComponent class="" label="Subred" name="subred" decorator={getFieldDecorator} />
+                            <InputComponent 
+                            class="" 
+                            label="Hostname" 
+                            id="hostname" 
+                            decorator={getFieldDecorator} />
 
-                            <InputComponent class="" label="Fortigate" name="fortigate" decorator={getFieldDecorator} />
+                            <InputComponent 
+                            class="" 
+                            label="Subred" 
+                            id="subred" 
+                            decorator={getFieldDecorator} />
+
+                            <InputComponent 
+                            class="" 
+                            label="Fortigate"
+                            id="fortigate" 
+                            decorator={getFieldDecorator} />
 
                             {/*  <Form.Item label="Asignado a">
                                 {getFieldDecorator('asignado')(

@@ -4,7 +4,7 @@ import {
   Form,
   Select,
   Input,
-  Button, 
+  Button,
   Layout,
   InputNumber,
   Divider,
@@ -13,6 +13,10 @@ import {
 } from 'antd';
 import '../custom-antd.css';
 import { Collapse } from 'antd';
+import MarcaSelect from '../Componentes/MarcaSelect'
+import InputComponent from '../Componentes/InputComponent'
+import AsignarSelect from '../Componentes/AsignarSelect'
+import IpSelect from '../Componentes/IpSelect'
 
 let id = 0;
 const { Panel } = Collapse;
@@ -25,7 +29,7 @@ const tailLayout = {
 };
 
 const buttonItemLayout = {
-  wrapperCol: {span: 14, offset: 8},
+  wrapperCol: { span: 14, offset: 8 },
 };
 
 const layout = {
@@ -33,29 +37,29 @@ const layout = {
   wrapperCol: { span: 14 },
 };
 
-class FormularioDesktop extends React.Component {    
+class FormularioDesktop extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        tipo: ""
+      tipo: ""
     };
     this.handle_guardar = this.handle_guardar.bind(this);
   }
 
 
   handle_guardar = e => {
-      e.preventDefault();
-      this.props.form.validateFields((err, values) => {
-          if (!err) {
-            console.log(values)
-          }
-      });
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log(values)
+      }
+    });
   }
 
   state = {
     loading: true,
   };
-  
+
   remove = k => {
     const { form } = this.props;
     // can use data-binding to get
@@ -120,10 +124,10 @@ class FormularioDesktop extends React.Component {
 
     const formItems = keys.map((k, index) => (
       <Collapse>
-        <Panel 
-          header={"RAM " + (k+1)} 
-          key={k+1} 
-          extra = {keys.length > 1 ? (
+        <Panel
+          header={"RAM " + (k + 1)}
+          key={k + 1}
+          extra={keys.length > 1 ? (
             <Icon
               className="dynamic-delete-button"
               type="minus-circle-o"
@@ -159,47 +163,58 @@ class FormularioDesktop extends React.Component {
           <Form.Item className="form-item-2columns" label="Descripción">
             <TextArea />
           </Form.Item>
-        </Panel>         
+        </Panel>
       </Collapse>
     ));
 
     return (
       <Content>
         <div className="div-border-top" >
-          <div className="div-container"> 
-            <Form {...layout} 
-              layout="horizontal" 
+          <div className="div-container">
+            <Form {...layout}
+              layout="horizontal"
             >
               <Divider orientation="left">DATOS GENERALES</Divider>
-              <Form.Item className="form-item-2columns" label="Código">
-                <Input />
-              </Form.Item>
-              <Form.Item className="form-item-2columns" label="Empleado">
-                <Select>
-                  <Select.Option value="demo">LG</Select.Option>
-                  <Select.Option value="dmo">Xiaomi</Select.Option>
-                </Select>
-              </Form.Item>
-              <Form.Item className="form-item-2columns" label="Dirección IP">
-                <Select>
-                  <Select.Option value="demo">LG</Select.Option>
-                  <Select.Option value="dmo">Xiaomi</Select.Option>
-                </Select>
-              </Form.Item>
-              <Form.Item className="form-item-2columns" label="Nombre PC">
-                <Input />
-              </Form.Item>
-              <Form.Item className="form-item-2columns" label="Usuario-PC">
-                <Input />
-              </Form.Item>
+
+              <InputComponent
+                class="form-item-2columns"
+                label="Código"
+                id="codigo"
+                decorator={getFieldDecorator} />
+
+              <AsignarSelect
+                class="form-item-2columns"
+                required={true}
+                id="asignado"
+                decorator={getFieldDecorator} />
+
+              <IpSelect
+                class="form-item-2columns"
+                required={true}
+                id="ip"
+                decorator={getFieldDecorator} />
+
+              <InputComponent
+                class="form-item-2columns"
+                label="Nombre Pc"
+                id="nombrepc"
+                decorator={getFieldDecorator} />
+
+              <InputComponent
+                class="form-item-2columns"
+                label="Usuario-Pc"
+                id="nombrepc"
+                decorator={getFieldDecorator} />
+
               <Form.Item className="form-item-2columns" label="Estado" >
                 <Select>
                   <Select.Option value="demo">LG</Select.Option>
                   <Select.Option value="dmo">Xiaomi</Select.Option>
                 </Select>
               </Form.Item>
+
               <Form.Item className="form-item-2columns" label="Descripción general">
-                  <TextArea />
+                <TextArea />
               </Form.Item>
 
               <Divider orientation="left">SISTEMA OPERATIVO</Divider>
@@ -232,12 +247,19 @@ class FormularioDesktop extends React.Component {
                   <Form.Item className="form-item-2columns" label="Código">
                     <Input />
                   </Form.Item>
-                  <Form.Item className="form-item-2columns" label="Marca">
+                  {/*  <Form.Item className="form-item-2columns" label="Marca">
                     <Select>
                       <Select.Option value="demo">LG</Select.Option>
                       <Select.Option value="dmo">Xiaomi</Select.Option>
                     </Select>
-                  </Form.Item>
+                  </Form.Item> */}
+
+                  <MarcaSelect
+                    class="form-item-2columns"
+                    id="mmonitor"
+                    required={false}
+                    decorator={getFieldDecorator} />
+
                   <Form.Item className="form-item-2columns" label="Modelo">
                     <Input />
                   </Form.Item>
@@ -255,12 +277,13 @@ class FormularioDesktop extends React.Component {
                   <Form.Item className="form-item-2columns" label="Código">
                     <Input />
                   </Form.Item>
-                  <Form.Item className="form-item-2columns" label="Marca">
-                    <Select>
-                      <Select.Option value="demo">LG</Select.Option>
-                      <Select.Option value="dmo">Xiaomi</Select.Option>
-                    </Select>
-                  </Form.Item>
+
+                  <MarcaSelect
+                    class="form-item-2columns"
+                    id="mteclado"
+                    required={false}
+                    decorator={getFieldDecorator} />
+
                   <Form.Item className="form-item-2columns" label="Modelo">
                     <Input />
                   </Form.Item>
@@ -278,12 +301,13 @@ class FormularioDesktop extends React.Component {
                   <Form.Item className="form-item-2columns" label="Código">
                     <Input />
                   </Form.Item>
-                  <Form.Item className="form-item-2columns" label="Marca">
-                    <Select>
-                      <Select.Option value="demo">LG</Select.Option>
-                      <Select.Option value="dmo">Xiaomi</Select.Option>
-                    </Select>
-                  </Form.Item>
+
+                  <MarcaSelect
+                    class="form-item-2columns"
+                    id="mups"
+                    required={false}
+                    decorator={getFieldDecorator} />
+
                   <Form.Item className="form-item-2columns" label="Modelo">
                     <Input />
                   </Form.Item>
@@ -301,12 +325,13 @@ class FormularioDesktop extends React.Component {
                   <Form.Item className="form-item-2columns" label="Código">
                     <Input />
                   </Form.Item>
-                  <Form.Item className="form-item-2columns" label="Marca">
-                    <Select>
-                      <Select.Option value="demo">LG</Select.Option>
-                      <Select.Option value="dmo">Xiaomi</Select.Option>
-                    </Select>
-                  </Form.Item>
+
+                  <MarcaSelect
+                    class="form-item-2columns"
+                    id="mmouse"
+                    required={false}
+                    decorator={getFieldDecorator} />
+
                   <Form.Item className="form-item-2columns" label="Modelo">
                     <Input />
                   </Form.Item>
@@ -325,12 +350,13 @@ class FormularioDesktop extends React.Component {
                   <Form.Item className="form-item-2columns" label="Código">
                     <Input />
                   </Form.Item>
-                  <Form.Item className="form-item-2columns" label="Marca">
-                    <Select>
-                      <Select.Option value="demo">LG</Select.Option>
-                      <Select.Option value="dmo">Xiaomi</Select.Option>
-                    </Select>
-                  </Form.Item >
+
+                  <MarcaSelect
+                    class="form-item-2columns"
+                    id="mcpu"
+                    required={false}
+                    decorator={getFieldDecorator} />
+
                   <Form.Item className="form-item-2columns" label="Modelo">
                     <Input />
                   </Form.Item>
@@ -348,10 +374,10 @@ class FormularioDesktop extends React.Component {
                   </Form.Item>
                   <Form.Item className="form-item-2columns" label="Descripción">
                     <TextArea />
-                  </Form.Item>                  
+                  </Form.Item>
                 </Panel>
               </Collapse>
-              <br/>
+              <br />
               <Collapse>
                 <Panel header="Memoria RAM" key="2">
                   {formItems}
@@ -385,7 +411,7 @@ class FormularioDesktop extends React.Component {
                   <Form.Item {...buttonItemLayout}>
                     <Button
                       type="dashed"
-                      onClick={this.add} 
+                      onClick={this.add}
                       icon="plus"
                       style={{ width: '60%' }}
                     >
@@ -393,19 +419,20 @@ class FormularioDesktop extends React.Component {
                     </Button>
                   </Form.Item>
                 </Panel>
-              </Collapse> 
-              <br/>
+              </Collapse>
+              <br />
               <Collapse>
                 <Panel header="Disco duro" key="3">
                   <Form.Item className="form-item-2columns" label="Código">
                     <Input />
                   </Form.Item>
-                  <Form.Item className="form-item-2columns" label="Marca">
-                    <Select>
-                      <Select.Option value="demo">LG</Select.Option>
-                      <Select.Option value="dmo">Xiaomi</Select.Option>
-                    </Select>
-                  </Form.Item>
+
+                  <MarcaSelect
+                    class="form-item-2columns"
+                    id="mdisco"
+                    required={false}
+                    decorator={getFieldDecorator} />
+
                   <Form.Item className="form-item-2columns" label="Modelo">
                     <Input />
                   </Form.Item>
@@ -428,18 +455,19 @@ class FormularioDesktop extends React.Component {
                   </Form.Item>
                 </Panel>
               </Collapse>
-              <br />              
+              <br />
               <Collapse>
                 <Panel header="Procesador" key="4">
                   <Form.Item className="form-item-2columns" label="Código">
                     <Input />
                   </Form.Item>
-                  <Form.Item className="form-item-2columns" label="Marca">
-                    <Select>
-                      <Select.Option value="demo">LG</Select.Option>
-                      <Select.Option value="dmo">Xiaomi</Select.Option>
-                    </Select>
-                  </Form.Item >
+
+                  <MarcaSelect
+                    class="form-item-2columns"
+                    id="mprocesador"
+                    required={false}
+                    decorator={getFieldDecorator} />
+
                   <Form.Item className="form-item-2columns" label="Modelo">
                     <Input />
                   </Form.Item>
@@ -457,18 +485,20 @@ class FormularioDesktop extends React.Component {
                   </Form.Item>
                 </Panel>
               </Collapse>
-              <br />              
+              <br />
               <Collapse>
                 <Panel header="Tarjeta de red" key="5">
                   <Form.Item className="form-item-2columns" label="Código">
                     <Input />
                   </Form.Item>
-                  <Form.Item className="form-item-2columns" label="Marca">
-                    <Select>
-                      <Select.Option value="demo">LG</Select.Option>
-                      <Select.Option value="dmo">Xiaomi</Select.Option>
-                    </Select>
-                  </Form.Item >
+
+                  <MarcaSelect
+                    class="form-item-2columns"
+                    id="mred"
+                    required={false}
+                    decorator={getFieldDecorator} />
+
+
                   <Form.Item className="form-item-2columns" label="Modelo">
                     <Input />
                   </Form.Item>
@@ -479,8 +509,8 @@ class FormularioDesktop extends React.Component {
                     <TextArea />
                   </Form.Item>
                 </Panel>
-              </Collapse>  
-              <br />              
+              </Collapse>
+              <br />
               <Collapse>
                 <Panel header="Case" key="6">
                   <Form.Item className="form-item-2columns" label="Código">
@@ -502,8 +532,8 @@ class FormularioDesktop extends React.Component {
                     <TextArea />
                   </Form.Item>
                 </Panel>
-              </Collapse> 
-              <br />              
+              </Collapse>
+              <br />
               <Collapse>
                 <Panel header="Fuente de poder" key="7">
                   <Form.Item className="form-item-2columns" label="Código">
@@ -525,16 +555,16 @@ class FormularioDesktop extends React.Component {
                     <TextArea />
                   </Form.Item>
                 </Panel>
-              </Collapse> 
+              </Collapse>
               <br />
               <Form.Item {...tailLayout}>
-                <Button style={{marginRight: 7}} type="primary" htmlType="submit">Guardar</Button>   
+                <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
                 <Button type="primary">Cancelar</Button>
-              </Form.Item> 
+              </Form.Item>
             </Form>
           </div>
-        </div>  
-      </Content>      
+        </div>
+      </Content>
     );
   }
 }

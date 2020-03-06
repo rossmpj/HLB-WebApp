@@ -19,7 +19,8 @@ class TipoSelect extends React.Component {
         return (
             <SelectComponent
                 label="Tipo de equipo"
-                name="tipo"
+                name={this.props.id}
+                class={this.props.class}
                 required={this.props.required}
                 decorator={this.props.decorator}
                 datos={this.state.tipos}></SelectComponent>

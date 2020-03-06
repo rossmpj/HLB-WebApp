@@ -19,7 +19,8 @@ class IpSelect extends React.Component {
         return (
            <SelectComponent 
            label="Dirección IP" 
-           name= "ip"
+           name= {this.props.id}
+           class={this.props.class}
            required={this.props.required}
            decorator={this.props.decorator} 
            datos={this.state.ip}></SelectComponent>

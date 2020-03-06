@@ -19,7 +19,8 @@ class MarcaSelect extends React.Component {
         return (
             <SelectComponent
                 label="Marca"
-                name="marca"
+                name={this.props.id}
+                class={this.props.class}
                 required={this.props.required}
                 decorator={this.props.decorator}
                 datos={this.state.marcas}></SelectComponent>

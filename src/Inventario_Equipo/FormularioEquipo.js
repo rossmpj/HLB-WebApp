@@ -62,7 +62,11 @@ class FormularioEquipo extends React.Component {
                             layout="horizontal"
                             onSubmit={this.handle_guardar}
                         >
-                            <InputComponent class="" label="Código" name="codigo" decorator={getFieldDecorator} />
+                            <InputComponent 
+                            class="" 
+                            label="Código" 
+                            id="codigo" 
+                            decorator={getFieldDecorator} />
                             {/*  <Form.Item label="Estado">
                                 {getFieldDecorator('estado', {
                                     rules: [{ required: true, message: 'Debe seleccionar el estado' }],
@@ -76,19 +80,47 @@ class FormularioEquipo extends React.Component {
                                 )}
                             </Form.Item> */}
 
-                            <InputComponent class="" label="Número de serie" name="nserie" decorator={getFieldDecorator} />
+                            <InputComponent 
+                            class="" 
+                            label="Número de serie" 
+                            id="nserie" 
+                            decorator={getFieldDecorator} />
 
-                            <TipoSelect required={true} decorator={getFieldDecorator} />
+                            <TipoSelect 
+                            class="" 
+                            id="tipo"
+                            required={true} 
+                            decorator={getFieldDecorator} />
 
-                            <InputComponent class="" label="Modelo" name="modelo" decorator={getFieldDecorator} />
+                            <InputComponent 
+                            class="" 
+                            label="Modelo" 
+                            id="modelo" 
+                            decorator={getFieldDecorator} />
 
-                            <MarcaSelect required={true} decorator={getFieldDecorator} />
+                            <MarcaSelect 
+                            class="" 
+                            id="marca"
+                            required={true} 
+                            decorator={getFieldDecorator} />
 
-                            <IpSelect required={false} decorator={getFieldDecorator}></IpSelect>
+                            <IpSelect 
+                            class="" 
+                            required={false} 
+                            id="ip"
+                            decorator={getFieldDecorator}/>
 
-                            <ComponentePrincipal required={false} decorator={getFieldDecorator}></ComponentePrincipal>
+                            <ComponentePrincipal 
+                            class="" 
+                            id="principal"
+                            required={false}
+                            decorator={getFieldDecorator}/>
 
-                            <AsignarSelect required={false} decorator={getFieldDecorator}></AsignarSelect>
+                            <AsignarSelect 
+                            class="" 
+                            required={false} 
+                            id="asignado"
+                            decorator={getFieldDecorator}/>
 
                             <Form.Item label="Descripción">
                                 {getFieldDecorator('descripcion')(

@@ -19,7 +19,8 @@ class AsignarSelect extends React.Component {
         return (
             <SelectComponent
                 label="Asignar a empleado"
-                name="asignado"
+                name={this.props.id}
+                class={this.props.class}
                 required={this.props.required}
                 decorator={this.props.decorator}
                 datos={this.state.empleados}></SelectComponent>
