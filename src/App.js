@@ -64,6 +64,22 @@ class App extends React.Component {
                 <Link to="/ip" />
                 </Menu.Item>
               </SubMenu>
+              <SubMenu
+                key="sub2"
+                title={
+                  <span>
+                    <Icon type="rocket" />
+                    <span>Extra</span>
+                  </span>
+                }
+              >
+                <Menu.Item key="1"><Icon type="global" />Marcas
+                  {/* <Link to="/#" /> */}
+                </Menu.Item>
+                <Menu.Item key="2"><Icon type="cluster" />Tipo de equipo
+                  {/* <Link to="/laptop" /> */}
+                </Menu.Item>
+              </SubMenu>
             </Menu>
           </Sider>
           <Layout className="site-layout">

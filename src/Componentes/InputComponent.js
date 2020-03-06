@@ -7,7 +7,9 @@ import {
 function InputComponent(props) {
     return (
         <Form.Item
-            label={props.label}>
+            label={props.label}
+            className= {props.class!=="" ? `${props.class}` : null}
+            >
             {props.decorator(`${props.name}`, {
                 rules: [{ required: true, message: 'Debe completar este campo' }],
             })(

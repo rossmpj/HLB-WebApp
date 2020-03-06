@@ -2,7 +2,6 @@ import React from 'react';
 import '../App.css';
 import {
     Form,
-    Select,
     Input,
     Button,
     Layout
@@ -63,7 +62,7 @@ class FormularioEquipo extends React.Component {
                             layout="horizontal"
                             onSubmit={this.handle_guardar}
                         >
-                            <InputComponent label="Código" name="codigo" decorator={getFieldDecorator} />
+                            <InputComponent class="" label="Código" name="codigo" decorator={getFieldDecorator} />
                             {/*  <Form.Item label="Estado">
                                 {getFieldDecorator('estado', {
                                     rules: [{ required: true, message: 'Debe seleccionar el estado' }],
@@ -77,11 +76,11 @@ class FormularioEquipo extends React.Component {
                                 )}
                             </Form.Item> */}
 
-                            <InputComponent label="Número de serie" name="nserie" decorator={getFieldDecorator} />
+                            <InputComponent class="" label="Número de serie" name="nserie" decorator={getFieldDecorator} />
 
                             <TipoSelect required={true} decorator={getFieldDecorator} />
 
-                            <InputComponent label="Modelo" name="modelo" decorator={getFieldDecorator} />
+                            <InputComponent class="" label="Modelo" name="modelo" decorator={getFieldDecorator} />
 
                             <MarcaSelect required={true} decorator={getFieldDecorator} />
 
