@@ -10,6 +10,7 @@ import HomeLaptop from './Inventario_Laptop/HomeLaptop';
 import HomeDesktop from './Inventario_Desktop/HomeDesktop';
 import HomeIp from './Inventario_Ip/HomeIp';
 import HomeEquipo from './Inventario_Equipo/HomeEquipo'
+import HomeTipo from './Extras/TipoEquipo/HomeTipo'
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -77,7 +78,7 @@ class App extends React.Component {
                   {/* <Link to="/#" /> */}
                 </Menu.Item>
                 <Menu.Item key="2"><Icon type="cluster" />Tipo de equipo
-                  {/* <Link to="/laptop" /> */}
+                  <Link to="/tipo" />
                 </Menu.Item>
               </SubMenu>
             </Menu>
@@ -91,6 +92,7 @@ class App extends React.Component {
               <Route exact path='/desktop' component={HomeDesktop} />
               <Route exact path='/ip' component={HomeIp} />
               <Route exact path='/otrosEquipos' component={HomeEquipo} />
+              <Route exact path='/tipo' component={HomeTipo} />
             </Content>
             <Footer className="style-footer">Inventario Hospital León Becerra ©2020 Creado por EasySoft [ESPOL]</Footer>
           </Layout>
