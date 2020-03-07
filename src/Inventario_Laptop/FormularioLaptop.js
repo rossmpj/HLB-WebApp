@@ -12,6 +12,8 @@ import {
 } from 'antd';
 import '../custom-antd.css';
 import { Collapse } from 'antd';
+import InputComponent from '../Componentes/InputComponent';
+import MarcaSelect from '../Componentes/MarcaSelect';
 
 let id = 0;
 const { Panel } = Collapse;
@@ -82,21 +84,6 @@ class FormularioDesktop extends React.Component {
     });
   };
 
-  // genExtra = k => {
-  //   const { form } = this.props;
-  //   const keys = form.getFieldValue('keys');
-  //    <SettingOutlined
-  //     onClick={() => this.remove(k)
-  //       }
-  //      /> 
-  //   {keys.length > 1 ? (
-  //     <SettingOutlined
-  //     onClick={() => this.remove(k)
-  //       }
-  //      /> 
-  //   ) : null} 
-  // };
-
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -129,21 +116,10 @@ class FormularioDesktop extends React.Component {
               onClick={() => this.remove(k)}
             />) : null}
         >
-          <Form.Item className="form-item-2columns" label="Código">
-            <Input />
-          </Form.Item>
-          <Form.Item className="form-item-2columns" label="Marca">
-            <Select>
-              <Select.Option value="demo">LG</Select.Option>
-              <Select.Option value="dmo">Xiaomi</Select.Option>
-            </Select>
-          </Form.Item>
-          <Form.Item className="form-item-2columns" label="Modelo">
-            <Input />
-          </Form.Item>
-          <Form.Item className="form-item-2columns" label="Número de serie">
-            <Input />
-          </Form.Item>
+          <InputComponent label="Código"          id={"codigo"+index} class="form-item-2columns" decorator={getFieldDecorator} />
+          <MarcaSelect required={true}            id={"marca"+index}  class="form-item-2columns" decorator={getFieldDecorator} />
+          <InputComponent label="Modelo"          id={"modelo"+index} class="form-item-2columns" decorator={getFieldDecorator} />
+          <InputComponent label="Número de serie" id={"nserie"+index} class="form-item-2columns" decorator={getFieldDecorator} />
           <Form.Item className="form-item-2columns" label="Capacidad">
             <InputNumber />
             <Select style={{ width: 80 }} >
@@ -152,9 +128,7 @@ class FormularioDesktop extends React.Component {
               <Option value="dollar">TB</Option>
             </Select>
           </Form.Item>
-          <Form.Item className="form-item-2columns" label="Tipo">
-            <Input />
-          </Form.Item>
+          <InputComponent label="Tipo"          id={"tipo"+index} class="form-item-2columns" decorator={getFieldDecorator} />
           <Form.Item className="form-item-2columns" label="Descripción">
             <TextArea />
           </Form.Item>
@@ -170,21 +144,10 @@ class FormularioDesktop extends React.Component {
               layout="horizontal" 
             >
               <Divider orientation="left">DATOS GENERALES</Divider>
-              <Form.Item className="form-item-2columns" label="Código">
-                <Input />
-              </Form.Item>
-              <Form.Item className="form-item-2columns" label="Marca">
-                <Select>
-                  <Select.Option value="demo">LG</Select.Option>
-                  <Select.Option value="dmo">Xiaomi</Select.Option>
-                </Select>
-              </Form.Item >
-              <Form.Item className="form-item-2columns" label="Modelo">
-                <Input />
-              </Form.Item>
-              <Form.Item className="form-item-2columns" label="Número de serie">
-                <Input />
-              </Form.Item>
+              <InputComponent label="Código Laptop"   id="codigo_laptop" class="form-item-2columns" decorator={getFieldDecorator} />
+              <MarcaSelect    required={true}         id="marca_laptop"  class="form-item-2columns" decorator={getFieldDecorator} />
+              <InputComponent label="Modelo"          id="modelo_laptop" class="form-item-2columns" decorator={getFieldDecorator} />
+              <InputComponent label="Número de serie" id="nserie_laptop" class="form-item-2columns" decorator={getFieldDecorator} />
               <Form.Item className="form-item-2columns" label="Descripción">
                   <TextArea />
               </Form.Item>

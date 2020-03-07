@@ -13,10 +13,10 @@ import {
 } from 'antd';
 import '../custom-antd.css';
 import { Collapse } from 'antd';
-import MarcaSelect from '../Componentes/MarcaSelect'
-import InputComponent from '../Componentes/InputComponent'
-import AsignarSelect from '../Componentes/AsignarSelect'
-import IpSelect from '../Componentes/IpSelect'
+import MarcaSelect from '../Componentes/MarcaSelect';
+import InputComponent from '../Componentes/InputComponent';
+import AsignarSelect from '../Componentes/AsignarSelect';
+import IpSelect from '../Componentes/IpSelect';
 
 let id = 0;
 const { Panel } = Collapse;
@@ -46,7 +46,6 @@ class FormularioDesktop extends React.Component {
     this.handle_guardar = this.handle_guardar.bind(this);
   }
 
-
   handle_guardar = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -62,14 +61,11 @@ class FormularioDesktop extends React.Component {
 
   remove = k => {
     const { form } = this.props;
-    // can use data-binding to get
     const keys = form.getFieldValue('keys');
-    // We need at least one passenger
     if (keys.length === 1) {
       return;
     }
 
-    // can use data-binding to set
     form.setFieldsValue({
       keys: keys.filter(key => key !== k),
     });
@@ -77,30 +73,12 @@ class FormularioDesktop extends React.Component {
 
   add = () => {
     const { form } = this.props;
-    // can use data-binding to get
     const keys = form.getFieldValue('keys');
     const nextKeys = keys.concat(id++);
-    // can use data-binding to set
-    // important! notify form to detect changes
     form.setFieldsValue({
       keys: nextKeys,
     });
   };
-
-  // genExtra = k => {
-  //   const { form } = this.props;
-  //   const keys = form.getFieldValue('keys');
-  //    <SettingOutlined
-  //     onClick={() => this.remove(k)
-  //       }
-  //      /> 
-  //   {keys.length > 1 ? (
-  //     <SettingOutlined
-  //     onClick={() => this.remove(k)
-  //       }
-  //      /> 
-  //   ) : null} 
-  // };
 
   handleSubmit = e => {
     e.preventDefault();
@@ -124,15 +102,8 @@ class FormularioDesktop extends React.Component {
 
     const formItems = keys.map((k, index) => (
       <Collapse>
-        <Panel
-          header={"RAM " + (k + 1)}
-          key={k + 1}
-          extra={keys.length > 1 ? (
-            <Icon
-              className="dynamic-delete-button"
-              type="minus-circle-o"
-              onClick={() => this.remove(k)}
-            />) : null}
+        <Panel header={"RAM " + (k + 1)} key={k + 1}
+          extra={keys.length > 1 ? (<Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.remove(k)} />) : null}
         >
           <Form.Item className="form-item-2columns" label="Código">
             <Input />
@@ -175,44 +146,17 @@ class FormularioDesktop extends React.Component {
               layout="horizontal"
             >
               <Divider orientation="left">DATOS GENERALES</Divider>
-
-              <InputComponent
-                class="form-item-2columns"
-                label="Código"
-                id="codigo"
-                decorator={getFieldDecorator} />
-
-              <AsignarSelect
-                class="form-item-2columns"
-                required={true}
-                id="asignado"
-                decorator={getFieldDecorator} />
-
-              <IpSelect
-                class="form-item-2columns"
-                required={true}
-                id="ip"
-                decorator={getFieldDecorator} />
-
-              <InputComponent
-                class="form-item-2columns"
-                label="Nombre Pc"
-                id="nombrepc"
-                decorator={getFieldDecorator} />
-
-              <InputComponent
-                class="form-item-2columns"
-                label="Usuario-Pc"
-                id="nombrepc"
-                decorator={getFieldDecorator} />
-
+              <InputComponent label="Código PC"  id="codigo"   class="form-item-2columns" decorator={getFieldDecorator} />
+              <AsignarSelect  required={true}    id="asignado" class="form-item-2columns" decorator={getFieldDecorator} />
+              <IpSelect       required={true}    id="ip"       class="form-item-2columns" decorator={getFieldDecorator} />
+              <InputComponent label="Nombre PC"  id="nombrepc" class="form-item-2columns" decorator={getFieldDecorator} />
+              <InputComponent label="Usuario-PC" id="nombrepc" class="form-item-2columns" decorator={getFieldDecorator} />
               <Form.Item className="form-item-2columns" label="Estado" >
                 <Select>
                   <Select.Option value="demo">LG</Select.Option>
                   <Select.Option value="dmo">Xiaomi</Select.Option>
                 </Select>
               </Form.Item>
-
               <Form.Item className="form-item-2columns" label="Descripción general">
                 <TextArea />
               </Form.Item>
@@ -247,14 +191,7 @@ class FormularioDesktop extends React.Component {
                   <Form.Item className="form-item-2columns" label="Código">
                     <Input />
                   </Form.Item>
-                  {/*  <Form.Item className="form-item-2columns" label="Marca">
-                    <Select>
-                      <Select.Option value="demo">LG</Select.Option>
-                      <Select.Option value="dmo">Xiaomi</Select.Option>
-                    </Select>
-                  </Form.Item> */}
-
-                  <MarcaSelect
+                  <MarcaSelect 
                     class="form-item-2columns"
                     id="mmonitor"
                     required={false}

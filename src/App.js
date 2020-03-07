@@ -38,7 +38,7 @@ class App extends React.Component {
                 <span>Inicio</span>
               </Menu.Item>
               <SubMenu
-                key="sub1"
+                key="dash"
                 title={
                   <span>
                     <Icon type="database" />
@@ -46,22 +46,22 @@ class App extends React.Component {
                   </span>
                 }
               >
-                <Menu.Item key="1"><Icon type="desktop" />Desktop
+                <Menu.Item key="desktop"><Icon type="desktop" />Desktop
                   <Link to="/desktop" />
                 </Menu.Item>
-                <Menu.Item key="2"><Icon type="laptop" />Laptop
+                <Menu.Item key="laptop"><Icon type="laptop" />Laptop
                   <Link to="/laptop" />
                 </Menu.Item>
-                <Menu.Item key="3"><Icon type="wifi" />Router
+                <Menu.Item key="router"><Icon type="wifi" />Router
                   <Link to="/router" />
                 </Menu.Item>
-                <Menu.Item key="4"><Icon type="printer" />Impresora
+                <Menu.Item key="impresora"><Icon type="printer" />Impresora
                   <Link to="/impresora" />
                 </Menu.Item>
-                <Menu.Item key="5"><Icon type="appstore" />Otros equipos
+                <Menu.Item key="varios"><Icon type="appstore" />Otros equipos
                 <Link to="/otrosEquipos" />
                 </Menu.Item>
-                <Menu.Item key="6"><Icon type="cluster" />IP
+                <Menu.Item key="ip"><Icon type="cluster" />IP
                 <Link to="/ip" />
                 </Menu.Item>
               </SubMenu>
@@ -74,10 +74,10 @@ class App extends React.Component {
                   </span>
                 }
               >
-                <Menu.Item key="1"><Icon type="global" />Marcas
+                <Menu.Item key="marcas"><Icon type="global" />Marcas
                   {/* <Link to="/#" /> */}
                 </Menu.Item>
-                <Menu.Item key="2"><Icon type="cluster" />Tipo de equipo
+                <Menu.Item key="tipos_equipo"><Icon type="cluster" />Tipo de equipo
                   <Link to="/tipo" />
                 </Menu.Item>
               </SubMenu>
