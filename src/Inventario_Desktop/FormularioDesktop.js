@@ -1,37 +1,22 @@
 import React from 'react';
 import '../App.css';
-import {
-  Form,
-  Select,
-  Input,
-  Button,
-  Layout,
-  InputNumber,
-  Divider,
-  Icon,
-  Switch
-} from 'antd';
+import { Form, Select, Button, Layout, Divider, Skeleton, Icon, Switch, Collapse } from 'antd';
 import '../custom-antd.css';
-import { Collapse } from 'antd';
-import MarcaSelect from '../Componentes/MarcaSelect';
-import InputComponent from '../Componentes/InputComponent';
-import AsignarSelect from '../Componentes/AsignarSelect';
+import MarcaComp from '../Componentes/MarcaSelect';
+import InputComp from '../Componentes/InputComponent';
+import AsignComp from '../Componentes/AsignarSelect';
 import IpSelect from '../Componentes/IpSelect';
-import EstadoSelect from '../Componentes/EstadoSelect';
+import EstadComp from '../Componentes/EstadoSelect';
+import DescrComp from '../Componentes/DescripcionComponent';
+import CapacComp from '../Componentes/CapacidadComponent';
+import InNumComp from '../Componentes/InputNumberComp';
 
 let id = 0;
 const { Panel } = Collapse;
 const { Content } = Layout;
-const { TextArea } = Input;
 const { Option } = Select;
-
-const tailLayout = {
-  wrapperCol: { offset: 9, span: 5 }
-};
-
-const buttonItemLayout = {
-  wrapperCol: { span: 14, offset: 8 },
-};
+const tailLayout = { wrapperCol: { offset: 9, span: 5 } };
+const buttonItemLayout = {   wrapperCol: { span: 14, offset: 8 } };
 
 const layout = {
   labelCol: { span: 6 },
@@ -56,9 +41,7 @@ class FormularioDesktop extends React.Component {
     });
   }
 
-  state = {
-    loading: true,
-  };
+  state = { loading: true, };
 
   remove = k => {
     const { form } = this.props;
@@ -71,12 +54,39 @@ class FormularioDesktop extends React.Component {
     });
   };
 
+  remove1 = k => {
+    const { form } = this.props;
+    // can use data-binding to get
+    const keys1 = form.getFieldValue('keys1');
+    // We need at least one passenger
+    if (keys1.length === 1) {
+      return;
+    }
+
+    // can use data-binding to set
+    form.setFieldsValue({
+      keys1: keys1.filter(key => key !== k),
+    });
+  };
+
   add = () => {
     const { form } = this.props;
     const keys = form.getFieldValue('keys');
     const nextKeys = keys.concat(id++);
     form.setFieldsValue({
       keys: nextKeys,
+    });
+  };
+
+  add1 = () => {
+    const { form } = this.props;
+    // can use data-binding to get
+    const keys1 = form.getFieldValue('keys1');
+    const nextKeys1 = keys1.concat(id++);
+    // can use data-binding to set
+    // important! notify form to detect changes
+    form.setFieldsValue({
+      keys1: nextKeys1,
     });
   };
 
@@ -96,45 +106,40 @@ class FormularioDesktop extends React.Component {
   };
 
   render() {
+    const { loading } = this.state;
     const { getFieldDecorator, getFieldValue } = this.props.form;
     getFieldDecorator('keys', { initialValue: [] });
     const keys = getFieldValue('keys');
+    getFieldDecorator('keys1', { initialValue: [] });
+    const keys1 = getFieldValue('keys1');
 
     const formItems = keys.map((k, index) => (
-      <Collapse>
-        <Panel header={"RAM " + (k + 1)} key={k + 1}
-          extra={keys.length > 1 ? (<Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.remove(k)} />) : null}
-        >
-          <Form.Item className="form2col" label="Código">
-            <Input />
-          </Form.Item>
-          <Form.Item className="form2col" label="Marca">
-            <Select>
-              <Select.Option value="demo">LG</Select.Option>
-              <Select.Option value="dmo">Xiaomi</Select.Option>
-            </Select>
-          </Form.Item>
-          <Form.Item className="form2col" label="Modelo">
-            <Input />
-          </Form.Item>
-          <Form.Item className="form2col" label="Número de serie">
-            <Input />
-          </Form.Item>
-          <Form.Item className="form2col" label="Capacidad">
-            <InputNumber />
-            <Select style={{ width: 80 }} >
-              <Option value="rmb">MB</Option>
-              <Option value="dollar">GB</Option>
-              <Option value="dollar">TB</Option>
-            </Select>
-          </Form.Item>
-          <Form.Item className="form2col" label="Tipo">
-            <Input />
-          </Form.Item>
-          <Form.Item className="form2col" label="Descripción">
-            <TextArea />
-          </Form.Item>
-        </Panel>
+      <Collapse key={"colram"+index}>
+        <Panel  key={"ram_"+(index+1)} header={"RAM " + (index+1)} extra = {keys.length > 1 ? ( 
+          <Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.remove(k)} />) : null} >
+          <InputComp label="Código"          id={"codigo_ram"+index} class="form2col" decorator={getFieldDecorator} />
+          <MarcaComp required={true}         id={"marca_ram"+index}  class="form2col" decorator={getFieldDecorator} />
+          <InputComp label="Modelo"          id={"modelo_ram"+index} class="form2col" decorator={getFieldDecorator} />
+          <InputComp label="Número de serie" id={"nserie_ram"+index} class="form2col" decorator={getFieldDecorator} />
+          <CapacComp label="Capacidad"       id={"capac_ram"+index}  class="form2col" decorator={getFieldDecorator} />
+          <InputComp label="Tipo"            id={"tipo_ram"+index}   class="form2col" decorator={getFieldDecorator} />
+          <DescrComp label="Descripción"     id={"descr_ram"+index}  class="form2col" decorator={getFieldDecorator} />
+        </Panel>         
+      </Collapse>
+    ));
+
+    const formuItems = keys1.map((k, index) => (
+      <Collapse key={"coldd"+index}>
+        <Panel  key={"dd"+(index+1)} header={"Disco duro " + (index+1)} extra = {keys1.length > 1 ? ( 
+          <Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.remove1(k)} />) : null} >
+          <InputComp label="Código"          id={"codigo_dd"+index} class="form2col" decorator={getFieldDecorator} />
+          <MarcaComp required={true}         id={"marca_dd"+index}  class="form2col" decorator={getFieldDecorator} />
+          <InputComp label="Modelo"          id={"modelo_dd"+index} class="form2col" decorator={getFieldDecorator} />
+          <InputComp label="Número de serie" id={"nserie_dd"+index} class="form2col" decorator={getFieldDecorator} />
+          <CapacComp label="Capacidad"       id={"capac_dd"+index}  class="form2col" decorator={getFieldDecorator} />
+          <InputComp label="Tipo"            id={"tipo_dd"+index}   class="form2col" decorator={getFieldDecorator} />
+          <DescrComp label="Descripción"     id={"descr_dd"+index}  class="form2col" decorator={getFieldDecorator} />
+        </Panel>         
       </Collapse>
     ));
 
@@ -142,342 +147,182 @@ class FormularioDesktop extends React.Component {
       <Content>
         <div className="div-border-top" >
           <div className="div-container">
-            <Form {...layout}
-              layout="horizontal"
-            >
+            <Form {...layout} layout="horizontal" onSubmit={this.handle_guardar} >
               <Divider orientation="left">DATOS GENERALES</Divider>
-              <InputComponent label="Código PC"  id="codigo_pc"  class="form2col" decorator={getFieldDecorator} />
-              <AsignarSelect  required={true}    id="asignar_pc" class="form2col" decorator={getFieldDecorator} />
-              <IpSelect       required={true}    id="ip_pc"      class="form2col" decorator={getFieldDecorator} />
-              <InputComponent label="Nombre PC"  id="nombre_pc"  class="form2col" decorator={getFieldDecorator} />
-              <InputComponent label="Usuario-PC" id="usuario_pc" class="form2col" decorator={getFieldDecorator} />
-              <EstadoSelect   required={true}    id="estado_pc"  class="form2col" decorator={getFieldDecorator} />
-              <Form.Item className="form2col" label="Descripción general">
-                <TextArea />
-              </Form.Item>
+              <InputComp label="Código PC"           id="codigo_pc"  class="form2col" decorator={getFieldDecorator} />
+              <AsignComp required={true}             id="asignar_pc" class="form2col" decorator={getFieldDecorator} />
+              {/* <IpSelect  required={true}             id="ip_pc"      class="form2col" decorator={getFieldDecorator} /> */}
+              <InputComp label="Nombre PC"           id="nombre_pc"  class="form2col" decorator={getFieldDecorator} />
+              <InputComp label="Usuario-PC"          id="usuario_pc" class="form2col" decorator={getFieldDecorator} />
+              <EstadComp required={true}             id="estado_pc"  class="form2col" decorator={getFieldDecorator} />
+              <DescrComp label="Descripción general" id= "descr_grl" class="form2col" decorator={getFieldDecorator} />
 
               <Divider orientation="left">SISTEMA OPERATIVO</Divider>
               <Form.Item className="form2col" label="SO">
                 <Select>
-                  <Select.Option value="demo">LG</Select.Option>
-                  <Select.Option value="dmo">Xiaomi</Select.Option>
+                  <Select.Option value="win7">Windows 7</Select.Option>
+                  <Select.Option value="win10">Windows 10</Select.Option>
+                  <Select.Option value="linkali">Linux Kali</Select.Option>
                 </Select>
               </Form.Item>
-              <Form.Item className="form2col" label="Service pack">
-                <Select>
-                  <Select.Option value="demo">LG</Select.Option>
-                  <Select.Option value="dmo">Xiaomi</Select.Option>
-                </Select>
+              <Form.Item className="form2col" label="Service pack 1">
+                {getFieldDecorator('sp1', {
+                  valuePropName: 'checked',
+                  initialValue: false,
+                  rules: [{required: true, message: 'Debe completar este campo' }]
+                })( <Switch checkedChildren="Si" unCheckedChildren="No" /> )}
               </Form.Item>
               <Form.Item className="form2col" label="Licencia">
-                <Switch checkedChildren="Si" unCheckedChildren="No" />
+                {getFieldDecorator('licencia', {
+                  valuePropName: 'checked',
+                  initialValue: false,
+                  rules: [{required: true, message: 'Debe completar este campo' }]
+                })( <Switch checkedChildren="Si" unCheckedChildren="No" /> )}
               </Form.Item>
               <Form.Item className="form2col" label="Tipo de SO">
-                <Select style={{ width: 80 }} >
+                {getFieldDecorator('tipo_so', {
+                  rules: [{required: true, message:  'Debe completar este campo' }]
+                })(
+                  <Select style={{ width: 80 }} >
                   <Option value="rmb">x32</Option>
                   <Option value="dollar">x64</Option>
                 </Select>
-                bits
+                )} <span className="ant-form-text"> bits</span>
               </Form.Item>
 
+              <Divider orientation="left">DIRECCIÓN IP</Divider>
+              <Form.Item className="form2col" label="¿Asignar IP?">
+                {getFieldDecorator('dir_ip', {
+                  valuePropName: 'checked',
+                  initialValue: true,
+                  rules: [{required: false, message: 'Debe completar este campo' }]
+                })( <Switch checkedChildren="Si" unCheckedChildren="No" onChange={this.onChange} /> )}
+                
+              </Form.Item>
+              <Skeleton active size="small" loading={loading}> 
+                <IpSelect class="form2col" required={!loading} id="ip" decorator={getFieldDecorator} />
+              </Skeleton> 
+
               <Divider orientation="left">PERIFÉRICOS</Divider>
-              <Collapse >
-                <Panel header="Monitor" key="1">
-                  <Form.Item className="form2col" label="Código">
-                    <Input />
-                  </Form.Item>
-                  <MarcaSelect 
-                    class="form2col"
-                    id="mmonitor"
-                    required={false}
-                    decorator={getFieldDecorator} />
+              <Collapse accordion key="collapse_perifericos"> 
+                <Panel header="Monitor" key="info_monitor">
+                  <InputComp label="Código"          id="codigo_monitor" class="form2col" decorator={getFieldDecorator} />
+                  <MarcaComp required={true}         id="marca_monitor"  class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Modelo"          id="modelo_monitor" class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Número de serie" id="nserie_monitor" class="form2col" decorator={getFieldDecorator} />
+                  <DescrComp label="Descripción"     id="descr_monitor"  class="form2col" decorator={getFieldDecorator} />
+                </Panel>
+              {/* </Collapse> 
+                
+              <br />*/}
+              {/* <Collapse key="collapse_teclado"> */}
+                <Panel header="Teclado" key="info_teclado">
+                  <InputComp label="Código"          id="codigo_teclado" class="form2col" decorator={getFieldDecorator} />
+                  <MarcaComp required={true}         id="marca_teclado"  class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Modelo"          id="modelo_teclado" class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Número de serie" id="nserie_teclado" class="form2col" decorator={getFieldDecorator} />
+                  <DescrComp label="Descripción"     id="descr_teclado"  class="form2col" decorator={getFieldDecorator} />
+                </Panel>
+              {/* </Collapse> 
+              <br />*/}
 
-                  <Form.Item className="form2col" label="Modelo">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Número de serie">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Descripción">
-                    <TextArea />
-                  </Form.Item>
+              {/* <Collapse key="collapse_parlantes"> */}
+                <Panel header="Parlantes" key="info_partantes">
+                  <InputComp label="Código"          id="codigo_parlantes" class="form2col" decorator={getFieldDecorator} />
+                  <MarcaComp required={true}         id="marca_parlantes"  class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Modelo"          id="modelo_parlantes" class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Número de serie" id="nserie_parlantes" class="form2col" decorator={getFieldDecorator} />
+                  <DescrComp label="Descripción"     id="descr_parlantes"  class="form2col" decorator={getFieldDecorator} />
+                </Panel>
+              {/* </Collapse> 
+              <br />*/}
+
+              {/* <Collapse key="collapse_mouse"> */}
+                <Panel header="Mouse" key="info_mouse">
+                  <InputComp label="Código"          id="codigo_mouse" class="form2col" decorator={getFieldDecorator} />
+                  <MarcaComp required={true}         id="marca_mouse"  class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Modelo"          id="modelo_mouse" class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Número de serie" id="nserie_mouse" class="form2col" decorator={getFieldDecorator} />
+                  <DescrComp label="Descripción"     id="descr_mouse"  class="form2col" decorator={getFieldDecorator} />
                 </Panel>
               </Collapse>
               <br />
-              <Collapse >
-                <Panel header="Teclado" key="2">
-                  <Form.Item className="form2col" label="Código">
-                    <Input />
-                  </Form.Item>
 
-                  <MarcaSelect
-                    class="form2col"
-                    id="mteclado"
-                    required={false}
-                    decorator={getFieldDecorator} />
-
-                  <Form.Item className="form2col" label="Modelo">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Número de serie">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Descripción">
-                    <TextArea />
-                  </Form.Item>
-                </Panel>
-              </Collapse>
-              <br />
-              <Collapse >
-                <Panel header="UPS" key="3">
-                  <Form.Item className="form2col" label="Código">
-                    <Input />
-                  </Form.Item>
-
-                  <MarcaSelect
-                    class="form2col"
-                    id="mups"
-                    required={false}
-                    decorator={getFieldDecorator} />
-
-                  <Form.Item className="form2col" label="Modelo">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Número de serie">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Descripción">
-                    <TextArea />
-                  </Form.Item>
-                </Panel>
-              </Collapse>
-              <br />
-              <Collapse >
-                <Panel header="Mouse" key="4">
-                  <Form.Item className="form2col" label="Código">
-                    <Input />
-                  </Form.Item>
-
-                  <MarcaSelect
-                    class="form2col"
-                    id="mmouse"
-                    required={false}
-                    decorator={getFieldDecorator} />
-
-                  <Form.Item className="form2col" label="Modelo">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Número de serie">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Descripción">
-                    <TextArea />
-                  </Form.Item>
-                </Panel>
-              </Collapse>
-              <br />
               <Divider orientation="left">CPU</Divider>
-              <Collapse >
-                <Panel header="Tarjeta Madre" key="1">
-                  <Form.Item className="form2col" label="Código">
-                    <Input />
-                  </Form.Item>
-
-                  <MarcaSelect
-                    class="form2col"
-                    id="mcpu"
-                    required={false}
-                    decorator={getFieldDecorator} />
-
-                  <Form.Item className="form2col" label="Modelo">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Número de serie">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="RAM Soportada">
-                    <InputNumber />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Número de slots">
-                    <InputNumber />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Conexiones para Disco Duro">
-                    <InputNumber />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Descripción">
-                    <TextArea />
-                  </Form.Item>
+              <Collapse accordion key="collapse_cpu">
+                <Panel header="Tarjeta Madre" key="info_tarjetamadre">
+                  <InputComp label="Código"                     id="codigo_tarjetamadre" class="form2col" decorator={getFieldDecorator} />
+                  <MarcaComp required={false}                   id="marca_tarjetamadre"  class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Modelo"                     id="modelo_tarjetamadre" class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Número de serie"            id="nserie_tarjetamadre" class="form2col" decorator={getFieldDecorator} />  
+                  <InNumComp label="RAM Soportada"              id="ram_soportada"       class="form2col" decorator={getFieldDecorator} text="GB" />
+                  <InNumComp label="Número slots"               id="num_slots"           class="form2col" decorator={getFieldDecorator} text=""  />
+                  <InNumComp label="Conexiones para disco duro" id="conexiones_dd"       class="form2col" decorator={getFieldDecorator} text=""  />
+                  <DescrComp label="Descripción"                id="descr_tarjetamadre"  class="form2col" decorator={getFieldDecorator} />
                 </Panel>
-              </Collapse>
-              <br />
-              <Collapse>
-                <Panel header="Memoria RAM" key="2">
+              {/* </Collapse>
+              <br /> 
+              <Collapse key="collapse_ram">*/}
+                <Panel header="Memoria RAM" key="info_ram">
                   {formItems}
-                  {/*<Form.Item className="form2col" label="Código">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Marca">
-                    <Select>
-                      <Select.Option value="demo">LG</Select.Option>
-                      <Select.Option value="dmo">Xiaomi</Select.Option>
-                    </Select>
-                  </Form.Item >
-                  <Form.Item className="form2col" label="Modelo">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Número de serie">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Capacidad">
-                    <InputNumber />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Tipo">
-                    <Select>
-                      <Select.Option value="demo">LG</Select.Option>
-                      <Select.Option value="dmo">Xiaomi</Select.Option>
-                    </Select>
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Descripción">
-                    <TextArea />
-                  </Form.Item>*/}
                   <Form.Item {...buttonItemLayout}>
-                    <Button
-                      type="dashed"
-                      onClick={this.add}
-                      icon="plus"
-                      style={{ width: '60%' }}
-                    >
-                      Agregar memoria RAM
-                    </Button>
+                    <Button type="dashed" onClick={this.add} icon="plus"  style={{ width: '60%' }} > Agregar memoria RAM </Button>
                   </Form.Item>
+                </Panel>
+              {/* </Collapse>
+              <br />
+              <Collapse key="collapse_dd"> */}
+                <Panel header="Disco duro" key="info_dd">
+                  {formuItems}
+                  <Form.Item {...buttonItemLayout}>
+                    <Button type="dashed" onClick={this.add1} icon="plus"  style={{ width: '60%' }} > Agregar disco duro </Button>
+                  </Form.Item>
+                </Panel>
+              {/* </Collapse>
+              <br />
+              <Collapse key="collapse_procesador"> */}
+                <Panel header="Procesador" key="info_procesador">
+                  <InputComp label="Código"          id="codigo_procesador" class="form2col" decorator={getFieldDecorator} />
+                  <MarcaComp required={false}        id="marca_procesador"  class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Modelo"          id="modelo_procesador" class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Número de serie" id="nserie_procesador" class="form2col" decorator={getFieldDecorator} />
+                  <InNumComp label="Frecuencia"      id="frec_procesador"   class="form2col" decorator={getFieldDecorator} text="GHz" />
+                  <InNumComp label="Núcleos"         id="num_nucleos"       class="form2col" decorator={getFieldDecorator} text="" />
+                  <DescrComp label="Descripción"     id="descr_procesador"  class="form2col" decorator={getFieldDecorator} />
+                </Panel>
+              {/* </Collapse>
+              <br />
+              <Collapse key="collapse_tarjetared"> */}
+                <Panel header="Tarjeta de red" key="info_tarjetared">
+                  <InputComp label="Código"          id="codigo_tarjetared" class="form2col" decorator={getFieldDecorator} />
+                  <MarcaComp required={true}         id="marca_tarjetared"  class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Modelo"          id="modelo_tarjetared" class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Número de serie" id="nserie_tarjetared" class="form2col" decorator={getFieldDecorator} />
+                  <DescrComp label="Descripción"     id="descr_tarjetared"  class="form2col" decorator={getFieldDecorator} />
+                </Panel>
+              {/* </Collapse>
+              <br />
+              <Collapse key="collapse_case"> */}
+                <Panel header="Case" key="info_case">
+                  <InputComp label="Código"          id="codigo_case" class="form2col" decorator={getFieldDecorator} />
+                  <MarcaComp required={true}         id="marca_case"  class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Modelo"          id="modelo_case" class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Número de serie" id="nserie_case" class="form2col" decorator={getFieldDecorator} />
+                  <DescrComp label="Descripción"     id="descr_case"  class="form2col" decorator={getFieldDecorator} />
+                </Panel>
+              {/* </Collapse>
+              <br />
+              <Collapse key="collapse_fuentepoder"> */}
+                <Panel header="Fuente de poder" key="info_fuentepoder">
+                  <InputComp label="Código"          id="codigo_fuentepoder" class="form2col" decorator={getFieldDecorator} />
+                  <MarcaComp required={true}         id="marca_fuentepoder"  class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Modelo"          id="modelo_fuentepoder" class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Número de serie" id="nserie_fuentepoder" class="form2col" decorator={getFieldDecorator} />
+                  <DescrComp label="Descripción"     id="descr_fuentepoder"  class="form2col" decorator={getFieldDecorator} />
                 </Panel>
               </Collapse>
               <br />
-              <Collapse>
-                <Panel header="Disco duro" key="3">
-                  <Form.Item className="form2col" label="Código">
-                    <Input />
-                  </Form.Item>
 
-                  <MarcaSelect
-                    class="form2col"
-                    id="mdisco"
-                    required={false}
-                    decorator={getFieldDecorator} />
-
-                  <Form.Item className="form2col" label="Modelo">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Número de serie">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Capacidad">
-                    <InputNumber />
-                    <Select style={{ width: 80 }} >
-                      <Option value="rmb">MB</Option>
-                      <Option value="dollar">GB</Option>
-                      <Option value="dollar">TB</Option>
-                    </Select>
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Tipo">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Descripción">
-                    <TextArea />
-                  </Form.Item>
-                </Panel>
-              </Collapse>
-              <br />
-              <Collapse>
-                <Panel header="Procesador" key="4">
-                  <Form.Item className="form2col" label="Código">
-                    <Input />
-                  </Form.Item>
-
-                  <MarcaSelect
-                    class="form2col"
-                    id="mprocesador"
-                    required={false}
-                    decorator={getFieldDecorator} />
-
-                  <Form.Item className="form2col" label="Modelo">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Número de serie">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Frecuencia">
-                    <InputNumber />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Número de núcleos">
-                    <InputNumber />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Descripción">
-                    <TextArea />
-                  </Form.Item>
-                </Panel>
-              </Collapse>
-              <br />
-              <Collapse>
-                <Panel header="Tarjeta de red" key="5">
-                  <Form.Item className="form2col" label="Código">
-                    <Input />
-                  </Form.Item>
-
-                  <MarcaSelect
-                    class="form2col"
-                    id="mred"
-                    required={false}
-                    decorator={getFieldDecorator} />
-
-
-                  <Form.Item className="form2col" label="Modelo">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Número de serie">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Descripción">
-                    <TextArea />
-                  </Form.Item>
-                </Panel>
-              </Collapse>
-              <br />
-              <Collapse>
-                <Panel header="Case" key="6">
-                  <Form.Item className="form2col" label="Código">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Marca">
-                    <Select>
-                      <Select.Option value="demo">LG</Select.Option>
-                      <Select.Option value="dmo">Xiaomi</Select.Option>
-                    </Select>
-                  </Form.Item >
-                  <Form.Item className="form2col" label="Modelo">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Número de serie">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item className="form2col" label="Descripción">
-                    <TextArea />
-                  </Form.Item>
-                </Panel>
-              </Collapse>
-              <br />
-              <Collapse>
-                <Panel header="Fuente de poder" key="7">
-                  <InputComponent label="Código"          id="codigo_fuente"   class="form2col" decorator={getFieldDecorator} />
-                  <MarcaSelect    required={true}         id="marca_fuente"    class="form2col" decorator={getFieldDecorator} />
-                  <InputComponent label="Modelo"          id="modelo_fuente"   class="form2col" decorator={getFieldDecorator} />
-                  <InputComponent label="Número de serie" id="nserie_fuente"   class="form2col" decorator={getFieldDecorator} />
-                  <Form.Item className="form2col" label="Descripción">
-                    <TextArea />
-                  </Form.Item> 
-                </Panel>
-              </Collapse>
-              <br />
               <Form.Item {...tailLayout}>
                 <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
                 <Button type="primary">Cancelar</Button>

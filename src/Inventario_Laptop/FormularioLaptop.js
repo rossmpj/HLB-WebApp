@@ -1,24 +1,23 @@
 import React from 'react';
 import '../App.css';
-import { Form, Button, Layout, InputNumber, Divider, Icon } from 'antd';
+import { Form, Button, Layout, Divider, Icon, Select, Skeleton, Switch } from 'antd';
 import '../custom-antd.css';
 import { Collapse } from 'antd';
 import InputComp from '../Componentes/InputComponent';
 import DescrComp from '../Componentes/DescripcionComponent';
 import CapacComp from '../Componentes/CapacidadComponent';
 import MarcaComp from '../Componentes/MarcaSelect';
+import AsignComp from '../Componentes/AsignarSelect';
+import IpSelect from '../Componentes/IpSelect';
+import EstadComp from '../Componentes/EstadoSelect';
+import InNumComp from '../Componentes/InputNumberComp';
 
 let id = 0;
 const { Panel } = Collapse;
+const { Option } = Select;
 const { Content } = Layout;
-
-const tailLayout = {
-  wrapperCol: { offset: 9, span: 5 }
-};
-
-const buttonItemLayout = {
-  wrapperCol: {span: 14, offset: 8},
-};
+const tailLayout = { wrapperCol: { offset: 9, span: 5 } };
+const buttonItemLayout = { wrapperCol: {span: 14, offset: 8} };
 
 const layout = {
   labelCol: { span: 6 },
@@ -34,9 +33,7 @@ class FormularioDesktop extends React.Component {
     this.handle_guardar = this.handle_guardar.bind(this);
   }
 
-  state = {
-    loading: true,
-  };
+  state = { loading: true };
   
   remove = k => {
     const { form } = this.props;
@@ -46,7 +43,6 @@ class FormularioDesktop extends React.Component {
     if (keys.length === 1) {
       return;
     }
-
     // can use data-binding to set
     form.setFieldsValue({
       keys: keys.filter(key => key !== k),
@@ -55,14 +51,10 @@ class FormularioDesktop extends React.Component {
 
   remove1 = k => {
     const { form } = this.props;
-    // can use data-binding to get
     const keys1 = form.getFieldValue('keys1');
-    // We need at least one passenger
     if (keys1.length === 1) {
       return;
     }
-
-    // can use data-binding to set
     form.setFieldsValue({
       keys1: keys1.filter(key => key !== k),
     });
@@ -82,11 +74,8 @@ class FormularioDesktop extends React.Component {
 
   add1 = () => {
     const { form } = this.props;
-    // can use data-binding to get
     const keys1 = form.getFieldValue('keys1');
     const nextKeys1 = keys1.concat(id++);
-    // can use data-binding to set
-    // important! notify form to detect changes
     form.setFieldsValue({
       keys1: nextKeys1,
     });
@@ -110,13 +99,14 @@ class FormularioDesktop extends React.Component {
           console.log(values)
         }
     });
-}
+  }
 
   onChange = checked => {
     this.setState({ loading: !checked });
   };
   
   render() {
+    const { loading } = this.state;
     const { getFieldDecorator, getFieldValue } = this.props.form;
     getFieldDecorator('keys', { initialValue: [] });
     const keys = getFieldValue('keys');
@@ -159,31 +149,68 @@ class FormularioDesktop extends React.Component {
           <div className="div-container"> 
             <Form {...layout} layout="horizontal" onSubmit={this.handle_guardar} >
               <Divider orientation="left">DATOS GENERALES</Divider>
-              <InputComp label="Código Laptop"   id="codigo_laptop" class="form2col" decorator={getFieldDecorator} />
-              <MarcaComp required={true}         id="marca_laptop"  class="form2col" decorator={getFieldDecorator} />
-              <InputComp label="Modelo"          id="modelo_laptop" class="form2col" decorator={getFieldDecorator} />
-              <InputComp label="Número de serie" id="nserie_laptop" class="form2col" decorator={getFieldDecorator} />
-              <DescrComp label="Descripción"     id="descr_laptop"  class="form2col" decorator={getFieldDecorator} />
+              <InputComp label="Código Laptop"   id="codigo_laptop" class="form2col"  decorator={getFieldDecorator} />
+              <AsignComp required={true}         id="asignar_laptop" class="form2col" decorator={getFieldDecorator} />
+              <MarcaComp required={true}         id="marca_laptop"  class="form2col"  decorator={getFieldDecorator} />
+              <InputComp label="Modelo"          id="modelo_laptop" class="form2col"  decorator={getFieldDecorator} />
+              <InputComp label="Número de serie" id="nserie_laptop" class="form2col"  decorator={getFieldDecorator} />
+              <InputComp label="Nombre PC"       id="nombre_laptop"  class="form2col" decorator={getFieldDecorator} />
+              <InputComp label="Usuario-PC"      id="usuario_laptop" class="form2col" decorator={getFieldDecorator} />
+              <EstadComp required={true}         id="estado_laptop"  class="form2col" decorator={getFieldDecorator} />
+              <DescrComp label="Descripción"     id="descr_laptop"  class="form2col"  decorator={getFieldDecorator} />
+
+              <Divider orientation="left">SISTEMA OPERATIVO</Divider>
+              <Form.Item className="form2col" label="SO">
+                <Select>
+                  <Select.Option value="win7">Windows 7</Select.Option>
+                  <Select.Option value="win10">Windows 10</Select.Option>
+                  <Select.Option value="linkali">Linux Kali</Select.Option>
+                </Select>
+              </Form.Item>
+              <Form.Item className="form2col" label="Service pack 1">
+                {getFieldDecorator('sp1', {
+                  valuePropName: 'checked',
+                  initialValue: false,
+                  rules: [{required: true, message: 'Debe completar este campo' }]
+                })( <Switch checkedChildren="Si" unCheckedChildren="No" /> )}
+              </Form.Item>
+              <Form.Item className="form2col" label="Licencia">
+                {getFieldDecorator('licencia', {
+                  valuePropName: 'checked',
+                  initialValue: false,
+                  rules: [{required: true, message: 'Debe completar este campo' }]
+                })( <Switch checkedChildren="Si" unCheckedChildren="No" /> )}
+              </Form.Item>
+              <Form.Item className="form2col" label="Tipo de SO">
+                {getFieldDecorator('tipo_so', {
+                  rules: [{required: true, message: 'Debe completar este campo' }]
+                })(
+                  <Select >
+                    <Option value="x32">x32</Option>
+                    <Option value="x64">x64</Option>
+                  </Select>
+                )} <span className="ant-form-text">bits</span>
+              </Form.Item>
+
+              <Divider orientation="left">DIRECCIÓN IP</Divider>
+              <Form.Item className="form2col" label="¿Asignar IP?">
+                {getFieldDecorator('asign_ip', {
+                  valuePropName: 'checked',
+                  initialValue: false,
+                  rules: [{required: false, message: 'Debe completar este campo' }]
+                })( <Switch checkedChildren="Si" unCheckedChildren="No" onChange={this.onChange} /> )}
+              </Form.Item>
+              <Skeleton loading={loading}> 
+                <IpSelect class="form2col" required={!loading} id="ip" decorator={getFieldDecorator} />
+              </Skeleton> 
         
               <Divider orientation="left">DATOS DEL PROCESADOR</Divider>
-              <Form.Item className="form2col" label="Frecuencia">
-                {getFieldDecorator('frecuencia', { rules: [{ required: true, message: 'Debe completar este campo' }],
-                })( <InputNumber /> )}<span className="ant-form-text"> GHz</span> 
-              </Form.Item>
-              <Form.Item className="form2col" label="Núcleos">
-                {getFieldDecorator('nucleos', { rules: [{ required: true, message: 'Debe completar este campo' }],
-                })( <InputNumber /> )}
-              </Form.Item>
-          
+              <InNumComp label="Frecuencia"    class="form2col" id="frec_procesador"    text="GHz" decorator={getFieldDecorator} />
+              <InNumComp label="Núcleos"       class="form2col" id="nucleos_procesador" text=""    decorator={getFieldDecorator} />
+                        
               <Divider orientation="left">DATOS GENERALES DE MEMORIA RAM</Divider>
-              <Form.Item className="form2col" label="RAM Soportada">
-                {getFieldDecorator('ram_soportada', { rules: [{ required: true, message: 'Debe completar este campo' }],
-                })( <InputNumber /> )}<span className="ant-form-text"> GB</span> 
-              </Form.Item>
-              <Form.Item className="form2col" label="Número de slots">
-                {getFieldDecorator('nslots', { rules: [{ required: true, message: 'Debe completar este campo' }],
-                })( <InputNumber /> )}
-              </Form.Item>
+              <InNumComp label="RAM Soportada" class="form2col" id="ram_soportada"      text="GB"  decorator={getFieldDecorator} />
+              <InNumComp label="Número slots"  class="form2col" id="num_slots"          text=""    decorator={getFieldDecorator} />
               <Collapse>
                 <Panel header="Memorias RAM" key="info_ram">
                   {formItems}

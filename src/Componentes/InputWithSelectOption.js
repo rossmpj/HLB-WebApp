@@ -4,18 +4,9 @@ import { Select, Input } from 'antd';
 const { Option } = Select;
 
 class InputWithSelectOption extends React.Component {
-  //  state = {
-  //    inputValue: 1,
-  //  };
-
-  //  onChange = value => {
-  //    this.setState({
-  //      inputValue: value,
-  //    });
-  //  };
    
   handleNumberChange = e => {
-    const number = parseInt(e.target.value || 0, 10);
+    const number = parseFloat(e.target.value || 0, 10);
     if (isNaN(number)) {
       return;
     }
@@ -41,9 +32,9 @@ class InputWithSelectOption extends React.Component {
     return (
         <span>
         <Input 
-        type="text"
-         value={value.number}
-         onChange={this.handleNumberChange}
+          type="text"
+          value={value.number}
+          onChange={this.handleNumberChange}
         />    
             <Select value={value.currency}
             onChange={this.handleCurrencyChange}
