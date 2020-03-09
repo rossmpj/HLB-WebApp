@@ -51,7 +51,7 @@
   min-height: 360px;
 }
 
-.form-item-2columns{
+.form2col{
   display: inline-block;
   width: calc(50% - 12px);
 }
