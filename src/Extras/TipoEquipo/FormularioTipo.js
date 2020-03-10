@@ -4,7 +4,8 @@ import {
     Form,
     Button,
     Layout,
-    Switch
+    Switch,
+    message
 } from 'antd';
 import '../../custom-antd.css';
 import InputComponent from '../../Componentes/InputComponent'
@@ -24,7 +25,7 @@ class FormularioIp extends React.Component {
 
     constructor(props) {
         super(props);
-       
+
         this.handle_guardar = this.handle_guardar.bind(this);
     }
 
@@ -33,6 +34,7 @@ class FormularioIp extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log(values)
+                message.success('Registro guardado satisfactoriamente')
             }
         });
     }

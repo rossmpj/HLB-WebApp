@@ -5,7 +5,8 @@ import {
     Select,
     Input,
     Button,
-    Layout
+    Layout,
+    message
 } from 'antd';
 import '../custom-antd.css';
 import InputComponent from '../Componentes/InputComponent'
@@ -45,7 +46,8 @@ class FormularioImpresora extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log(values)
-            }
+                message.success('Registro guardado satisfactoriamente')
+            } 
         });
     }
 
@@ -60,11 +62,11 @@ class FormularioImpresora extends React.Component {
                             layout="horizontal"
                             onSubmit={this.handle_guardar}
                         >
-                            <InputComponent 
-                            class="" 
-                            label="Número de serie" 
-                            id="nserie" 
-                            decorator={getFieldDecorator} />
+                            <InputComponent
+                                class=""
+                                label="Número de serie"
+                                id="nserie"
+                                decorator={getFieldDecorator} />
 
                             <Form.Item label="Tipo">
                                 {getFieldDecorator('tipo', {
@@ -89,11 +91,11 @@ class FormularioImpresora extends React.Component {
                                 required={true}
                                 decorator={getFieldDecorator} />
 
-                            <InputComponent 
-                            class="" 
-                            label="Código" 
-                            id="codigo" 
-                            decorator={getFieldDecorator} />
+                            <InputComponent
+                                class=""
+                                label="Código"
+                                id="codigo"
+                                decorator={getFieldDecorator} />
 
                             <Form.Item label="Estado">
                                 {getFieldDecorator('estado', {
@@ -108,26 +110,26 @@ class FormularioImpresora extends React.Component {
                                 )}
                             </Form.Item>
 
-                            <InputComponent 
-                            class="" 
-                            label="Modelo" 
-                            id="modelo" 
-                            decorator={getFieldDecorator} />
+                            <InputComponent
+                                class=""
+                                label="Modelo"
+                                id="modelo"
+                                decorator={getFieldDecorator} />
 
                             {
                                 this.state.tipo === "matricial" ?
                                     <div>
-                                        <InputComponent 
-                                        class="" 
-                                        label="Cinta" 
-                                        id="cinta" 
-                                        decorator={getFieldDecorator} />
+                                        <InputComponent
+                                            class=""
+                                            label="Cinta"
+                                            id="cinta"
+                                            decorator={getFieldDecorator} />
 
-                                        <InputComponent 
-                                        class="" 
-                                        label="Cartucho" 
-                                        id="cartucho" 
-                                        decorator={getFieldDecorator} />
+                                        <InputComponent
+                                            class=""
+                                            label="Cartucho"
+                                            id="cartucho"
+                                            decorator={getFieldDecorator} />
                                     </div>
                                     : null
                             }
@@ -135,17 +137,17 @@ class FormularioImpresora extends React.Component {
                             {
                                 this.state.tipo === "impresora" ?
                                     <div>
-                                        <InputComponent 
-                                        class="" 
-                                        label="Tinta" 
-                                        id="tinta" 
-                                        decorator={getFieldDecorator} />
+                                        <InputComponent
+                                            class=""
+                                            label="Tinta"
+                                            id="tinta"
+                                            decorator={getFieldDecorator} />
 
-                                        <InputComponent 
-                                        class="" 
-                                        label="Cartucho" 
-                                        id="cartucho" 
-                                        decorator={getFieldDecorator} />
+                                        <InputComponent
+                                            class=""
+                                            label="Cartucho"
+                                            id="cartucho"
+                                            decorator={getFieldDecorator} />
                                     </div>
                                     : null
                             }
@@ -153,27 +155,27 @@ class FormularioImpresora extends React.Component {
                             {
                                 this.state.tipo === "brazalete" ?
                                     <div>
-                                        <InputComponent 
-                                        class="" 
-                                        label="Rollo-Brazalete" 
-                                        id="rolloBrazalete" 
-                                        decorator={getFieldDecorator} />
-                                        <InputComponent 
-                                        class="" 
-                                        label="Tinta" 
-                                        id="tinta" 
-                                        decorator={getFieldDecorator} />
-                                        <InputComponent 
-                                        class="" 
-                                        label="Cartucho" 
-                                        id="cartucho" 
-                                        decorator={getFieldDecorator} />
-                                        
-                                        <InputComponent 
-                                        class="" 
-                                        label="Toner" 
-                                        id="toner" 
-                                        decorator={getFieldDecorator} />
+                                        <InputComponent
+                                            class=""
+                                            label="Rollo-Brazalete"
+                                            id="rolloBrazalete"
+                                            decorator={getFieldDecorator} />
+                                        <InputComponent
+                                            class=""
+                                            label="Tinta"
+                                            id="tinta"
+                                            decorator={getFieldDecorator} />
+                                        <InputComponent
+                                            class=""
+                                            label="Cartucho"
+                                            id="cartucho"
+                                            decorator={getFieldDecorator} />
+
+                                        <InputComponent
+                                            class=""
+                                            label="Toner"
+                                            id="toner"
+                                            decorator={getFieldDecorator} />
                                     </div>
                                     : null
                             }
@@ -181,11 +183,11 @@ class FormularioImpresora extends React.Component {
                             {
                                 this.state.tipo === "escaner" ?
                                     <div>
-                                        <InputComponent 
-                                        class="" 
-                                        label="Rodillo" 
-                                        id="rodillo" 
-                                        decorator={getFieldDecorator} />
+                                        <InputComponent
+                                            class=""
+                                            label="Rodillo"
+                                            id="rodillo"
+                                            decorator={getFieldDecorator} />
                                     </div>
                                     : null
                             }
@@ -193,21 +195,21 @@ class FormularioImpresora extends React.Component {
                             {
                                 this.state.tipo === "multifuncional" ?
                                     <div>
-                                        <InputComponent 
-                                        class="" 
-                                        label="Cartucho" 
-                                        id="cartucho" 
-                                        decorator={getFieldDecorator} />
-                                        <InputComponent 
-                                        class="" 
-                                        label="Toner" 
-                                        id="toner" 
-                                        decorator={getFieldDecorator} />
-                                        <InputComponent 
-                                        class="" 
-                                        label="Rodillo" 
-                                        id="rodillo" 
-                                        decorator={getFieldDecorator} />
+                                        <InputComponent
+                                            class=""
+                                            label="Cartucho"
+                                            id="cartucho"
+                                            decorator={getFieldDecorator} />
+                                        <InputComponent
+                                            class=""
+                                            label="Toner"
+                                            id="toner"
+                                            decorator={getFieldDecorator} />
+                                        <InputComponent
+                                            class=""
+                                            label="Rodillo"
+                                            id="rodillo"
+                                            decorator={getFieldDecorator} />
                                     </div>
                                     : null
                             }

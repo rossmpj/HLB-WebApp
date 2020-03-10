@@ -4,7 +4,8 @@ import {
     Form,
     Input,
     Button,
-    Layout
+    Layout,
+    message
 } from 'antd';
 import '../custom-antd.css';
 import InputComponent from '../Componentes/InputComponent'
@@ -33,7 +34,6 @@ class FormularioEquipo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tipo: "",
             estado: "disponible",
             encargado: "",
             id: ""
@@ -47,6 +47,7 @@ class FormularioEquipo extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log(values)
+                message.success('Registro guardado satisfactoriamente')
             }
         });
     }
@@ -62,11 +63,11 @@ class FormularioEquipo extends React.Component {
                             layout="horizontal"
                             onSubmit={this.handle_guardar}
                         >
-                            <InputComponent 
-                            class="" 
-                            label="Código" 
-                            id="codigo" 
-                            decorator={getFieldDecorator} />
+                            <InputComponent
+                                class=""
+                                label="Código"
+                                id="codigo"
+                                decorator={getFieldDecorator} />
                             {/*  <Form.Item label="Estado">
                                 {getFieldDecorator('estado', {
                                     rules: [{ required: true, message: 'Debe seleccionar el estado' }],
@@ -80,47 +81,47 @@ class FormularioEquipo extends React.Component {
                                 )}
                             </Form.Item> */}
 
-                            <InputComponent 
-                            class="" 
-                            label="Número de serie" 
-                            id="nserie" 
-                            decorator={getFieldDecorator} />
+                            <InputComponent
+                                class=""
+                                label="Número de serie"
+                                id="nserie"
+                                decorator={getFieldDecorator} />
 
-                            <TipoSelect 
-                            class="" 
-                            id="tipo"
-                            required={true} 
-                            decorator={getFieldDecorator} />
+                            <TipoSelect
+                                class=""
+                                id="tipo"
+                                required={true}
+                                decorator={getFieldDecorator} />
 
-                            <InputComponent 
-                            class="" 
-                            label="Modelo" 
-                            id="modelo" 
-                            decorator={getFieldDecorator} />
+                            <InputComponent
+                                class=""
+                                label="Modelo"
+                                id="modelo"
+                                decorator={getFieldDecorator} />
 
-                            <MarcaSelect 
-                            class="" 
-                            id="marca"
-                            required={true} 
-                            decorator={getFieldDecorator} />
+                            <MarcaSelect
+                                class=""
+                                id="marca"
+                                required={true}
+                                decorator={getFieldDecorator} />
 
-                            <IpSelect 
-                            class="" 
-                            required={false} 
-                            id="ip"
-                            decorator={getFieldDecorator}/>
+                            <IpSelect
+                                class=""
+                                required={false}
+                                id="ip"
+                                decorator={getFieldDecorator} />
 
-                            <ComponentePrincipal 
-                            class="" 
-                            id="principal"
-                            required={false}
-                            decorator={getFieldDecorator}/>
+                            <ComponentePrincipal
+                                class=""
+                                id="principal"
+                                required={false}
+                                decorator={getFieldDecorator} />
 
-                            <AsignarSelect 
-                            class="" 
-                            required={false} 
-                            id="asignado"
-                            decorator={getFieldDecorator}/>
+                            <AsignarSelect
+                                class=""
+                                required={false}
+                                id="asignado"
+                                decorator={getFieldDecorator} />
 
                             <Form.Item label="Descripción">
                                 {getFieldDecorator('descripcion')(
