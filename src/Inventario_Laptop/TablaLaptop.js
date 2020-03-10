@@ -15,6 +15,11 @@ const columns = [
     render: text => <a href="!#">{text}</a>,
   },
   {
+    title: 'Empleado',
+    dataIndex: 'empleado',
+    key: 'empleado',
+  },
+  {
     title: 'Marca',
     dataIndex: 'marca',
     key: 'marca',
@@ -30,6 +35,61 @@ const columns = [
     key: 'num_serie',
   },
   {
+    title: 'Nombre PC',
+    dataIndex: 'name_pc',
+    key: 'name_pc',
+  },
+  {
+    title: 'Usuario PC',
+    dataIndex: 'user_pc',
+    key: 'user_pc',
+  },
+  {
+    title: 'Estado',
+    dataIndex: 'estado',
+    key: 'estado',
+  },
+  {
+    title: 'Sistema operativo',
+    dataIndex: 'so',
+    key: 'so',
+  }, 
+  {
+    title: 'Tipo de SO',
+    dataIndex: 'so_type',
+    key: 'so_type',
+  }, 
+  {
+    title: 'Service Pack 1',
+    dataIndex: 'servpack',
+    key: 'servpack',
+  }, 
+  {
+    title: 'Licencia',
+    dataIndex: 'licencia',
+    key: 'licencia',
+  }, 
+  {
+    title: 'Office',
+    dataIndex: 'office',
+    key: 'office',
+  },
+  {
+    title: 'Dirección IP',
+    dataIndex: 'ip',
+    key: 'ip',
+  },
+  {
+    title: 'Frecuencia del procesador',
+    dataIndex: 'frecuencia',
+    key: 'frecuencia',
+  }, 
+  {
+    title: 'Núcleos del procesador',
+    dataIndex: 'clave',
+    key: 'clave',
+  },
+  {
     title: 'RAM Soportada',
     dataIndex: 'ram',
     key: 'ram',
@@ -40,14 +100,14 @@ const columns = [
     key: 'slots_ram',
   },
   {
-    title: 'Frecuencia del procesador',
-    dataIndex: 'frecuencia',
-    key: 'frecuencia',
-  }, 
+    title: 'Memorias RAM',
+    dataIndex: 'rams',
+    key: 'rams',
+  },  
   {
-    title: 'Núcleos del prcesador',
-    dataIndex: 'clave',
-    key: 'clave',
+    title: 'Discos duros',
+    dataIndex: 'discos',
+    key: 'discos',
   },
   {
     title: 'Descripción',
@@ -217,7 +277,7 @@ class TablaLaptop extends React.Component{
         </Row>
       </div>
       <br />
-      <Table columns={columns} dataSource={data}></Table>
+      <Table size="small" columns={columns} dataSource={data}></Table>
     </div>
     );
   }

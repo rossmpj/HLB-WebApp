@@ -161,11 +161,25 @@ class FormularioDesktop extends React.Component {
 
               <Divider orientation="left">SISTEMA OPERATIVO</Divider>
               <Form.Item className="form2col" label="SO">
-                <Select>
-                  <Select.Option value="win7">Windows 7</Select.Option>
-                  <Select.Option value="win10">Windows 10</Select.Option>
-                  <Select.Option value="linkali">Linux Kali</Select.Option>
-                </Select>
+                {getFieldDecorator('so', {
+                  rules: [{required: true, message: 'Debe completar este campo' }]
+                })(
+                  <Select>
+                    <Select.Option value="win7">Windows 7</Select.Option>
+                    <Select.Option value="win10">Windows 10</Select.Option>
+                    <Select.Option value="linkali">Linux Kali</Select.Option>
+                  </Select>
+                )}
+              </Form.Item>
+              <Form.Item className="form2col" label="Tipo de SO">
+                {getFieldDecorator('tipo_so', {
+                  rules: [{required: true, message: 'Debe completar este campo' }]
+                })(
+                  <Select style={{ width: 80 }} >
+                    <Option value="x86">32</Option>
+                    <Option value="x64">64</Option>
+                  </Select>
+                )} <span className="ant-form-text">bits</span>
               </Form.Item>
               <Form.Item className="form2col" label="Service pack 1">
                 {getFieldDecorator('sp1', {
@@ -181,22 +195,23 @@ class FormularioDesktop extends React.Component {
                   rules: [{required: true, message: 'Debe completar este campo' }]
                 })( <Switch checkedChildren="Si" unCheckedChildren="No" /> )}
               </Form.Item>
-              <Form.Item className="form2col" label="Tipo de SO">
-                {getFieldDecorator('tipo_so', {
+              
+              <Form.Item className="form2col" label="Office">
+                {getFieldDecorator('office', {
                   rules: [{required: true, message: 'Debe completar este campo' }]
                 })(
-                  <Select >
-                    <Option value="x32">x32</Option>
-                    <Option value="x64">x64</Option>
+                  <Select>
+                    <Select.Option value="2010">Office 2010</Select.Option>
+                    <Select.Option value="2013">Office 2013</Select.Option>
                   </Select>
-                )} <span className="ant-form-text">bits</span>
+                )}
               </Form.Item>
 
               <Divider orientation="left">DIRECCIÓN IP</Divider>
               <Form.Item className="form2col" label="¿Asignar IP?">
                 {getFieldDecorator('asign_ip', {
                   valuePropName: 'checked',
-                  initialValue: false,
+                  initialValue: true,
                   rules: [{required: false, message: 'Debe completar este campo' }]
                 })( <Switch checkedChildren="Si" unCheckedChildren="No" onChange={this.onChange} /> )}
               </Form.Item>

@@ -20,11 +20,6 @@ const columns = [
     key: 'empleado',
   },
   {
-    title: 'Dirección IP',
-    dataIndex: 'ip',
-    key: 'ip',
-  },
-  {
     title: 'Nombre PC',
     dataIndex: 'name_pc',
     key: 'name_pc',
@@ -45,7 +40,12 @@ const columns = [
     key: 'so',
   }, 
   {
-    title: 'Service Pack',
+    title: 'Tipo de SO',
+    dataIndex: 'so_type',
+    key: 'so_type',
+  }, 
+  {
+    title: 'Service Pack 1',
     dataIndex: 'servpack',
     key: 'servpack',
   }, 
@@ -55,14 +55,14 @@ const columns = [
     key: 'licencia',
   }, 
   {
-    title: 'Tipo de SO',
-    dataIndex: 'so_type',
-    key: 'so_type',
-  }, 
-  {
     title: 'Office',
     dataIndex: 'office',
     key: 'office',
+  },
+  {
+    title: 'Dirección IP',
+    dataIndex: 'ip',
+    key: 'ip',
   },
   {
     title: 'Monitor',
@@ -75,9 +75,9 @@ const columns = [
     key: 'teclado',
   }, 
   {
-    title: 'UPS',
-    dataIndex: 'ups',
-    key: 'ups',
+    title: 'Parlantes',
+    dataIndex: 'parlantes',
+    key: 'parlantes',
   },
   {
     title: 'Mouse',
@@ -118,6 +118,11 @@ const columns = [
     title: 'Fuente de poder',
     dataIndex: 'f_poder',
     key: 'f_poder',
+  }, 
+  {
+    title: 'UPS',
+    dataIndex: 'ups',
+    key: 'ups',
   },
   {
     title: 'Descripción',
@@ -244,17 +249,18 @@ const data = [
   //   num_serie: 23, 
   //   descripcion: 'muy bueno'
   // },
-  // {
-  //   codigo: '3',
-  //   nombre: 'Joe Black',
-  //   pass: 432,
-  //   usuario: 'admin', 
-  //   clave: '1234',
-  //   marca: 'LG',
-  //   modelo: 'ergr',
-  //   num_serie: 23, 
-  //   descripcion: 'muy bueno'
-  // },
+   {
+     key:'4',
+     codigo: '3',
+     nombre: 'Joe Black',
+     pass: 432,
+     usuario: 'admin', 
+     clave: '1234',
+     marca: 'LG',
+     modelo: 'ergr',
+     num_serie: 23, 
+     descripcion: 'muy bueno'
+   },
 ];
 
 class TablaDesktop extends React.Component{
@@ -287,7 +293,7 @@ class TablaDesktop extends React.Component{
         </Row>
       </div>
       <br />
-      <Table size="medium" columns={columns} dataSource={data}></Table>
+      <Table size="small" columns={columns} dataSource={data}></Table>
     </div>
     );
   }

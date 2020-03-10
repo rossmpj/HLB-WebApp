@@ -1,6 +1,6 @@
 import React from 'react';
 import '../App.css';
-import { Form, Select, Button, Layout, Divider, Skeleton, Icon, Switch, Collapse } from 'antd';
+import { Form, Select, Button, Layout, Divider, Skeleton, Icon, Switch, Collapse, Radio } from 'antd';
 import '../custom-antd.css';
 import MarcaComp from '../Componentes/MarcaSelect';
 import InputComp from '../Componentes/InputComponent';
@@ -31,6 +31,18 @@ class FormularioDesktop extends React.Component {
     };
     this.handle_guardar = this.handle_guardar.bind(this);
   }
+  state = {
+    value: 'Noaplica',
+    activo: false,
+  };
+
+  onChangeRadio = e => {
+    console.log('radio checked', e.target.value);
+    this.setState({
+      value: e.target.value,
+      activo: true
+    });
+  };
 
   handle_guardar = e => {
     e.preventDefault();
@@ -46,7 +58,7 @@ class FormularioDesktop extends React.Component {
   remove = k => {
     const { form } = this.props;
     const keys = form.getFieldValue('keys');
-    if (keys.length === 1) {
+    if (keys.length === 0) {
       return;
     }
     form.setFieldsValue({
@@ -59,7 +71,7 @@ class FormularioDesktop extends React.Component {
     // can use data-binding to get
     const keys1 = form.getFieldValue('keys1');
     // We need at least one passenger
-    if (keys1.length === 1) {
+    if (keys1.length === 0) {
       return;
     }
 
@@ -115,7 +127,7 @@ class FormularioDesktop extends React.Component {
 
     const formItems = keys.map((k, index) => (
       <Collapse key={"colram"+index}>
-        <Panel  key={"ram_"+(index+1)} header={"RAM " + (index+1)} extra = {keys.length > 1 ? ( 
+        <Panel  key={"ram_"+(index+1)} header={"RAM " + (index+1)} extra = {keys.length > 0 ? ( 
           <Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.remove(k)} />) : null} >
           <InputComp label="Código"          id={"codigo_ram"+index} class="form2col" decorator={getFieldDecorator} />
           <MarcaComp required={true}         id={"marca_ram"+index}  class="form2col" decorator={getFieldDecorator} />
@@ -130,7 +142,7 @@ class FormularioDesktop extends React.Component {
 
     const formuItems = keys1.map((k, index) => (
       <Collapse key={"coldd"+index}>
-        <Panel  key={"dd"+(index+1)} header={"Disco duro " + (index+1)} extra = {keys1.length > 1 ? ( 
+        <Panel  key={"dd"+(index+1)} header={"Disco duro " + (index+1)} extra = {keys1.length > 0 ? ( 
           <Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.remove1(k)} />) : null} >
           <InputComp label="Código"          id={"codigo_dd"+index} class="form2col" decorator={getFieldDecorator} />
           <MarcaComp required={true}         id={"marca_dd"+index}  class="form2col" decorator={getFieldDecorator} />
@@ -159,11 +171,25 @@ class FormularioDesktop extends React.Component {
 
               <Divider orientation="left">SISTEMA OPERATIVO</Divider>
               <Form.Item className="form2col" label="SO">
-                <Select>
-                  <Select.Option value="win7">Windows 7</Select.Option>
-                  <Select.Option value="win10">Windows 10</Select.Option>
-                  <Select.Option value="linkali">Linux Kali</Select.Option>
+                {getFieldDecorator('so', {
+                  rules: [{required: true, message: 'Debe completar este campo' }]
+                })(
+                  <Select>
+                    <Select.Option value="win7">Windows 7</Select.Option>
+                    <Select.Option value="win10">Windows 10</Select.Option>
+                    <Select.Option value="linkali">Linux Kali</Select.Option>
+                  </Select>
+                )}
+              </Form.Item>
+              <Form.Item className="form2col" label="Tipo de SO">
+                {getFieldDecorator('tipo_so', {
+                  rules: [{required: true, message:  'Debe completar este campo' }]
+                })(
+                  <Select style={{ width: 80 }} >
+                  <Option value="x86">32</Option>
+                  <Option value="x64">64</Option>
                 </Select>
+                )} <span className="ant-form-text"> bits</span>
               </Form.Item>
               <Form.Item className="form2col" label="Service pack 1">
                 {getFieldDecorator('sp1', {
@@ -179,15 +205,15 @@ class FormularioDesktop extends React.Component {
                   rules: [{required: true, message: 'Debe completar este campo' }]
                 })( <Switch checkedChildren="Si" unCheckedChildren="No" /> )}
               </Form.Item>
-              <Form.Item className="form2col" label="Tipo de SO">
-                {getFieldDecorator('tipo_so', {
-                  rules: [{required: true, message:  'Debe completar este campo' }]
+              <Form.Item className="form2col" label="Office">
+                {getFieldDecorator('office', {
+                  rules: [{required: true, message: 'Debe completar este campo' }]
                 })(
-                  <Select style={{ width: 80 }} >
-                  <Option value="rmb">x32</Option>
-                  <Option value="dollar">x64</Option>
-                </Select>
-                )} <span className="ant-form-text"> bits</span>
+                  <Select>
+                    <Select.Option value="2010">Office 2010</Select.Option>
+                    <Select.Option value="2013">Office 2013</Select.Option>
+                  </Select>
+                )}
               </Form.Item>
 
               <Divider orientation="left">DIRECCIÓN IP</Divider>
@@ -197,7 +223,6 @@ class FormularioDesktop extends React.Component {
                   initialValue: true,
                   rules: [{required: false, message: 'Debe completar este campo' }]
                 })( <Switch checkedChildren="Si" unCheckedChildren="No" onChange={this.onChange} /> )}
-                
               </Form.Item>
               <Skeleton active size="small" loading={loading}> 
                 <IpSelect class="form2col" required={!loading} id="ip" decorator={getFieldDecorator} />
@@ -247,6 +272,24 @@ class FormularioDesktop extends React.Component {
                 </Panel>
               </Collapse>
               <br />
+              <Divider orientation="left">SISTEMA DE ALIMENTACIÓN</Divider>
+              <Radio.Group checked={this.state.activo} defaultValue={['Noaplica']} onChange={this.onChangeRadio} value={this.state.value}>
+                <Radio value='UPS'>UPS</Radio>
+                <Radio value='Regulador'>Regulador</Radio>
+                <Radio value="Noaplica">No aplica</Radio>
+              </Radio.Group>
+              <br /><br />
+              {this.state.value !== 'Noaplica' && this.state.activo === true?  
+                <Collapse key="collapse_alimentacion"> 
+                  <Panel header={this.state.value} key="info_alimentacion">
+                    <InputComp label="Código"          id={"codigo_"+this.state.value} class="form2col" decorator={getFieldDecorator} />
+                    <MarcaComp required={true}         id={"marca_"+this.state.value}  class="form2col" decorator={getFieldDecorator} />
+                    <InputComp label="Modelo"          id={"modelo_"+this.state.value} class="form2col" decorator={getFieldDecorator} />
+                    <InputComp label="Número de serie" id={"nserie_"+this.state.value} class="form2col" decorator={getFieldDecorator} />
+                    <DescrComp label="Descripción"     id={"descr_"+this.state.value}  class="form2col" decorator={getFieldDecorator} />
+                  </Panel>
+                </Collapse> : null
+              }
 
               <Divider orientation="left">CPU</Divider>
               <Collapse accordion key="collapse_cpu">
@@ -264,6 +307,13 @@ class FormularioDesktop extends React.Component {
               <br /> 
               <Collapse key="collapse_ram">*/}
                 <Panel header="Memoria RAM" key="info_ram">
+                  <InputComp label="Código"          id={"codigo_ram"} class="form2col" decorator={getFieldDecorator} />
+                  <MarcaComp required={true}         id={"marca_ram"}  class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Modelo"          id={"modelo_ram"} class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Número de serie" id={"nserie_ram"} class="form2col" decorator={getFieldDecorator} />
+                  <CapacComp label="Capacidad"       id={"capac_ram"}  class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Tipo"            id={"tipo_ram"}   class="form2col" decorator={getFieldDecorator} />
+                  <DescrComp label="Descripción"     id={"descr_ram"}  class="form2col" decorator={getFieldDecorator} />
                   {formItems}
                   <Form.Item {...buttonItemLayout}>
                     <Button type="dashed" onClick={this.add} icon="plus"  style={{ width: '60%' }} > Agregar memoria RAM </Button>
@@ -273,6 +323,13 @@ class FormularioDesktop extends React.Component {
               <br />
               <Collapse key="collapse_dd"> */}
                 <Panel header="Disco duro" key="info_dd">
+                  <InputComp label="Código"          id={"codigo_dd"} class="form2col" decorator={getFieldDecorator} />
+                  <MarcaComp required={true}         id={"marca_dd"}  class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Modelo"          id={"modelo_dd"} class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Número de serie" id={"nserie_dd"} class="form2col" decorator={getFieldDecorator} />
+                  <CapacComp label="Capacidad"       id={"capac_dd"}  class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Tipo"            id={"tipo_dd"}   class="form2col" decorator={getFieldDecorator} />
+                  <DescrComp label="Descripción"     id={"descr_dd"}  class="form2col" decorator={getFieldDecorator} />
                   {formuItems}
                   <Form.Item {...buttonItemLayout}>
                     <Button type="dashed" onClick={this.add1} icon="plus"  style={{ width: '60%' }} > Agregar disco duro </Button>
