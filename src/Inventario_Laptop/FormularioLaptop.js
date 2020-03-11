@@ -115,7 +115,7 @@ class FormularioDesktop extends React.Component {
 
     const formItems = keys.map((k, index) => (
       <Collapse key={"colram"+index}>
-        <Panel  key={"ramm_"+(index+1)} header={"RAM " + (index+1)} extra = {keys.length > 1 ? ( 
+        <Panel  key={"ramm_"+(index+1)} header={"RAM " + (index+1)} forceRender={true} extra = {keys.length > 1 ? ( 
           <Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.remove(k)} />) : null} >
           <InputComp label="Código"          id={"codigo_ram"+index} class="form2col" decorator={getFieldDecorator} />
           <MarcaComp required={true}         id={"marca_ram"+index}  class="form2col" decorator={getFieldDecorator} />
@@ -130,7 +130,7 @@ class FormularioDesktop extends React.Component {
 
     const formuItems = keys1.map((k, index) => (
       <Collapse key={"coldd"+index}>
-        <Panel  key={"dd"+(index+1)} header={"Disco duro " + (index+1)} extra = {keys1.length > 1 ? ( 
+        <Panel  key={"dd"+(index+1)} header={"Disco duro " + (index+1)} forceRender={true} extra = {keys1.length > 1 ? ( 
           <Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.remove1(k)} />) : null} >
           <InputComp label="Código"          id={"codigo_dd"+index} class="form2col" decorator={getFieldDecorator} />
           <MarcaComp required={true}         id={"marca_dd"+index}  class="form2col" decorator={getFieldDecorator} />
@@ -227,7 +227,14 @@ class FormularioDesktop extends React.Component {
               <InNumComp label="RAM Soportada" class="form2col" id="ram_soportada"      text="GB"  decorator={getFieldDecorator} />
               <InNumComp label="Número slots"  class="form2col" id="num_slots"          text=""    decorator={getFieldDecorator} />
               <Collapse>
-                <Panel header="Memorias RAM" key="info_ram">
+                <Panel forceRender={true} header="Memorias RAM" key="info_ram">
+                  <InputComp label="Código"          id={"codigo_ram"} class="form2col" decorator={getFieldDecorator} />
+                  <MarcaComp required={true}         id={"marca_ram"}  class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Modelo"          id={"modelo_ram"} class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Número de serie" id={"nserie_ram"} class="form2col" decorator={getFieldDecorator} />
+                  <CapacComp label="Capacidad"       id={"capac_ram"}  class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Tipo"            id={"tipo_ram"}   class="form2col" decorator={getFieldDecorator} />
+                  <DescrComp label="Descripción"     id={"descr_ram"}  class="form2col" decorator={getFieldDecorator} />
                   {formItems}
                   <Form.Item {...buttonItemLayout}>
                     <Button type="dashed" onClick={this.add} icon="plus" style={{ width: '60%' }} > 
@@ -239,7 +246,14 @@ class FormularioDesktop extends React.Component {
 
               <Divider orientation="left">DATOS DE DISCO DURO</Divider>
               <Collapse>
-                <Panel header="Discos duros" key="info_dd">
+                <Panel forceRender={true} header="Discos duros" key="info_dd">
+                  <InputComp label="Código"          id={"codigo_dd"} class="form2col" decorator={getFieldDecorator} />
+                  <MarcaComp required={true}         id={"marca_dd"}  class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Modelo"          id={"modelo_dd"} class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Número de serie" id={"nserie_dd"} class="form2col" decorator={getFieldDecorator} />
+                  <CapacComp label="Capacidad"       id={"capac_dd"}  class="form2col" decorator={getFieldDecorator} />
+                  <InputComp label="Tipo"            id={"tipo_dd"}   class="form2col" decorator={getFieldDecorator} />
+                  <DescrComp label="Descripción"     id={"descr_dd"}  class="form2col" decorator={getFieldDecorator} />
                   {formuItems}
                   <Form.Item {...buttonItemLayout}>
                     <Button type="dashed" onClick={this.add1} icon="plus" style={{ width: '60%' }} >
