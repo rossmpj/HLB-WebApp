@@ -88,36 +88,58 @@ const columns = [
     title: 'Dirección IP',
     dataIndex: 'ip',
     key: 'ip',
+    render: text => <a href="!#">{text}</a>,
   },
   {
-    title: 'Frecuencia del procesador',
-    dataIndex: 'frecuencia',
-    key: 'frecuencia',
+    title: 'Procesador',
+    dataIndex: 'id_procesador',
+    key: 'id_procesador',
+    children: [
+      {
+        title: 'Nombre',
+        dataIndex: 'nombre_procesador',
+        key: 'nombre_procesador',
+      },
+      {
+        title: 'Frecuencia',
+        dataIndex: 'frecuencia',
+        key: 'frecuencia',
+      }, 
+      {
+        title: 'Núcleos',
+        dataIndex: 'nnucleos',
+        key: 'nnucleos',
+      },
+    ],
   }, 
   {
-    title: 'Núcleos del procesador',
-    dataIndex: 'clave',
-    key: 'clave',
-  },
-  {
-    title: 'RAM Soportada',
+    title: 'RAM',
     dataIndex: 'ram',
     key: 'ram',
-  },  
-  {
-    title: 'Número de slots para RAM',
-    dataIndex: 'slots_ram',
-    key: 'slots_ram',
-  },
-  {
-    title: 'Memorias RAM',
-    dataIndex: 'rams',
-    key: 'rams',
-  },  
+    children: [
+      {
+        title: 'RAM Soportada',
+        dataIndex: 'ram_soportada',
+        key: 'ram_soportada',
+      },  
+      {
+        title: 'Slots de expansión',
+        dataIndex: 'slots_ram',
+        key: 'slots_ram',
+      },
+      {
+        title: 'Memorias RAM',
+        dataIndex: 'rams',
+        key: 'rams',
+        render: text => <a href="!#">{text}</a>,
+      },  
+    ],
+  },   
   {
     title: 'Discos duros',
     dataIndex: 'discos',
     key: 'discos',
+    render: text => <a href="!#">{text}</a>,
   },
   {
     title: 'Descripción',
@@ -129,132 +151,42 @@ const columns = [
     key: 'accion',
     render: (text, record) => (
       <div>
-        <Button style= {{marginRight: '7px'}} type="success" icon="eye" />
-        <Button style= {{marginRight: '7px'}} type="info" icon="edit" />
-        <Button type="error" icon="delete" />
+        <Button style= {{marginRight: '2px'}} type="success" size="small" icon="eye" />
+        <Button style= {{marginRight: '2px'}} type="info" size="small" icon="edit" />
+        <Button type="error" icon="delete" size="small" />
       </div>
     ),
   },
 ];
 
 const data = [
-  // {
-  //   codigo: 1,
-  //   nombre: 'John Brown',
-  //   pass: 32,
-  //   usuario: 'admin', 
-  //   clave: '345',
-  //   marca: 'LG',
-  //   modelo: 'ergr',
-  //   num_serie: 23, 
-  //   descripcion: 'muy bueno'
-  // },
-  // {
-  //   codigo: '2',
-  //   nombre: 'Jim Green',
-  //   pass: 42,
-  //   usuario: 'admin', 
-  //   clave: '1234',
-  //   marca: 'LG',
-  //   modelo: 'ergr',
-  //   num_serie: 23, 
-  //   descripcion: 'muy bueno'
-  // },{
-  //   codigo: '1',
-  //   nombre: 'John Brown',
-  //   pass: 32,
-  //   usuario: 'admin', 
-  //   clave: '345',
-  //   marca: 'LG',
-  //   modelo: 'ergr',
-  //   num_serie: 23, 
-  //   descripcion: 'muy bueno'
-  // },
-  // {
-  //   codigo: '2',
-  //   nombre: 'Jim Green',
-  //   pass: 42,
-  //   usuario: 'admin', 
-  //   clave: '1234',
-  //   marca: 'LG',
-  //   modelo: 'ergr',
-  //   num_serie: 23, 
-  //   descripcion: 'muy bueno'
-  // },{
-  //   codigo: '1',
-  //   nombre: 'John Brown',
-  //   pass: 32,
-  //   usuario: 'admin', 
-  //   clave: '345',
-  //   marca: 'LG',
-  //   modelo: 'ergr',
-  //   num_serie: 23, 
-  //   descripcion: 'muy bueno'
-  // },
-  // {
-  //   codigo: '2',
-  //   nombre: 'Jim Green',
-  //   pass: 42,
-  //   usuario: 'admin', 
-  //   clave: '1234',
-  //   marca: 'LG',
-  //   modelo: 'ergr',
-  //   num_serie: 23, 
-  //   descripcion: 'muy bueno'
-  // },{
-  //   codigo: '1',
-  //   nombre: 'John Brown',
-  //   pass: 32,
-  //   usuario: 'admin', 
-  //   clave: '345',
-  //   marca: 'LG',
-  //   modelo: 'ergr',
-  //   num_serie: 23, 
-  //   descripcion: 'muy bueno'
-  // },
-  // {
-  //   codigo: '2',
-  //   nombre: 'Jim Green',
-  //   pass: 42,
-  //   usuario: 'admin', 
-  //   clave: '1234',
-  //   marca: 'LG',
-  //   modelo: 'ergr',
-  //   num_serie: 23, 
-  //   descripcion: 'muy bueno'
-  // },{
-  //   codigo: '1',
-  //   nombre: 'John Brown',
-  //   pass: 32,
-  //   usuario: 'admin', 
-  //   clave: '345',
-  //   marca: 'LG',
-  //   modelo: 'ergr',
-  //   num_serie: 23, 
-  //   descripcion: 'muy bueno'
-  // },
-  // {
-  //   codigo: '2',
-  //   nombre: 'Jim Green',
-  //   pass: 42,
-  //   usuario: 'admin', 
-  //   clave: '1234',
-  //   marca: 'LG',
-  //   modelo: 'ergr',
-  //   num_serie: 23, 
-  //   descripcion: 'muy bueno'
-  // },
-  // {
-  //   codigo: '3',
-  //   nombre: 'Joe Black',
-  //   pass: 432,
-  //   usuario: 'admin', 
-  //   clave: '1234',
-  //   marca: 'LG',
-  //   modelo: 'ergr',
-  //   num_serie: 23, 
-  //   descripcion: 'muy bueno'
-  // },
+  {
+    key: '1',
+    codigo: 'HLB_COMP_1',
+    bspi: 'Hospital León Becerra',
+    departamento: 'Proveeduría',
+    empleado: 'John Villamar',
+    marca: 'Lenovo',
+    modelo: 'L450',
+    num_serie: '24954839605 BGPGTH1',
+    name_pc: 'UserHLB',
+    user_pc: 'Usuario',
+    estado: 'No Operativo',
+    so: 'Windows 10 Home Single Language',
+    so_type: '64 bits',
+    servpack: 'Si',
+    licencia: 'Si',
+    office: '2019',
+    ip: 'R3',
+    nombre_procesador: 'Intel Core i7-5500U',
+    frecuencia: '3 GHz',
+    nnucleos: 4,
+    ram_soportada: '12 GB',
+    slots_ram: 2,
+    rams: 'HLB_Sdg',
+    discos: 'HLB_DD_3',
+    descripcion: 'nn'
+  },
 ];
 
 class TablaLaptop extends React.Component{
@@ -287,7 +219,11 @@ class TablaLaptop extends React.Component{
         </Row>
       </div>
       <br />
-      <Table tableLayout={undefined} scroll={{ x: 'max-content' }} columns={columns} dataSource={data}></Table>
+      <div className="table-operations">
+        <Button onClick={this.clearFilters}>Limpiar filtros</Button>
+        <Button onClick={this.clearAll}>Limpiar filtros y ordenamientos</Button>
+      </div> 
+      <Table bordered key={this.state.index} onChange={this.handleChange} size="small" tableLayout={undefined} scroll={{ x: 'max-content' }} columns={columns} dataSource={data}></Table>
     </div>
     );
   }

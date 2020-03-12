@@ -25,6 +25,11 @@ const columns = [
     key: 'dpto',
   },
   {
+    title: 'Empleado',
+    dataIndex: 'empleado',
+    key: 'empleado',
+  },
+  {
     title: 'Nombre',
     dataIndex: 'nombre',
     key: 'nombre',
@@ -45,6 +50,16 @@ const columns = [
     key: 'clave',
   },
   {
+    title: 'IP',
+    dataIndex: 'ip',
+    key: 'ip',
+  },
+  {
+    title: 'Puerta de enlace',
+    dataIndex: 'p_enlace',
+    key: 'p_enlace',
+  },
+  {
     title: 'Marca',
     dataIndex: 'marca',
     key: 'marca',
@@ -58,6 +73,11 @@ const columns = [
     title: 'Número de serie',
     dataIndex: 'num_serie',
     key: 'num_serie',
+  },
+  {
+    title: 'Estado',
+    dataIndex: 'estado',
+    key: 'estado',
   },
   {
     title: 'Descripción',
@@ -228,7 +248,12 @@ class TablaRouter extends React.Component{
         </Row>
       </div>
       <br />
-      <Table columns={columns} dataSource={data}></Table>
+      <div className="table-operations">
+        <Button onClick={this.limpiarFiltros}>Limpiar filtros</Button>
+        <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>
+        <Button onClick={this.clearAll}>Limpiar todo</Button>
+      </div>
+      <Table size="small" key={this.state.index} onChange={this.handleChange} tableLayout={undefined} scroll={{ x: 'max-content' }} columns={columns} dataSource={data}></Table>
     </div>
     );
   }
