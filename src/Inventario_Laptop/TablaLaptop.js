@@ -15,6 +15,16 @@ const columns = [
     render: text => <a href="!#">{text}</a>,
   },
   {
+    title: 'BSPI Punto',
+    dataIndex: 'bspi',
+    key: 'bspi',
+  },
+  {
+    title: 'Departamento',
+    dataIndex: 'departamento',
+    key: 'departamento',
+  },
+  {
     title: 'Empleado',
     dataIndex: 'empleado',
     key: 'empleado',
@@ -277,7 +287,7 @@ class TablaLaptop extends React.Component{
         </Row>
       </div>
       <br />
-      <Table size="small" columns={columns} dataSource={data}></Table>
+      <Table tableLayout={undefined} scroll={{ x: 'max-content' }} columns={columns} dataSource={data}></Table>
     </div>
     );
   }

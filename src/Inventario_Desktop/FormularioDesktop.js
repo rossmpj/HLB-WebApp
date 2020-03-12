@@ -127,7 +127,7 @@ class FormularioDesktop extends React.Component {
 
     const formItems = keys.map((k, index) => (
       <Collapse key={"colram"+index}>
-        <Panel  key={"ram_"+(index+1)} header={"RAM " + (index+1)} extra = {keys.length > 0 ? ( 
+        <Panel  key={"ram_"+(index+1)} header={"RAM " + (index+1)} forceRender={true} extra = {keys.length > 0 ? ( 
           <Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.remove(k)} />) : null} >
           <InputComp label="Código"          id={"codigo_ram"+index} class="form2col" decorator={getFieldDecorator} />
           <MarcaComp required={true}         id={"marca_ram"+index}  class="form2col" decorator={getFieldDecorator} />
@@ -142,7 +142,7 @@ class FormularioDesktop extends React.Component {
 
     const formuItems = keys1.map((k, index) => (
       <Collapse key={"coldd"+index}>
-        <Panel  key={"dd"+(index+1)} header={"Disco duro " + (index+1)} extra = {keys1.length > 0 ? ( 
+        <Panel  key={"dd"+(index+1)} header={"Disco duro " + (index+1)} forceRender={true} extra = {keys1.length > 0 ? ( 
           <Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.remove1(k)} />) : null} >
           <InputComp label="Código"          id={"codigo_dd"+index} class="form2col" decorator={getFieldDecorator} />
           <MarcaComp required={true}         id={"marca_dd"+index}  class="form2col" decorator={getFieldDecorator} />
@@ -210,8 +210,11 @@ class FormularioDesktop extends React.Component {
                   rules: [{required: true, message: 'Debe completar este campo' }]
                 })(
                   <Select>
+                    <Select.Option value="2007">Office 2007</Select.Option>
                     <Select.Option value="2010">Office 2010</Select.Option>
                     <Select.Option value="2013">Office 2013</Select.Option>
+                    <Select.Option value="2016">Office 2016</Select.Option>
+                    <Select.Option value="2019">Office 2019</Select.Option>
                   </Select>
                 )}
               </Form.Item>
@@ -230,7 +233,7 @@ class FormularioDesktop extends React.Component {
 
               <Divider orientation="left">PERIFÉRICOS</Divider>
               <Collapse accordion key="collapse_perifericos"> 
-                <Panel header="Monitor" key="info_monitor">
+                <Panel forceRender={true} header="Monitor" key="info_monitor">
                   <InputComp label="Código"          id="codigo_monitor" class="form2col" decorator={getFieldDecorator} />
                   <MarcaComp required={true}         id="marca_monitor"  class="form2col" decorator={getFieldDecorator} />
                   <InputComp label="Modelo"          id="modelo_monitor" class="form2col" decorator={getFieldDecorator} />
@@ -241,7 +244,7 @@ class FormularioDesktop extends React.Component {
                 
               <br />*/}
               {/* <Collapse key="collapse_teclado"> */}
-                <Panel header="Teclado" key="info_teclado">
+                <Panel forceRender={true} header="Teclado" key="info_teclado">
                   <InputComp label="Código"          id="codigo_teclado" class="form2col" decorator={getFieldDecorator} />
                   <MarcaComp required={true}         id="marca_teclado"  class="form2col" decorator={getFieldDecorator} />
                   <InputComp label="Modelo"          id="modelo_teclado" class="form2col" decorator={getFieldDecorator} />
@@ -252,7 +255,7 @@ class FormularioDesktop extends React.Component {
               <br />*/}
 
               {/* <Collapse key="collapse_parlantes"> */}
-                <Panel header="Parlantes" key="info_partantes">
+                <Panel forceRender={true} header="Parlantes" key="info_partantes">
                   <InputComp label="Código"          id="codigo_parlantes" class="form2col" decorator={getFieldDecorator} />
                   <MarcaComp required={true}         id="marca_parlantes"  class="form2col" decorator={getFieldDecorator} />
                   <InputComp label="Modelo"          id="modelo_parlantes" class="form2col" decorator={getFieldDecorator} />
@@ -263,7 +266,7 @@ class FormularioDesktop extends React.Component {
               <br />*/}
 
               {/* <Collapse key="collapse_mouse"> */}
-                <Panel header="Mouse" key="info_mouse">
+                <Panel forceRender={true} header="Mouse" key="info_mouse">
                   <InputComp label="Código"          id="codigo_mouse" class="form2col" decorator={getFieldDecorator} />
                   <MarcaComp required={true}         id="marca_mouse"  class="form2col" decorator={getFieldDecorator} />
                   <InputComp label="Modelo"          id="modelo_mouse" class="form2col" decorator={getFieldDecorator} />
@@ -281,7 +284,7 @@ class FormularioDesktop extends React.Component {
               <br /><br />
               {this.state.value !== 'Noaplica' && this.state.activo === true?  
                 <Collapse key="collapse_alimentacion"> 
-                  <Panel header={this.state.value} key="info_alimentacion">
+                  <Panel forceRender={true} header={this.state.value} key="info_alimentacion">
                     <InputComp label="Código"          id={"codigo_"+this.state.value} class="form2col" decorator={getFieldDecorator} />
                     <MarcaComp required={true}         id={"marca_"+this.state.value}  class="form2col" decorator={getFieldDecorator} />
                     <InputComp label="Modelo"          id={"modelo_"+this.state.value} class="form2col" decorator={getFieldDecorator} />
@@ -293,7 +296,7 @@ class FormularioDesktop extends React.Component {
 
               <Divider orientation="left">CPU</Divider>
               <Collapse accordion key="collapse_cpu">
-                <Panel header="Tarjeta Madre" key="info_tarjetamadre">
+                <Panel forceRender={true} header="Tarjeta Madre" key="info_tarjetamadre">
                   <InputComp label="Código"                     id="codigo_tarjetamadre" class="form2col" decorator={getFieldDecorator} />
                   <MarcaComp required={false}                   id="marca_tarjetamadre"  class="form2col" decorator={getFieldDecorator} />
                   <InputComp label="Modelo"                     id="modelo_tarjetamadre" class="form2col" decorator={getFieldDecorator} />
@@ -306,7 +309,7 @@ class FormularioDesktop extends React.Component {
               {/* </Collapse>
               <br /> 
               <Collapse key="collapse_ram">*/}
-                <Panel header="Memoria RAM" key="info_ram">
+                <Panel forceRender={true} header="Memoria RAM" key="info_ram">
                   <InputComp label="Código"          id={"codigo_ram"} class="form2col" decorator={getFieldDecorator} />
                   <MarcaComp required={true}         id={"marca_ram"}  class="form2col" decorator={getFieldDecorator} />
                   <InputComp label="Modelo"          id={"modelo_ram"} class="form2col" decorator={getFieldDecorator} />
@@ -322,7 +325,7 @@ class FormularioDesktop extends React.Component {
               {/* </Collapse>
               <br />
               <Collapse key="collapse_dd"> */}
-                <Panel header="Disco duro" key="info_dd">
+                <Panel forceRender={true} header="Disco duro" key="info_dd">
                   <InputComp label="Código"          id={"codigo_dd"} class="form2col" decorator={getFieldDecorator} />
                   <MarcaComp required={true}         id={"marca_dd"}  class="form2col" decorator={getFieldDecorator} />
                   <InputComp label="Modelo"          id={"modelo_dd"} class="form2col" decorator={getFieldDecorator} />
@@ -338,7 +341,7 @@ class FormularioDesktop extends React.Component {
               {/* </Collapse>
               <br />
               <Collapse key="collapse_procesador"> */}
-                <Panel header="Procesador" key="info_procesador">
+                <Panel forceRender={true} header="Procesador" key="info_procesador">
                   <InputComp label="Código"          id="codigo_procesador" class="form2col" decorator={getFieldDecorator} />
                   <MarcaComp required={false}        id="marca_procesador"  class="form2col" decorator={getFieldDecorator} />
                   <InputComp label="Modelo"          id="modelo_procesador" class="form2col" decorator={getFieldDecorator} />
@@ -350,7 +353,7 @@ class FormularioDesktop extends React.Component {
               {/* </Collapse>
               <br />
               <Collapse key="collapse_tarjetared"> */}
-                <Panel header="Tarjeta de red" key="info_tarjetared">
+                <Panel forceRender={true} header="Tarjeta de red" key="info_tarjetared">
                   <InputComp label="Código"          id="codigo_tarjetared" class="form2col" decorator={getFieldDecorator} />
                   <MarcaComp required={true}         id="marca_tarjetared"  class="form2col" decorator={getFieldDecorator} />
                   <InputComp label="Modelo"          id="modelo_tarjetared" class="form2col" decorator={getFieldDecorator} />
@@ -360,7 +363,7 @@ class FormularioDesktop extends React.Component {
               {/* </Collapse>
               <br />
               <Collapse key="collapse_case"> */}
-                <Panel header="Case" key="info_case">
+                <Panel forceRender={true} header="Case" key="info_case">
                   <InputComp label="Código"          id="codigo_case" class="form2col" decorator={getFieldDecorator} />
                   <MarcaComp required={true}         id="marca_case"  class="form2col" decorator={getFieldDecorator} />
                   <InputComp label="Modelo"          id="modelo_case" class="form2col" decorator={getFieldDecorator} />
@@ -370,7 +373,7 @@ class FormularioDesktop extends React.Component {
               {/* </Collapse>
               <br />
               <Collapse key="collapse_fuentepoder"> */}
-                <Panel header="Fuente de poder" key="info_fuentepoder">
+                <Panel forceRender={true} header="Fuente de poder" key="info_fuentepoder">
                   <InputComp label="Código"          id="codigo_fuentepoder" class="form2col" decorator={getFieldDecorator} />
                   <MarcaComp required={true}         id="marca_fuentepoder"  class="form2col" decorator={getFieldDecorator} />
                   <InputComp label="Modelo"          id="modelo_fuentepoder" class="form2col" decorator={getFieldDecorator} />
