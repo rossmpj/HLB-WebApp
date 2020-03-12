@@ -4,90 +4,57 @@ import {
     Row,
     Col,
     Table,
+    Input,
+    Icon
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 
-const columns = [
+
+const datos = [
     {
-        title: 'Id',
-        dataIndex: 'id_equipo',
-        key: 'id_equipo'
+        key: 1,
+        codigo: '0908102940',
+        nserie: 's0908102940',
+        estado: 'En revisión',
+        tipo: 'Lector de DVD',
+        modelo: 'GSV10970',
+        marca: 'Intel',
+        ip: '',
+        componente: '',
+        asignado: 'Juan Sempere',
+        registro: '2020-03-11',
+        descripcion: ''
     },
     {
-        title: 'Código',
-        dataIndex: 'codigo',
-        key: 'codigo',
-        render: text => <a href="/#">{text}</a>
+        key: 2,
+        codigo: '0908102960',
+        nserie: 's0908102960',
+        estado: 'Disponible',
+        tipo: 'Pluma digital',
+        modelo: 'GSV10969',
+        marca: 'Intel',
+        ip: '',
+        componente: '',
+        asignado: 'Juan Sempere',
+        registro: '2020-03-12',
+        descripcion: ''
     },
     {
-        title: 'Estado',
-        dataIndex: 'estado',
-        key: 'estado'
-    },
-    {
-        title: 'Número de serie',
-        dataIndex: 'nserie',
-        key: 'nserie'
-    },
-    {
-        title: 'Tipo',
-        dataIndex: 'tipo',
-        key: 'tipo'
-    },
-    {
-        title: 'Modelo',
-        dataIndex: 'modelo',
-        key: 'modelo'
-    },
-    
-    {
-        title: 'Marca',
-        dataIndex: 'marca',
-        key: 'marca'
-    },
-    {
-        title: 'Ip',
-        dataIndex: 'ip',
-        key: 'ip'
-    },
-    {
-        title: 'Componente principal',
-        dataIndex: 'componente',
-        key: 'componente',
-        render: text => <a href="/#">{text}</a>
-    },
-    {
-        title: 'Asignado',
-        dataIndex: 'asignado',
-        key: 'asignado'
-    },
-    {
-        title: 'Encargado',
-        dataIndex: 'encargado',
-        key: 'encargado'
-    },
-    {
-        title: 'Fecha registro',
-        dataIndex: 'registro',
-        key: 'registro'
-    },
-    {
-        title: 'Descripción',
-        dataIndex: 'descripcion',
-        key: 'descripcion'
-    },
-    {
-        title: 'Acción',
-        key: 'accion',
-        render: (text, record) => (
-            <div>
-                <Button style={{ marginRight: '7px' }} size="medium" type="success" icon="eye" />
-                <Button style={{ marginRight: '7px' }} size="medium" type="info" icon="edit" />
-                <Button size="medium" type="error" icon="delete" />
-            </div>
-        ),
-    },
-];
+        key: 3,
+        codigo: '0908102990',
+        nserie: 's0908102990',
+        estado: 'Disponible',
+        tipo: 'Tarjeta de red',
+        modelo: 'GSV10968',
+        marca: 'Intel',
+        ip: '',
+        componente: '',
+        asignado: 'Juan Sempere',
+        registro: '2020-03-10',
+        descripcion: ''
+    }
+]
+
 
 
 class TablaEquipo extends React.Component {
@@ -96,6 +63,7 @@ class TablaEquipo extends React.Component {
         this.state = {
             showComponent: false,
             showTable: true,
+            searchText: ''
         };
         this.handleClick = this.handleClick.bind(this);
     }
@@ -106,13 +74,161 @@ class TablaEquipo extends React.Component {
         });
     }
 
+    getColumnSearchProps = dataIndex => ({
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+            <div style={{ padding: 8 }}>
+                <Input
+                    ref={node => { this.searchInput = node }
+                    }
+                    placeholder={`Buscar ${dataIndex}`}
+                    value={selectedKeys[0]}
+                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                    onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                    style={{ width: 188, marginBottom: 8, display: 'block' }}
+                />
+                <Button
+                    type="primary"
+                    onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                    icon="search"
+                    size="small"
+                    style={{ width: 90, marginRight: 8 }}
+                >
+                    Buscar
+            </Button>
+                <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+                    Reset
+            </Button>
+            </div>
+        ),
+        filterIcon: filtered => (
+            <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
+        ),
+        onFilter: (value, record) =>
+            record[dataIndex]
+                .toString()
+                .toLowerCase()
+                .includes(value.toLowerCase()),
+        onFilterDropdownVisibleChange: visible => {
+            if (visible) {
+                setTimeout(() => this.searchInput.select());
+            }
+        }
+    });
+
+    handleSearch = (selectedKeys, confirm, dataIndex) => {
+        confirm();
+        this.setState({
+            searchText: selectedKeys[0],
+            searchedColumn: dataIndex,
+        });
+    };
+    handleReset = clearFilters => {
+        clearFilters();
+        this.setState({ searchText: '' });
+    };
+
+
+
     render() {
+        const columns = [
+            {
+                title: 'Código',
+                dataIndex: 'codigo',
+                key: 'codigo',
+                render: text => <a href="/#">{text}</a>,
+                ...this.getColumnSearchProps('codigo')
+            },
+            {
+                title: 'Número de serie',
+                dataIndex: 'nserie',
+                key: 'nserie',
+                ...this.getColumnSearchProps('nserie')
+            },
+            {
+                title: 'Estado',
+                dataIndex: 'estado',
+                key: 'estado',
+                filters: [
+                    {
+                        text: 'Operativo',
+                        value: 'Operativo',
+                    },
+                    {
+                        text: 'En revisión',
+                        value: 'En revisión',
+                    }
+                ],
+                onFilter: (value, record) => record.estado.indexOf(value) === 0,
+                sorter: (a, b) => a.estado.length - b.estado.length
+            },
+
+            {
+                title: 'Tipo',
+                dataIndex: 'tipo',
+                key: 'tipo',
+                ...this.getColumnSearchProps('tipo')
+            },
+            {
+                title: 'Modelo',
+                dataIndex: 'modelo',
+                key: 'modelo',
+                ...this.getColumnSearchProps('modelo')
+            },
+
+            {
+                title: 'Marca',
+                dataIndex: 'marca',
+                key: 'marca',
+                ...this.getColumnSearchProps('marca')
+            },
+            {
+                title: 'Fecha registro',
+                dataIndex: 'registro',
+                key: 'registro',
+                sorter: (a, b) => a.registro.length - b.registro.length
+            },
+            {
+                title: 'Asignado',
+                dataIndex: 'asignado',
+                key: 'asignado',
+                ...this.getColumnSearchProps('asignado')
+            },
+            {
+                title: 'Ip',
+                dataIndex: 'ip',
+                key: 'ip',
+                ...this.getColumnSearchProps('ip')
+            },
+            {
+                title: 'Componente principal',
+                dataIndex: 'componente',
+                key: 'componente',
+                render: text => <a href="/#">{text}</a>,
+                ...this.getColumnSearchProps('componente')
+            },
+
+            {
+                title: 'Descripción',
+                dataIndex: 'descripcion',
+                key: 'descripcion'
+            },
+            {
+                title: 'Acción',
+                key: 'accion',
+                render: (text, record) => (
+                    <div>
+                        <Button style={{ marginRight: '7px' }} type="info" icon="edit" />
+                        <Button type="error" icon="delete" />
+                    </div>
+                ),
+            },
+        ];
         return (
             <div className="div-container">
                 <div >
                     <Row>
                         <Col className='flexbox'>
-                            <ButtonGroup style={{ align: 'right' }} size="medium">
+                            <ButtonGroup style={{ align: 'right' }}>
                                 <Button type="primary" icon="import">Importar</Button>
                                 <Button type="primary" icon="cloud-download">Exportar</Button>
                             </ButtonGroup>
@@ -120,7 +236,7 @@ class TablaEquipo extends React.Component {
                     </Row>
                 </div>
                 <br />
-                <Table size="medium" columns={columns}></Table>
+                <Table size="medium" columns={columns} dataSource={datos}></Table>
             </div>
         );
     }

@@ -164,7 +164,8 @@ class TablaIp extends React.Component {
             {
                 title: 'Fecha asignación',
                 dataIndex: 'asignacion',
-                key: 'asignacion'
+                key: 'asignacion',
+                sorter: (a, b) => a.asignacion.length - b.asignacion.length
             },
             {
                 title: 'Hostname',
@@ -176,12 +177,14 @@ class TablaIp extends React.Component {
             {
                 title: 'Subred',
                 dataIndex: 'subred',
-                key: 'subred'
+                key: 'subred',
+                sorter: (a, b) => a.subred.length - b.subred.length
             },
             {
                 title: 'Fortigate',
                 dataIndex: 'fortigate',
-                key: 'fortigate'
+                key: 'fortigate',
+                sorter: (a, b) => a.fortigate.length - b.fortigate.length
             },
             {
                 title: 'Máquinas adicionales',
@@ -213,7 +216,6 @@ class TablaIp extends React.Component {
                 key: 'accion',
                 render: (text, record) => (
                     <div>
-                        <Button style={{ marginRight: '7px' }} type="success" icon="eye" />
                         <Button style={{ marginRight: '7px' }} type="info" icon="edit" />
                         <Button type="error" icon="delete" />
                     </div>
