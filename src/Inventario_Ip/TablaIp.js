@@ -4,12 +4,12 @@ import {
     Row,
     Col,
     Table,
+    Input,
+    Icon
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
-
-
-
-
+/* import getColumnSearchProps from '../Componentes/SearchInput'
+ */
 const ip = [
     {
         key: '1',
@@ -19,7 +19,7 @@ const ip = [
         hostname: 'Procyon',
         subred: '192.168.0.0',
         fortigate: 'Recepcion',
-        maquinas: 1,
+        maquinas: 5,
         asignado: 'Fermín Romero',
         encargado: 'admin',
         observacion: 'ninguna'
@@ -33,12 +33,27 @@ const ip = [
         hostname: 'Antares',
         subred: '192.168.0.0',
         fortigate: 'Recepcion',
-        maquinas: 0,
+        maquinas: 1,
         asignado: 'Juan Sempere',
-        encargado: 'admin',
+        encargado: 'yo',
+        observacion: 'ninguna'
+
+    },
+    {
+        key: '3',
+        ip: '192.168.1.3',
+        estado: 'Libre',
+        asignacion: '2020-01-02',
+        hostname: 'Antares',
+        subred: '192.168.0.0',
+        fortigate: 'Recepcion',
+        maquinas: 7,
+        asignado: 'Alicia Sempere',
+        encargado: 'yo',
         observacion: 'ninguna'
 
     }
+
 
 ]
 
@@ -48,16 +63,74 @@ class TablaIp extends React.Component {
         super(props);
         this.state = {
             showComponent: false,
-            showTable: true
+            showTable: true,
+            data: [],
+            pagination: {},
+            loading: false,
+            searchText: ''
         };
         this.handleClick = this.handleClick.bind(this);
     }
+
     handleClick() {
         this.setState({
             showComponent: true,
             showTable: false,
         });
     }
+
+    getColumnSearchProps = dataIndex => ({
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+            <div style={{ padding: 8 }}>
+                <Input
+                    ref={node => { this.searchInput = node }
+                    }
+                    placeholder={`Buscar ${dataIndex}`}
+                    value={selectedKeys[0]}
+                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                    onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                    style={{ width: 188, marginBottom: 8, display: 'block' }}
+                />
+                <Button
+                    type="primary"
+                    onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                    icon="search"
+                    size="small"
+                    style={{ width: 90, marginRight: 8 }}
+                >
+                    Buscar
+            </Button>
+                <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+                    Reset
+            </Button>
+            </div>
+        ),
+        filterIcon: filtered => (
+            <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
+        ),
+        onFilter: (value, record) =>
+            record[dataIndex]
+                .toString()
+                .toLowerCase()
+                .includes(value.toLowerCase()),
+        onFilterDropdownVisibleChange: visible => {
+            if (visible) {
+                setTimeout(() => this.searchInput.select());
+            }
+        }
+    });
+
+    handleSearch = (selectedKeys, confirm, dataIndex) => {
+        confirm();
+        this.setState({
+            searchText: selectedKeys[0],
+            searchedColumn: dataIndex,
+        });
+    };
+    handleReset = clearFilters => {
+        clearFilters();
+        this.setState({ searchText: '' });
+    };
 
 
 
@@ -66,7 +139,10 @@ class TablaIp extends React.Component {
             {
                 title: 'Ip',
                 dataIndex: 'ip',
-                key: 'ip'
+                key: 'ip',
+                /*                 ...getColumnSearchProps('ip', this.handleSearch, this.handleReset) */
+                ...this.getColumnSearchProps('ip')
+
             },
             {
                 title: 'Estado',
@@ -89,15 +165,12 @@ class TablaIp extends React.Component {
                 title: 'Fecha asignación',
                 dataIndex: 'asignacion',
                 key: 'asignacion'
-                /*  filteredValue: filteredInfo.asignacion || null,
-                 sortOrder: sortedInfo.columnKey === 'asignacion' && sortedInfo.order */
             },
             {
                 title: 'Hostname',
                 dataIndex: 'hostname',
                 key: 'hostname',
-                onFilter: (value, record) => record.hostname.indexOf(value) === 0,
-                sorter: (a, b) => a.hostname.length - b.hostname.length,
+                sorter: (a, b) => a.hostname.length - b.hostname.length
 
             },
             {
@@ -114,19 +187,21 @@ class TablaIp extends React.Component {
                 title: 'Máquinas adicionales',
                 dataIndex: 'maquinas',
                 key: 'maquinas',
-                defaultSortOrder: 'descend',
                 sorter: (a, b) => a.maquinas.length - b.maquinas.length
 
             },
             {
                 title: 'Asignado',
                 dataIndex: 'asignado',
-                key: 'asignado'
+                key: 'asignado',
+                sorter: (a, b) => a.asignado.length - b.asignado.length
+
             },
             {
                 title: 'Encargado',
                 dataIndex: 'encargado',
-                key: 'encargado'
+                key: 'encargado',
+                sorter: (a, b) => a.encargado.length - b.encargado.length
             },
             {
                 title: 'Observación',

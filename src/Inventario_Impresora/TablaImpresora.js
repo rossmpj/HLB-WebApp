@@ -7,6 +7,73 @@ import {
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 
+const impresora = [
+    {
+        key: '1',
+        nserie: '123456',
+        bspi: 'Hospital León Becerra',
+        asignado: 'Julián Carax',
+        dpto: 'Financiero',
+        tipo: 'Matricial',
+        marca: 'EPSON',
+        codigo: 123,
+        estado: 'Operativo',
+        modelo: 'RGB-102',
+        tinta: '',
+        cartucho: 'RGB',
+        descripcion: 'Ninguna',
+        toner: '',
+        rodillo: '',
+        cinta: 'RGB',
+        rolloBrazalete: ''
+
+    },
+    {
+        key: '2',
+        nserie: '123456',
+        bspi: 'Hospital León Becerra',
+        asignado: 'Julián Carax',
+        dpto: 'Financiero',
+        tipo: 'Matricial',
+        marca: 'EPSON',
+        codigo: 123,
+        estado: 'Operativo',
+        modelo: 'RGB-102',
+        tinta: '',
+        cartucho: 'RGB',
+        descripcion: 'Ninguna',
+        toner: '',
+        rodillo: '',
+        cinta: 'RGB',
+        rolloBrazalete: ''
+
+    },
+    {
+        key: '3',
+        nserie: '123456',
+        bspi: 'Hospital León Becerra',
+        asignado: 'Julián Carax',
+        dpto: 'Financiero',
+        tipo: 'Matricial',
+        marca: 'EPSON',
+        codigo: 123,
+        estado: 'Operativo',
+        modelo: 'RGB-102',
+        tinta: '',
+        cartucho: 'RGB',
+        descripcion: 'Ninguna',
+        toner: '',
+        rodillo: '',
+        cinta: 'RGB',
+        rolloBrazalete: ''
+
+    }
+
+
+]
+
+
+
 const columns = [
     {
         title: 'Número de serie',
@@ -20,14 +87,14 @@ const columns = [
         key: 'bspi',
     },
     {
-        title: 'Usuario',
-        dataIndex: 'usuario',
-        key: 'usuario',
-    },
-    {
-        title: 'Departamento Custodia',
+        title: 'Departamento',
         dataIndex: 'dpto',
         key: 'dpto',
+    },
+    {
+        title: 'Asignado',
+        dataIndex: 'asignado',
+        key: 'asignado',
     },
     {
         title: 'Tipo',
@@ -133,7 +200,7 @@ class TablaImpresora extends React.Component {
                     </Row>
                 </div>
                 <br />
-                <Table size="medium" columns={columns}></Table>
+                <Table size="medium" tableLayout={undefined} scroll={{x:'max-content'}} columns={columns} dataSource={impresora}></Table>
             </div>
         );
     }
