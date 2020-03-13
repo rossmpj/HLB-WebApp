@@ -5,31 +5,119 @@ import {
     Col,
     Table,
     Input,
-    Icon
+    Icon,
+    Popconfirm
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 
 
 
-const datos=[
+const datos = [
     {
         key: 1,
-        tipo:'Impresora',
-        ip:'si'
+        tipo: 'Impresora',
+        ip: 'si'
     },
     {
         key: 2,
-        tipo:'Router',
-        ip:'si'
+        tipo: 'Router',
+        ip: 'si'
     },
     {
         key: 3,
-        tipo:'Teclado',
-        ip:'no'
+        tipo: 'Pluma digital',
+        ip: 'no'
+    },
+    {
+        key: 4,
+        tipo: 'UPS',
+        ip: 'no'
+    },
+    {
+        key: 5,
+        tipo: 'Monitor',
+        ip: 'no'
+    },
+    {
+        key: 6,
+        tipo: 'Regulador de voltaje',
+        ip: 'no'
+    },
+    {
+        key: 7,
+        tipo: 'Mouse',
+        ip: 'no'
+    },
+    {
+        key: 8,
+        tipo: 'CPU',
+        ip: 'no'
+    },
+    {
+        key: 9,
+        tipo: 'Impresora',
+        ip: 'no'
+    },
+    {
+        key: 10,
+        tipo: 'Memoria RAM',
+        ip: 'no'
+    },
+    {
+        key: 11,
+        tipo: 'Tarjete de video',
+        ip: 'no'
     },
 
+    {
+        key: 12,
+        tipo: 'CDROM',
+        ip: 'no'
+    },
+    {
+        key: 13,
+        tipo: 'Tarjeta de video',
+        ip: 'no'
+    },
+    {
+        key: 14,
+        tipo: 'Tarjeta gráfica',
+        ip: 'no'
+    },
+    {
+        key: 15,
+        tipo: 'Mainboard',
+        ip: 'no'
+    },
+    {
+        key: 16,
+        tipo: 'Tablet',
+        ip: 'no'
+    },
+
+    {
+        key: 17,
+        tipo: 'Laptop',
+        ip: 'no'
+    }, {
+        key: 18,
+        tipo: 'Switch',
+        ip: 'no'
+    },
+    {
+        key: 19,
+        tipo: 'Tarjeta de red',
+        ip: 'no'
+    },
+    {
+        key: 20,
+        tipo: 'Modem',
+        ip: 'no'
+    },
+
+
 ]
- 
+
 
 class TablaTipo extends React.Component {
     constructor(props) {
@@ -131,8 +219,15 @@ class TablaTipo extends React.Component {
                 key: 'accion',
                 render: (text, record) => (
                     <div>
-                        <Button style={{ marginRight: '7px' }} type="info" icon="edit" />
-                        <Button type="error" icon="delete" />
+                        <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
+                        <Popconfirm
+                            title="¿Desea eliminar este registro?"
+                            okText="Si"
+                            cancelText="No"
+                        /* onConfirm={} */
+                        >
+                            <Button size="small" type="error" icon="delete" />
+                        </Popconfirm>
                     </div>
                 ),
             },

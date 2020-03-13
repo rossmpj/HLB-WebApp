@@ -5,7 +5,8 @@ import {
     Col,
     Table,
     Input,
-    Icon
+    Icon,
+    Popconfirm
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 /* import getColumnSearchProps from '../Componentes/SearchInput'
@@ -31,7 +32,7 @@ const ip = [
         estado: 'Libre',
         asignacion: '2020-01-02',
         hostname: 'Antares',
-        subred: '192.168.0.0',
+        subred: '192.168.0.1',
         fortigate: 'Recepcion',
         maquinas: 1,
         asignado: 'Juan Sempere',
@@ -44,9 +45,9 @@ const ip = [
         ip: '192.168.1.3',
         estado: 'Libre',
         asignacion: '2020-01-02',
-        hostname: 'Antares',
+        hostname: 'Betelgeuse',
         subred: '192.168.0.0',
-        fortigate: 'Recepcion',
+        fortigate: 'Farmacia',
         maquinas: 7,
         asignado: 'Alicia Sempere',
         encargado: 'yo',
@@ -77,6 +78,10 @@ class TablaIp extends React.Component {
             showComponent: true,
             showTable: false,
         });
+    }
+
+    stringSorter(a, b) {
+        return a.localeCompare(b);
     }
 
     getColumnSearchProps = dataIndex => ({
@@ -141,6 +146,7 @@ class TablaIp extends React.Component {
                 dataIndex: 'ip',
                 key: 'ip',
                 /*                 ...getColumnSearchProps('ip', this.handleSearch, this.handleReset) */
+                render: text => <a href="/#">{text}</a>,
                 ...this.getColumnSearchProps('ip')
 
             },
@@ -165,20 +171,20 @@ class TablaIp extends React.Component {
                 title: 'Fecha asignación',
                 dataIndex: 'asignacion',
                 key: 'asignacion',
-                sorter: (a, b) => a.asignacion.length - b.asignacion.length
+                sorter: (a, b) => this.stringSorter(a.asignacion, b.asignacion)
             },
             {
                 title: 'Hostname',
                 dataIndex: 'hostname',
                 key: 'hostname',
-                sorter: (a, b) => a.hostname.length - b.hostname.length
+                sorter: (a, b) => this.stringSorter(a.hostname, b.hostname)
 
             },
             {
                 title: 'Subred',
                 dataIndex: 'subred',
                 key: 'subred',
-                sorter: (a, b) => a.subred.length - b.subred.length
+                sorter: (a, b) => this.stringSorter(a.subred, b.subred)
             },
             {
                 title: 'Fortigate',
@@ -217,7 +223,14 @@ class TablaIp extends React.Component {
                 render: (text, record) => (
                     <div>
                         <Button style={{ marginRight: '7px' }} type="info" icon="edit" />
-                        <Button type="error" icon="delete" />
+                        <Popconfirm
+                            title="¿Desea eliminar este registro?"
+                            okText="Si"
+                            cancelText="No"
+                        /* onConfirm={} */
+                        >
+                            <Button size="small" type="error" icon="delete" />
+                        </Popconfirm>
                     </div>
                 ),
             },

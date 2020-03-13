@@ -5,7 +5,8 @@ import {
     Input,
     Button,
     Layout,
-    message
+    message,
+    Select
 } from 'antd';
 import '../custom-antd.css';
 import InputComponent from '../Componentes/InputComponent'
@@ -13,9 +14,9 @@ import AsignarSelect from '../Componentes/AsignarSelect'
 import MarcaSelect from '../Componentes/MarcaSelect'
 import IpSelect from '../Componentes/IpSelect'
 import ComponentePrincipal from '../Componentes/ComponentePrincipal'
-import TipoSelect from '../Componentes/TipoSelect'
-
-
+import FormularioImpresora from '../Inventario_Impresora/FormularioImpresora'
+import FormularioDesktop from '../Inventario_Desktop/FormularioDesktop'
+import FormularioRouter from '../Inventario_Router/FormularioRouter'
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -36,9 +37,16 @@ class FormularioEquipo extends React.Component {
         this.state = {
             estado: "disponible",
             encargado: "",
-            id: ""
+            id: "",
+            tipo_equipo: "",
+            equipos: []
         };
         this.handle_guardar = this.handle_guardar.bind(this);
+    }
+
+    componentDidMount = () => {
+        var comp = ["Servidor", "UPS", "Impresora", "Cpu", "Router"];
+        this.setState({ equipos: comp });
     }
 
 
@@ -55,85 +63,105 @@ class FormularioEquipo extends React.Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
+        const condicional = () => {
+            switch (this.state.tipo_equipo.toLocaleLowerCase()) {
+                case "impresora":
+                    return <FormularioImpresora> </FormularioImpresora>;
+                case "cpu":
+                    return <FormularioDesktop></FormularioDesktop>;
+                case "router":
+                    return <FormularioRouter> </FormularioRouter>;
+                default:
+                    return <div className="div-border-top">
+                        <div className="div-container">
+                            <Form {...layout}
+                                layout="horizontal"
+                                onSubmit={this.handle_guardar}
+                            >
+                                <InputComponent
+                                    class=""
+                                    label="Número de serie"
+                                    id="nserie"
+                                    decorator={getFieldDecorator} />
+
+                                <InputComponent
+                                    class=""
+                                    label="Modelo"
+                                    id="modelo"
+                                    decorator={getFieldDecorator} />
+
+                                <MarcaSelect
+                                    class=""
+                                    id="marca"
+                                    required={true}
+                                    decorator={getFieldDecorator} />
+
+                                <IpSelect
+                                    class=""
+                                    required={false}
+                                    id="ip"
+                                    decorator={getFieldDecorator} />
+
+                                <ComponentePrincipal
+                                    class=""
+                                    id="principal"
+                                    required={false}
+                                    decorator={getFieldDecorator} />
+
+                                <AsignarSelect
+                                    class=""
+                                    required={false}
+                                    id="asignado"
+                                    decorator={getFieldDecorator} />
+
+                                <Form.Item label="Descripción">
+                                    {getFieldDecorator('descripcion')(
+                                        <TextArea />
+                                    )}
+                                </Form.Item>
+                                <Form.Item {...tailLayout}>
+                                    <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
+                                    <Button type="primary">Cancelar</Button>
+                                </Form.Item>
+                            </Form>
+                        </div>
+                    </div>;
+            }
+        }
         return (
             <Content>
-                <div className="div-border-top" >
+                <div>
                     <div className="div-container">
                         <Form {...layout}
                             layout="horizontal"
                             onSubmit={this.handle_guardar}
                         >
-                            <InputComponent
-                                class=""
-                                label="Código"
-                                id="codigo"
-                                decorator={getFieldDecorator} />
-                            {/*  <Form.Item label="Estado">
-                                {getFieldDecorator('estado', {
-                                    rules: [{ required: true, message: 'Debe seleccionar el estado' }],
+                            <Form.Item
+                                label="Tipo de equipo"
+                            >
+                                {getFieldDecorator('tipo', {
+                                    rules: [{ required: true, message: 'Debe completar este campo' }]
                                 })(
-                                    <Select>
-                                        <Select.Option value="disponible">Disponible</Select.Option>
-                                        <Select.Option value="revision">En revisión</Select.Option>
-                                        <Select.Option value="reparado">Reparado</Select.Option>
-                                        <Select.Option value="baja">De baja</Select.Option>
+                                    <Select
+                                        showSearch
+                                        optionFilterProp="children"
+                                        filterOption={(input, option) =>
+                                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                        onChange={(value) => {
+                                            this.setState({ tipo_equipo: value });
+                                        }}
+                                    >
+                                        {
+                                            this.state.equipos.map(dato =>
+                                                <Select.Option key={dato} value={dato}>{dato}</Select.Option>
+                                            )
+                                        }
                                     </Select>
-                                )}
-                            </Form.Item> */}
-
-                            <InputComponent
-                                class=""
-                                label="Número de serie"
-                                id="nserie"
-                                decorator={getFieldDecorator} />
-
-                            <TipoSelect
-                                class=""
-                                id="tipo"
-                                required={true}
-                                decorator={getFieldDecorator} />
-
-                            <InputComponent
-                                class=""
-                                label="Modelo"
-                                id="modelo"
-                                decorator={getFieldDecorator} />
-
-                            <MarcaSelect
-                                class=""
-                                id="marca"
-                                required={true}
-                                decorator={getFieldDecorator} />
-
-                            <IpSelect
-                                class=""
-                                required={false}
-                                id="ip"
-                                decorator={getFieldDecorator} />
-
-                            <ComponentePrincipal
-                                class=""
-                                id="principal"
-                                required={false}
-                                decorator={getFieldDecorator} />
-
-                            <AsignarSelect
-                                class=""
-                                required={false}
-                                id="asignado"
-                                decorator={getFieldDecorator} />
-
-                            <Form.Item label="Descripción">
-                                {getFieldDecorator('descripcion')(
-                                    <TextArea />
-                                )}
-                            </Form.Item>
-
-                            <Form.Item {...tailLayout}>
-                                <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
-                                <Button type="primary">Cancelar</Button>
-                            </Form.Item>
+                                )
+                                }
+                            </Form.Item >
                         </Form>
+                        {condicional()}
                     </div>
                 </div>
             </Content >
@@ -142,3 +170,4 @@ class FormularioEquipo extends React.Component {
 }
 FormularioEquipo = Form.create({})(FormularioEquipo);
 export default FormularioEquipo;
+
