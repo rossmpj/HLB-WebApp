@@ -34,9 +34,15 @@ class FormularioImpresora extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tipo: ""
+            tipo: "",
+            equipos: []
         };
         this.handle_guardar = this.handle_guardar.bind(this);
+    }
+
+    componentDidMount = () => {
+        var comp = ["Servidor", "UPS"];
+        this.setState({ equipos: comp });
     }
 
 
@@ -47,7 +53,7 @@ class FormularioImpresora extends React.Component {
             if (!err) {
                 console.log(values)
                 message.success('Registro guardado satisfactoriamente')
-            } 
+            }
         });
     }
 

@@ -5,7 +5,8 @@ import {
     Col,
     Table,
     Input,
-    Icon
+    Icon,
+    Popconfirm
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 
@@ -306,8 +307,15 @@ class TablaImpresora extends React.Component {
                 key: 'accion',
                 render: (text, record) => (
                     <div>
-                        <Button style={{ marginRight: '7px' }} type="info" icon="edit" />
-                        <Button type="error" icon="delete" />
+                        <Button style={{ marginRight: '2px' }} size="small" type="info" icon="edit" />
+                        <Popconfirm
+                            title="¿Desea eliminar este registro?"
+                            okText="Si"
+                            cancelText="No"
+                        /* onConfirm={} */
+                        >
+                            <Button size="small" type="error" icon="delete" />
+                        </Popconfirm>
                     </div>
                 ),
             },

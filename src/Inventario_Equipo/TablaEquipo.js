@@ -5,7 +5,8 @@ import {
     Col,
     Table,
     Input,
-    Icon
+    Icon,
+    Popconfirm
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 
@@ -72,6 +73,10 @@ class TablaEquipo extends React.Component {
             showComponent: true,
             showTable: false,
         });
+    }
+
+    sortString(a, b) {
+        return a.localeCompare(b);
     }
 
     getColumnSearchProps = dataIndex => ({
@@ -185,7 +190,7 @@ class TablaEquipo extends React.Component {
                 title: 'Fecha registro',
                 dataIndex: 'registro',
                 key: 'registro',
-                sorter: (a, b) => a.registro.length - b.registro.length
+                sorter: (a, b) => this.sortString(a.registro, b.registro)
             },
             {
                 title: 'Asignado',
@@ -217,8 +222,15 @@ class TablaEquipo extends React.Component {
                 key: 'accion',
                 render: (text, record) => (
                     <div>
-                        <Button style={{ marginRight: '7px' }} type="info" icon="edit" />
-                        <Button type="error" icon="delete" />
+                        <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
+                        <Popconfirm
+                            title="¿Desea eliminar este registro?"
+                            okText="Si"
+                            cancelText="No"
+                        /* onConfirm={} */
+                        >
+                            <Button size="small" type="error" icon="delete" />
+                        </Popconfirm>
                     </div>
                 ),
             },
