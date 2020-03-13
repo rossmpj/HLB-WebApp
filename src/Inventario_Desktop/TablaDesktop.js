@@ -160,7 +160,7 @@ class TablaDesktop extends React.Component{
           Buscar
         </Button>
         <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
-          Reset
+          Limpiar
         </Button>
       </div>
     ),
@@ -178,6 +178,10 @@ class TablaDesktop extends React.Component{
       }
     }
   });
+
+  sortString(a,b){
+    return a.localeCompare(b);
+  }
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -208,6 +212,7 @@ class TablaDesktop extends React.Component{
         title: 'BSPI Punto',
         dataIndex: 'bspi',
         key: 'bspi',
+        width: 150,
         filters: [
           {
               text: 'Hospital León Becerra',
@@ -295,6 +300,7 @@ class TablaDesktop extends React.Component{
         title: 'Sistema operativo',
         dataIndex: 'so',
         key: 'so',
+        width: 150,
         filters: [
           {
               text: 'Windows 10 Home Single Language',
@@ -315,7 +321,7 @@ class TablaDesktop extends React.Component{
         sortOrder: sortedInfo.columnKey === 'so' && sortedInfo.order,
       }, 
       {
-        title: 'Tipo de SO',
+        title: 'Tipo SO',
         dataIndex: 'so_type',
         key: 'so_type',
         filters: [
@@ -331,13 +337,14 @@ class TablaDesktop extends React.Component{
         filterMultiple: false,
         filteredValue: filteredInfo.so_type || null,
         onFilter: (value, record) => record.so_type.indexOf(value) === 0,
-        sorter: (a, b) => a.so_type.length - b.so_type.length,
+        sorter: (a, b) => this.sortString(a.so_type,b.so_type),
         sortOrder: sortedInfo.columnKey === 'so_type' && sortedInfo.order,
       }, 
       {
         title: 'Service Pack 1',
         dataIndex: 'servpack',
         key: 'servpack',
+        width: 110,
         filters: [
           {
               text: 'Si',
@@ -351,7 +358,7 @@ class TablaDesktop extends React.Component{
         filterMultiple: false,
         filteredValue: filteredInfo.servpack || null,
         onFilter: (value, record) => record.servpack.indexOf(value) === 0,
-        sorter: (a, b) => a.servpack.length - b.servpack.length,
+        sorter: (a, b) => this.sortString(a.servpack,b.servpack),
         sortOrder: sortedInfo.columnKey === 'servpack' && sortedInfo.order,
       }, 
       {
@@ -368,10 +375,10 @@ class TablaDesktop extends React.Component{
               value: 'No',
           }
         ],
-        // filterMultiple: false,
+        filterMultiple: false,
         filteredValue: filteredInfo.licencia || null,
         onFilter: (value, record) => record.licencia.indexOf(value) === 0,
-        sorter: (a, b) => a.licencia.length - b.licencia.length,
+        sorter: (a, b) => this.sortString(a.licencia,b.licencia),
         sortOrder: sortedInfo.columnKey === 'licencia' && sortedInfo.order,
       }, 
       {
@@ -402,11 +409,11 @@ class TablaDesktop extends React.Component{
         ],
         filteredValue: filteredInfo.office || null,
         onFilter: (value, record) => record.office.indexOf(value) === 0,
-        sorter: (a, b) => a.office.length - b.office.length,
+        sorter: (a, b) => this.sortString(a.office,b.office),
         sortOrder: sortedInfo.columnKey === 'office' && sortedInfo.order,
       },
       {
-        title: 'Dirección IP',
+        title: 'IP',
         dataIndex: 'ip',
         key: 'ip',
         render: text => <a href="!#" >{text}</a>,
@@ -436,7 +443,7 @@ class TablaDesktop extends React.Component{
         render: text => <a href="!#" >{text}</a>,
       },
       {
-        title: 'Tarjeta madre',
+        title: 'Mainboard',
         dataIndex: 'mainboard',
         key: 'mainboard',
         render: text => <a href="!#" >{text}</a>,
@@ -472,7 +479,7 @@ class TablaDesktop extends React.Component{
         render: text => <a href="!#" >{text}</a>,
       },
       {
-        title: 'Fuente de alimentación',
+        title: 'Alimentación',
         dataIndex: 'f_alim',
         key: 'f_alim',
         render: text => <a href="!#" >{text}</a>,
@@ -502,9 +509,8 @@ class TablaDesktop extends React.Component{
         key: 'accion',
         render: (text, record) => (
           <div>
-            <Button style= {{marginRight: '2px'}} type="success" size="small" icon="eye" />
-            <Button style= {{marginRight: '2px'}} type="info" size="small" icon="edit" />
-            <Button type="error" icon="delete" size="small" />
+            <Button style= {{marginRight: '2px'}} type="primary" size="small" icon="edit" />
+            <Button type="danger" icon="delete" size="small" />
           </div>
         ),
       },
