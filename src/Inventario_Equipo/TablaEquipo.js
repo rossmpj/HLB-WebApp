@@ -6,7 +6,8 @@ import {
     Table,
     Input,
     Icon,
-    Popconfirm
+    Popconfirm,
+    message
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 
@@ -64,7 +65,8 @@ class TablaEquipo extends React.Component {
         this.state = {
             showComponent: false,
             showTable: true,
-            searchText: ''
+            searchText: '',
+            dataSource: []
         };
         this.handleClick = this.handleClick.bind(this);
     }
@@ -73,6 +75,22 @@ class TablaEquipo extends React.Component {
             showComponent: true,
             showTable: false,
         });
+    }
+
+    llenar_tabla() {
+        this.setState({ dataSource: datos });
+    }
+
+    componentDidMount() {
+        this.llenar_tabla();
+    }
+
+
+    handleDelete(key) {
+        const dataSource = [...this.state.dataSource];
+        this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+        message.success("Registro eliminado exitosamente");
+        /* message.error("Error al eliminar el registro, inténtelo más tarde"); */
     }
 
     sortString(a, b) {
@@ -227,7 +245,7 @@ class TablaEquipo extends React.Component {
                             title="¿Desea eliminar este registro?"
                             okText="Si"
                             cancelText="No"
-                        /* onConfirm={} */
+                            onConfirm={() => this.handleDelete(record.key)}
                         >
                             <Button size="small" type="error" icon="delete" />
                         </Popconfirm>
@@ -248,7 +266,7 @@ class TablaEquipo extends React.Component {
                     </Row>
                 </div>
                 <br />
-                <Table size="medium" columns={columns} dataSource={datos}></Table>
+                <Table size="medium" tableLayout={undefined} scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
             </div>
         );
     }

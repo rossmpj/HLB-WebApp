@@ -6,9 +6,11 @@ import {
     Table,
     Input,
     Icon,
-    Popconfirm
+    Popconfirm,
+    message
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
+
 
 
 
@@ -125,7 +127,8 @@ class TablaTipo extends React.Component {
         this.state = {
             showComponent: false,
             showTable: true,
-            searchText: ''
+            searchText: '',
+            dataSource: []
         };
         this.handleClick = this.handleClick.bind(this);
     }
@@ -134,6 +137,25 @@ class TablaTipo extends React.Component {
             showComponent: true,
             showTable: false,
         });
+    }
+
+    llenar_tabla() {
+        this.setState({ dataSource: datos });
+    }
+
+    componentDidMount() {
+        this.llenar_tabla();
+    }
+
+    /*  handleEditar(data){
+        return <FormularioTipo datos={data}></FormularioTipo>
+     } */
+
+    handleDelete(key) {
+        const dataSource = [...this.state.dataSource];
+        this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+        message.success("Registro eliminado exitosamente");
+        /* message.error("Error al eliminar el registro, inténtelo más tarde"); */
     }
 
     getColumnSearchProps = dataIndex => ({
@@ -218,13 +240,14 @@ class TablaTipo extends React.Component {
                 title: 'Acción',
                 key: 'accion',
                 render: (text, record) => (
-                    <div>
-                        <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
+                    <div> 
+                            <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit"
+                        /* onClick={() => this.handleEditar(record)} */ />
                         <Popconfirm
                             title="¿Desea eliminar este registro?"
                             okText="Si"
                             cancelText="No"
-                        /* onConfirm={} */
+                            onConfirm={() => this.handleDelete(record.key)}
                         >
                             <Button size="small" type="error" icon="delete" />
                         </Popconfirm>
@@ -245,7 +268,7 @@ class TablaTipo extends React.Component {
                     </Row>
                 </div>
                 <br />
-                <Table size="medium" columns={columns} dataSource={datos}></Table>
+                <Table size="medium" columns={columns} dataSource={this.state.dataSource}></Table>
             </div>
         );
     }

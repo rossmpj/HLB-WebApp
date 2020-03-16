@@ -63,10 +63,23 @@ class FormularioIp extends React.Component {
                                 })(<Switch checkedChildren="Si" unCheckedChildren="No"></Switch>)}
                             </Form.Item>
 
+                           {/*  <Form.Item
+                                label="Prueba"
+                            >
+                                {getFieldDecorator('p', {
+                                    rules: [{ required: true, message: 'Debe completar este campo' }],
+                                })(
+                                    <Input>{this.props.datos.ip}</Input>
+                                )}
+                            </Form.Item> */}
+
                             <Form.Item {...tailLayout}>
                                 <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
                                 <Button type="primary">Cancelar</Button>
                             </Form.Item>
+
+
+
                         </Form>
                     </div>
                 </div>

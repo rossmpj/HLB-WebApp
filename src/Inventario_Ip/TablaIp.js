@@ -6,12 +6,13 @@ import {
     Table,
     Input,
     Icon,
-    Popconfirm
+    Popconfirm,
+    message
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 /* import getColumnSearchProps from '../Componentes/SearchInput'
  */
-const ip = [
+const ips= [
     {
         key: '1',
         ip: '192.168.1.1',
@@ -68,7 +69,8 @@ class TablaIp extends React.Component {
             data: [],
             pagination: {},
             loading: false,
-            searchText: ''
+            searchText: '',
+            dataSource: []
         };
         this.handleClick = this.handleClick.bind(this);
     }
@@ -78,6 +80,22 @@ class TablaIp extends React.Component {
             showComponent: true,
             showTable: false,
         });
+    }
+
+    llenar_tabla() {
+        this.setState({ dataSource: ips });
+    }
+
+    componentDidMount() {
+        this.llenar_tabla();
+    }
+
+
+    handleDelete(key) {
+        const dataSource = [...this.state.dataSource];
+        this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+        message.success("Registro eliminado exitosamente");
+        /* message.error("Error al eliminar el registro, inténtelo más tarde"); */
     }
 
     stringSorter(a, b) {
@@ -249,7 +267,7 @@ class TablaIp extends React.Component {
                     </Row>
                 </div>
                 <br />
-                <Table size="medium" columns={columns} dataSource={ip}></Table>
+                <Table size="medium" columns={columns} dataSource={this.state.dataSource}></Table>
             </div>
         );
     }
