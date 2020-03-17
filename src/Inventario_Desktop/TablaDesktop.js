@@ -1,94 +1,6 @@
 import React from 'react';
-import { Button, Row, Col, Table, Input, Icon } from 'antd';
+import { Button, Row, Col, Table, Input, Icon, Popconfirm } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
-
-const data = [
-  {
-    key:'1',
-    codigo: 'HLB_COMP_3',
-    bspi: 'Hospital León Becerra',
-    departamento: 'Financiero',
-    empleado: 'Victor Toral',
-    name_pc: 'Contador-PC',
-    user_pc: 'Contador',
-    estado: 'Operativo',
-    so: 'Windows 7 Professional',
-    so_type: '32 bits',
-    servpack: 'No',
-    licencia: 'No',
-    office: '2013',
-    ip: '8',
-    monitor: 'HLB_MNT_1',
-    teclado: 'HLB_TEC_12',
-    mouse: 'HLB_MOU_35',
-    parlantes: 'HLB_PAR_23',
-    mainboard: 'HLB_MNB_34',
-    ram: ['1', 'gfh'],
-    dd: 'HLB_DD_4',
-    procesador: 'HLB_PRC',
-    tarj_red: 'hlb_tred_1',
-    case: 'hlb_cas_4',
-    f_alim: 'UPS',
-    descripcion: 'revisar'
-  },
-  {
-    key:'2',
-    codigo: 'HLB_COMP_1',
-    bspi: 'Hospital León Becerra',
-    departamento: 'Proveeduría',
-    empleado: 'John Villamar',
-    name_pc: 'UserHLB',
-    user_pc: 'Usuario',
-    estado: 'No Operativo',
-    so: 'Windows 10 Home Single Language',
-    so_type: '64 bits',
-    servpack: 'Si',
-    licencia: 'Si',
-    office: '2019',
-    ip: 'R3',
-    monitor: 'HLB_MNT_2',
-    teclado: 'HLB_TEC_13',
-    mouse: 'HLB_MOU_36',
-    parlantes: 'HLB_PAR_22',
-    mainboard: 'HLB_MNB_32',
-    ram: 'HLB_RAM_1',
-    dd: 'HLB_DD_3',
-    procesador: 'HLB_PRC_0',
-    tarj_red: 'hlb_tred_1',
-    case: 'hlb_cas_3',
-    f_alim: 'Regulador',
-    descripcion: ''
-  },
-  {
-    key:'63',
-    codigo: 'HLB_COMP_1',
-    bspi: 'Residencia Mercedes Begué',
-    departamento: 'Auditoría',
-    empleado: 'John Villamar',
-    name_pc: 'UserHLB',
-    user_pc: 'Usuario',
-    estado: 'No Operativo',
-    so: 'Windows 8.1 Pro',
-    so_type: '32 bits',
-    servpack: 'No',
-    licencia: 'Si',
-    office: '2007',
-    ip: 'R3',
-    monitor: 'HLB_MNT_2',
-    teclado: 'HLB_TEC_13',
-    mouse: 'HLB_MOU_36',
-    parlantes: 'HLB_PAR_22',
-    mainboard: 'HLB_MNB_32',
-    ram: 'HLB_RAM_1',
-    dd: 'HLB_DD_3',
-    procesador: 'HLB_PRC_0',
-    tarj_red: 'hlb_tred_1',
-    case: 'hlb_cas_3',
-    f_alim: 'UPS',
-    descripcion: ''
-  },
-  
-];
 
 class TablaDesktop extends React.Component{
   constructor(props) {
@@ -100,10 +12,119 @@ class TablaDesktop extends React.Component{
       sortedInfo: null,
       searchText: '',
       searchedColumn: '',
-      index: 0
+      index: 0,
+      dataSource: [
+        {
+          key:'1',
+          codigo: 'HLB_COMP_3',
+          bspi: 'Hospital León Becerra',
+          departamento: 'Financiero',
+          empleado: 'Victor Toral',
+          name_pc: 'Contador-PC',
+          user_pc: 'Contador',
+          estado: 'Operativo',
+          so: 'Windows 7 Professional',
+          so_type: '32 bits',
+          servpack: 'No',
+          licencia: 'No',
+          office: '2013',
+          ip: '8',
+          monitor: 'HLB_MNT_1',
+          teclado: 'HLB_TEC_12',
+          mouse: 'HLB_MOU_35',
+          parlantes: 'HLB_PAR_23',
+          mainboard: 'HLB_MNB_34',
+          ram: ['1', 'gfh'],
+          dd: 'HLB_DD_4',
+          procesador: 'HLB_PRC',
+          tarj_red: 'hlb_tred_1',
+          case: 'hlb_cas_4',
+          f_alim: 'UPS',
+          descripcion: 'revisar'
+        },
+        {
+          key:'2',
+          codigo: 'HLB_COMP_1',
+          bspi: 'Hospital León Becerra',
+          departamento: 'Proveeduría',
+          empleado: 'John Villamar',
+          name_pc: 'UserHLB',
+          user_pc: 'Usuario',
+          estado: 'No Operativo',
+          so: 'Windows 10 Home Single Language',
+          so_type: '64 bits',
+          servpack: 'Si',
+          licencia: 'Si',
+          office: '2019',
+          ip: 'R3',
+          monitor: 'HLB_MNT_2',
+          teclado: 'HLB_TEC_13',
+          mouse: 'HLB_MOU_36',
+          parlantes: 'HLB_PAR_22',
+          mainboard: 'HLB_MNB_32',
+          ram: 'HLB_RAM_1',
+          dd: 'HLB_DD_3',
+          procesador: 'HLB_PRC_0',
+          tarj_red: 'hlb_tred_1',
+          case: 'hlb_cas_3',
+          f_alim: 'Regulador',
+          descripcion: ''
+        },
+        {
+          key:'63',
+          codigo: 'HLB_COMP_1',
+          bspi: 'Residencia Mercedes Begué',
+          departamento: 'Auditoría',
+          empleado: 'John Villamar',
+          name_pc: 'UserHLB',
+          user_pc: 'Usuario',
+          estado: 'No Operativo',
+          so: 'Windows 8.1 Pro',
+          so_type: '32 bits',
+          servpack: 'No',
+          licencia: 'Si',
+          office: '2007',
+          ip: 'R3',
+          monitor: 'HLB_MNT_2',
+          teclado: 'HLB_TEC_13',
+          mouse: 'HLB_MOU_36',
+          parlantes: 'HLB_PAR_22',
+          mainboard: 'HLB_MNB_32',
+          ram: 'HLB_RAM_1',
+          dd: 'HLB_DD_3',
+          procesador: 'HLB_PRC_0',
+          tarj_red: 'hlb_tred_1',
+          case: 'hlb_cas_3',
+          f_alim: 'UPS',
+          descripcion: ''
+        },
+      ],
     };
     this.handleClick = this.handleClick.bind(this);
   }
+
+  handleDelete = key => {
+    const dataSource = [...this.state.dataSource];
+    //this.setState({ dataSource: dataSource.estado = "De baja"})
+     this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+  };
+
+  // showDeleteConfirm = key => {
+  //   // onConfirm=
+  //   confirm({
+  //     title: 'Are you sure delete this task?',
+  //     icon: <ExclamationCircleOutlined />,
+  //     content: 'Some descriptions',
+  //     okText: 'Yes',
+  //     okType: 'danger',
+  //     cancelText: 'No',
+  //     onOk() {
+  //    this.handleDelete(key)     },
+  //     onCancel() {
+  //       console.log('Cancel');
+  //     },
+  //   });
+  // }
 
   handleClick() {
     this.setState({
@@ -205,6 +226,7 @@ class TablaDesktop extends React.Component{
         title: 'Código', 
         dataIndex: 'codigo',
         key: 'codigo',
+        fixed: 'left',
         render: text => <a href="!#" >{text}</a>,
         ...this.getColumnSearchProps('codigo')
       },
@@ -507,11 +529,17 @@ class TablaDesktop extends React.Component{
       {
         title: 'Acción',
         key: 'accion',
+        fixed: 'right',
         render: (text, record) => (
-          <div>
-            <Button style= {{marginRight: '2px'}} type="primary" size="small" icon="edit" />
-            <Button type="danger" icon="delete" size="small" />
-          </div>
+          this.state.dataSource.length >= 1 ? (
+            <span>
+              <Button style= {{marginRight: '2px'}} type="primary" size="small" icon="edit" />
+              <Popconfirm placement="topRight" 
+              title="¿Está seguro de que desea dar de baja a este equipo?" 
+              okText="Si, eliminar" cancelText="No" onConfirm={() => this.handleDelete(record.key)}>
+              <Button type="danger" icon="delete" size="small" /></Popconfirm>
+            </span>
+          ) : null 
         ),
       },
     ];
@@ -534,7 +562,8 @@ class TablaDesktop extends React.Component{
         <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>
         <Button onClick={this.clearAll}>Limpiar todo</Button>
       </div> 
-      <Table key={this.state.index} onChange={this.handleChange} size="small" tableLayout={undefined} scroll={{ x: 'max-content' }} columns={columns} dataSource={data}></Table>
+      <Table key={this.state.index} onChange={this.handleChange} size="small" tableLayout={undefined} 
+      scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
     </div>
     );
   }

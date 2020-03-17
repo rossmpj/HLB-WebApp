@@ -1,81 +1,7 @@
 import React from 'react';
-import { Button, Row, Col, Table, Input, Icon} from 'antd';
+import { Button, Row, Col, Table, Input, Icon, Popconfirm } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
-
-const data = [
-  {
-    key: 1,
-    codigo: '0',
-    bspi: 'Hogar Inés Chambers',
-    departamento: 'Proveeduría',
-    empleado: 'John Villamar',
-    nombre: 'John Brown',
-    pass: 'gjgkd32',
-    ip: '2',
-    p_enlace: '192.168.1.0',
-    usuario: 'drgd5547', 
-    clave: '345',
-    marca: 'LG',
-    modelo: 'ergr',
-    num_serie: 23,
-    estado: 'Operativo',
-    descripcion: 'muy bueno'
-  },
-  {
-    key: 112,
-    codigo: '1',
-    bspi: 'Hospital León Becerra',
-    departamento: 'Proveeduría',
-    empleado: 'Marco Mendieta',
-    nombre: 'John Brown',
-    pass: 'admin132',
-    ip: '78',
-    p_enlace: '192.168.1.0',
-    usuario: 'admin', 
-    clave: '345',
-    marca: 'HP',
-    modelo: 'ergr',
-    num_serie: '23',
-    estado: 'Operativo',
-    descripcion: 'muy bueno'
-  },
-  {
-    key: 3,
-    codigo: '2',
-    bspi: 'Residencia Mercedes Begué',
-    departamento: 'Proveeduría',
-    empleado: 'John Villamar',
-    nombre: 'Hospital1',
-    pass: '123456',
-    ip: '16',
-    p_enlace: '0.0.1.0',
-    usuario: 'dgfthw', 
-    clave: '345',
-    marca: 'Lenovo',
-    modelo: 'ergr',
-    num_serie: '23',
-    estado: 'Operativo',
-    descripcion: 'muy bueno'
-  },
-  {
-    key: 5,
-    codigo: '3',
-    bspi: 'Unidad Educativa San José Buen Pastor',
-    departamento: 'UCI',
-    empleado: 'Rosa Pincay',
-    nombre: 'John Brown',
-    pass: '4321',
-    ip: '125',
-    p_enlace: '192.168.1.0',
-    usuario: 'hpso', 
-    clave: '345',
-    marca: 'TPLink',
-    modelo: 'ergr',
-    num_serie: '23',
-    estado: 'Operativo',
-    descripcion: 'muy bueno'
-  },
-];
+import { BrowserRouter as Link } from 'react-router-dom';
 
 class TablaRouter extends React.Component{
   constructor(props) {
@@ -87,7 +13,81 @@ class TablaRouter extends React.Component{
       sortedInfo: null,
       searchText: '',
       searchedColumn: '',
-      index: 0
+      index: 0,
+      dataSource : [
+        {
+          key: 1,
+          codigo: '0',
+          bspi: 'Hogar Inés Chambers',
+          departamento: 'Proveeduría',
+          empleado: 'John Villamar',
+          nombre: 'John Brown',
+          pass: 'gjgkd32',
+          ip: '2',
+          p_enlace: '192.168.1.0',
+          usuario: 'drgd5547', 
+          clave: '345',
+          marca: 'LG',
+          modelo: 'ergr',
+          num_serie: 23,
+          estado: 'Operativo',
+          descripcion: 'muy bueno'
+        },
+        {
+          key: 112,
+          codigo: '1',
+          bspi: 'Hospital León Becerra',
+          departamento: 'Proveeduría',
+          empleado: 'Marco Mendieta',
+          nombre: 'John Brown',
+          pass: 'admin132',
+          ip: '78',
+          p_enlace: '192.168.1.0',
+          usuario: 'admin', 
+          clave: '345',
+          marca: 'HP',
+          modelo: 'ergr',
+          num_serie: '23',
+          estado: 'Operativo',
+          descripcion: 'muy bueno'
+        },
+        {
+          key: 3,
+          codigo: '2',
+          bspi: 'Residencia Mercedes Begué',
+          departamento: 'Proveeduría',
+          empleado: 'John Villamar',
+          nombre: 'Hospital1',
+          pass: '123456',
+          ip: '16',
+          p_enlace: '0.0.1.0',
+          usuario: 'dgfthw', 
+          clave: '345',
+          marca: 'Lenovo',
+          modelo: 'ergr',
+          num_serie: '23',
+          estado: 'Operativo',
+          descripcion: 'muy bueno'
+        },
+        {
+          key: 5,
+          codigo: '3',
+          bspi: 'Unidad Educativa San José Buen Pastor',
+          departamento: 'UCI',
+          empleado: 'Rosa Pincay',
+          nombre: 'John Brown',
+          pass: '4321',
+          ip: '125',
+          p_enlace: '192.168.1.0',
+          usuario: 'hpso', 
+          clave: '345',
+          marca: 'TPLink',
+          modelo: 'ergr',
+          num_serie: '23',
+          estado: 'Operativo',
+          descripcion: 'muy bueno'
+        },
+      ]
     };
     this.handleClick = this.handleClick.bind(this);
   }
@@ -192,8 +192,9 @@ class TablaRouter extends React.Component{
           title: 'Código',
           dataIndex: 'codigo',
           key: 'codigo',
-           render: text => <a href="!#">{text}</a>,
-          //render: (text, record) => <Link to={`user/${record.id}`}>{text}</Link>,
+          fixed: 'left',
+          // render: text => <a href="!#">{text}</a>,
+          render: (text, record) => <Link to={`user/${record.id}`}>{text}</Link>,
           ...this.getColumnSearchProps('codigo'),
           sorter: (a, b) => this.sortString(a.codigo,b.codigo),
           sortOrder: sortedInfo.columnKey === 'codigo' && sortedInfo.order,
@@ -369,11 +370,17 @@ class TablaRouter extends React.Component{
         {
           title: 'Acción',
           key: 'accion',
+          fixed: 'right',
           render: (text, record) => (
-            <div>
-              <Button style= {{marginRight: '7px'}} size="small" type="primary" icon="edit" />
-              <Button type="danger" icon="delete" size="small" />
-            </div>
+            this.state.dataSource.length >= 1 ? (
+              <span>
+                <Button style= {{marginRight: '2px'}} type="primary" size="small" icon="edit" />
+                <Popconfirm placement="topRight" 
+                title="¿Está seguro de que desea dar de baja a este equipo?" 
+                okText="Si, eliminar" cancelText="No" onConfirm={() => this.handleDelete(record.key)}>
+                <Button type="danger" icon="delete" size="small" /></Popconfirm>
+              </span>
+            ) : null
           ),
         },
       ];
@@ -395,7 +402,8 @@ class TablaRouter extends React.Component{
         <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>
         <Button onClick={this.clearAll}>Limpiar todo</Button>
       </div>
-      <Table size="small" key={this.state.index} onChange={this.handleChange} tableLayout={undefined} scroll={{ x: 'max-content' }} columns={columns} dataSource={data}></Table>
+      <Table size="small" key={this.state.index} onChange={this.handleChange} tableLayout={undefined} 
+      scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
     </div>
     );
   }

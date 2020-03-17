@@ -1,63 +1,6 @@
 import React from 'react';
-import { Button, Row, Col, Table, Input, Icon } from 'antd';
+import { Button, Row, Col, Table, Input, Icon, Popconfirm } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
-
-const data = [
-  {
-    key: '1',
-    codigo: 'HLB_COMP_1',
-    bspi: 'Hospital León Becerra',
-    departamento: 'Proveeduría',
-    empleado: 'John Villamar',
-    marca: 'Lenovo',
-    modelo: 'h2343',
-    num_serie: 'tftyfBGPGTH1',
-    name_pc: 'Admin',
-    user_pc: 'UsADmin1',
-    estado: 'No Operativo',
-    so: 'Windows 10 Home Single Language',
-    so_type: '64 bits',
-    servpack: 'Si',
-    licencia: 'Si',
-    office: '2010',
-    ip: '1',
-    nombre_procesador: 'Intel Core i7-5500U',
-    frecuencia: '3 GHz',
-    nnucleos: 4,
-    ram_soportada: '12 GB',
-    slots_ram: 2,
-    rams: 'HLB_Sdg',
-    discos: 'HLB_DD_3',
-    descripcion: 'nn'
-  },
-  {
-    key: '2',
-    codigo: 'HL_1',
-    bspi: 'Unidad Educativa San José Buen Pastor',
-    departamento: 'UCI',
-    empleado: 'Carla Villamar',
-    marca: 'HP',
-    modelo: 'L450',
-    num_serie: '24954839605 BGPGTH1',
-    name_pc: 'UserHLB',
-    user_pc: 'Usuario',
-    estado: 'Operativo',
-    so: 'Windows 7',
-    so_type: '32 bits',
-    servpack: 'No',
-    licencia: 'No',
-    office: '2019',
-    ip: 'R3',
-    nombre_procesador: 'Intel Core i7-5500U',
-    frecuencia: '3 GHz',
-    nnucleos: 4,
-    ram_soportada: '12 GB',
-    slots_ram: 2,
-    rams: 'HLB_Sdg',
-    discos: 'HLB_DD_3',
-    descripcion: 'nn'
-  },
-];
 
 class TablaLaptop extends React.Component{
   constructor(props) {
@@ -69,7 +12,63 @@ class TablaLaptop extends React.Component{
       sortedInfo: null,
       searchText: '',
       searchedColumn: '',
-      index: 0
+      index: 0,
+      dataSource : [
+        {
+          key: '1',
+          codigo: 'HLB_COMP_1',
+          bspi: 'Hospital León Becerra',
+          departamento: 'Proveeduría',
+          empleado: 'John Villamar',
+          marca: 'Lenovo',
+          modelo: 'h2343',
+          num_serie: 'tftyfBGPGTH1',
+          name_pc: 'Admin',
+          user_pc: 'UsADmin1',
+          estado: 'No Operativo',
+          so: 'Windows 10 Home Single Language',
+          so_type: '64 bits',
+          servpack: 'Si',
+          licencia: 'Si',
+          office: '2010',
+          ip: '1',
+          nombre_procesador: 'Intel Core i7-5500U',
+          frecuencia: '3 GHz',
+          nnucleos: 4,
+          ram_soportada: '12 GB',
+          slots_ram: 2,
+          rams: 'HLB_Sdg',
+          discos: 'HLB_DD_3',
+          descripcion: 'nn'
+        },
+        {
+          key: '2',
+          codigo: 'HL_1',
+          bspi: 'Unidad Educativa San José Buen Pastor',
+          departamento: 'UCI',
+          empleado: 'Carla Villamar',
+          marca: 'HP',
+          modelo: 'L450',
+          num_serie: '24954839605 BGPGTH1',
+          name_pc: 'UserHLB',
+          user_pc: 'Usuario',
+          estado: 'Operativo',
+          so: 'Windows 7',
+          so_type: '32 bits',
+          servpack: 'No',
+          licencia: 'No',
+          office: '2019',
+          ip: 'R3',
+          nombre_procesador: 'Intel Core i7-5500U',
+          frecuencia: '3 GHz',
+          nnucleos: 4,
+          ram_soportada: '12 GB',
+          slots_ram: 2,
+          rams: 'HLB_Sdg',
+          discos: 'HLB_DD_3',
+          descripcion: 'nn'
+        },
+      ]
     };
     this.handleClick = this.handleClick.bind(this);
     }
@@ -174,6 +173,7 @@ class TablaLaptop extends React.Component{
       title: 'Código',
       dataIndex: 'codigo',
       key: 'codigo',
+      fixed: 'left',
       render: text => <a href="!#">{text}</a>,
       ...this.getColumnSearchProps('codigo'),
       sorter: (a, b) => a.codigo.length - b.codigo.length,
@@ -452,7 +452,7 @@ class TablaLaptop extends React.Component{
           title: 'Nombre',
           dataIndex: 'nombre_procesador',
           key: 'nombre_procesador',
-          width: 110,
+          width: 120,
           ...this.getColumnSearchProps('nombre_procesador'),
           sorter: (a, b) => a.nombre_procesador.length - b.nombre_procesador.length,
           sortOrder: sortedInfo.columnKey === 'nombre_procesador' && sortedInfo.order,
@@ -520,11 +520,17 @@ class TablaLaptop extends React.Component{
     {
       title: 'Acción',
       key: 'accion',
+      fixed: 'right',
       render: (text, record) => (
-        <div>
-          <Button style= {{marginRight: '2px'}} type="primary" size="small" icon="edit" />
-          <Button type="danger" icon="delete" size="small" />
-        </div>
+        this.state.dataSource.length >= 1 ? (
+          <span>
+            <Button style= {{marginRight: '2px'}} type="primary" size="small" icon="edit" />
+            <Popconfirm placement="topRight" 
+            title="¿Está seguro de que desea dar de baja a este equipo?" 
+            okText="Si, eliminar" cancelText="No" onConfirm={() => this.handleDelete(record.key)}>
+            <Button type="danger" icon="delete" size="small" /></Popconfirm>
+          </span>
+        ) : null
       ),
     },
   ];
@@ -547,7 +553,8 @@ class TablaLaptop extends React.Component{
         <Button onClick={this.clearAll}>Limpiar todo</Button>
         {/* scroll={{ x: 'max-content' }}tableLayout={undefined}  */}
       </div> 
-      <Table bordered key={this.state.index} onChange={this.handleChange} size="small" scroll={{ x: 'max-content' }} columns={columns} dataSource={data}></Table>
+      <Table bordered key={this.state.index} onChange={this.handleChange} size="small" 
+      scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
     </div>
     );
   }
