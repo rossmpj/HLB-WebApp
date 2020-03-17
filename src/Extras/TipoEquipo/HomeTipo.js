@@ -49,12 +49,12 @@ class HomeTipo extends React.Component {
                     </Col>
                     <Col className='flexbox'>
                         {this.state.showButton ?
-                            <Button onClick={this.handleClick} type="primary"  icon="plus">Agregar registro</Button>
+                            <Button onClick={this.handleClick} type="primary" icon="plus">Agregar registro</Button>
                             : <Button onClick={this.handleClick2} type="primary" icon="left">Volver</Button>
                         }
                     </Col>
                 </Row>
-                {this.state.showComponent ? <FormularioTipo /> : null}
+                     {this.state.showComponent ? <FormularioTipo /> : null}
                 {this.state.showTable ? <TablaTipo /> : null}
             </div>
         );

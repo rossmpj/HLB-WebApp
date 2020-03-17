@@ -10,6 +10,7 @@ import {
     message
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
+import { Link } from 'react-router-dom';
 
 const impresoras = [
     {
@@ -325,7 +326,14 @@ class TablaImpresora extends React.Component {
                 key: 'accion',
                 render: (text, record) => (
                     <div>
+                         <Link to={{
+                            pathname: '/impresora/edit',
+                            state: {
+                                info: record
+                            }
+                        }} >
                         <Button style={{ marginRight: '2px' }} size="small" type="info" icon="edit" />
+                        </Link>
                         <Popconfirm
                             title="¿Desea eliminar este registro?"
                             okText="Si"

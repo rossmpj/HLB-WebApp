@@ -59,6 +59,20 @@ class FormularioEquipo extends React.Component {
             }
         });
     }
+    
+    cargar_datos(info) {
+        this.props.form.setFieldsValue({
+            nserie: info.nserie,
+            modelo: info.modelo,
+            marca: info.marca,
+            ip: info.ip,
+            principal: info.principal,
+            asignado: info.asignado,
+            descripcion: info.descripcion,
+            tipo: info.tipo
+        })
+    }
+
 
 
     render() {

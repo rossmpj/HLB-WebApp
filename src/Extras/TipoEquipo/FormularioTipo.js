@@ -8,7 +8,8 @@ import {
     message
 } from 'antd';
 import '../../custom-antd.css';
-import InputComponent from '../../Componentes/InputComponent'
+import InputComponent from '../../Componentes/InputComponent';
+import { Link } from 'react-router-dom';
 
 const { Content } = Layout;
 
@@ -39,6 +40,29 @@ class FormularioIp extends React.Component {
         });
     }
 
+    cargar_datos(info) {
+        this.props.form.setFieldsValue({
+            tipo: info.tipo,
+        })
+        if (info.ip === 'false') {
+            this.props.form.setFieldsValue({
+                ip: false
+            })
+        } else {
+            this.props.form.setFieldsValue({
+                ip: true
+            })
+
+        }
+    }
+
+    componentDidMount() {
+        if (typeof this.props.location !== 'undefined') {
+            const { info } = this.props.location.state;
+            this.cargar_datos(info);
+        }
+    }
+
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -63,7 +87,7 @@ class FormularioIp extends React.Component {
                                 })(<Switch checkedChildren="Si" unCheckedChildren="No"></Switch>)}
                             </Form.Item>
 
-                           {/*  <Form.Item
+                            {/*  <Form.Item
                                 label="Prueba"
                             >
                                 {getFieldDecorator('p', {
@@ -75,11 +99,10 @@ class FormularioIp extends React.Component {
 
                             <Form.Item {...tailLayout}>
                                 <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
-                                <Button type="primary">Cancelar</Button>
+                                <Link to='/tipo'>
+                                    <Button type="primary">Cancelar</Button>
+                                </Link>
                             </Form.Item>
-
-
-
                         </Form>
                     </div>
                 </div>

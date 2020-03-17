@@ -10,6 +10,7 @@ import {
     message
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
+import { Link } from 'react-router-dom';
 /* import getColumnSearchProps from '../Componentes/SearchInput'
  */
 const ips= [
@@ -240,7 +241,14 @@ class TablaIp extends React.Component {
                 key: 'accion',
                 render: (text, record) => (
                     <div>
-                        <Button style={{ marginRight: '7px' }} type="info" icon="edit" />
+                         <Link to={{
+                            pathname: '/ip/edit',
+                            state: {
+                                info: record
+                            }
+                        }} >
+                        <Button style={{ marginRight: '7px' }} size="small" type="info" icon="edit" />
+                        </Link>
                         <Popconfirm
                             title="¿Desea eliminar este registro?"
                             okText="Si"
@@ -267,7 +275,7 @@ class TablaIp extends React.Component {
                     </Row>
                 </div>
                 <br />
-                <Table size="medium" columns={columns} dataSource={this.state.dataSource}></Table>
+                <Table size="medium" tableLayout={undefined} scroll={{ x: 'max-content' }}  columns={columns} dataSource={this.state.dataSource}></Table>
             </div>
         );
     }

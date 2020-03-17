@@ -11,6 +11,7 @@ import {
 } from 'antd';
 import '../custom-antd.css';
 import InputComponent from '../Componentes/InputComponent'
+import { Link } from 'react-router-dom';
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -38,10 +39,28 @@ class FormularioIp extends React.Component {
             if (!err) {
                 console.log(values)
                 message.success('Registro guardado satisfactoriamente')
-            } 
+            }
         });
     }
 
+    cargar_datos(info) {
+        this.props.form.setFieldsValue({
+            ip: info.ip,
+            estado: info.estado,
+            hostname: info.hostname,
+            subred: info.subred,
+            fortigate: info.fortigate,
+            observacion: info.observacion,
+            maquinas: info.maquinas
+        })
+    }
+
+    componentDidMount() {
+        if (typeof this.props.location !== 'undefined') {
+            const { info } = this.props.location.state;
+            this.cargar_datos(info);
+        }
+    }
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -53,11 +72,11 @@ class FormularioIp extends React.Component {
                             layout="horizontal"
                             onSubmit={this.handle_guardar}
                         >
-                            <InputComponent 
-                            class="" 
-                            label="Ip" 
-                            id="ip" 
-                            decorator={getFieldDecorator} />
+                            <InputComponent
+                                class=""
+                                label="Ip"
+                                id="ip"
+                                decorator={getFieldDecorator} />
 
                             <Form.Item label="Estado">
                                 {getFieldDecorator('estado', {
@@ -70,23 +89,23 @@ class FormularioIp extends React.Component {
                                 )}
                             </Form.Item>
 
-                            <InputComponent 
-                            class="" 
-                            label="Hostname" 
-                            id="hostname" 
-                            decorator={getFieldDecorator} />
+                            <InputComponent
+                                class=""
+                                label="Hostname"
+                                id="hostname"
+                                decorator={getFieldDecorator} />
 
-                            <InputComponent 
-                            class="" 
-                            label="Subred" 
-                            id="subred" 
-                            decorator={getFieldDecorator} />
+                            <InputComponent
+                                class=""
+                                label="Subred"
+                                id="subred"
+                                decorator={getFieldDecorator} />
 
-                            <InputComponent 
-                            class="" 
-                            label="Fortigate"
-                            id="fortigate" 
-                            decorator={getFieldDecorator} />
+                            <InputComponent
+                                class=""
+                                label="Fortigate"
+                                id="fortigate"
+                                decorator={getFieldDecorator} />
 
                             {/*  <Form.Item label="Asignado a">
                                 {getFieldDecorator('asignado')(
@@ -114,7 +133,9 @@ class FormularioIp extends React.Component {
 
                             <Form.Item {...tailLayout}>
                                 <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
+                                <Link to='/ip'>
                                 <Button type="primary">Cancelar</Button>
+                                </Link>
                             </Form.Item>
                         </Form>
                     </div>

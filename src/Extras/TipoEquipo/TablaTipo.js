@@ -10,111 +10,111 @@ import {
     message
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
-
-
+import { Link } from 'react-router-dom';
+/* import FormularioTipo from './FormularioTipo'; */
 
 
 const datos = [
     {
         key: 1,
         tipo: 'Impresora',
-        ip: 'si'
+        ip: 'true'
     },
     {
         key: 2,
         tipo: 'Router',
-        ip: 'si'
+        ip: 'true'
     },
     {
         key: 3,
         tipo: 'Pluma digital',
-        ip: 'no'
+        ip: 'false'
     },
     {
         key: 4,
         tipo: 'UPS',
-        ip: 'no'
+        ip: 'false'
     },
     {
         key: 5,
         tipo: 'Monitor',
-        ip: 'no'
+        ip: 'false'
     },
     {
         key: 6,
         tipo: 'Regulador de voltaje',
-        ip: 'no'
+        ip: 'false'
     },
     {
         key: 7,
         tipo: 'Mouse',
-        ip: 'no'
+        ip:'false'
     },
     {
         key: 8,
         tipo: 'CPU',
-        ip: 'no'
+        ip: 'false'
     },
     {
         key: 9,
         tipo: 'Impresora',
-        ip: 'no'
+        ip: 'false'
     },
     {
         key: 10,
         tipo: 'Memoria RAM',
-        ip: 'no'
+        ip: 'false'
     },
     {
         key: 11,
         tipo: 'Tarjete de video',
-        ip: 'no'
+        ip: 'false'
     },
 
     {
         key: 12,
         tipo: 'CDROM',
-        ip: 'no'
+        ip: 'false'
     },
     {
         key: 13,
         tipo: 'Tarjeta de video',
-        ip: 'no'
+        ip: 'false'
     },
     {
         key: 14,
         tipo: 'Tarjeta gráfica',
-        ip: 'no'
+        ip: 'false'
     },
     {
         key: 15,
         tipo: 'Mainboard',
-        ip: 'no'
+        ip: 'false'
     },
     {
         key: 16,
         tipo: 'Tablet',
-        ip: 'no'
+        ip: 'false'
     },
 
     {
         key: 17,
         tipo: 'Laptop',
-        ip: 'no'
+        ip: 'false'
     }, {
         key: 18,
         tipo: 'Switch',
-        ip: 'no'
+        ip: 'false'
     },
     {
         key: 19,
         tipo: 'Tarjeta de red',
-        ip: 'no'
+        ip: 'false'
     },
     {
         key: 20,
         tipo: 'Modem',
-        ip: 'no'
+        ip: 'true'
     },
 
 
@@ -147,9 +147,13 @@ class TablaTipo extends React.Component {
         this.llenar_tabla();
     }
 
-    /*  handleEditar(data){
-        return <FormularioTipo datos={data}></FormularioTipo>
-     } */
+    /*   handleEditar(data) {
+  
+              return <FormularioTipo></FormularioTipo>
+  
+      } */
+
+
 
     handleDelete(key) {
         const dataSource = [...this.state.dataSource];
@@ -226,12 +230,12 @@ class TablaTipo extends React.Component {
                 key: 'ip',
                 filters: [
                     {
-                        text: 'si',
-                        value: 'si',
+                        text: 'true',
+                        value: 'true',
                     },
                     {
-                        text: 'no',
-                        value: 'no',
+                        text: 'false',
+                        value: 'false',
                     }
                 ],
                 onFilter: (value, record) => record.ip.indexOf(value) === 0
@@ -240,9 +244,15 @@ class TablaTipo extends React.Component {
                 title: 'Acción',
                 key: 'accion',
                 render: (text, record) => (
-                    <div> 
-                            <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit"
-                        /* onClick={() => this.handleEditar(record)} */ />
+                    <div>
+                        <Link to={{
+                            pathname: '/tipo/edit',
+                            state: {
+                                info: record
+                            }
+                        }} >
+                            <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
+                        </Link>
                         <Popconfirm
                             title="¿Desea eliminar este registro?"
                             okText="Si"

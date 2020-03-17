@@ -14,7 +14,7 @@ import AsignarSelect from '../Componentes/AsignarSelect'
 import MarcaSelect from '../Componentes/MarcaSelect'
 import IpSelect from '../Componentes/IpSelect'
 import ComponentePrincipal from '../Componentes/ComponentePrincipal'
-
+import { Link } from 'react-router-dom';
 
 
 const { Content } = Layout;
@@ -43,6 +43,10 @@ class FormularioImpresora extends React.Component {
     componentDidMount = () => {
         var comp = ["Servidor", "UPS"];
         this.setState({ equipos: comp });
+        if (typeof this.props.location !== 'undefined') {
+            const { info } = this.props.location.state;
+            this.cargar_datos(info);
+        }
     }
 
 
@@ -57,6 +61,54 @@ class FormularioImpresora extends React.Component {
         });
     }
 
+    cargar_datos(info) {
+        this.props.form.setFieldsValue({
+            nserie: info.nserie,
+            codigo: info.codigo,
+            modelo: info.modelo,
+            estado: info.estado,
+            marca: info.marca,
+            ip: info.ip,
+            principal: info.principal,
+            asignado: info.asignado,
+            descripcion: info.descripcion,
+            tipo: info.tipo
+        })
+
+        if (info.tipo === "matricial") {
+            this.props.form.setFieldsValue({
+                cinta: info.cinta,
+                cartucho: info.cartucho
+            })
+        }
+        if (info.tipo === "impresora") {
+            this.props.form.setFieldsValue({
+                tinta: info.tinta,
+                cartucho: info.cartucho
+            })
+        }
+        if (info.tipo === "brazalete") {
+            this.props.form.setFieldsValue({
+                tinta: info.tinta,
+                cartucho: info.cartucho,
+                rolloBrazalete: info.rollBrazalete,
+                toner: info.toner
+            })
+        }
+        if (info.tipo === "escaner") {
+            this.props.form.setFieldsValue({
+                rodillo: info.rodillo
+            })
+        }
+        if (info.tipo === "multifuncional") {
+            this.props.form.setFieldsValue({
+                rodillo: info.rodillo,
+                toner: info.toner,
+                cartucho: info.cartucho
+            })
+        }
+
+    }
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -243,7 +295,9 @@ class FormularioImpresora extends React.Component {
 
                             <Form.Item {...tailLayout}>
                                 <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
-                                <Button type="primary">Cancelar</Button>
+                                <Link to='/impresora'>
+                                    <Button type="primary">Cancelar</Button>
+                                </Link>
                             </Form.Item>
                         </Form>
                     </div>
