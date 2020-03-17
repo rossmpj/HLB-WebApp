@@ -220,9 +220,14 @@ class FormularioDesktop extends React.Component {
               </Skeleton> 
         
               <Divider orientation="left">DATOS DEL PROCESADOR</Divider>
-              <InNumComp label="Frecuencia"    class="form2col" id="frec_procesador"    text="GHz" decorator={getFieldDecorator} />
-              <InNumComp label="Núcleos"       class="form2col" id="nucleos_procesador" text=""    decorator={getFieldDecorator} />
-                        
+              <InputComp label="Código"          id="codigo_procesador" class="form2col" decorator={getFieldDecorator} />
+              <MarcaComp required={true}         id="marca_procesador"  class="form2col" decorator={getFieldDecorator} />
+              <InputComp label="Modelo"          id="modelo_procesador" class="form2col" decorator={getFieldDecorator} />
+              <InputComp label="Número de serie" id="nserie_procesador" class="form2col" decorator={getFieldDecorator} />
+              <InNumComp label="Frecuencia"      id="frec_procesador"    class="form2col" decorator={getFieldDecorator} text="GHz" />
+              <InNumComp label="Núcleos"         id="nucleos_procesador" class="form2col" decorator={getFieldDecorator} text=""/>
+              <DescrComp label="Descripción"     id="descr_procesador"  class="form2col" decorator={getFieldDecorator} />
+
               <Divider orientation="left">DATOS GENERALES DE MEMORIA RAM</Divider>
               <InNumComp label="RAM Soportada" class="form2col" id="ram_soportada"      text="GB"  decorator={getFieldDecorator} />
               <InNumComp label="Número slots"  class="form2col" id="num_slots"          text=""    decorator={getFieldDecorator} />
