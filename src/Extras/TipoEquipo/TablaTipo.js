@@ -48,7 +48,7 @@ const datos = [
     {
         key: 7,
         tipo: 'Mouse',
-        ip:'false'
+        ip: 'false'
     },
     {
         key: 8,
@@ -253,6 +253,8 @@ class TablaTipo extends React.Component {
                         }} >
                             <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
                         </Link>
+
+
                         <Popconfirm
                             title="¿Desea eliminar este registro?"
                             okText="Si"

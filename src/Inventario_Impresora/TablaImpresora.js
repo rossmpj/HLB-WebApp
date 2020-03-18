@@ -19,7 +19,7 @@ const impresoras = [
         bspi: 'Hogar Inés Chambers',
         asignado: 'Julián Carax',
         dpto: 'Financiero',
-        tipo: 'Matricial',
+        tipo: 'matricial',
         marca: 'Epson',
         codigo: 123,
         estado: 'Operativo',
@@ -29,7 +29,7 @@ const impresoras = [
         descripcion: 'Ninguna',
         toner: '',
         rodillo: '',
-        cinta: 'RGB',
+        cinta: 'Large',
         rolloBrazalete: ''
 
     },
@@ -39,7 +39,7 @@ const impresoras = [
         bspi: 'Hospital León Becerra',
         asignado: 'Roberto Hendaya',
         dpto: 'Financiero',
-        tipo: 'Escaner',
+        tipo: 'escaner',
         marca: 'Lexmark',
         codigo: 123,
         estado: 'En revisión',
@@ -48,7 +48,7 @@ const impresoras = [
         cartucho: '',
         descripcion: 'Considerar repuestos originales que se encuentran en la av. siempre viva',
         toner: '',
-        rodillo: 'RGB',
+        rodillo: 'H98',
         cinta: '',
         rolloBrazalete: ''
 
@@ -59,18 +59,18 @@ const impresoras = [
         bspi: 'Hospital León Becerra',
         asignado: 'Carlos Ruiz Zafón',
         dpto: 'Sistemas',
-        tipo: 'Matricial',
+        tipo: 'brazalete',
         marca: 'Epson',
         codigo: 123,
         estado: 'Operativo',
         modelo: 'RGB-102',
-        tinta: '',
-        cartucho: 'RGB',
+        tinta: 'Z95',
+        cartucho: 'H96',
         descripcion: 'Ninguna',
-        toner: '',
+        toner: 'J98',
         rodillo: '',
-        cinta: 'RGB',
-        rolloBrazalete: ''
+        cinta: '',
+        rolloBrazalete: 'Y97'
 
     }
 
