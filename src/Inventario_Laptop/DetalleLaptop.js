@@ -66,7 +66,7 @@ class DetalleLaptop extends React.Component {
             </Descriptions>
             <br />
             <Descriptions title="RAM Principal" bordered>
-              <Descriptions.Item label="Código">HLB_RAM_1</Descriptions.Item>
+              <Descriptions.Item label="Código">HLB_RAM_c1</Descriptions.Item>
               <Descriptions.Item label="Marca">Kingston</Descriptions.Item>
               <Descriptions.Item label="Modelo">SGGT2GTX</Descriptions.Item>
               <Descriptions.Item label="Número de serie">13353435346</Descriptions.Item>

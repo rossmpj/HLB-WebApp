@@ -5,7 +5,9 @@ import './custom-antd.css'; //lessc --js mytheme.less ../../../src/custom-antd.c
 import { Layout } from 'antd';
 
 import Impresora from './Inventario_Impresora/HomeImpresora';
-import HomeRouter from './Inventario_Router/HomeRouter';
+import TablaRouter from './Inventario_Router/TablaRouter';
+import FormularioRouter from './Inventario_Router/FormularioRouter';
+import DetalleRouter from './Inventario_Router/DetalleRouter';
 import HomeLaptop from './Inventario_Laptop/HomeLaptop';
 import HomeDesktop from './Inventario_Desktop/HomeDesktop';
 import HomeIp from './Inventario_Ip/HomeIp';
@@ -26,7 +28,6 @@ class App extends React.Component {
   };
 
   onCollapse = collapsed => {
-    console.log(collapsed);
     this.setState({ collapsed });
   };
 
@@ -34,7 +35,12 @@ class App extends React.Component {
     return (
       <Router>
         <Layout style={{ minHeight: '100vh' }}>
-          <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
+          <Sider 
+          breakpoint="lg"
+          onBreakpoint={broken => {
+            console.log(broken);
+          }}
+          collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
             {this.state.collapsed ? <img className="App-logo" src={"./Boton.png"} alt="icon" /> : <img className="App-logo" src={"./logo.png"} alt="logo" />}
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
               <Menu.Item key="11">
@@ -90,7 +96,9 @@ class App extends React.Component {
           <Layout className="site-layout">
             <Header className="site-layout-background"></Header>
             <Content style={{ margin: '16px' }}>
-              <Route exact path='/router' component={HomeRouter} />
+              <Route exact path='/router' component={TablaRouter} />              
+              <Route exact path='/router/view' component={DetalleRouter} />
+              <Route exact path='/router/form' component={FormularioRouter} />
               <Route exact path='/impresora' component={Impresora} />
               <Route exact path='/laptop' component={HomeLaptop} />
               <Route exact path='/desktop' component={HomeDesktop} />

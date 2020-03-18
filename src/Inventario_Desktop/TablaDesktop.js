@@ -535,8 +535,8 @@ class TablaDesktop extends React.Component{
             <span>
               <Button style= {{marginRight: '2px'}} type="primary" size="small" icon="edit" />
               <Popconfirm placement="topRight" 
-              title="¿Está seguro de que desea dar de baja a este equipo?" 
-              okText="Si, eliminar" cancelText="No" onConfirm={() => this.handleDelete(record.key)}>
+              title="¿Desea eliminar este registro?" 
+              okText="Si" cancelText="No" onConfirm={() => this.handleDelete(record.key)}>
               <Button type="danger" icon="delete" size="small" /></Popconfirm>
             </span>
           ) : null 

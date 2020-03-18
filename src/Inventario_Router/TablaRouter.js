@@ -1,7 +1,11 @@
 import React from 'react';
-import { Button, Row, Col, Table, Input, Icon, Popconfirm } from 'antd';
+import { Button, Row, Col, Table, Input, Icon, Popconfirm, Typography } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
-import { BrowserRouter as Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+import {  } from 'antd';
+
+const { Title } = Typography;
 
 class TablaRouter extends React.Component{
   constructor(props) {
@@ -24,7 +28,7 @@ class TablaRouter extends React.Component{
           nombre: 'John Brown',
           pass: 'gjgkd32',
           ip: '2',
-          p_enlace: '192.168.1.0',
+          penlace: '192.168.1.0',
           usuario: 'drgd5547', 
           clave: '345',
           marca: 'LG',
@@ -42,7 +46,7 @@ class TablaRouter extends React.Component{
           nombre: 'John Brown',
           pass: 'admin132',
           ip: '78',
-          p_enlace: '192.168.1.0',
+          penlace: '192.168.1.0',
           usuario: 'admin', 
           clave: '345',
           marca: 'HP',
@@ -60,7 +64,7 @@ class TablaRouter extends React.Component{
           nombre: 'Hospital1',
           pass: '123456',
           ip: '16',
-          p_enlace: '0.0.1.0',
+          penlace: '0.0.1.0',
           usuario: 'dgfthw', 
           clave: '345',
           marca: 'Lenovo',
@@ -78,7 +82,7 @@ class TablaRouter extends React.Component{
           nombre: 'John Brown',
           pass: '4321',
           ip: '125',
-          p_enlace: '192.168.1.0',
+          penlace: '192.168.1.0',
           usuario: 'hpso', 
           clave: '345',
           marca: 'TPLink',
@@ -183,18 +187,17 @@ class TablaRouter extends React.Component{
     this.setState({ searchText: '' });
   };
 
-    render() {
-      let { sortedInfo, filteredInfo } = this.state;
-      sortedInfo = sortedInfo || {};
-      filteredInfo = filteredInfo || {};
-      const columns = [
+  render() {
+    let { sortedInfo, filteredInfo } = this.state;
+    sortedInfo = sortedInfo || {};
+    filteredInfo = filteredInfo || {};
+    const columns = [
         {
           title: 'Código',
           dataIndex: 'codigo',
           key: 'codigo',
           fixed: 'left',
-          // render: text => <a href="!#">{text}</a>,
-          render: (text, record) => <Link to={`user/${record.id}`}>{text}</Link>,
+          render: (text, record) => <Link to={{ pathname: '/router/view' }} >{text}</Link>,
           ...this.getColumnSearchProps('codigo'),
           sorter: (a, b) => this.sortString(a.codigo,b.codigo),
           sortOrder: sortedInfo.columnKey === 'codigo' && sortedInfo.order,
@@ -270,11 +273,11 @@ class TablaRouter extends React.Component{
           sorter: (a, b) => a.nombre.length - b.nombre.length,
           sortOrder: sortedInfo.columnKey === 'nombre' && sortedInfo.order,
         },  
-        // {
-        //   title: 'Pass',
-        //   dataIndex: 'pass',
-        //   key: 'pass',
-        // },
+        {
+          title: 'Pass',
+          dataIndex: 'pass',
+          key: 'pass',
+        },
         {
           title: 'Usuario',
           dataIndex: 'usuario',
@@ -283,11 +286,11 @@ class TablaRouter extends React.Component{
           sorter: (a, b) => a.usuario.length - b.usuario.length,
           sortOrder: sortedInfo.columnKey === 'usuario' && sortedInfo.order,
         }, 
-        // {
-        //   title: 'Clave',
-        //   dataIndex: 'clave',
-        //   key: 'clave',
-        // },
+        {
+          title: 'Clave',
+          dataIndex: 'clave',
+          key: 'clave',
+        },
         {
           title: 'IP',
           dataIndex: 'ip',
@@ -298,11 +301,11 @@ class TablaRouter extends React.Component{
         },
         {
           title: 'Puerta enlace',
-          dataIndex: 'p_enlace',
-          key: 'p_enlace',
-          ...this.getColumnSearchProps('p_enlace'),
-          sorter: (a, b) => this.sortString(a.p_enlace,b.p_enlace),
-          sortOrder: sortedInfo.columnKey === 'p_enlace' && sortedInfo.order,
+          dataIndex: 'penlace',
+          key: 'penlace',
+          ...this.getColumnSearchProps('penlace'),
+          sorter: (a, b) => this.sortString(a.penlace,b.penlace),
+          sortOrder: sortedInfo.columnKey === 'penlace' && sortedInfo.order,
         },
         {
           title: 'Marca',
@@ -372,39 +375,52 @@ class TablaRouter extends React.Component{
           key: 'accion',
           fixed: 'right',
           render: (text, record) => (
-            this.state.dataSource.length >= 1 ? (
-              <span>
-                <Button style= {{marginRight: '2px'}} type="primary" size="small" icon="edit" />
-                <Popconfirm placement="topRight" 
-                title="¿Está seguro de que desea dar de baja a este equipo?" 
-                okText="Si, eliminar" cancelText="No" onConfirm={() => this.handleDelete(record.key)}>
-                <Button type="danger" icon="delete" size="small" /></Popconfirm>
-              </span>
-            ) : null
-          ),
+            <span> 
+              <Link to={{ pathname: '/router/form', state: { info: record, titulo: "Editar router" } }} >
+                <Button style= {{marginRight: '2px'}} onClick={() =>  console.log(record)} type="primary" ghost size="small" icon="edit" />
+              </Link>
+              
+              <Popconfirm placement="topRight" 
+              title="¿Desea eliminar este registro?" 
+              okText="Si" cancelText="No" onConfirm={() => this.handleDelete(record.key)}>
+              <Button type="danger" icon="delete" ghost size="small" /></Popconfirm>
+            </span>
+          ),  
         },
-      ];
-      return (
-      <div className="div-container">
-      <div >
-        <Row>
-          <Col className='flexbox'>
-            <ButtonGroup>
-              <Button type="primary" icon="import">Importar</Button>
-              <Button type="primary" icon="cloud-download">Exportar</Button>
-            </ButtonGroup>
-          </Col>
-        </Row>
+    ];
+    return (
+      <div>
+        <div className="div-container-title">    
+          <Row>
+            <Col span={12}><Title level={2}>Inventario de routers</Title></Col>
+            <Col className='flexbox'>
+              <Link to={{ pathname: '/router/form', state: { titulo: "Nuevo router" } }} > 
+                <Button type="primary" icon="plus">Agregar router</Button>
+              </Link> 
+            </Col>
+          </Row>
+          <div className="div-container">
+            <div>
+              <Row>
+                <Col className='flexbox'>
+                  <ButtonGroup>
+                    <Button type="primary" icon="import">Importar</Button>
+                    <Button type="primary" icon="cloud-download">Exportar</Button>
+                  </ButtonGroup>
+                </Col>
+              </Row>
+            </div>
+            <br />
+            <div className="table-operations">
+              <Button onClick={this.limpiarFiltros}>Limpiar filtros</Button>
+              <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>
+              <Button onClick={this.clearAll}>Limpiar todo</Button>
+            </div>
+            <Table size="small" key={this.state.index} onChange={this.handleChange} tableLayout={undefined} 
+            scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
+          </div>
+        </div>
       </div>
-      <br />
-      <div className="table-operations">
-        <Button onClick={this.limpiarFiltros}>Limpiar filtros</Button>
-        <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>
-        <Button onClick={this.clearAll}>Limpiar todo</Button>
-      </div>
-      <Table size="small" key={this.state.index} onChange={this.handleChange} tableLayout={undefined} 
-      scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
-    </div>
     );
   }
 }
