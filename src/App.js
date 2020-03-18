@@ -19,8 +19,6 @@ import FormularioIp from './Inventario_Ip/FormularioIp';
 import FormularioImpresora from './Inventario_Impresora/FormularioImpresora'
 import FormularioEquipo from './Inventario_Equipo/FormularioEquipo'
 import FormularioDesktop from './Inventario_Desktop/FormularioDesktop'
-import FormularioRouter from './Inventario_Router/FormularioRouter'
-
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
