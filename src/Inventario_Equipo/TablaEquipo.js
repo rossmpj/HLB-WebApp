@@ -10,7 +10,7 @@ import {
     message
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
-
+import { Link } from 'react-router-dom';
 
 const datos = [
     {
@@ -46,7 +46,7 @@ const datos = [
         codigo: '0908102990',
         nserie: 's0908102990',
         estado: 'Disponible',
-        tipo: 'Tarjeta de red',
+        tipo: 'impresora',
         modelo: 'GSV10968',
         marca: 'Intel',
         ip: '',
@@ -153,6 +153,27 @@ class TablaEquipo extends React.Component {
 
 
     render() {
+        const tipo_render = (record) => {
+            switch (record.tipo) {
+                case "impresora":
+                    return <Link to={{ pathname: '/impresora/edit', state: { info: record } }}>
+                        <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
+                    </Link>
+                case "cpu":
+                    return <Link to={{ pathname: '/desktop/edit', state: { info: record } }}>
+                        <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
+                    </Link>;
+                case "router":
+                    return <Link to={{ pathname: '/router/edit', state: { info: record } }}>
+                        <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
+                    </Link>;
+                default:
+                    return <Link to={{ pathname: '/equipo/edit', state: { info: record } }}>
+                        <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
+                    </Link>
+            }
+        }
+
         const columns = [
             {
                 title: 'Código',
@@ -240,7 +261,7 @@ class TablaEquipo extends React.Component {
                 key: 'accion',
                 render: (text, record) => (
                     <div>
-                        <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
+                        {tipo_render(record)}
                         <Popconfirm
                             title="¿Desea eliminar este registro?"
                             okText="Si"

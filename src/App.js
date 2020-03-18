@@ -17,6 +17,10 @@ import HomeTipo from './Extras/TipoEquipo/HomeTipo'
 import FormularioTipo from './Extras/TipoEquipo/FormularioTipo';
 import FormularioIp from './Inventario_Ip/FormularioIp';
 import FormularioImpresora from './Inventario_Impresora/FormularioImpresora'
+import FormularioEquipo from './Inventario_Equipo/FormularioEquipo'
+import FormularioDesktop from './Inventario_Desktop/FormularioDesktop'
+import FormularioRouter from './Inventario_Router/FormularioRouter'
+
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -108,6 +112,10 @@ class App extends React.Component {
               <Route exact path='/tipo/edit' component={FormularioTipo} />
               <Route exact path='/ip/edit' component={FormularioIp} />
               <Route exact path='/impresora/edit' component={FormularioImpresora} />
+              <Route exact path='/equipo/edit' component={FormularioEquipo} />
+              <Route exact path='/desktop/edit' component={FormularioDesktop} />
+              <Route exact path='/router/edit' component={FormularioRouter} />
+
             </Content>
             <Footer className="style-footer">Inventario Hospital León Becerra ©2020 Creado por EasySoft [ESPOL]</Footer>
           </Layout>
