@@ -18,7 +18,7 @@ const datos = [
         codigo: '0908102940',
         nserie: 's0908102940',
         estado: 'En revisión',
-        tipo: 'Lector de DVD',
+        tipo: 'router',
         modelo: 'GSV10970',
         marca: 'Intel',
         ip: '',
@@ -156,19 +156,19 @@ class TablaEquipo extends React.Component {
         const tipo_render = (record) => {
             switch (record.tipo) {
                 case "impresora":
-                    return <Link to={{ pathname: '/impresora/edit', state: { info: record } }}>
+                    return <Link to={{ pathname: '/impresora/form', state: { info: record } }}>
                         <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
                     </Link>
                 case "cpu":
-                    return <Link to={{ pathname: '/desktop/edit', state: { info: record } }}>
+                    return <Link to={{ pathname: '/', state: { info: record } }}>
                         <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
                     </Link>;
                 case "router":
-                    return <Link to={{ pathname: '/router/edit', state: { info: record } }}>
+                    return <Link to={{ pathname: '/', state: { info: record } }}>
                         <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
                     </Link>;
                 default:
-                    return <Link to={{ pathname: '/equipo/edit', state: { info: record } }}>
+                    return <Link to={{ pathname: '/', state: { info: record } }}>
                         <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
                     </Link>
             }

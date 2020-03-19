@@ -3,7 +3,7 @@ import { Menu, Icon, Layout } from 'antd';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './custom-antd.css'; //lessc --js mytheme.less ../../../src/custom-antd.css @import "./antd.less"; @primary-color: #0081C3;  
 
-import Impresora from './Inventario_Impresora/HomeImpresora';
+import Impresora from './Inventario_Impresora/TablaImpresora';
 import TablaRouter from './Inventario_Router/TablaRouter';
 import FormularioRouter from './Inventario_Router/FormularioRouter';
 import DetalleRouter from './Inventario_Router/DetalleRouter'
@@ -12,15 +12,13 @@ import DetalleLaptop from './Inventario_Laptop/DetalleLaptop';
 import DetalleOtrosEquipos from './Inventario_Desktop/DetalleOtrosEquipos';
 import HomeLaptop from './Inventario_Laptop/HomeLaptop';
 import HomeDesktop from './Inventario_Desktop/HomeDesktop';
-import HomeIp from './Inventario_Ip/HomeIp';
+import TablaIp from './Inventario_Ip/TablaIp';
 import HomeEquipo from './Inventario_Equipo/HomeEquipo'
-import HomeTipo from './Extras/TipoEquipo/HomeTipo'
-/* Esto es temporal*/
-import FormularioTipo from './Extras/TipoEquipo/FormularioTipo';
-import FormularioIp from './Inventario_Ip/FormularioIp';
-import FormularioImpresora from './Inventario_Impresora/FormularioImpresora'
+import TablaTipo from './Extras/TipoEquipo/TablaTipo'
+import VistaTipo from './Extras/TipoEquipo/VistaTipo';
+import VistaIp from './Inventario_Ip/VistaIp';
+import VistaImpresora from './Inventario_Impresora/VistaImpresora'
 import FormularioEquipo from './Inventario_Equipo/FormularioEquipo'
-import FormularioDesktop from './Inventario_Desktop/FormularioDesktop'
 import Detalle_RAM_DD from './Inventario_Laptop/Detalle_RAM_DD';
 import DetalleDesktop from './Inventario_Desktop/DetalleDesktop';
 
@@ -41,9 +39,9 @@ class App extends React.Component {
     return (
       <Router>
         <Layout style={{ minHeight: '100vh' }}>
-          <Sider 
-          breakpoint="lg"
-          collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
+          <Sider
+            breakpoint="lg"
+            collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
             {this.state.collapsed ? <img className="App-logo" src={"./Boton.png"} alt="icon" /> : <img className="App-logo" src={"./logo.png"} alt="logo" />}
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
               <Menu.Item key="11">
@@ -99,26 +97,26 @@ class App extends React.Component {
           <Layout className="site-layout">
             <Header className="site-layout-background"></Header>
             <Content style={{ margin: '16px' }}>
-              <Route exact path='/router' component={TablaRouter} />              
-              <Route exact path='/router/view' component={DetalleRouter} />                   
-              <Route exact path='/desktop/view' component={DetalleDesktop} /> 
-              <Route exact path='/otros/view' component={DetalleOtrosEquipos} /> 
+              <Route exact path='/router' component={TablaRouter} />
+              <Route exact path='/router/view' component={DetalleRouter} />
+              <Route exact path='/desktop/view' component={DetalleDesktop} />
+              <Route exact path='/otros/view' component={DetalleOtrosEquipos} />
               <Route exact path='/ip/view' component={DetalleIP} />
-              <Route exact path='/laptop/view' component={DetalleLaptop} />              
-              <Route exact path='/ram_disco/view' component={Detalle_RAM_DD} />  
+              <Route exact path='/laptop/view' component={DetalleLaptop} />
+              <Route exact path='/ram_disco/view' component={Detalle_RAM_DD} />
               <Route exact path='/router/form' component={FormularioRouter} />
               <Route exact path='/impresora' component={Impresora} />
               <Route exact path='/laptop' component={HomeLaptop} />
               <Route exact path='/desktop' component={HomeDesktop} />
-              <Route exact path='/ip' component={HomeIp} />
+              <Route exact path='/ip' component={TablaIp} />
               <Route exact path='/otrosEquipos' component={HomeEquipo} />
-              <Route exact path='/tipo' component={HomeTipo} />
-              <Route exact path='/tipo/edit' component={FormularioTipo} />
-              <Route exact path='/ip/edit' component={FormularioIp} />
-              <Route exact path='/impresora/edit' component={FormularioImpresora} />
+              <Route exact path='/tipo' component={TablaTipo} />
+              <Route exact path='/tipo/form' component={VistaTipo} />
+              <Route exact path='/ip/form' component={VistaIp} />
+              <Route exact path='/impresora/form' component={VistaImpresora} />
               <Route exact path='/equipo/edit' component={FormularioEquipo} />
-              <Route exact path='/desktop/edit' component={FormularioDesktop} />
-              <Route exact path='/router/edit' component={FormularioRouter} />
+
+
             </Content>
             <Footer className="style-footer">Inventario Hospital León Becerra ©2020 Creado por EasySoft [ESPOL]</Footer>
           </Layout>

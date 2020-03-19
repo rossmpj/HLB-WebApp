@@ -7,12 +7,12 @@ import {
     Input,
     Icon,
     Popconfirm,
-    message
+    message,
+    Typography
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
-/* import FormularioTipo from './FormularioTipo'; */
-
+const { Title } = Typography;
 
 const datos = [
     {
@@ -147,14 +147,6 @@ class TablaTipo extends React.Component {
         this.llenar_tabla();
     }
 
-    /*   handleEditar(data) {
-  
-              return <FormularioTipo></FormularioTipo>
-  
-      } */
-
-
-
     handleDelete(key) {
         const dataSource = [...this.state.dataSource];
         this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
@@ -246,9 +238,10 @@ class TablaTipo extends React.Component {
                 render: (text, record) => (
                     <div>
                         <Link to={{
-                            pathname: '/tipo/edit',
+                            pathname: '/tipo/form',
                             state: {
-                                info: record
+                                info: record,
+                                titulo: "Editar tipo de equipo"
                             }
                         }} >
                             <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
@@ -268,19 +261,31 @@ class TablaTipo extends React.Component {
             },
         ];
         return (
-            <div className="div-container">
-                <div >
+            <div>
+                <div className="div-container-title">
                     <Row>
+                        <Col span={12}><Title level={2}>Tipos de equipos registrados</Title></Col>
                         <Col className='flexbox'>
-                            <ButtonGroup style={{ align: 'right' }}>
-                                <Button type="primary" icon="import">Importar</Button>
-                                <Button type="primary" icon="cloud-download">Exportar</Button>
-                            </ButtonGroup>
+                            <Link to={{ pathname: '/tipo/form', state: {titulo: "Nuevo tipo de equipo" } }} >
+                                <Button type="primary" icon="plus">Agregar tipo de equipo</Button>
+                            </Link>
                         </Col>
                     </Row>
+                    <div className="div-container">
+                        <div>
+                            <Row>
+                                <Col className='flexbox'>
+                                    <ButtonGroup>
+                                        <Button type="primary" icon="import">Importar</Button>
+                                        <Button type="primary" icon="cloud-download">Exportar</Button>
+                                    </ButtonGroup>
+                                </Col>
+                            </Row>
+                        </div>
+                        <br />
+                        <Table size="small" columns={columns} dataSource={this.state.dataSource}></Table>
+                    </div>
                 </div>
-                <br />
-                <Table size="medium" columns={columns} dataSource={this.state.dataSource}></Table>
             </div>
         );
     }

@@ -3,15 +3,19 @@ import '../../App.css';
 import {
     Form,
     Button,
-    Layout,
+    /* Layout, */
     Switch,
-    message
+    message,
+    /*  Row,
+     Col, */
+    /*  Typography */
 } from 'antd';
 import '../../custom-antd.css';
 import InputComponent from '../../Componentes/InputComponent';
 import { Link } from 'react-router-dom';
 
-const { Content } = Layout;
+/* const { Content } = Layout;
+const { Title } = Typography; */
 
 const tailLayout = {
     wrapperCol: { offset: 9, span: 5 }
@@ -22,7 +26,7 @@ const layout = {
     wrapperCol: { span: 14 },
 };
 
-class FormularioIp extends React.Component {
+class FormularioTipo extends React.Component {
 
     constructor(props) {
         super(props);
@@ -57,9 +61,10 @@ class FormularioIp extends React.Component {
     }
 
     componentDidMount() {
-        if (typeof this.props.location !== 'undefined') {
-            const { info } = this.props.location.state;
-            this.cargar_datos(info);
+        if (typeof this.props.data.state !== 'undefined'
+            && typeof this.props.data.state.info !== 'undefined'
+        ) {
+            this.cargar_datos(this.props.data.state.info);
         }
     }
 
@@ -67,38 +72,33 @@ class FormularioIp extends React.Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <Content>
-                <div className="div-border-top" >
-                    <div className="div-container">
-                        <Form {...layout}
-                            layout="horizontal"
-                            onSubmit={this.handle_guardar}
-                        >
-                            <InputComponent
-                                class=""
-                                label="Tipo de equipo"
-                                id="tipo"
-                                decorator={getFieldDecorator} />
+            <div className="div-container">
+                <Form {...layout}
+                    layout="horizontal"
+                    onSubmit={this.handle_guardar}
+                >
+                    <InputComponent
+                        class=""
+                        label="Tipo de equipo"
+                        id="tipo"
+                        decorator={getFieldDecorator} />
 
-                            <Form.Item label="¿Utiliza dirección IP?">
-                                {getFieldDecorator('ip', {
-                                    valuePropName: 'checked',
-                                    initialValue: false,
-                                })(<Switch checkedChildren="Si" unCheckedChildren="No"></Switch>)}
-                            </Form.Item>
-
-                            <Form.Item {...tailLayout}>
-                                <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
-                                <Link to='/tipo'>
-                                    <Button type="primary">Cancelar</Button>
-                                </Link>
-                            </Form.Item>
-                        </Form>
-                    </div>
-                </div>
-            </Content >
+                    <Form.Item label="¿Utiliza dirección IP?">
+                        {getFieldDecorator('ip', {
+                            valuePropName: 'checked',
+                            initialValue: false,
+                        })(<Switch checkedChildren="Si" unCheckedChildren="No"></Switch>)}
+                    </Form.Item>
+                    <Form.Item {...tailLayout}>
+                        <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
+                        <Link to='/tipo'>
+                            <Button type="primary">Cancelar</Button>
+                        </Link>
+                    </Form.Item>
+                </Form>
+            </div>
         );
     }
 }
-FormularioIp = Form.create({})(FormularioIp);
-export default FormularioIp;
+FormularioTipo = Form.create({})(FormularioTipo);
+export default FormularioTipo;

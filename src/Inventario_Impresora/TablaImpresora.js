@@ -7,10 +7,12 @@ import {
     Input,
     Icon,
     Popconfirm,
-    message
+    message,
+    Typography
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
+const { Title } = Typography;
 
 const impresoras = [
     {
@@ -326,19 +328,20 @@ class TablaImpresora extends React.Component {
                 key: 'accion',
                 render: (text, record) => (
                     <div>
-                         <Link to={{
-                            pathname: '/impresora/edit',
+                        <Link to={{
+                            pathname: '/impresora/form',
                             state: {
-                                info: record
+                                info: record,
+                                titulo: "Editar impresora"
                             }
                         }} >
-                        <Button style={{ marginRight: '2px' }} size="small" type="info" icon="edit" />
+                            <Button style={{ marginRight: '2px' }} size="small" type="info" icon="edit" />
                         </Link>
                         <Popconfirm
                             title="¿Desea eliminar este registro?"
                             okText="Si"
                             cancelText="No"
-                            onConfirm={()=> this.handleDelete(record.key)}
+                            onConfirm={() => this.handleDelete(record.key)}
                         >
                             <Button size="small" type="error" icon="delete" />
                         </Popconfirm>
@@ -349,19 +352,29 @@ class TablaImpresora extends React.Component {
 
 
         return (
-            <div className="div-container">
-                <div >
-                    <Row>
-                        <Col className='flexbox'>
-                            <ButtonGroup style={{ align: 'right' }}>
-                                <Button type="primary" icon="import">Importar</Button>
-                                <Button type="primary" icon="cloud-download">Exportar</Button>
-                            </ButtonGroup>
-                        </Col>
-                    </Row>
+            <div className="div-container-title">
+                <Row>
+                    <Col span={12}><Title level={2}>Inventario Impresora</Title></Col>
+                    <Col className='flexbox'>
+                        <Link to={{ pathname: '/impresora/form', state: {titulo: "Nueva Impresora" } }} >
+                            <Button type="primary" icon="plus">Agregar Impresora</Button>
+                        </Link>
+                    </Col>
+                </Row>
+                <div className="div-container">
+                    <div >
+                        <Row>
+                            <Col className='flexbox'>
+                                <ButtonGroup style={{ align: 'right' }}>
+                                    <Button type="primary" icon="import">Importar</Button>
+                                    <Button type="primary" icon="cloud-download">Exportar</Button>
+                                </ButtonGroup>
+                            </Col>
+                        </Row>
+                    </div>
+                    <br />
+                    <Table size="medium" tableLayout={undefined} scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
-                <br />
-                <Table size="medium" tableLayout={undefined} scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
             </div>
         );
     }

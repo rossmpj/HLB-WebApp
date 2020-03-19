@@ -7,13 +7,14 @@ import {
     Input,
     Icon,
     Popconfirm,
-    message
+    message,
+    Typography
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
-/* import getColumnSearchProps from '../Componentes/SearchInput'
- */
-const ips= [
+const { Title } = Typography;
+
+const ips = [
     {
         key: '1',
         ip: '192.168.1.1',
@@ -241,13 +242,14 @@ class TablaIp extends React.Component {
                 key: 'accion',
                 render: (text, record) => (
                     <div>
-                         <Link to={{
-                            pathname: '/ip/edit',
+                        <Link to={{
+                            pathname: '/ip/form',
                             state: {
-                                info: record
+                                info: record,
+                                titulo: "Editar dirección IP"
                             }
                         }} >
-                        <Button style={{ marginRight: '7px' }} size="small" type="info" icon="edit" />
+                            <Button style={{ marginRight: '7px' }} size="small" type="info" icon="edit" />
                         </Link>
                         <Popconfirm
                             title="¿Desea eliminar este registro?"
@@ -263,19 +265,29 @@ class TablaIp extends React.Component {
         ];
 
         return (
-            <div className="div-container">
-                <div >
-                    <Row>
-                        <Col className='flexbox'>
-                            <ButtonGroup style={{ align: 'right' }}>
-                                <Button type="primary" icon="import">Importar</Button>
-                                <Button type="primary" icon="cloud-download">Exportar</Button>
-                            </ButtonGroup>
-                        </Col>
-                    </Row>
+            <div className="div-container-title">
+                <Row>
+                    <Col span={12}><Title level={2}>Inventario IP</Title></Col>
+                    <Col className='flexbox'>
+                        <Link to={{ pathname: '/ip/form', state: {titulo: "Nueva dirección IP" } }} >
+                            <Button type="primary" icon="plus">Agregar dirección IP</Button>
+                        </Link>
+                    </Col>
+                </Row>
+                <div className="div-container">
+                    <div >
+                        <Row>
+                            <Col className='flexbox'>
+                                <ButtonGroup style={{ align: 'right' }}>
+                                    <Button type="primary" icon="import">Importar</Button>
+                                    <Button type="primary" icon="cloud-download">Exportar</Button>
+                                </ButtonGroup>
+                            </Col>
+                        </Row>
+                    </div>
+                    <br />
+                    <Table size="medium" tableLayout={undefined} scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
-                <br />
-                <Table size="medium" tableLayout={undefined} scroll={{ x: 'max-content' }}  columns={columns} dataSource={this.state.dataSource}></Table>
             </div>
         );
     }
