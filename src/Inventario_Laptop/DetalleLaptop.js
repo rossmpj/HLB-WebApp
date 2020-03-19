@@ -1,96 +1,193 @@
 import React from 'react';
-import { Tabs } from 'antd';
+import { Tabs, Row, Col, Typography, Button, Descriptions, Badge } from 'antd';
 import { LaptopOutlined, WindowsOutlined } from '@ant-design/icons';
-import { Descriptions, Badge } from 'antd';
 import { FiHardDrive } from "react-icons/fi";
 import { FaMemory } from "react-icons/fa";
 import { GiProcessor } from "react-icons/gi";
 
 const { TabPane } = Tabs;
+const { Title } = Typography; 
 
 class DetalleLaptop extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+        codigo: '',
+        bspi: '',
+        departamento: '',
+        empleado: '',
+        marca: '',
+        modelo: '',
+        num_serie: '',
+        name_pc: '',
+        user_pc: '',
+        estado: '',
+        ip: '',
+        so: '',
+        so_type: '',
+        servpack: '',
+        licencia: '',
+        office: '',
+        nombre_procesador: '',
+        frecuencia: '',
+        nnucleos: '',
+        ram_soportada: '',
+        slots_ram: '',
+        rams: [],
+        discos: [],
+        descripcion: ''
+    };
+  }
+
+  componentDidMount = () => {
+    if (typeof this.props.location !== 'undefined') {
+      const { info } = this.props.location.state;
+      this.cargar_datos(info);
+    }
+  }
+
+  cargar_datos(info) {
+    console.log(info);
+    this.setState({
+        codigo: info.codigo,
+        bspi: info.bspi,
+        departamento: info.departamento,
+        empleado: info.empleado,
+        marca: info.marca,
+        modelo: info.modelo,
+        num_serie: info.num_serie,
+        name_pc: info.name_pc,
+        user_pc: info.user_pc,
+        estado: info.estado,
+        ip: info.ip,
+        so: info.so,
+        so_type: info.so_type,
+        servpack: info.servpack,
+        licencia: info.licencia,
+        office: info.office,
+        nombre_procesador: info.nombre_procesador,
+        frecuencia: info.frecuencia,
+        nnucleos: info.nnucleos,
+        ram_soportada: info.ram_soportada,
+        slots_ram: info.slots_ram,
+        rams: info.rams,
+        discos: info.discos,
+        descripcion: info.descripcion
+    })
+  }
+
   render() {
     return (
-      <div className="div-container">
-        <Tabs defaultActiveKey="1">
-          <TabPane tab={<span><LaptopOutlined />General</span>} key="1">
-            <Descriptions title="Datos generales del equipo" bordered>
-              <Descriptions.Item label="Codigo Laptop" span={3}>HLB_PC_01</Descriptions.Item>
-              <Descriptions.Item label="Empleado a cargo" span={3}>Marco Mendieta</Descriptions.Item>
-              <Descriptions.Item label="Marca">HP</Descriptions.Item>
-              <Descriptions.Item label="Modelo">Pavilion 15-cs0xxx</Descriptions.Item>
-              <Descriptions.Item label="Número de serie">454WEFRX-2</Descriptions.Item>
-              <Descriptions.Item label="Nombre PC">HLB_PC_SIST1</Descriptions.Item>
-              <Descriptions.Item label="Usuario PC">SistemasHLB001</Descriptions.Item>
-              <Descriptions.Item label="Estado">
-                <Badge status="processing" text="Operativo" />
-              </Descriptions.Item>
-              <Descriptions.Item label="Dirección IP" span={3}>192.168.1.1</Descriptions.Item>
-              <Descriptions.Item label="Descripción" span={3}>
-                Cambiar el sistema operativo.
+      <div>
+        <div className="div-container-title">      
+          <Row>
+            <Col span={12}>
+              <Title level={2}>Detalle de laptop</Title> 
+            </Col>
+            <Col className='flexbox'>
+            <Button onClick={this.props.history.goBack} type="primary" icon="left">Volver</Button>
+            </Col>
+          </Row>  
+          <div className="div-container">
+            <Tabs defaultActiveKey="1">
+              <TabPane tab={<span><LaptopOutlined />General</span>} key="1">
+                <Descriptions title="Datos generales del equipo" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
+                  <Descriptions.Item label="Código Laptop" span={3}>{this.state.codigo}</Descriptions.Item>                  
+                  <Descriptions.Item label="BSPI-Punto">{this.state.bspi}</Descriptions.Item>
+                  <Descriptions.Item label="Departamento">{this.state.departamento}</Descriptions.Item>
+                  <Descriptions.Item label="Empleado a cargo">{this.state.empleado}</Descriptions.Item>
+                  <Descriptions.Item label="Marca">{this.state.marca}</Descriptions.Item>
+                  <Descriptions.Item label="Modelo">{this.state.modelo}</Descriptions.Item>
+                  <Descriptions.Item label="Número de serie">{this.state.num_serie}</Descriptions.Item>
+                  <Descriptions.Item label="Nombre PC">{this.state.name_pc}</Descriptions.Item>
+                  <Descriptions.Item label="Usuario PC">{this.state.user_pc}</Descriptions.Item>
+                  <Descriptions.Item label="Estado">
+                    <Badge status="processing" text={this.state.estado} />
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Dirección IP" span={3}>{this.state.ip}</Descriptions.Item>
+                  <Descriptions.Item label="Descripción">
+                    {this.state.descripcion}
+                  </Descriptions.Item>
+                </Descriptions>
+              </TabPane>
+
+              <TabPane tab={<span><WindowsOutlined />SO</span>} key="2" >
+                <Descriptions title="Datos del sistema operativo" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
+                  <Descriptions.Item label="Sistema operativo" span={2}>{this.state.so}</Descriptions.Item>
+                  <Descriptions.Item label="Tipo de sistema operativo">{this.state.so_type}</Descriptions.Item>
+                  <Descriptions.Item label="Service Pack 1" span={3}><Badge status="success" text={this.state.servpack} /></Descriptions.Item>
+                  <Descriptions.Item label="Licencia" span={3}>
+                    <Badge status="warning" text={this.state.licencia} />
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Office">{this.state.office}</Descriptions.Item>
+                </Descriptions>
+              </TabPane>
+
+              <TabPane tab={<span><GiProcessor className="anticon" />Procesador</span>} key="3" >
+                <Descriptions title="Procesador" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
+                  <Descriptions.Item label="Código">{this.state.nombre_procesador}</Descriptions.Item>
+                  <Descriptions.Item label="Marca"></Descriptions.Item>
+                  <Descriptions.Item label="Modelo"></Descriptions.Item>
+                  <Descriptions.Item label="Número de serie"></Descriptions.Item>
+                  <Descriptions.Item label="Frecuencia">{this.state.frecuencia}</Descriptions.Item>
+                  <Descriptions.Item label="Número de núcleos">{this.state.nnucleos}</Descriptions.Item>
+                  <Descriptions.Item label="Descripción"></Descriptions.Item>
+                </Descriptions>
+                <br />                     
+              </TabPane>
+
+              <TabPane tab={<span><FaMemory className="anticon" />Memoria RAM</span>} key="4" >
+                <Descriptions title="Datos generales de memoria RAM" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
+                  <Descriptions.Item label="RAM soportada">{this.state.ram_soportada}</Descriptions.Item>
+                  <Descriptions.Item label="Número de slots">{this.state.slots_ram}</Descriptions.Item>
+                </Descriptions>
                 <br />
-                Se necesita reparar el panel táctil.
-              </Descriptions.Item>
-            </Descriptions>
-          </TabPane>
+                <div>
+                  {this.state.rams.map((ram, index) => {
+                    return (
+                      <div key={index}>
+                        <Descriptions title={"Memoria RAM "+(index+1)} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
+                          <Descriptions.Item label="Código">{ram}</Descriptions.Item>
+                          <Descriptions.Item label="Marca"></Descriptions.Item>
+                          <Descriptions.Item label="Modelo"></Descriptions.Item>
+                          <Descriptions.Item label="Número de serie"></Descriptions.Item>
+                          <Descriptions.Item label="Capacidad"></Descriptions.Item>
+                          <Descriptions.Item label="Tipo"></Descriptions.Item>
+                          <Descriptions.Item label="Descripción"></Descriptions.Item>
+                        </Descriptions>       
+                        <br /> 
+                      </div>     
+                    );
+                  })}
+                </div>               
+              </TabPane>
 
-          <TabPane tab={<span><WindowsOutlined />SO</span>} key="2" >
-            <Descriptions title="Datos del sistema operativo" bordered>
-              <Descriptions.Item label="Sistema operativo" span={2}>Windows 7 professional</Descriptions.Item>
-              <Descriptions.Item label="Tipo de sistema operativo">64 bits</Descriptions.Item>
-              <Descriptions.Item label="Service Pack 1" span={3}><Badge status="success" text="Si" /></Descriptions.Item>
-              <Descriptions.Item label="Licencia" span={3}>
-                <Badge status="warning" text="No" />
-              </Descriptions.Item>
-              <Descriptions.Item label="Office">2016</Descriptions.Item>
-            </Descriptions>
-          </TabPane>
-
-          <TabPane tab={<span><GiProcessor className="anticon" />Procesador</span>} key="3" >
-            <Descriptions title="Procesador" bordered>
-              <Descriptions.Item label="Código">HLB_PROCES_1</Descriptions.Item>
-              <Descriptions.Item label="Marca">Intel Core i7</Descriptions.Item>
-              <Descriptions.Item label="Modelo">8va generación</Descriptions.Item>
-              <Descriptions.Item label="Número de serie">24353DFXE</Descriptions.Item>
-              <Descriptions.Item label="Frecuencia">2.54 GHz</Descriptions.Item>
-              <Descriptions.Item label="Número de núcleos">8</Descriptions.Item>
-              <Descriptions.Item label="Descripción">Tarjeta gráfica nvidia geforce</Descriptions.Item>
-            </Descriptions>
-            <br />                     
-          </TabPane>
-
-          <TabPane tab={<span><FaMemory className="anticon" />Memoria RAM</span>} key="4" >
-            <Descriptions title="Datos generales de memoria RAM" bordered>
-              <Descriptions.Item label="RAM soportada">2 GB</Descriptions.Item>
-              <Descriptions.Item label="Número de slots">3</Descriptions.Item>
-            </Descriptions>
-            <br />
-            <Descriptions title="RAM Principal" bordered>
-              <Descriptions.Item label="Código">HLB_RAM_c1</Descriptions.Item>
-              <Descriptions.Item label="Marca">Kingston</Descriptions.Item>
-              <Descriptions.Item label="Modelo">SGGT2GTX</Descriptions.Item>
-              <Descriptions.Item label="Número de serie">13353435346</Descriptions.Item>
-              <Descriptions.Item label="Capacidad">12 GB</Descriptions.Item>
-              <Descriptions.Item label="Tipo">SSD</Descriptions.Item>
-              <Descriptions.Item label="Descripción">-</Descriptions.Item>
-            </Descriptions>
-          </TabPane>
-
-          <TabPane tab={<span><FiHardDrive className="anticon" />Disco Duro</span>} key="5" >
-            <Descriptions title="Información sobre discos duros" bordered>
-              <Descriptions.Item label="Código">HLB_DD_1</Descriptions.Item>
-              <Descriptions.Item label="Marca">Toshiba</Descriptions.Item>
-              <Descriptions.Item label="Modelo">SGGT2GTX</Descriptions.Item>
-              <Descriptions.Item label="Número de serie">13353435346</Descriptions.Item>
-              <Descriptions.Item label="Capacidad">2 TB</Descriptions.Item>
-              <Descriptions.Item label="Tipo">SSD</Descriptions.Item>
-              <Descriptions.Item label="Descripción">-</Descriptions.Item>
-            </Descriptions> 
-          </TabPane>  
-        </Tabs>
+              <TabPane tab={<span><FiHardDrive className="anticon" />Disco Duro</span>} key="5" >
+              <div>
+                  {this.state.discos.map((dd, index) => {
+                    return (
+                      <div key={index}>
+                        <Descriptions title={"Disco duro "+(index+1)} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
+                          <Descriptions.Item label="Código">{dd}</Descriptions.Item>
+                          <Descriptions.Item label="Marca"></Descriptions.Item>
+                          <Descriptions.Item label="Modelo"></Descriptions.Item>
+                          <Descriptions.Item label="Número de serie"></Descriptions.Item>
+                          <Descriptions.Item label="Capacidad"></Descriptions.Item>
+                          <Descriptions.Item label="Tipo"></Descriptions.Item>
+                          <Descriptions.Item label="Descripción"></Descriptions.Item>
+                        </Descriptions>       
+                        <br /> 
+                      </div>     
+                    );
+                  })}
+                </div>
+              </TabPane>  
+            </Tabs>
+          </div>
+        </div>
       </div>
     )
- }
+  }
 }
 
 export default DetalleLaptop;

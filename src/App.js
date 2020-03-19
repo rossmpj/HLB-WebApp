@@ -1,13 +1,15 @@
 import React from 'react';
-import { Menu, Icon } from 'antd';
+import { Menu, Icon, Layout } from 'antd';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './custom-antd.css'; //lessc --js mytheme.less ../../../src/custom-antd.css @import "./antd.less"; @primary-color: #0081C3;  
-import { Layout } from 'antd';
 
 import Impresora from './Inventario_Impresora/HomeImpresora';
 import TablaRouter from './Inventario_Router/TablaRouter';
 import FormularioRouter from './Inventario_Router/FormularioRouter';
-import DetalleRouter from './Inventario_Router/DetalleRouter';
+import DetalleRouter from './Inventario_Router/DetalleRouter'
+import DetalleIP from './Inventario_Router/DetalleIP';
+import DetalleLaptop from './Inventario_Laptop/DetalleLaptop';
+import DetalleOtrosEquipos from './Inventario_Desktop/DetalleOtrosEquipos';
 import HomeLaptop from './Inventario_Laptop/HomeLaptop';
 import HomeDesktop from './Inventario_Desktop/HomeDesktop';
 import HomeIp from './Inventario_Ip/HomeIp';
@@ -19,6 +21,8 @@ import FormularioIp from './Inventario_Ip/FormularioIp';
 import FormularioImpresora from './Inventario_Impresora/FormularioImpresora'
 import FormularioEquipo from './Inventario_Equipo/FormularioEquipo'
 import FormularioDesktop from './Inventario_Desktop/FormularioDesktop'
+import Detalle_RAM_DD from './Inventario_Laptop/Detalle_RAM_DD';
+import DetalleDesktop from './Inventario_Desktop/DetalleDesktop';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -39,9 +43,6 @@ class App extends React.Component {
         <Layout style={{ minHeight: '100vh' }}>
           <Sider 
           breakpoint="lg"
-          onBreakpoint={broken => {
-            console.log(broken);
-          }}
           collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
             {this.state.collapsed ? <img className="App-logo" src={"./Boton.png"} alt="icon" /> : <img className="App-logo" src={"./logo.png"} alt="logo" />}
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
@@ -99,7 +100,12 @@ class App extends React.Component {
             <Header className="site-layout-background"></Header>
             <Content style={{ margin: '16px' }}>
               <Route exact path='/router' component={TablaRouter} />              
-              <Route exact path='/router/view' component={DetalleRouter} />
+              <Route exact path='/router/view' component={DetalleRouter} />                   
+              <Route exact path='/desktop/view' component={DetalleDesktop} /> 
+              <Route exact path='/otros/view' component={DetalleOtrosEquipos} /> 
+              <Route exact path='/ip/view' component={DetalleIP} />
+              <Route exact path='/laptop/view' component={DetalleLaptop} />              
+              <Route exact path='/ram_disco/view' component={Detalle_RAM_DD} />  
               <Route exact path='/router/form' component={FormularioRouter} />
               <Route exact path='/impresora' component={Impresora} />
               <Route exact path='/laptop' component={HomeLaptop} />
@@ -113,7 +119,6 @@ class App extends React.Component {
               <Route exact path='/equipo/edit' component={FormularioEquipo} />
               <Route exact path='/desktop/edit' component={FormularioDesktop} />
               <Route exact path='/router/edit' component={FormularioRouter} />
-
             </Content>
             <Footer className="style-footer">Inventario Hospital León Becerra ©2020 Creado por EasySoft [ESPOL]</Footer>
           </Layout>

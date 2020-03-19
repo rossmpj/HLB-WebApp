@@ -3,8 +3,6 @@ import { Button, Row, Col, Table, Input, Icon, Popconfirm, Typography } from 'an
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 
-import {  } from 'antd';
-
 const { Title } = Typography;
 
 class TablaRouter extends React.Component{
@@ -68,6 +66,24 @@ class TablaRouter extends React.Component{
           usuario: 'dgfthw', 
           clave: '345',
           marca: 'Lenovo',
+          modelo: 'ergr',
+          num_serie: '23',
+          estado: 'Operativo',
+          descripcion: 'muy bueno'
+        },
+        {
+          key: 7,
+          codigo: 'HlB-454',
+          bspi: 'Unidad Educativa San José Buen Pastor',
+          departamento: 'UCI',
+          empleado: 'Rosa Pincay',
+          nombre: 'John Brown',
+          pass: '4321',
+          ip: undefined,
+          penlace: undefined,
+          usuario: 'hpso', 
+          clave: '345',
+          marca: 'TPLink',
           modelo: 'ergr',
           num_serie: '23',
           estado: 'Operativo',
@@ -197,7 +213,7 @@ class TablaRouter extends React.Component{
           dataIndex: 'codigo',
           key: 'codigo',
           fixed: 'left',
-          render: (text, record) => <Link to={{ pathname: '/router/view' }} >{text}</Link>,
+          render: (text, record) => <Link to={{ pathname: '/router/view', state: { info: record } }} >{text}</Link>,
           ...this.getColumnSearchProps('codigo'),
           sorter: (a, b) => this.sortString(a.codigo,b.codigo),
           sortOrder: sortedInfo.columnKey === 'codigo' && sortedInfo.order,
@@ -295,7 +311,7 @@ class TablaRouter extends React.Component{
           title: 'IP',
           dataIndex: 'ip',
           key: 'ip',
-          render: text => <a href="!#">{text}</a>,
+          render: (text, record) => <Link to={{ pathname: '/ip/view', state: { info: record } }} >{text}</Link>,
           sorter: (a, b) => a.ip.length - b.ip.length,
           sortOrder: sortedInfo.columnKey === 'ip' && sortedInfo.order,
         },
@@ -377,7 +393,7 @@ class TablaRouter extends React.Component{
           render: (text, record) => (
             <span> 
               <Link to={{ pathname: '/router/form', state: { info: record, titulo: "Editar router" } }} >
-                <Button style= {{marginRight: '2px'}} onClick={() =>  console.log(record)} type="primary" ghost size="small" icon="edit" />
+                <Button style= {{marginRight: '2px'}} type="primary" ghost size="small" icon="edit" />
               </Link>
               
               <Popconfirm placement="topRight" 
@@ -416,7 +432,7 @@ class TablaRouter extends React.Component{
               <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>
               <Button onClick={this.clearAll}>Limpiar todo</Button>
             </div>
-            <Table size="small" key={this.state.index} onChange={this.handleChange} tableLayout={undefined} 
+            <Table size="small" bordered key={this.state.index} onChange={this.handleChange} tableLayout={undefined} 
             scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
           </div>
         </div>

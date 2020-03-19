@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, Row, Col, Table, Input, Icon, Popconfirm } from 'antd';
+import { Button, Row, Col, Table, Input, Icon, Popconfirm, Tag } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
+import { Link } from 'react-router-dom';
 
 class TablaDesktop extends React.Component{
   constructor(props) {
@@ -34,12 +35,13 @@ class TablaDesktop extends React.Component{
           mouse: 'HLB_MOU_35',
           parlantes: 'HLB_PAR_23',
           mainboard: 'HLB_MNB_34',
-          ram: ['1', 'gfh'],
-          dd: 'HLB_DD_4',
+          rams: ['1', 'gfh'],
+          discos: ['HLB_DD_4'],
           procesador: 'HLB_PRC',
           tarj_red: 'hlb_tred_1',
           case: 'hlb_cas_4',
           f_alim: 'UPS',
+          f_poder: 'HLB_fpod_1',
           descripcion: 'revisar'
         },
         {
@@ -62,12 +64,13 @@ class TablaDesktop extends React.Component{
           mouse: 'HLB_MOU_36',
           parlantes: 'HLB_PAR_22',
           mainboard: 'HLB_MNB_32',
-          ram: 'HLB_RAM_1',
-          dd: 'HLB_DD_3',
+          rams: ['HLB_RAM_1', 'HFDGFSt2', 'GHTH43_34'],
+          discos: ['HLB_DD_3', 'THRTE2534'],
           procesador: 'HLB_PRC_0',
           tarj_red: 'hlb_tred_1',
           case: 'hlb_cas_3',
           f_alim: 'Regulador',
+          f_poder: 'HLB_fpod_2',
           descripcion: ''
         },
         {
@@ -90,12 +93,13 @@ class TablaDesktop extends React.Component{
           mouse: 'HLB_MOU_36',
           parlantes: 'HLB_PAR_22',
           mainboard: 'HLB_MNB_32',
-          ram: 'HLB_RAM_1',
-          dd: 'HLB_DD_3',
+          rams: ['HLB_RAM_1'],
+          discos: ['HLB_DD_3'],
           procesador: 'HLB_PRC_0',
           tarj_red: 'hlb_tred_1',
           case: 'hlb_cas_3',
-          f_alim: 'UPS',
+          f_alim: 'UPS',          
+          f_poder: 'HLB_fpod_3',
           descripcion: ''
         },
       ],
@@ -108,23 +112,6 @@ class TablaDesktop extends React.Component{
     //this.setState({ dataSource: dataSource.estado = "De baja"})
      this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
   };
-
-  // showDeleteConfirm = key => {
-  //   // onConfirm=
-  //   confirm({
-  //     title: 'Are you sure delete this task?',
-  //     icon: <ExclamationCircleOutlined />,
-  //     content: 'Some descriptions',
-  //     okText: 'Yes',
-  //     okType: 'danger',
-  //     cancelText: 'No',
-  //     onOk() {
-  //    this.handleDelete(key)     },
-  //     onCancel() {
-  //       console.log('Cancel');
-  //     },
-  //   });
-  // }
 
   handleClick() {
     this.setState({
@@ -227,7 +214,7 @@ class TablaDesktop extends React.Component{
         dataIndex: 'codigo',
         key: 'codigo',
         fixed: 'left',
-        render: text => <a href="!#" >{text}</a>,
+        render: (text, record) =>  <Link to={{ pathname: '/desktop/view', state: { info: record } }} >{text}</Link>,
         ...this.getColumnSearchProps('codigo')
       },
       {
@@ -438,73 +425,101 @@ class TablaDesktop extends React.Component{
         title: 'IP',
         dataIndex: 'ip',
         key: 'ip',
-        render: text => <a href="!#" >{text}</a>,
+        render: (text, record) =>  <Link to={{ pathname: '/ip/view', state: { info: record } }} >{text}</Link>,
       },
       {
         title: 'Monitor',
         dataIndex: 'monitor',
         key: 'monitor',
-        render: text => <a href="!#" >{text}</a>,
+        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'monitor'} }} >{text}</Link>,
       },
       {
         title: 'Teclado',
         dataIndex: 'teclado',
         key: 'teclado',
-        render: text => <a href="!#" >{text}</a>,
+        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'teclado'} }} >{text}</Link>,
       }, 
       {
         title: 'Parlantes',
         dataIndex: 'parlantes',
         key: 'parlantes',
-        render: text => <a href="!#" >{text}</a>,
+        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'parlantes'} }} >{text}</Link>,
       },
       {
         title: 'Mouse',
         dataIndex: 'mouse',
         key: 'mouse',
-        render: text => <a href="!#" >{text}</a>,
+        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'mouse'} }} >{text}</Link>,
       },
       {
         title: 'Mainboard',
         dataIndex: 'mainboard',
         key: 'mainboard',
-        render: text => <a href="!#" >{text}</a>,
+        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'mainboard'} }} >{text}</Link>,
       }, 
       {
-        title: 'RAM',
-        dataIndex: 'ram',
-        key: 'ram',
-        render: text => <a href="!#" >{text}</a>,
+        title: 'Memorias RAM',
+        dataIndex: 'rams',
+        key: 'rams',
+        width: 70,
+        render: (rams) => (
+          <div>
+            {rams.map(id_memoria => {
+              return (
+                <Link key={id_memoria} to={{ pathname: '/ram_disco/view', state: { info: id_memoria, tipo_equipo: 'memoria RAM' } }} >
+                  <Tag style={{margin: 2}} color="cyan" key={id_memoria.toString()}>{id_memoria}</Tag>
+                </Link>              
+              );
+            })}
+          </div>
+        ),
       },  
       {
-        title: 'Disco duro',
-        dataIndex: 'dd',
-        key: 'dd',
-        render: text => <a href="!#" >{text}</a>,
+        title: 'Discos duros',
+        dataIndex: 'discos',
+        key: 'discos',
+        width: 70,
+        render: (discos) => (
+          <div>
+            {discos.map(id_disco => {
+              return (
+                <Link key={id_disco} to={{ pathname: '/ram_disco/view', state: { info: id_disco, tipo_equipo: 'disco duro' } }} >
+                  <Tag style={{margin: 2}} color="blue" key={id_disco.toString()}>{id_disco}</Tag>
+                </Link>              
+              );
+            })}
+          </div>
+        ),
       }, 
       {
         title: 'Procesador',
         dataIndex: 'procesador',
         key: 'procesador',
-        render: text => <a href="!#" >{text}</a>,
+        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'procesador'} }} >{text}</Link>,
       }, 
       {
         title: 'Tarjeta de red',
         dataIndex: 'tarj_red',
         key: 'tarj_red',
-        render: text => <a href="!#" >{text}</a>,
+        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'tarjeta de red'} }} >{text}</Link>,
       },
       {
         title: 'Case',
         dataIndex: 'case',
         key: 'case',
-        render: text => <a href="!#" >{text}</a>,
+        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'case'} }} >{text}</Link>,
+      },
+      {
+        title: 'Fuente poder',
+        dataIndex: 'f_poder',
+        key: 'f_poder',
+        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'fuente de poder' } }} >{text}</Link>,
       },
       {
         title: 'Alimentación',
         dataIndex: 'f_alim',
         key: 'f_alim',
-        render: text => <a href="!#" >{text}</a>,
+        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'fuente de alimentación'} }} >{text}</Link>,
         filters: [
           {
               text: 'UPS',
@@ -562,7 +577,7 @@ class TablaDesktop extends React.Component{
         <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>
         <Button onClick={this.clearAll}>Limpiar todo</Button>
       </div> 
-      <Table key={this.state.index} onChange={this.handleChange} size="small" tableLayout={undefined} 
+      <Table bordered key={this.state.index} onChange={this.handleChange} size="small" tableLayout={undefined} 
       scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
     </div>
     );

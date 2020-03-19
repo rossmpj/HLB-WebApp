@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, Row, Col, Table, Input, Icon, Popconfirm } from 'antd';
+import { Button, Row, Col, Table, Input, Icon, Popconfirm, Tag } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
+import { Link } from 'react-router-dom';
 
 class TablaLaptop extends React.Component{
   constructor(props) {
@@ -37,8 +38,8 @@ class TablaLaptop extends React.Component{
           nnucleos: 4,
           ram_soportada: '12 GB',
           slots_ram: 2,
-          rams: 'HLB_Sdg',
-          discos: 'HLB_DD_3',
+          rams: ['HLB_S2', 'GGRGHGDGRGT-1', 'DFGHR22'],
+          discos: ['HLB_DD_9', 'HLB_DDD_1'],
           descripcion: 'nn'
         },
         {
@@ -64,8 +65,8 @@ class TablaLaptop extends React.Component{
           nnucleos: 4,
           ram_soportada: '12 GB',
           slots_ram: 2,
-          rams: 'HLB_Sdg',
-          discos: 'HLB_DD_3',
+          rams: ['HLB_Sdg'],
+          discos: ['HLB_DD_3', 'FGGH24'],
           descripcion: 'nn'
         },
       ]
@@ -174,7 +175,7 @@ class TablaLaptop extends React.Component{
       dataIndex: 'codigo',
       key: 'codigo',
       fixed: 'left',
-      render: text => <a href="!#">{text}</a>,
+      render: (text, record) =>  <Link to={{ pathname: '/laptop/view', state: { info: record } }} >{text}</Link>,
       ...this.getColumnSearchProps('codigo'),
       sorter: (a, b) => a.codigo.length - b.codigo.length,
       sortOrder: sortedInfo.columnKey === 'codigo' && sortedInfo.order,
@@ -439,7 +440,7 @@ class TablaLaptop extends React.Component{
       title: 'IP',
       dataIndex: 'ip',
       key: 'ip',
-      render: text => <a href="!#">{text}</a>,
+      render: (text, record) =>  <Link to={{ pathname: '/ip/view', state: { info: record } }} >{text}</Link>,
       sorter: (a, b) => a.ip.length - b.ip.length,
       sortOrder: sortedInfo.columnKey === 'ip' && sortedInfo.order,
     },
@@ -481,19 +482,19 @@ class TablaLaptop extends React.Component{
       key: 'ram',
       children: [
         {
-          title: 'RAM Soportada',
+          title: 'Capacidad',
           dataIndex: 'ram_soportada',
           key: 'ram_soportada',
-          width: 130,
+          // width: 130,
           ...this.getColumnSearchProps('ram_soportada'),
           sorter: (a, b) => a.ram_soportada.length - b.ram_soportada.length,
           sortOrder: sortedInfo.columnKey === 'ram_soportada' && sortedInfo.order,
         },  
         {
-          title: 'Slot de expansión',
+          title: 'Slots',
           dataIndex: 'slots_ram',
           key: 'slots_ram',
-          width: 140,
+          // width: 140,
           ...this.getColumnSearchProps('slots_ram'),
           sorter: (a, b) => a.slots_ram.length - b.slots_ram.length,
           sortOrder: sortedInfo.columnKey === 'slots_ram' && sortedInfo.order,
@@ -502,7 +503,18 @@ class TablaLaptop extends React.Component{
           title: 'Memorias RAM',
           dataIndex: 'rams',
           key: 'rams',
-          render: text => <a href="!#">{text}</a>,
+          width: 70,
+          render: (rams) => (
+            <div>
+              {rams.map(id_memoria => {
+                return (
+                  <Link key={id_memoria} to={{ pathname: '/ram_disco/view', state: { info: id_memoria, tipo_equipo: 'memoria RAM' } }} >
+                    <Tag style={{margin: 2}} color="cyan" key={id_memoria.toString()}>{id_memoria}</Tag>
+                  </Link>              
+                );
+              })}
+            </div>
+          ),
         },  
       ],
     },   
@@ -510,7 +522,18 @@ class TablaLaptop extends React.Component{
       title: 'Discos duros',
       dataIndex: 'discos',
       key: 'discos',
-      render: text => <a href="!#">{text}</a>,
+      width: 70,
+      render: (discos) => (
+        <div>
+          {discos.map(id_disco => {
+            return (
+              <Link key={id_disco} to={{ pathname: '/ram_disco/view', state: { info: id_disco, tipo_equipo: 'disco Duro' } }} >
+                <Tag style={{margin: 2}} color="blue" key={id_disco.toString()}>{id_disco}</Tag>
+              </Link>              
+            );
+          })}
+        </div>
+      ),
     },
     {
       title: 'Descripción',
@@ -521,10 +544,10 @@ class TablaLaptop extends React.Component{
       title: 'Acción',
       key: 'accion',
       fixed: 'right',
-      render: (text, record) => (
+      render: (record) => (
         this.state.dataSource.length >= 1 ? (
           <span>
-            <Button style= {{marginRight: '2px'}} type="primary" size="small" icon="edit" />
+            <Button style= {{marginRight: '2px'}} onClick={() => console.log(record)} type="primary" size="small" icon="edit" />
             <Popconfirm placement="topRight" 
             title="¿Desea eliminar este registro?" 
             okText="Si" cancelText="No" onConfirm={() => this.handleDelete(record.key)}>
@@ -551,7 +574,6 @@ class TablaLaptop extends React.Component{
         <Button onClick={this.limpiarFiltros}>Limpiar filtros</Button>
         <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>
         <Button onClick={this.clearAll}>Limpiar todo</Button>
-        {/* scroll={{ x: 'max-content' }}tableLayout={undefined}  */}
       </div> 
       <Table bordered key={this.state.index} onChange={this.handleChange} size="small" 
       scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
