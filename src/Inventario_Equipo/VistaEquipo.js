@@ -3,18 +3,18 @@ import {
     Typography,
     Button,
     Row,
-    Col,
+    Col
 } from 'antd';
+import FormularioEquipo from './FormularioEquipo';
 import { Link } from 'react-router-dom';
-import FormularioImpresora from './FormularioImpresora';
-
 const { Title } = Typography;
 
-class VistaImpresora extends React.Component {
+class VistaEquipo extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = {
-            titulo: "Inventario Impresora",
+            titulo: "Inventario de Equipos informáticos",
             data: this.props.location
         };
     }
@@ -22,6 +22,7 @@ class VistaImpresora extends React.Component {
     componentDidMount() {
         if (typeof this.props.location.state !== 'undefined') {
             const { titulo } = this.props.location.state;
+            console.log(titulo);
             this.setState({ titulo: titulo });
         }
     }
@@ -32,16 +33,13 @@ class VistaImpresora extends React.Component {
                 <Row>
                     <Col span={12}><Title level={2}>{this.state.titulo}</Title></Col>
                     <Col className='flexbox'>
-                        <Link to={{ pathname: '/impresora' }} ><Button type="primary" icon="left">Volver</Button></Link>
+                        <Link to={{ pathname: '/otrosequipos' }} ><Button type="primary" icon="left">Volver</Button></Link>
                     </Col>
                 </Row>
-                <div className="div-miniborder-top" >
-                    <FormularioImpresora data={this.state.data}></FormularioImpresora>
-                </div>
+                    <FormularioEquipo data={this.state.data}></FormularioEquipo>
             </div>
 
-        );
+        )
     }
 }
-
-export default VistaImpresora;
+export default VistaEquipo;

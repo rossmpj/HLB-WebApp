@@ -55,10 +55,12 @@ class FormularioIp extends React.Component {
     }
 
     componentDidMount() {
-        if (typeof this.props.data.state !== 'undefined'
-            && typeof this.props.data.state.info !== 'undefined'
-        ) {
-            this.cargar_datos(this.props.data.state.info);
+        if (typeof this.props.data !== 'undefined') {
+            if (typeof this.props.data.state !== 'undefined'
+                && typeof this.props.data.state.info !== 'undefined'
+            ) {
+                this.cargar_datos(this.props.data.state.info);
+            }
         }
     }
 

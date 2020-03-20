@@ -69,3 +69,13 @@
 .table-operations > button {
   margin-right: 8px;
 }
+
+.div-background{
+  padding: 30px 5px 5px 5px;
+  background: #fff;
+}
+.div-miniborder-top {
+  border-top-style: solid;
+  border-top-color: #39CCCC;
+  border-top-width: 3px;
+}

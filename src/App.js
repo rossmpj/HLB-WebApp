@@ -3,7 +3,8 @@ import { Menu, Icon, Layout } from 'antd';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './custom-antd.css'; //lessc --js mytheme.less ../../../src/custom-antd.css @import "./antd.less"; @primary-color: #0081C3;  
 
-import Impresora from './Inventario_Impresora/TablaImpresora';
+
+
 import TablaRouter from './Inventario_Router/TablaRouter';
 import FormularioRouter from './Inventario_Router/FormularioRouter';
 import DetalleRouter from './Inventario_Router/DetalleRouter'
@@ -12,13 +13,17 @@ import DetalleLaptop from './Inventario_Laptop/DetalleLaptop';
 import DetalleOtrosEquipos from './Inventario_Desktop/DetalleOtrosEquipos';
 import HomeLaptop from './Inventario_Laptop/HomeLaptop';
 import HomeDesktop from './Inventario_Desktop/HomeDesktop';
+
+import Impresora from './Inventario_Impresora/TablaImpresora';
+import VistaImpresora from './Inventario_Impresora/VistaImpresora'
 import TablaIp from './Inventario_Ip/TablaIp';
-import HomeEquipo from './Inventario_Equipo/HomeEquipo'
+import VistaIp from './Inventario_Ip/VistaIp';
+import DetalleIIp from './Inventario_Ip/DetalleIIp'
+import HomeEquipo from './Inventario_Equipo/TablaEquipo'
+import VistaEquipo from './Inventario_Equipo/VistaEquipo'
 import TablaTipo from './Extras/TipoEquipo/TablaTipo'
 import VistaTipo from './Extras/TipoEquipo/VistaTipo';
-import VistaIp from './Inventario_Ip/VistaIp';
-import VistaImpresora from './Inventario_Impresora/VistaImpresora'
-import FormularioEquipo from './Inventario_Equipo/FormularioEquipo'
+
 import Detalle_RAM_DD from './Inventario_Laptop/Detalle_RAM_DD';
 import DetalleDesktop from './Inventario_Desktop/DetalleDesktop';
 
@@ -109,12 +114,14 @@ class App extends React.Component {
               <Route exact path='/laptop' component={HomeLaptop} />
               <Route exact path='/desktop' component={HomeDesktop} />
               <Route exact path='/ip' component={TablaIp} />
-              <Route exact path='/otrosEquipos' component={HomeEquipo} />
+              <Route exact path='/otrosequipos' component={HomeEquipo} />
+              <Route exact path='/otrosequipos/form' component={VistaEquipo} />
               <Route exact path='/tipo' component={TablaTipo} />
               <Route exact path='/tipo/form' component={VistaTipo} />
               <Route exact path='/ip/form' component={VistaIp} />
+              <Route exact path='/ip/detail' component={DetalleIIp} />
               <Route exact path='/impresora/form' component={VistaImpresora} />
-              <Route exact path='/equipo/edit' component={FormularioEquipo} />
+
 
 
             </Content>
