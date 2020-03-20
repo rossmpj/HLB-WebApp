@@ -31,7 +31,7 @@ class FormularioRouter extends React.Component {
     this.handle_guardar = this.handle_guardar.bind(this);
   }
 
-   componentDidMount = () => {
+  componentDidMount = () => {
     if (typeof this.props.location !== 'undefined') {
       const { info } = this.props.location.state;
       const { titulo } = this.props.location.state;

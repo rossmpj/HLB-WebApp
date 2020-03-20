@@ -90,7 +90,7 @@ class DetalleRouter extends React.Component {
                 </Descriptions>
               </TabPane>
               
-              {this.state.penlace !== undefined ? 
+              {this.state.penlace !== (undefined || null || '') ? 
                 <TabPane tab={<span><FaNetworkWired className="anticon" />Dirección IP</span>} key="2" >
                   <Descriptions title="Dirección IP asisgnada" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
                     <Descriptions.Item label="Dirección IP" span={3}>{this.state.ip}</Descriptions.Item>

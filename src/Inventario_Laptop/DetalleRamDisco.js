@@ -3,7 +3,7 @@ import { Row, Col, Typography, Button, Descriptions} from 'antd';
 
 const { Title } = Typography; 
 
-class Detalle_RAM_DD extends React.Component {
+class DetalleRamDisco extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -77,4 +77,4 @@ class Detalle_RAM_DD extends React.Component {
   }
 }
 
-export default Detalle_RAM_DD;
+export default DetalleRamDisco;

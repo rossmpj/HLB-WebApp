@@ -1,6 +1,6 @@
 import React from 'react';
 import '../App.css';
-import { Form, Select, Button, Layout, Divider, Skeleton, Icon, Switch, Collapse, Radio } from 'antd';
+import { Form, Select, Button, Layout, Divider, Skeleton, Icon, Switch, Collapse, Radio, Row, Col, Typography } from 'antd';
 import '../custom-antd.css';
 import MarcaComp from '../Componentes/MarcaSelect';
 import InputComp from '../Componentes/InputComponent';
@@ -10,11 +10,13 @@ import EstadComp from '../Componentes/EstadoSelect';
 import DescrComp from '../Componentes/DescripcionComponent';
 import CapacComp from '../Componentes/CapacidadComponent';
 import InNumComp from '../Componentes/InputNumberComp';
+import { Link } from 'react-router-dom';
 
 let id = 0;
 const { Panel } = Collapse;
 const { Content } = Layout;
 const { Option } = Select;
+const { Title } = Typography;
 const tailLayout = { wrapperCol: { offset: 9, span: 5 } };
 const buttonItemLayout = {   wrapperCol: { span: 14, offset: 8 } };
 
@@ -27,20 +29,78 @@ class FormularioDesktop extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tipo: ""
+      titulo: ""
     };
     this.handle_guardar = this.handle_guardar.bind(this);
   }
+
   state = {
     value: 'Noaplica',
     activo: false,
   };
 
+  componentDidMount = () => {
+    if (typeof this.props.location !== 'undefined') {
+      const { info } = this.props.location.state;
+      const { titulo } = this.props.location.state;
+      if (titulo === "Editar computadora" && info !== undefined){
+        this.cargar_datos(info);
+      }   
+      this.cambiar_titulo(titulo);
+    }
+  }
+
+  cargar_datos(info) {
+    console.log(info);
+    this.props.form.setFieldsValue({
+      codigo_pc: info.codigo,
+      bspi: info.bspi,
+      departamento: info.departamento,
+      asignar_pc: info.empleado,
+      marca_pc: info.marca,
+      modelo_pc: info.modelo,
+      nserie_pc: info.num_serie,
+      nombre_pc: info.name_pc,
+      usuario_pc: info.user_pc,
+      estado_pc: info.estado,
+      so: info.so,
+      tipo_so: info.so_type,
+      sp1: info.servpack === 'Si' ? true : false,
+      licencia: info.licencia === 'Si' ? true : false,
+      office: info.office,
+      ip: info.ip,
+      codigo_monitor: info.monitor,
+      codigo_teclado: info.teclado,
+      codigo_mouse: info.mouse,
+      codigo_parlantes: info.parlantes,
+      codigo_procesador: info.procesador,
+      codigo_fuentepoder: info.f_poder,
+      codigo_case: info.case,
+      frec_procesador: info.frecuencia,
+      nucleos_procesador: info.nnucleos,
+      ram_soportada: info.ram_soportada,
+      codigo_alimentacion: info.f_alim,
+      codigo_tarjetamadre: info.mainboard,
+      codigo_tarjetared : info.tarj_red,
+      value: 'UPS',
+      activo: true,
+      num_slots: info.slots_ram,
+      codigo_ram: info.rams,
+      codigo_dd: info.discos,
+      descr_pc: info.descripcion
+    })
+  }
+
+  cambiar_titulo(titulo){
+    this.setState({titulo: titulo})
+  }
+
   onChangeRadio = e => {
     console.log('radio checked', e.target.value);
     this.setState({
       value: e.target.value,
-      activo: true
+      activo: true, 
+      loading: true
     });
   };
 
@@ -52,8 +112,6 @@ class FormularioDesktop extends React.Component {
       }
     });
   }
-
-  state = { loading: true, };
 
   remove = k => {
     const { form } = this.props;
@@ -157,6 +215,13 @@ class FormularioDesktop extends React.Component {
 
     return (
       <Content>
+        <div className="div-container-title">      
+          <Row>
+            <Col span={12}><Title level={2}>{this.state.titulo}</Title></Col>
+            <Col className='flexbox'>
+              <Link to={{ pathname: '/desktop' }} ><Button type="primary" icon="left">Volver</Button></Link>
+            </Col>
+          </Row>  
         <div className="div-border-top" >
           <div className="div-container">
             <Form {...layout} layout="horizontal" onSubmit={this.handle_guardar} >
@@ -167,7 +232,7 @@ class FormularioDesktop extends React.Component {
               <InputComp label="Nombre PC"           id="nombre_pc"  class="form2col" decorator={getFieldDecorator} />
               <InputComp label="Usuario-PC"          id="usuario_pc" class="form2col" decorator={getFieldDecorator} />
               <EstadComp required={true}             id="estado_pc"  class="form2col" decorator={getFieldDecorator} />
-              <DescrComp label="Descripción general" id= "descr_grl" class="form2col" decorator={getFieldDecorator} />
+              <DescrComp label="Descripción general" id= "descr_pc" class="form2col" decorator={getFieldDecorator} />
 
               <Divider orientation="left">SISTEMA OPERATIVO</Divider>
               <Form.Item className="form2col" label="SO">
@@ -285,7 +350,7 @@ class FormularioDesktop extends React.Component {
               {this.state.value !== 'Noaplica' && this.state.activo === true?  
                 <Collapse key="collapse_alimentacion"> 
                   <Panel forceRender={true} header={this.state.value} key="info_alimentacion">
-                    <InputComp label="Código"          id={"codigo_"+this.state.value} class="form2col" decorator={getFieldDecorator} />
+                    <InputComp label="Código"          id={"codigo_alimentacion"} class="form2col" decorator={getFieldDecorator} />
                     <MarcaComp required={true}         id={"marca_"+this.state.value}  class="form2col" decorator={getFieldDecorator} />
                     <InputComp label="Modelo"          id={"modelo_"+this.state.value} class="form2col" decorator={getFieldDecorator} />
                     <InputComp label="Número de serie" id={"nserie_"+this.state.value} class="form2col" decorator={getFieldDecorator} />
@@ -390,6 +455,7 @@ class FormularioDesktop extends React.Component {
             </Form>
           </div>
         </div>
+        </div> 
       </Content>
     );
   }

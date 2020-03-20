@@ -1,6 +1,6 @@
 import React from 'react';
 import '../App.css';
-import { Form, Button, Layout, Divider, Icon, Select, Skeleton, Switch } from 'antd';
+import { Form, Button, Layout, Divider, Icon, Select, Skeleton, Switch, Row, Col, Typography } from 'antd';
 import '../custom-antd.css';
 import { Collapse } from 'antd';
 import InputComp from '../Componentes/InputComponent';
@@ -11,11 +11,13 @@ import AsignComp from '../Componentes/AsignarSelect';
 import IpSelect from '../Componentes/IpSelect';
 import EstadComp from '../Componentes/EstadoSelect';
 import InNumComp from '../Componentes/InputNumberComp';
+import { Link } from 'react-router-dom';
 
 let id = 0;
 const { Panel } = Collapse;
 const { Option } = Select;
 const { Content } = Layout;
+const { Title } = Typography;
 const tailLayout = { wrapperCol: { offset: 9, span: 5 } };
 const buttonItemLayout = { wrapperCol: {span: 14, offset: 8} };
 
@@ -24,17 +26,61 @@ const layout = {
   wrapperCol: { span: 14 },
 };
 
-class FormularioDesktop extends React.Component {    
+class FormularioLaptop extends React.Component {    
   constructor(props) {
     super(props);
     this.state = {
-        tipo: ""
+      titulo: "",
+      loading: true
     };
     this.handle_guardar = this.handle_guardar.bind(this);
   }
 
-  state = { loading: true };
-  
+  componentDidMount = () => {
+    if (typeof this.props.location !== 'undefined') {
+      const { info } = this.props.location.state;
+      const { titulo } = this.props.location.state;
+      if (titulo === "Editar laptop" && info !== undefined){
+        this.cargar_datos(info);
+      }   
+      this.cambiar_titulo(titulo);
+    }
+  }
+
+  cargar_datos(info) {
+    console.log(info);
+    this.props.form.setFieldsValue({
+      codigo_laptop: info.codigo,
+      bspi: info.bspi,
+      departamento: info.departamento,
+      asignar_laptop: info.empleado,
+      marca_laptop: info.marca,
+      modelo_laptop: info.modelo,
+      nserie_laptop: info.num_serie,
+      nombre_laptop: info.name_pc,
+      usuario_laptop: info.user_pc,
+      estado_laptop: info.estado,
+      so: info.so,
+      tipo_so: info.so_type,
+      sp1: info.servpack === 'Si' ? true : false,
+      licencia: info.licencia === 'Si' ? true : false,
+      office: info.office,
+      ip: info.ip,
+      codigo_procesador: info.nombre_procesador,
+      frec_procesador: info.frecuencia,
+      nucleos_procesador: info.nnucleos,
+      ram_soportada: info.ram_soportada,
+      num_slots: info.slots_ram,
+      codigo_ram: info.rams,
+      codigo_dd: info.discos,
+      descr_laptop: info.descripcion
+    })
+  }
+
+  cambiar_titulo(titulo){
+    this.setState({titulo: titulo})
+  }
+
   remove = k => {
     const { form } = this.props;
     // can use data-binding to get
@@ -145,6 +191,13 @@ class FormularioDesktop extends React.Component {
 
     return (
       <Content>
+        <div className="div-container-title">      
+          <Row>
+            <Col span={12}><Title level={2}>{this.state.titulo}</Title></Col>
+            <Col className='flexbox'>
+              <Link to={{ pathname: '/laptop' }} ><Button type="primary" icon="left">Volver</Button></Link>
+            </Col>
+          </Row>  
         <div className="div-border-top" >
           <div className="div-container"> 
             <Form {...layout} layout="horizontal" onSubmit={this.handle_guardar} >
@@ -273,12 +326,13 @@ class FormularioDesktop extends React.Component {
                 <Button type="primary">Cancelar</Button>
               </Form.Item>  
             </Form>
+            </div>  
           </div>
-        </div>  
+        </div> 
       </Content>      
     );
   }
 }
 
-FormularioDesktop = Form.create({})(FormularioDesktop);
-export default FormularioDesktop;
+FormularioLaptop = Form.create({})(FormularioLaptop);
+export default FormularioLaptop;

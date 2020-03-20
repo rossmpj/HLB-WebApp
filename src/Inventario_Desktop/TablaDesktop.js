@@ -1,7 +1,9 @@
 import React from 'react';
-import { Button, Row, Col, Table, Input, Icon, Popconfirm, Tag } from 'antd';
+import { Button, Row, Col, Table, Input, Icon, Popconfirm, Tag, Typography } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
+
+const { Title } = Typography;
 
 class TablaDesktop extends React.Component{
   constructor(props) {
@@ -548,7 +550,9 @@ class TablaDesktop extends React.Component{
         render: (text, record) => (
           this.state.dataSource.length >= 1 ? (
             <span>
-              <Button style= {{marginRight: '2px'}} type="primary" size="small" icon="edit" />
+              <Link to={{ pathname: '/desktop/form', state: { info: record, titulo: "Editar computadora" } }} >
+                <Button style= {{marginRight: '2px'}} type="primary" size="small" icon="edit" />
+              </Link>
               <Popconfirm placement="topRight" 
               title="¿Desea eliminar este registro?" 
               okText="Si" cancelText="No" onConfirm={() => this.handleDelete(record.key)}>
@@ -560,6 +564,16 @@ class TablaDesktop extends React.Component{
     ];
       
     return (
+      <div>
+        <div className="div-container-title">    
+          <Row>
+            <Col span={12}><Title level={2}>Inventario de laptops</Title></Col>
+            <Col className='flexbox'>
+              <Link to={{ pathname: '/desktop/form', state: { titulo: "Nueva computadora" } }} > 
+                <Button type="primary" icon="plus">Agregar computadora</Button>
+              </Link> 
+            </Col>
+          </Row>
       <div className="div-container">
       <div >
         <Row>
@@ -580,6 +594,8 @@ class TablaDesktop extends React.Component{
       <Table bordered key={this.state.index} onChange={this.handleChange} size="small" tableLayout={undefined} 
       scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
     </div>
+        </div>
+      </div>
     );
   }
 }

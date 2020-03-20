@@ -3,24 +3,26 @@ import { Menu, Icon, Layout } from 'antd';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './custom-antd.css'; //lessc --js mytheme.less ../../../src/custom-antd.css @import "./antd.less"; @primary-color: #0081C3;  
 
-import Impresora from './Inventario_Impresora/TablaImpresora';
 import TablaRouter from './Inventario_Router/TablaRouter';
 import FormularioRouter from './Inventario_Router/FormularioRouter';
 import DetalleRouter from './Inventario_Router/DetalleRouter'
-import DetalleIP from './Inventario_Router/DetalleIP';
+import TablaLaptop from './Inventario_Laptop/TablaLaptop';
+import FormularioLaptop from './Inventario_Laptop/FormularioLaptop';
 import DetalleLaptop from './Inventario_Laptop/DetalleLaptop';
+import TablaDesktop from './Inventario_Desktop/TablaDesktop';
+import FormularioDesktop from './Inventario_Desktop/FormularioDesktop';
+import DetalleDesktop from './Inventario_Desktop/DetalleDesktop';
 import DetalleOtrosEquipos from './Inventario_Desktop/DetalleOtrosEquipos';
-import HomeLaptop from './Inventario_Laptop/HomeLaptop';
-import HomeDesktop from './Inventario_Desktop/HomeDesktop';
+import DetalleIP from './Inventario_Router/DetalleIP';
+import DetalleRamDisco from './Inventario_Laptop/DetalleRamDisco';
 import TablaIp from './Inventario_Ip/TablaIp';
 import HomeEquipo from './Inventario_Equipo/HomeEquipo'
 import TablaTipo from './Extras/TipoEquipo/TablaTipo'
 import VistaTipo from './Extras/TipoEquipo/VistaTipo';
 import VistaIp from './Inventario_Ip/VistaIp';
+import Impresora from './Inventario_Impresora/TablaImpresora';
 import VistaImpresora from './Inventario_Impresora/VistaImpresora'
 import FormularioEquipo from './Inventario_Equipo/FormularioEquipo'
-import Detalle_RAM_DD from './Inventario_Laptop/Detalle_RAM_DD';
-import DetalleDesktop from './Inventario_Desktop/DetalleDesktop';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -99,15 +101,17 @@ class App extends React.Component {
             <Content style={{ margin: '16px' }}>
               <Route exact path='/router' component={TablaRouter} />
               <Route exact path='/router/view' component={DetalleRouter} />
-              <Route exact path='/desktop/view' component={DetalleDesktop} />
+              <Route exact path='/router/form' component={FormularioRouter} />
+              <Route exact path='/desktop' component={TablaDesktop} />           
+              <Route exact path='/desktop/view' component={DetalleDesktop} />                 
+              <Route exact path='/desktop/form' component={FormularioDesktop} />
+              <Route exact path='/laptop' component={TablaLaptop} />
+              <Route exact path='/laptop/view' component={DetalleLaptop} />              
+              <Route exact path='/laptop/form' component={FormularioLaptop} />
               <Route exact path='/otros/view' component={DetalleOtrosEquipos} />
               <Route exact path='/ip/view' component={DetalleIP} />
-              <Route exact path='/laptop/view' component={DetalleLaptop} />
-              <Route exact path='/ram_disco/view' component={Detalle_RAM_DD} />
-              <Route exact path='/router/form' component={FormularioRouter} />
+              <Route exact path='/ram_disco/view' component={DetalleRamDisco} />
               <Route exact path='/impresora' component={Impresora} />
-              <Route exact path='/laptop' component={HomeLaptop} />
-              <Route exact path='/desktop' component={HomeDesktop} />
               <Route exact path='/ip' component={TablaIp} />
               <Route exact path='/otrosEquipos' component={HomeEquipo} />
               <Route exact path='/tipo' component={TablaTipo} />
@@ -115,8 +119,6 @@ class App extends React.Component {
               <Route exact path='/ip/form' component={VistaIp} />
               <Route exact path='/impresora/form' component={VistaImpresora} />
               <Route exact path='/equipo/edit' component={FormularioEquipo} />
-
-
             </Content>
             <Footer className="style-footer">Inventario Hospital León Becerra ©2020 Creado por EasySoft [ESPOL]</Footer>
           </Layout>

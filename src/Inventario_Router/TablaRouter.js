@@ -79,8 +79,8 @@ class TablaRouter extends React.Component{
           empleado: 'Rosa Pincay',
           nombre: 'John Brown',
           pass: '4321',
-          ip: undefined,
-          penlace: undefined,
+          ip: '',
+          penlace: '',
           usuario: 'hpso', 
           clave: '345',
           marca: 'TPLink',
@@ -187,7 +187,7 @@ class TablaRouter extends React.Component{
   });
 
   sortString(a,b){
-    return a.localeCompare(b);
+    return a.localeCompare(b);  
   }
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -322,6 +322,7 @@ class TablaRouter extends React.Component{
           ...this.getColumnSearchProps('penlace'),
           sorter: (a, b) => this.sortString(a.penlace,b.penlace),
           sortOrder: sortedInfo.columnKey === 'penlace' && sortedInfo.order,
+          
         },
         {
           title: 'Marca',
