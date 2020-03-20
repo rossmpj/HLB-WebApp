@@ -14,7 +14,7 @@ class VistaTipo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            titulo: "Tipo de equipo",
+            titulo: "Inventario de Equipos informáticos",
             data: this.props.location
         };
     }

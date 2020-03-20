@@ -15,13 +15,15 @@ import DetalleDesktop from './Inventario_Desktop/DetalleDesktop';
 import DetalleOtrosEquipos from './Inventario_Desktop/DetalleOtrosEquipos';
 import DetalleIP from './Inventario_Router/DetalleIP';
 import DetalleRamDisco from './Inventario_Laptop/DetalleRamDisco';
-import TablaIp from './Inventario_Ip/TablaIp';
-import HomeEquipo from './Inventario_Equipo/HomeEquipo'
-import TablaTipo from './Extras/TipoEquipo/TablaTipo'
-import VistaTipo from './Extras/TipoEquipo/VistaTipo';
-import VistaIp from './Inventario_Ip/VistaIp';
 import Impresora from './Inventario_Impresora/TablaImpresora';
 import VistaImpresora from './Inventario_Impresora/VistaImpresora'
+import TablaIp from './Inventario_Ip/TablaIp';
+import VistaIp from './Inventario_Ip/VistaIp';
+import DetalleIIp from './Inventario_Ip/DetalleIIp'
+import HomeEquipo from './Inventario_Equipo/TablaEquipo'
+import VistaEquipo from './Inventario_Equipo/VistaEquipo'
+import TablaTipo from './Extras/TipoEquipo/TablaTipo'
+import VistaTipo from './Extras/TipoEquipo/VistaTipo';
 import FormularioEquipo from './Inventario_Equipo/FormularioEquipo'
 
 const { Sider } = Layout;
@@ -113,10 +115,12 @@ class App extends React.Component {
               <Route exact path='/ram_disco/view' component={DetalleRamDisco} />
               <Route exact path='/impresora' component={Impresora} />
               <Route exact path='/ip' component={TablaIp} />
-              <Route exact path='/otrosEquipos' component={HomeEquipo} />
+              <Route exact path='/otrosequipos' component={HomeEquipo} />
+              <Route exact path='/otrosequipos/form' component={VistaEquipo} />
               <Route exact path='/tipo' component={TablaTipo} />
               <Route exact path='/tipo/form' component={VistaTipo} />
               <Route exact path='/ip/form' component={VistaIp} />
+              <Route exact path='/ip/detail' component={DetalleIIp} />
               <Route exact path='/impresora/form' component={VistaImpresora} />
               <Route exact path='/equipo/edit' component={FormularioEquipo} />
             </Content>

@@ -7,10 +7,12 @@ import {
     Input,
     Icon,
     Popconfirm,
-    message
+    message,
+    Typography
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
+const { Title } = Typography;
 
 const datos = [
     {
@@ -156,19 +158,23 @@ class TablaEquipo extends React.Component {
         const tipo_render = (record) => {
             switch (record.tipo) {
                 case "impresora":
-                    return <Link to={{ pathname: '/impresora/form', state: { info: record } }}>
+                    return <Link to={{ pathname: '/impresora/form', state: { info: record, titulo: "Editar impresora" } }}>
                         <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
                     </Link>
                 case "cpu":
-                    return <Link to={{ pathname: '/', state: { info: record } }}>
+                    return <Link to={{ pathname: '/', state: { info: record, titulo: "Editar Desktop" } }}>
+                        <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
+                    </Link>;
+                case "laptop":
+                    return <Link to={{ pathname: '/', state: { info: record, titulo: "Editar Laptop" } }}>
                         <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
                     </Link>;
                 case "router":
-                    return <Link to={{ pathname: '/', state: { info: record } }}>
+                    return <Link to={{ pathname: '/', state: { info: record, titulo: "Editar router" } }}>
                         <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
                     </Link>;
                 default:
-                    return <Link to={{ pathname: '/', state: { info: record } }}>
+                    return <Link to={{ pathname: '/otrosequipos/form', state: { info: record, titulo: "Editar equipo" } }}>
                         <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
                     </Link>
             }
@@ -275,19 +281,29 @@ class TablaEquipo extends React.Component {
             },
         ];
         return (
-            <div className="div-container">
-                <div >
-                    <Row>
-                        <Col className='flexbox'>
-                            <ButtonGroup style={{ align: 'right' }}>
-                                <Button type="primary" icon="import">Importar</Button>
-                                <Button type="primary" icon="cloud-download">Exportar</Button>
-                            </ButtonGroup>
-                        </Col>
-                    </Row>
+            <div className="div-container-title">
+                <Row>
+                    <Col span={12}><Title level={2}>Inventario equipos informáticos</Title></Col>
+                    <Col className='flexbox'>
+                        <Link to={{ pathname: '/otrosequipos/form', state: { titulo: "Nuevo equipo" } }} >
+                            <Button type="primary" icon="plus">Agregar tipo de equipo</Button>
+                        </Link>
+                    </Col>
+                </Row>
+                <div className="div-container">
+                    <div >
+                        <Row>
+                            <Col className='flexbox'>
+                                <ButtonGroup style={{ align: 'right' }}>
+                                    <Button type="primary" icon="import">Importar</Button>
+                                    <Button type="primary" icon="cloud-download">Exportar</Button>
+                                </ButtonGroup>
+                            </Col>
+                        </Row>
+                    </div>
+                    <br />
+                    <Table size="medium" tableLayout={undefined} scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
-                <br />
-                <Table size="medium" tableLayout={undefined} scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
             </div>
         );
     }

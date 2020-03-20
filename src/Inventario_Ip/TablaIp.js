@@ -165,10 +165,8 @@ class TablaIp extends React.Component {
                 title: 'Ip',
                 dataIndex: 'ip',
                 key: 'ip',
-                /*                 ...getColumnSearchProps('ip', this.handleSearch, this.handleReset) */
-                render: text => <a href="/#">{text}</a>,
+                render: (text, record) => <Link to={{ pathname: '/ip/detail', state: { info: record } }}>{text}</Link>,
                 ...this.getColumnSearchProps('ip')
-
             },
             {
                 title: 'Estado',
@@ -269,7 +267,7 @@ class TablaIp extends React.Component {
                 <Row>
                     <Col span={12}><Title level={2}>Inventario IP</Title></Col>
                     <Col className='flexbox'>
-                        <Link to={{ pathname: '/ip/form', state: {titulo: "Nueva dirección IP" } }} >
+                        <Link to={{ pathname: '/ip/form', state: { titulo: "Nueva dirección IP" } }} >
                             <Button type="primary" icon="plus">Agregar dirección IP</Button>
                         </Link>
                     </Col>
