@@ -174,7 +174,7 @@ class TablaImpresora extends React.Component {
                 title: 'Código',
                 dataIndex: 'codigo',
                 key: 'codigo',
-                render: text => <a href="/#">{text}</a>,
+                render: (text, record) => <Link to={{ pathname: '/impresora/view', state: { info: record } }}>{text}</Link>,
                 ...this.getColumnSearchProps('codigo')
             },
             {
@@ -356,7 +356,7 @@ class TablaImpresora extends React.Component {
                 <Row>
                     <Col span={12}><Title level={2}>Inventario Impresora</Title></Col>
                     <Col className='flexbox'>
-                        <Link to={{ pathname: '/impresora/form', state: {titulo: "Nueva Impresora" } }} >
+                        <Link to={{ pathname: '/impresora/form', state: { titulo: "Nueva Impresora" } }} >
                             <Button type="primary" icon="plus">Agregar Impresora</Button>
                         </Link>
                     </Col>

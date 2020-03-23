@@ -79,3 +79,8 @@
   border-top-color: #39CCCC;
   border-top-width: 3px;
 }
+
+.center{
+  display: block;
+  margin: auto;
+}
