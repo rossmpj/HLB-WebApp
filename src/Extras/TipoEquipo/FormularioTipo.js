@@ -3,19 +3,13 @@ import '../../App.css';
 import {
     Form,
     Button,
-    /* Layout, */
     Switch,
-    message,
-    /*  Row,
-     Col, */
-    /*  Typography */
+    message
 } from 'antd';
 import '../../custom-antd.css';
 import InputComponent from '../../Componentes/InputComponent';
 import { Link } from 'react-router-dom';
-
-/* const { Content } = Layout;
-const { Title } = Typography; */
+import AxiosTipo from '../../Servicios/AxiosTipo';
 
 const tailLayout = {
     wrapperCol: { offset: 9, span: 5 }
@@ -25,6 +19,8 @@ const layout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 14 },
 };
+
+const key = 'updatable';
 
 class FormularioTipo extends React.Component {
 
@@ -38,8 +34,24 @@ class FormularioTipo extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log(values)
-                message.success('Registro guardado satisfactoriamente')
+                let valor;
+                if (values.ip) {
+                    valor = "s";
+                } else {
+                    valor = "n";
+                }
+                let tipo = {
+                    tipo: values.tipo.toLocaleLowerCase(),
+                    usa_ip: valor
+                }
+                AxiosTipo.almacenar_datos(tipo).then(res => {
+                    message.loading({ content: 'Guardando datos...', key });
+                    setTimeout(() => {
+                        message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+                    }, 1000);
+                }).catch(err => {
+                    message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
+                });
             }
         });
     }

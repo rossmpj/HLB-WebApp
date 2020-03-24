@@ -24,7 +24,7 @@ class DetalleIIp extends React.Component {
             toner: "---",
             rodillo: "---",
             cinta: "---",
-            rollo: "---",           
+            rollo: "---",
             componente: "",
             ip: "",
             nodata: false
@@ -52,16 +52,30 @@ class DetalleIIp extends React.Component {
             marca: info.marca,
             estado: info.estado,
             modelo: info.modelo,
-            tinta: info.tinta,
-            cartucho: info.cartucho,
             descripcion: info.descripcion,
-            toner: info.toner,
-            rodillo: info.rodillo,
-            cinta: info.cinta,
-            rollo: info.rollo,
             componente: info.componente,
             ip: info.ip
-        })
+        });
+
+        if (info.tinta !== "" || typeof info.tinta!== "undefined") {
+            this.setState({ tinta: info.tinta })
+        }
+        if (info.cartucho !== "" || typeof info.cartucho!== "undefined") {
+            this.setState({ cartucho: info.cartucho })
+        }
+        if (info.toner !== "" || typeof info.toner!== "undefined") {
+            this.setState({ toner: info.toner})
+        }
+        if (info.rodillo !== "" || typeof info.rodillo!== "undefined") {
+            this.setState({ rodillo: info.rodillo})
+        }
+        if (info.cinta !== "" || typeof info.cinta!== "undefined") {
+            this.setState({ cinta: info.cinta})
+        }
+        if (info.rollo !== "" || typeof info.rollo!== "undefined") {
+            this.setState({ rollo: info.rollo})
+        }
+        
     }
 
     render() {
