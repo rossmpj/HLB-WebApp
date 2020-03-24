@@ -24,7 +24,9 @@ import HomeEquipo from './Inventario_Equipo/TablaEquipo'
 import VistaEquipo from './Inventario_Equipo/VistaEquipo'
 import TablaTipo from './Extras/TipoEquipo/TablaTipo'
 import VistaTipo from './Extras/TipoEquipo/VistaTipo';
-import FormularioEquipo from './Inventario_Equipo/FormularioEquipo'
+import FormularioEquipo from './Inventario_Equipo/FormularioEquipo';
+import DetalleImpresora from './Inventario_Impresora/DetalleImpresora';
+import DetalleEquipo from './Inventario_Equipo/DetalleEquipo';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -104,11 +106,11 @@ class App extends React.Component {
               <Route exact path='/router' component={TablaRouter} />
               <Route exact path='/router/view' component={DetalleRouter} />
               <Route exact path='/router/form' component={FormularioRouter} />
-              <Route exact path='/desktop' component={TablaDesktop} />           
-              <Route exact path='/desktop/view' component={DetalleDesktop} />                 
+              <Route exact path='/desktop' component={TablaDesktop} />
+              <Route exact path='/desktop/view' component={DetalleDesktop} />
               <Route exact path='/desktop/form' component={FormularioDesktop} />
               <Route exact path='/laptop' component={TablaLaptop} />
-              <Route exact path='/laptop/view' component={DetalleLaptop} />              
+              <Route exact path='/laptop/view' component={DetalleLaptop} />
               <Route exact path='/laptop/form' component={FormularioLaptop} />
               <Route exact path='/otros/view' component={DetalleOtrosEquipos} />
               <Route exact path='/ip/view' component={DetalleIP} />
@@ -122,7 +124,9 @@ class App extends React.Component {
               <Route exact path='/ip/form' component={VistaIp} />
               <Route exact path='/ip/detail' component={DetalleIIp} />
               <Route exact path='/impresora/form' component={VistaImpresora} />
+              <Route exact path='/impresora/view' component={DetalleImpresora} />
               <Route exact path='/equipo/edit' component={FormularioEquipo} />
+              <Route exact path='/equipo/view' component={DetalleEquipo} />
             </Content>
             <Footer className="style-footer">Inventario Hospital León Becerra ©2020 Creado por EasySoft [ESPOL]</Footer>
           </Layout>
