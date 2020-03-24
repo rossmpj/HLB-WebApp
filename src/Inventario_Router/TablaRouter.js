@@ -158,8 +158,8 @@ class TablaRouter extends React.Component{
           fixed: 'left',
           render: (text, record) => <Link to={{ pathname: '/router/view', state: { info: record } }} >{text}</Link>,
           ...this.getColumnSearchProps('codigo'),
-          sorter: (a, b) => this.sortString(a.codigo,b.codigo),
-          sortOrder: sortedInfo.columnKey === 'codigo' && sortedInfo.order,
+          //sorter: (a, b) => this.sortString(a.codigo,b.codigo),
+          //sortOrder: sortedInfo.columnKey === 'codigo' && sortedInfo.order,
         },
         {
           title: 'BSPI Punto',
@@ -334,7 +334,7 @@ class TablaRouter extends React.Component{
           fixed: 'right',
           render: (text, record) => (
             <span> 
-              <Link to={{ pathname: '/router/form', state: { info: record, titulo: "Editar router" } }} >
+              <Link to={{ pathname: '/router/form', state: { info: record, titulo: "Editar router", disabled: true } }} >
                 <Button style= {{marginRight: '2px'}} type="primary" ghost size="small" icon="edit" />
               </Link>
               

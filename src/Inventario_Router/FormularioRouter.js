@@ -26,7 +26,8 @@ class FormularioRouter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        titulo: ""
+        titulo: "",
+        disabled: false
     };
     this.handle_guardar = this.handle_guardar.bind(this);
   }
@@ -35,10 +36,13 @@ class FormularioRouter extends React.Component {
     if (typeof this.props.location !== 'undefined') {
       const { info } = this.props.location.state;
       const { titulo } = this.props.location.state;
+      const { disabled } = this.props.location.state;
+      console.log("desac:",disabled)
       if (titulo === "Editar router" && info !== undefined){
         this.cargar_datos(info);
       }   
-      this.cambiar_titulo(titulo);
+      this.setState({titulo: titulo})
+      this.setState({disabled: disabled})
     }
   }
 
@@ -70,20 +74,7 @@ class FormularioRouter extends React.Component {
     })
   }
 
-  cambiar_titulo(titulo){
-    this.setState({titulo: titulo})
-  }
-
-  state = {
-    loading: true,
-  };
-
-  onChange = checked => {
-    this.setState({ loading: !checked });
-  };
-
   render() {
-    const { loading } = this.state;
     const { getFieldDecorator } = this.props.form;   
     return (
       <Content> 
@@ -102,7 +93,7 @@ class FormularioRouter extends React.Component {
                 action={this.state.titulo}
                 id={this.state.titulo}
               > 
-                <InputComp label="Código"          id="codigo"  decorator={getFieldDecorator} />
+                <InputComp label="Código"          id="codigo" decorator={getFieldDecorator} disabled={this.state.disabled} />
                 <AsignComp required={true}         id="asignar" decorator={getFieldDecorator} />
                 <InputComp label="Nombre"          id="nombre"  decorator={getFieldDecorator} />  
                 <Form.Item label="Pass">

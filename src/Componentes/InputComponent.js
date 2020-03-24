@@ -8,12 +8,13 @@ function InputComponent(props) {
     return (
         <Form.Item
             label={props.label}
+            disabled={props.disabled}
             className= {props.class!=="" ? `${props.class}` : null}
             >
             {props.decorator(`${props.id}`, {
                 rules: [{ required: true, message: 'Debe completar este campo' }],
             })(
-                <Input
+                <Input disabled={props.disabled}
                 />
             )}
         </Form.Item>

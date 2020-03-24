@@ -4,6 +4,7 @@ import { FaNetworkWired } from "react-icons/fa";
 import { MdRouter } from "react-icons/md";
 import { AiOutlineSetting } from "react-icons/ai";
 import { Link } from 'react-router-dom';
+import MetodosAxios from '../Servicios/AxiosRouter'
 
 const { TabPane } = Tabs;
 const { Title } = Typography;
@@ -38,7 +39,7 @@ class DetalleRouter extends React.Component {
   }
 
   cargar_datos(info) {
-    console.log("router: ", info)
+    console.log("router: ", info);
     this.setState({
         codigo: info.codigo,
         bspi: info.bspi,
@@ -52,9 +53,16 @@ class DetalleRouter extends React.Component {
         modelo: info.modelo,
         nserie: info.num_serie,
         estado: info.estado,
-        ip: info.ip,
         penlace: info.penlace,
         descripcion: info.descripcion
+    })
+    info.ip === " " ? this.setState({ip: "No asignada"}) : 
+    MetodosAxios.buscar_ip_por_codigo(info.ip).then(res => {
+      res.data.map(registro => {
+        this.setState({
+          ip: registro.direccion_ip,
+        })
+      })
     })
   }
 
@@ -92,7 +100,7 @@ class DetalleRouter extends React.Component {
               
               {this.state.penlace !== (undefined || null || '') ? 
                 <TabPane tab={<span><FaNetworkWired className="anticon" />Dirección IP</span>} key="2" >
-                  <Descriptions title="Dirección IP asisgnada" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
+                  <Descriptions title="Datos de dirección IP" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
                     <Descriptions.Item label="Dirección IP" span={3}>{this.state.ip}</Descriptions.Item>
                     <Descriptions.Item label="Puerta de enlace">{this.state.penlace}</Descriptions.Item>
                   </Descriptions>
