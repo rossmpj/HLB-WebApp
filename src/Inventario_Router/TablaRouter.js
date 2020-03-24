@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Row, Col, Table, Input, Icon, Popconfirm, Typography } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
+import MetodosAxios from '../Servicios/AxiosRouter'
 
 const { Title } = Typography;
 
@@ -16,100 +17,42 @@ class TablaRouter extends React.Component{
       searchText: '',
       searchedColumn: '',
       index: 0,
-      dataSource : [
-        {
-          key: 1,
-          codigo: '0',
-          bspi: 'Hogar Inés Chambers',
-          departamento: 'Proveeduría',
-          empleado: 'John Villamar',
-          nombre: 'John Brown',
-          pass: 'gjgkd32',
-          ip: '2',
-          penlace: '192.168.1.0',
-          usuario: 'drgd5547', 
-          clave: '345',
-          marca: 'LG',
-          modelo: 'ergr',
-          num_serie: 23,
-          estado: 'Operativo',
-          descripcion: 'muy bueno'
-        },
-        {
-          key: 112,
-          codigo: '1',
-          bspi: 'Hospital León Becerra',
-          departamento: 'Proveeduría',
-          empleado: 'Marco Mendieta',
-          nombre: 'John Brown',
-          pass: 'admin132',
-          ip: '78',
-          penlace: '192.168.1.0',
-          usuario: 'admin', 
-          clave: '345',
-          marca: 'HP',
-          modelo: 'ergr',
-          num_serie: '23',
-          estado: 'Operativo',
-          descripcion: 'muy bueno'
-        },
-        {
-          key: 3,
-          codigo: '2',
-          bspi: 'Residencia Mercedes Begué',
-          departamento: 'Proveeduría',
-          empleado: 'John Villamar',
-          nombre: 'Hospital1',
-          pass: '123456',
-          ip: '16',
-          penlace: '0.0.1.0',
-          usuario: 'dgfthw', 
-          clave: '345',
-          marca: 'Lenovo',
-          modelo: 'ergr',
-          num_serie: '23',
-          estado: 'Operativo',
-          descripcion: 'muy bueno'
-        },
-        {
-          key: 7,
-          codigo: 'HlB-454',
-          bspi: 'Unidad Educativa San José Buen Pastor',
-          departamento: 'UCI',
-          empleado: 'Rosa Pincay',
-          nombre: 'John Brown',
-          pass: '4321',
-          ip: '',
-          penlace: '',
-          usuario: 'hpso', 
-          clave: '345',
-          marca: 'TPLink',
-          modelo: 'ergr',
-          num_serie: '23',
-          estado: 'Operativo',
-          descripcion: 'muy bueno'
-        },
-        {
-          key: 5,
-          codigo: '3',
-          bspi: 'Unidad Educativa San José Buen Pastor',
-          departamento: 'UCI',
-          empleado: 'Rosa Pincay',
-          nombre: 'John Brown',
-          pass: '4321',
-          ip: '125',
-          penlace: '192.168.1.0',
-          usuario: 'hpso', 
-          clave: '345',
-          marca: 'TPLink',
-          modelo: 'ergr',
-          num_serie: '23',
-          estado: 'Operativo',
-          descripcion: 'muy bueno'
-        },
-      ]
+      dataSource: []
     };
     this.handleClick = this.handleClick.bind(this);
+  }
+  
+  obtener_datos = () => {
+    let datos = [];
+    MetodosAxios.listar_routers().then(res => {
+      res.data.map(registro => {
+        let dip = registro.ip === null ? ' ' : registro.ip;
+        let router = {
+          key: registro.id_router,
+          codigo: registro.id_router,
+          bspi: registro.bspi_punto,
+          departamento: registro.departamento,
+          nombre: registro.nombre,
+          pass: registro.pass,
+          penlace: registro.puerta_enlace,
+          usuario: registro.usuario,
+          clave: registro.clave,
+          marca: registro.marca,
+          modelo: registro.modelo,
+          num_serie: registro.numero_serie, 
+          estado: registro.estado_operativo,
+          ip: dip,
+          empleado: registro.nempleado+' '+registro.apellido,
+          descripcion: registro.descripcion
+        }
+        datos.push(router);
+      });
+      this.setState({ dataSource: datos, }, () => { console.log('routers: ', this.state.routers); });
+    });
+  }
+  
+  componentDidMount = () => {
+    this.obtener_datos();
   }
 
   handleClick() {
@@ -270,7 +213,7 @@ class TablaRouter extends React.Component{
           ],
           filteredValue: filteredInfo.departamento || null,
           onFilter: (value, record) => record.departamento.indexOf(value) === 0,
-          sorter: (a, b) => a.departamento.length - b.departamento.length,
+          sorter: (a, b) => this.sortString(a.departamento, b.departamento),
           sortOrder: sortedInfo.columnKey === 'departamento' && sortedInfo.order,
         },
         {
@@ -278,7 +221,7 @@ class TablaRouter extends React.Component{
           dataIndex: 'empleado',
           key: 'empleado',
           ...this.getColumnSearchProps('empleado'),
-          sorter: (a, b) => a.empleado.length - b.empleado.length,
+          sorter: (a, b) => this.sortString(a.empleado,b.empleado),
           sortOrder: sortedInfo.columnKey === 'empleado' && sortedInfo.order,
         },
         {
@@ -286,7 +229,7 @@ class TablaRouter extends React.Component{
           dataIndex: 'nombre',
           key: 'nombre',
           ...this.getColumnSearchProps('nombre'),
-          sorter: (a, b) => a.nombre.length - b.nombre.length,
+          sorter: (a, b) => this.sortString(a.nombre, b.nombre),
           sortOrder: sortedInfo.columnKey === 'nombre' && sortedInfo.order,
         },  
         {
@@ -312,8 +255,6 @@ class TablaRouter extends React.Component{
           dataIndex: 'ip',
           key: 'ip',
           render: (text, record) => <Link to={{ pathname: '/ip/view', state: { info: record } }} >{text}</Link>,
-          sorter: (a, b) => a.ip.length - b.ip.length,
-          sortOrder: sortedInfo.columnKey === 'ip' && sortedInfo.order,
         },
         {
           title: 'Puerta enlace',

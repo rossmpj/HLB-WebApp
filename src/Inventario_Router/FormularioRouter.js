@@ -117,22 +117,16 @@ class FormularioRouter extends React.Component {
                 <MarcaSelect    required={true}    id="marca"   decorator={getFieldDecorator} />
                 <InputComp label="Modelo"          id="modelo"  decorator={getFieldDecorator} /> 
                 <InputComp label="Número de serie" id="nserie"  decorator={getFieldDecorator} />              
-                <EstadComp required={true}         id="estado"  decorator={getFieldDecorator} /> 
+                <EstadComp required={true}         id="estado"  decorator={getFieldDecorator} />
+                <IpSelect required={false} id="ip" decorator={getFieldDecorator} />
+                <Form.Item label="Puerta de enlace">
+                  {getFieldDecorator('penlace', {
+                    rules: [{ required: false, message: 'Debe completar este campo' }],
+                  })( <Input /> )}
+                </Form.Item>
                 <Form.Item label="Descripción">
                   {getFieldDecorator("descripcion")( <TextArea /> )}
                 </Form.Item>
-              
-                <Form.Item label="¿Asignar una dirección IP?">
-                  <Switch checkedChildren="Si" unCheckedChildren="No" checked={!loading} onChange={this.onChange} />
-                </Form.Item>
-                <Skeleton loading={loading}> 
-                  <IpSelect required={!loading} id="ip" decorator={getFieldDecorator} />
-                  <Form.Item label="Puerta de enlace">
-                  {getFieldDecorator('penlace', {
-                    rules: [{ required: !loading, message: 'Debe completar este campo' }],
-                  })( <Input /> )}
-                  </Form.Item>
-                </Skeleton> 
                 <Form.Item {...tailLayout}>
                   <Button style={{marginRight: 7}} type="primary" htmlType="submit">Guardar</Button>   
                   <Link to={{ pathname: '/router' }} ><Button type="primary">Cancelar</Button></Link> 
