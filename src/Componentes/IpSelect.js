@@ -1,5 +1,6 @@
 import React from 'react';
 import SelectComponent from './SelectComponent'
+import MetodosAxios from '../Servicios/AxiosIp'
 
 class IpSelect extends React.Component {
 
@@ -11,8 +12,17 @@ class IpSelect extends React.Component {
     }
 
     componentDidMount = () => {
-        var ips = ["192.168.175.0", "192.178.0.1"];
-        this.setState({ ip: ips });
+      let datos = [];
+      MetodosAxios.ips_libres().then(res => {
+      res.data.map(registro => {
+        // let ip = {
+        //   id_ip: registro.id_ip,
+        //   direccion_ip: registro.direccion_ip
+        // }
+        datos.push(registro.direccion_ip);
+      });
+      this.setState({ ip: datos, }, () => { console.log('ips: ', this.state.ip); });
+    });
     }
 
     render() {

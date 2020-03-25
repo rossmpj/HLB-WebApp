@@ -22,6 +22,7 @@ function SelectComponent(props) {
                     {
                         props.datos.map(dato =>
                             <Select.Option key={dato} value={dato}>{dato}</Select.Option>
+                            //<Select.Option key={dato.id_ip} value={dato.direccion_ip}>{dato.direccion_ip}</Select.Option>
                         )
                     }
                 </Select>

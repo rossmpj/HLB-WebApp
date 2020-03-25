@@ -26,7 +26,7 @@ class TablaRouter extends React.Component{
     let datos = [];
     MetodosAxios.listar_routers().then(res => {
       res.data.map(registro => {
-        let dip = registro.ip === null ? ' ' : registro.ip;
+        var dip = registro.ip === null ? ' ' : registro.ip;
         let router = {
           key: registro.id_router,
           codigo: registro.id_router,
@@ -47,7 +47,7 @@ class TablaRouter extends React.Component{
         }
         datos.push(router);
       });
-      this.setState({ dataSource: datos, }, () => { console.log('routers: ', this.state.routers); });
+      this.setState({ dataSource: datos });
     });
   }
   
