@@ -12,9 +12,10 @@ import {
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
+import Axios from '../Servicios/AxiosTipo';
 const { Title } = Typography;
 
-const ips = [
+/* const ips = [
     {
         key: '1',
         ip: '192.168.1.1',
@@ -59,7 +60,7 @@ const ips = [
     }
 
 
-]
+] */
 
 
 class TablaIp extends React.Component {
@@ -85,7 +86,28 @@ class TablaIp extends React.Component {
     }
 
     llenar_tabla() {
-        this.setState({ dataSource: ips });
+        let datos = [];
+        Axios.ver_ips().then(res => {
+            res.data.forEach(function (dato) {
+                let registro = {
+                    key: dato.id_ip,
+                    ip: dato.direccion_ip,
+                    estado: dato.estado,
+                    hostname: dato.hostname,
+                    subred: dato.subred,
+                    fortigate: dato.fortigate,
+                    maquinas: dato.maquinas_adicionales,
+                    asignado: dato.nombre_usuario,
+                    encargado: dato.encargado_registro,
+                    observacion: dato.observacion,
+                    asignacion: dato.created_at
+                }
+                datos.push(registro)
+            });
+            this.setState({ dataSource: datos });
+        }).catch(err => {
+            message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
+        });
     }
 
     componentDidMount() {

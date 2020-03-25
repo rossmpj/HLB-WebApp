@@ -11,8 +11,7 @@ import {
 import '../custom-antd.css';
 import InputComponent from '../Componentes/InputComponent'
 import { Link } from 'react-router-dom';
-import AsignarSelect from '../Componentes/AsignarSelect'
-
+import Axios from '../Servicios/AxiosTipo';
 const { TextArea } = Input;
 
 const tailLayout = {
@@ -23,6 +22,8 @@ const layout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 14 },
 };
+
+const key = 'updatable';
 
 class FormularioIp extends React.Component {
 
@@ -36,8 +37,26 @@ class FormularioIp extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log(values)
-                message.success('Registro guardado satisfactoriamente')
+                let ip = {
+                    direccion_ip: values.ip,
+                    estado: values.estado,
+                    hostname: values.hostname,
+                    subred: values.subred,
+                    fortigate: values.fortigate,
+                    maquinas_adicionales: parseInt(values.maquinas),
+                    nombre_usuario: "",
+                    encargado_registro: "admin",
+                    observacion: values.observacion
+                }
+                Axios.crear_ip(ip).then(res => {
+                    message.loading({ content: 'Guardando datos...', key });
+                    setTimeout(() => {
+                        message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+                    }, 1000);
+                }).catch(err => {
+                    console.log(err)
+                    message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
+                });
             }
         });
     }
@@ -83,8 +102,8 @@ class FormularioIp extends React.Component {
                             rules: [{ required: true, message: 'Debe seleccionar el estado' }],
                         })(
                             <Select>
-                                <Select.Option value="en uso">En uso</Select.Option>
-                                <Select.Option value="libre">Libre</Select.Option>
+                                <Select.Option value="e">En uso</Select.Option>
+                                <Select.Option value="l">Libre</Select.Option>
                             </Select>
                         )}
                     </Form.Item>
@@ -120,13 +139,6 @@ class FormularioIp extends React.Component {
                             />
                         )}
                     </Form.Item>
-
-                    <AsignarSelect
-                        class=""
-                        required={false}
-                        id="asignado"
-                        decorator={getFieldDecorator} />
-
 
                     <Form.Item {...tailLayout}>
                         <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>

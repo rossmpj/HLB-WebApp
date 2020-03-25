@@ -60,7 +60,7 @@ class FormularioTipo extends React.Component {
         this.props.form.setFieldsValue({
             tipo: info.tipo,
         })
-        if (info.ip === 'false') {
+        if (info.ip === 'n') {
             this.props.form.setFieldsValue({
                 ip: false
             })

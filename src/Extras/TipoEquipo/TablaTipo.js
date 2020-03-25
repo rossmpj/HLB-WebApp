@@ -12,9 +12,10 @@ import {
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
+import AxiosTipo from '../../Servicios/AxiosTipo';
 const { Title } = Typography;
 
-const datos = [
+/* const datos = [
     {
         key: 1,
         tipo: 'Impresora',
@@ -118,7 +119,7 @@ const datos = [
     },
 
 
-]
+] */
 
 
 class TablaTipo extends React.Component {
@@ -140,7 +141,20 @@ class TablaTipo extends React.Component {
     }
 
     llenar_tabla() {
-        this.setState({ dataSource: datos });
+        let datos = [];
+        AxiosTipo.mostrar_datos().then(res => {
+            res.data.forEach(function (dato) {
+                let registro = {
+                    key: dato.id_tipo,
+                    tipo: dato.tipo,
+                    ip: dato.usa_ip
+                }
+                datos.push(registro)
+            });
+            this.setState({ dataSource: datos });
+        }).catch(err => {
+            message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
+        });
     }
 
     componentDidMount() {
@@ -222,12 +236,12 @@ class TablaTipo extends React.Component {
                 key: 'ip',
                 filters: [
                     {
-                        text: 'true',
-                        value: 'true',
+                        text: 'si',
+                        value: 's',
                     },
                     {
-                        text: 'false',
-                        value: 'false',
+                        text: 'no',
+                        value: 'n',
                     }
                 ],
                 onFilter: (value, record) => record.ip.indexOf(value) === 0
@@ -266,7 +280,7 @@ class TablaTipo extends React.Component {
                     <Row>
                         <Col span={12}><Title level={2}>Tipos de equipos registrados</Title></Col>
                         <Col className='flexbox'>
-                            <Link to={{ pathname: '/tipo/form', state: {titulo: "Nuevo tipo de equipo" } }} >
+                            <Link to={{ pathname: '/tipo/form', state: { titulo: "Nuevo tipo de equipo" } }} >
                                 <Button type="primary" icon="plus">Agregar tipo de equipo</Button>
                             </Link>
                         </Col>
