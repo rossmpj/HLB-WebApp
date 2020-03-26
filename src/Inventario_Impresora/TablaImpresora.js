@@ -14,8 +14,8 @@ import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 const { Title } = Typography;
 
-const impresoras = [
-    {
+ const impresoras = [
+   /*  {
         key: '1',
         nserie: '123456',
         bspi: 'Hogar Inés Chambers',
@@ -75,9 +75,9 @@ const impresoras = [
         rolloBrazalete: 'Y97'
 
     }
+ */
 
-
-]
+] 
 
 
 class TablaImpresora extends React.Component {
@@ -179,9 +179,9 @@ class TablaImpresora extends React.Component {
             },
             {
                 title: 'Número de serie',
-                dataIndex: 'nserie',
-                key: 'nserie',
-                ...this.getColumnSearchProps('nserie')
+                dataIndex: 'numero_serie',
+                key: 'numero_serie',
+                ...this.getColumnSearchProps('numero_serie')
             },
             {
                 title: 'BSPI Punto',
@@ -261,8 +261,8 @@ class TablaImpresora extends React.Component {
             },
             {
                 title: 'Estado',
-                dataIndex: 'estado',
-                key: 'estado',
+                dataIndex: 'estado_operativo',
+                key: 'estado_operativo',
                 filters: [
                     {
                         text: 'Operativo',
@@ -314,9 +314,9 @@ class TablaImpresora extends React.Component {
             },
             {
                 title: 'Rollo/Brazalete',
-                dataIndex: 'rolloBrazalete',
-                key: 'rolloBrazalete',
-                ...this.getColumnSearchProps('rolloBrazalete')
+                dataIndex: 'rollo',
+                key: 'rollo',
+                ...this.getColumnSearchProps('rollo')
             },
             {
                 title: 'Descripción',

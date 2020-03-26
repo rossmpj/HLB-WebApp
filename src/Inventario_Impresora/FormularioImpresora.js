@@ -14,7 +14,7 @@ import AsignarSelect from '../Componentes/AsignarSelect'
 import MarcaSelect from '../Componentes/MarcaSelect'
 import IpSelect from '../Componentes/IpSelect'
 import ComponentePrincipal from '../Componentes/ComponentePrincipal'
-
+import Axios from '../Servicios/AxiosTipo'
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -29,13 +29,14 @@ const layout = {
     wrapperCol: { span: 14 },
 };
 
+const key = 'updatable';
+
 class FormularioImpresora extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
             tipo: "",
-            equipos: [],
             cinta: "",
             cartucho: "",
             toner: "",
@@ -47,9 +48,6 @@ class FormularioImpresora extends React.Component {
     }
 
     componentDidMount = () => {
-        var comp = ["Servidor", "UPS"];
-        this.setState({ equipos: comp });
-
         if (typeof this.props.data !== 'undefined') {
             if (typeof this.props.data.state !== 'undefined'
                 && typeof this.props.data.state.info !== 'undefined'
@@ -65,21 +63,29 @@ class FormularioImpresora extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log(values)
-                message.success('Registro guardado satisfactoriamente')
+                 Axios.crear_impresora(values).then(res => {
+                    message.loading({ content: 'Guardando datos...', key });
+                    setTimeout(() => {
+                        message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+                    }, 1000);
+                }).catch(err => {
+                    console.log(err)
+                    message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
+                }); 
+                
             }
         });
     }
 
     cargar_datos(info) {
         this.props.form.setFieldsValue({
-            nserie: info.nserie,
+            numero_serie: info.numero_serie,
             codigo: info.codigo,
             modelo: info.modelo,
-            estado: info.estado,
-            marca: info.marca,
+            estado_operativo: info.estado_operativo,
+            id_marca: info.id_marca,
             ip: info.ip,
-            principal: info.principal,
+            componente_principa: info.componente_principa,
             asignado: info.asignado,
             descripcion: info.descripcion,
             tipo: info.tipo
@@ -123,7 +129,7 @@ class FormularioImpresora extends React.Component {
                         <InputComponent
                             class=""
                             label="Número de serie"
-                            id="nserie"
+                            id="numero_serie"
                             decorator={getFieldDecorator} />
 
                         <Form.Item label="Tipo">
@@ -145,7 +151,7 @@ class FormularioImpresora extends React.Component {
 
                         <MarcaSelect
                             class=""
-                            id="marca"
+                            id="id_marca"
                             required={true}
                             decorator={getFieldDecorator} />
 
@@ -156,14 +162,14 @@ class FormularioImpresora extends React.Component {
                             decorator={getFieldDecorator} />
 
                         <Form.Item label="Estado">
-                            {getFieldDecorator('estado', {
+                            {getFieldDecorator('estado_operativo', {
                                 rules: [{ required: true, message: 'Debe seleccionar el estado' }],
                             })(
                                 <Select>
-                                    <Select.Option value="disponible">Disponible</Select.Option>
-                                    <Select.Option value="revision">En revisión</Select.Option>
-                                    <Select.Option value="reparado">Reparado</Select.Option>
-                                    <Select.Option value="baja">De baja</Select.Option>
+                                    <Select.Option value="D">Disponible</Select.Option>
+                                    <Select.Option value="ER">En revisión</Select.Option>
+                                    <Select.Option value="R">Reparado</Select.Option>
+                                    <Select.Option value="B">De baja</Select.Option>
                                 </Select>
                             )}
                         </Form.Item>
@@ -231,7 +237,7 @@ class FormularioImpresora extends React.Component {
                                 <div>
                                     <Form.Item
                                         label="Rollo-Brazalete">
-                                        {getFieldDecorator('rolloBrazalete', {
+                                        {getFieldDecorator('rollo', {
                                             rules: [{ required: true, message: 'Debe completar este campo' }],
                                             initialValue: this.state.rollo
                                         })
@@ -323,7 +329,7 @@ class FormularioImpresora extends React.Component {
 
                         <ComponentePrincipal class=""
                             required={false}
-                            id="principal"
+                            id="componente_principal"
                             decorator={getFieldDecorator} />
 
                         <AsignarSelect class=""

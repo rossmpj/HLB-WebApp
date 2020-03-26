@@ -1,5 +1,6 @@
 import React from 'react';
 import SelectComponent from './SelectComponent'
+import Axios from '../Servicios/AxiosTipo'
 
 class MarcaSelect extends React.Component {
 
@@ -11,8 +12,19 @@ class MarcaSelect extends React.Component {
     }
 
     componentDidMount = () => {
-        var marca = ["HP", "Dell"];
-        this.setState({ marcas: marca});
+        let registro = [];
+        Axios.mostrar_marcas().then(res => {
+            res.data.forEach(function (dato) {
+                let users = {
+                    id: dato.id_marca,
+                    dato: dato.nombre
+                }
+                registro.push(users);
+            });
+            this.setState({ marcas: registro });
+        }).catch(err => {
+            console.log(err);
+        });
     }
 
     render() {

@@ -1,5 +1,6 @@
 import React from 'react';
 import SelectComponent from './SelectComponent'
+import Axios from '../Servicios/AxiosTipo'
 
 class AsignarSelect extends React.Component {
 
@@ -11,8 +12,19 @@ class AsignarSelect extends React.Component {
     }
 
     componentDidMount = () => {
-        var empleado = ["Alicia Gris", "Daniel Sempere"];
-        this.setState({ empleados: empleado });
+        let registro = [];
+        Axios.mostrar_empleados().then(res => {
+            res.data.forEach(function (dato) {
+                let users = {
+                    dato: dato.nombre.concat(" ", dato.apellido),
+                    id: dato.id
+                }
+                registro.push(users);
+            });
+            this.setState({ empleados: registro});
+        }).catch(err => {
+            console.log(err);
+        });
     }
 
     render() {

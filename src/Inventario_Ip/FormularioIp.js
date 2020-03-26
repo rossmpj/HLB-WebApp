@@ -102,8 +102,8 @@ class FormularioIp extends React.Component {
                             rules: [{ required: true, message: 'Debe seleccionar el estado' }],
                         })(
                             <Select>
-                                <Select.Option value="e">En uso</Select.Option>
-                                <Select.Option value="l">Libre</Select.Option>
+                                <Select.Option value="EU">En uso</Select.Option>
+                                <Select.Option value="L">Libre</Select.Option>
                             </Select>
                         )}
                     </Form.Item>
