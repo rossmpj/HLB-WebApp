@@ -12,4 +12,12 @@ export default class AxiosRouter {
   static buscar_ip_por_codigo = (id_ip) => {
     return AxiosRouter.instanceAxios.get(`/buscar_ip_por_codigo/${id_ip}`)
   }
+
+  static crear_equipo_router = (router) => {
+    return AxiosRouter.instanceAxios.post(`/crear_equipo_router`,router);
+  }
+
+  static eliminar_router = (id) => {
+    return AxiosRouter.instanceAxios.put(`/eliminar_router/${id}`);
+  }
 }

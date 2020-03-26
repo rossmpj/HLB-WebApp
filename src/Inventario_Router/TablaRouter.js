@@ -1,10 +1,11 @@
 import React from 'react';
-import { Button, Row, Col, Table, Input, Icon, Popconfirm, Typography } from 'antd';
+import { Button, Row, Col, Table, Input, Icon, Popconfirm, Typography, message } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
-import MetodosAxios from '../Servicios/AxiosRouter'
+import AxiosRouter from '../Servicios/AxiosRouter'
 
 const { Title } = Typography;
+const key = 'updatable';
 
 class TablaRouter extends React.Component{
   constructor(props) {
@@ -22,9 +23,13 @@ class TablaRouter extends React.Component{
     this.handleClick = this.handleClick.bind(this);
   }
   
+  recargar_datos(){
+    this.obtener_datos();
+  }
+
   obtener_datos = () => {
     let datos = [];
-    MetodosAxios.listar_routers().then(res => {
+    AxiosRouter.listar_routers().then(res => {
       res.data.map(registro => {
         var dip = registro.ip === null ? ' ' : registro.ip;
         let router = {
@@ -48,7 +53,9 @@ class TablaRouter extends React.Component{
         datos.push(router);
       });
       this.setState({ dataSource: datos });
-    });
+    }).catch(err => {
+      message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
+  });
   }
   
   componentDidMount = () => {
@@ -128,6 +135,19 @@ class TablaRouter extends React.Component{
       }
     }
   });
+
+  handleDelete(id) {
+    console.log("clave a eliminar",id)
+    AxiosRouter.eliminar_router(id).then(res => {
+      message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+      this.recargar_datos();
+    }).catch(err => {
+      console.log(err)
+      message.error('Error al eliminar el registro, inténtelo más tarde', 4);
+    });
+    const dataSource = [...this.state.dataSource];
+    this.setState({ dataSource: dataSource.filter(item => item.id !== id) });
+  }
 
   sortString(a,b){
     return a.localeCompare(b);  

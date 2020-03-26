@@ -1,12 +1,14 @@
 import React from 'react';
 import '../App.css';
-import { Form, Input, Button, Layout, Skeleton, Switch, Row, Col, Typography } from 'antd';
+import { Form, Input, Button, Layout, Skeleton, Switch, Row, Col, Typography, message } from 'antd';
 import '../custom-antd.css';
 import InputComp from '../Componentes/InputComponent';
 import MarcaSelect from '../Componentes/MarcaSelect';
 import IpSelect from '../Componentes/IpSelect';
 import AsignComp from '../Componentes/AsignarSelect';
 import EstadComp from '../Componentes/EstadoSelect';
+import AxiosRouter from '../Servicios/AxiosRouter';
+
 import { Link } from 'react-router-dom';
 
 const { Content } = Layout;
@@ -21,6 +23,8 @@ const layout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 14 },
 };
+
+const key = 'updatable';
 
 class FormularioRouter extends React.Component {
   constructor(props) {
@@ -51,7 +55,36 @@ class FormularioRouter extends React.Component {
       this.props.form.validateFields((err, values) => {
           if (!err) {
             console.log(values)
+            let router = {
+              codigo: values.codigo,
+              asignar: "",
+              tipo_equipo: "Router",
+              id_marca: values.marca,
+              modelo: values.modelo,
+              numero_serie: values.nserie,
+              encargado_registro: "admin",
+              componente_principal: null,
+              ip: values.ip,
+              nombre: values.nombre,
+              pass: values.pass,
+              usuario: values.usuario,
+              clave: values.clave,
+              nserie: values.nserie,
+              estado_operativo: values.estado,
+              puerta_enlace: values.penlace,
+              descripcion: values.descripcion,
+              fecha_registro: '2020-03-26'
           }
+          AxiosRouter.crear_equipo_router(router).then(res => {
+              message.loading({ content: 'Guardando datos...', key });
+              setTimeout(() => {
+                  message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+              }, 1000);
+          }).catch(err => {
+              console.log(err)
+              message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
+          });
+        }
       });
   }
 
@@ -94,7 +127,7 @@ class FormularioRouter extends React.Component {
                 id={this.state.titulo}
               > 
                 <InputComp label="Código"          id="codigo" decorator={getFieldDecorator} disabled={this.state.disabled} />
-                <AsignComp required={true}         id="asignar" decorator={getFieldDecorator} />
+                <AsignComp required={false}         id="asignar" decorator={getFieldDecorator} />
                 <InputComp label="Nombre"          id="nombre"  decorator={getFieldDecorator} />  
                 <Form.Item label="Pass">
                   {getFieldDecorator('pass', { rules: [{ required: true, message: 'Por favor, ingrese una contraseña' }],
@@ -105,7 +138,7 @@ class FormularioRouter extends React.Component {
                   {getFieldDecorator('clave', { rules: [{ required: true, message: 'Por favor, ingrese una contraseña' }],
                   })( <Input.Password /> )}
                 </Form.Item>
-                <MarcaSelect    required={true}    id="marca"   decorator={getFieldDecorator} />
+                <MarcaSelect    required={false}    id="marca"   decorator={getFieldDecorator} />
                 <InputComp label="Modelo"          id="modelo"  decorator={getFieldDecorator} /> 
                 <InputComp label="Número de serie" id="nserie"  decorator={getFieldDecorator} />              
                 <EstadComp required={true}         id="estado"  decorator={getFieldDecorator} />

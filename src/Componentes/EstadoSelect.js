@@ -9,9 +9,13 @@ class EstadoSelect extends React.Component {
             estados: []
         };
     }
-
+    //Temporal
     componentDidMount = () => {
-        var estado = ["Disponible", "En uso", "En revisión", "De baja"];
+        var estado = [{id:"Disponible", dato:"Disponible"}, 
+                      {id:"Operativo", dato:"Operativo"}, 
+                      {id:"Reparado", dato:"Reparado"}, 
+                      {id:"En revisión", dato:"En revisión"}, 
+                      {id:"De baja", dato:"De baja"}];
         this.setState({ estados: estado});
     }
 
