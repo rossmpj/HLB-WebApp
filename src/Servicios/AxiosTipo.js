@@ -22,11 +22,28 @@ export default class AxiosTipo {
     }
 
 
+    /* Componente Principal */
+    static mostrar_codigos = () => {
+        return AxiosTipo.instanceAxios.get(`/mostrar_codigos`);
+    }
+
     /* Sección Marcas */
     static mostrar_marcas = () => {
         return AxiosTipo.instanceAxios.get(`/listado_marcas`);
     }
 
+
+    /* Mostrar Departamentos*/
+    static mostrar_departamentos = () => {
+        return AxiosTipo.instanceAxios.get(`/departamentos`);
+    }
+
+    /*Mostrar Organizaciones*/
+    static mostrar_organizaciones = () => {
+        return AxiosTipo.instanceAxios.get(`/organizaciones`);
+    }
+
+/******************************************************************************/
 
     /* Inventario IP */
     static crear_ip = (ip) => {
@@ -42,5 +59,11 @@ export default class AxiosTipo {
     static crear_impresora = (impresora) => {
         return AxiosTipo.instanceAxios.post(`/impresora`, impresora);
     }
+
+    static mostrar_impresoras = () => {
+        return AxiosTipo.instanceAxios.get(`/impresoraxequipo`);
+    }
+
+
 
 }

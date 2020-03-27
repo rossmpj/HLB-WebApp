@@ -85,7 +85,7 @@ class FormularioImpresora extends React.Component {
             estado_operativo: info.estado_operativo,
             id_marca: info.id_marca,
             ip: info.ip,
-            componente_principa: info.componente_principa,
+            componente_principal: info.componente_principal,
             asignado: info.asignado,
             descripcion: info.descripcion,
             tipo: info.tipo

@@ -1,5 +1,6 @@
 import React from 'react';
 import SelectComponent from './SelectComponent'
+import Axios from '../Servicios/AxiosTipo'
 
 class ComponentePrincipal extends React.Component {
 
@@ -11,8 +12,11 @@ class ComponentePrincipal extends React.Component {
     }
 
     componentDidMount = () => {
-        var comp = ["000001", "000002"];
-        this.setState({ componentes: comp});
+        Axios.mostrar_codigos().then(res => {
+            this.setState({ componentes: res.data });
+        }).catch(err => {
+            console.log(err);
+        });
     }
 
     render() {

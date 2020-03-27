@@ -12,73 +12,8 @@ import {
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
+import Axios from '../Servicios/AxiosTipo'
 const { Title } = Typography;
-
- const impresoras = [
-   /*  {
-        key: '1',
-        nserie: '123456',
-        bspi: 'Hogar Inés Chambers',
-        asignado: 'Julián Carax',
-        dpto: 'Financiero',
-        tipo: 'matricial',
-        marca: 'Epson',
-        codigo: 123,
-        estado: 'Operativo',
-        modelo: 'RGB-102',
-        tinta: '',
-        cartucho: 'RGB',
-        descripcion: 'Ninguna',
-        toner: '',
-        rodillo: '',
-        cinta: 'Large',
-        rolloBrazalete: ''
-
-    },
-    {
-        key: '2',
-        nserie: '113456',
-        bspi: 'Hospital León Becerra',
-        asignado: 'Roberto Hendaya',
-        dpto: 'Financiero',
-        tipo: 'escaner',
-        marca: 'Lexmark',
-        codigo: 123,
-        estado: 'En revisión',
-        modelo: 'RGB-102',
-        tinta: '',
-        cartucho: '',
-        descripcion: 'Considerar repuestos originales que se encuentran en la av. siempre viva',
-        toner: '',
-        rodillo: 'H98',
-        cinta: '',
-        rolloBrazalete: ''
-
-    },
-    {
-        key: '3',
-        nserie: '3456',
-        bspi: 'Hospital León Becerra',
-        asignado: 'Carlos Ruiz Zafón',
-        dpto: 'Sistemas',
-        tipo: 'brazalete',
-        marca: 'Epson',
-        codigo: 123,
-        estado: 'Operativo',
-        modelo: 'RGB-102',
-        tinta: 'Z95',
-        cartucho: 'H96',
-        descripcion: 'Ninguna',
-        toner: 'J98',
-        rodillo: '',
-        cinta: '',
-        rolloBrazalete: 'Y97'
-
-    }
- */
-
-] 
-
 
 class TablaImpresora extends React.Component {
     constructor(props) {
@@ -98,8 +33,65 @@ class TablaImpresora extends React.Component {
         });
     }
 
+    departamentos() {
+        let dpto = [];
+        Axios.mostrar_departamentos().then(res => {
+            res.data.forEach(function (dato) {
+                let dict = {
+                    text: dato.nombre,
+                    value: dato.nombre
+                }
+                dpto.push(dict);
+            });
+
+        }).catch(err => { console.log(err) });
+        return dpto;
+    }
+
+    organizaciones() {
+        let org = [];
+        Axios.mostrar_organizaciones().then(res => {
+            res.data.forEach(function (dato) {
+                let dict = {
+                    text: dato.bspi_punto,
+                    value: dato.bspi_punto
+                }
+                org.push(dict);
+            });
+        }).catch(err => { console.log(err) });
+        return org;
+    }
+
     llenar_tabla() {
-        this.setState({ dataSource: impresoras });
+        let datos = [];
+        Axios.mostrar_impresoras().then(res => {
+            res.data.forEach(function (dato) {
+                let impresoras = {
+                    key: dato.id_impresora,
+                    numero_serie: dato.numero_serie,
+                    bspi: dato.bspi_punto,
+                    asignado: dato.empleado.concat(" ", dato.apellido),
+                    dpto: dato.nombre,
+                    tipo: dato.tipo,
+                    id_marca: dato.marca,
+                    codigo: dato.codigo,
+                    estado_operativo: dato.estado_operativo,
+                    modelo: dato.modelo,
+                    tinta: dato.tinta,
+                    cartucho: dato.cartucho,
+                    descripcion: dato.descripcion,
+                    toner: dato.toner,
+                    rodillo: dato.rodillo,
+                    cinta: dato.cinta,
+                    rollo: dato.rollo
+                }
+                datos.push(impresoras)
+            });
+            this.setState({ dataSource: datos });
+        }).catch(err => {
+            console.log(err)
+            message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
+        });
     }
 
     componentDidMount() {
@@ -187,16 +179,7 @@ class TablaImpresora extends React.Component {
                 title: 'BSPI Punto',
                 dataIndex: 'bspi',
                 key: 'bspi',
-                filters: [
-                    {
-                        text: 'Hospital León Becerra',
-                        value: 'Hospital León Becerra',
-                    },
-                    {
-                        text: 'Hogar Inés Chambers',
-                        value: 'Hogar Inés Chambers',
-                    }
-                ],
+                filters: this.organizaciones(),
                 onFilter: (value, record) => record.bspi.indexOf(value) === 0,
                 sorter: (a, b) => a.bspi.length - b.bspi.length
             },
@@ -204,16 +187,7 @@ class TablaImpresora extends React.Component {
                 title: 'Departamento',
                 dataIndex: 'dpto',
                 key: 'dpto',
-                filters: [
-                    {
-                        text: 'Financiero',
-                        value: 'Financiero',
-                    },
-                    {
-                        text: 'Sistemas',
-                        value: 'Sistemas',
-                    }
-                ],
+                filters: this.departamentos(),
                 onFilter: (value, record) => record.dpto.indexOf(value) === 0,
                 sorter: (a, b) => a.dpto.length - b.dpto.length
             },
@@ -230,23 +204,23 @@ class TablaImpresora extends React.Component {
                 filters: [
                     {
                         text: 'Impresora',
-                        value: 'Impresora',
+                        value: 'impresora',
                     },
                     {
                         text: 'Matricial',
-                        value: 'Matricial',
+                        value: 'matricial',
                     },
                     {
                         text: 'Brazalete',
-                        value: 'Brazalete',
+                        value: 'brazalete',
                     },
                     {
                         text: 'Escaner',
-                        value: 'Escaner',
+                        value: 'escaner',
                     },
                     {
                         text: 'Multifuncional',
-                        value: 'Multifuncional',
+                        value: 'multifuncional',
                     },
                 ],
                 onFilter: (value, record) => record.tipo.indexOf(value) === 0,
@@ -255,9 +229,9 @@ class TablaImpresora extends React.Component {
             },
             {
                 title: 'Marca',
-                dataIndex: 'marca',
-                key: 'marca',
-                ...this.getColumnSearchProps('marca')
+                dataIndex: 'id_marca',
+                key: 'id_marca',
+                ...this.getColumnSearchProps('id_marca')
             },
             {
                 title: 'Estado',
@@ -265,12 +239,24 @@ class TablaImpresora extends React.Component {
                 key: 'estado_operativo',
                 filters: [
                     {
+                        text: 'Disponible',
+                        value: 'D',
+                    },
+                    {
                         text: 'Operativo',
-                        value: 'Operativo',
+                        value: 'O',
                     },
                     {
                         text: 'En revisión',
-                        value: 'En revisión',
+                        value: 'ER',
+                    },
+                    {
+                        text: 'Reparado',
+                        value: 'R',
+                    },
+                    {
+                        text: 'De baja',
+                        value: 'B',
                     }
                 ],
                 onFilter: (value, record) => record.estado.indexOf(value) === 0,
