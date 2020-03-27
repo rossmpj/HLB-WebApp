@@ -354,13 +354,13 @@ class TablaRouter extends React.Component{
           fixed: 'right',
           render: (text, record) => (
             <span> 
-              <Link to={{ pathname: '/router/form', state: { info: record, titulo: "Editar router", disabled: true } }} >
-                <Button style= {{marginRight: '2px'}} type="primary" ghost size="small" icon="edit" />
+              <Link to={{ pathname: '/router/form', state: { info: record.codigo, titulo: "Editar router", disabled: true } }} >
+                <Button style= {{marginRight: '2px'}} onClick={() => console.log("text", record.codigo)} type="primary" ghost size="small" icon="edit" />
               </Link>
               
               <Popconfirm placement="topRight" 
               title="¿Desea eliminar este registro?" 
-              okText="Si" cancelText="No" onConfirm={() => this.handleDelete(record.key)}>
+              okText="Si" cancelText="No" onConfirm={() => this.handleDelete(record.codigo)}>
               <Button type="danger" icon="delete" ghost size="small" /></Popconfirm>
             </span>
           ),  

@@ -20,4 +20,13 @@ export default class AxiosRouter {
   static eliminar_router = (id) => {
     return AxiosRouter.instanceAxios.put(`/eliminar_router/${id}`);
   }
+
+  static editar_equipo_router = (router) => {
+    return AxiosRouter.instanceAxios.post(`/editar_equipo_router`, router);
+  }
+
+  static buscar_router_por_id = (id_router) => {
+    return AxiosRouter.instanceAxios.get(`/buscar_router_por_id/${id_router}`)
+  }
+
 }
