@@ -259,8 +259,8 @@ class TablaImpresora extends React.Component {
                         value: 'B',
                     }
                 ],
-                onFilter: (value, record) => record.estado.indexOf(value) === 0,
-                sorter: (a, b) => a.estado.length - b.estado.length
+                onFilter: (value, record) => record.estado_operativo.indexOf(value) === 0,
+                sorter: (a, b) => a.estado_operativo.length - b.estado_operativo.length
             },
             {
                 title: 'Modelo',

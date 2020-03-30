@@ -43,6 +43,7 @@ class FormularioImpresora extends React.Component {
             rodillo: "",
             tinta: "",
             rollo: "",
+            encargado_registro: "admin"
         };
         this.handle_guardar = this.handle_guardar.bind(this);
     }
@@ -63,7 +64,8 @@ class FormularioImpresora extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                 Axios.crear_impresora(values).then(res => {
+                values.encargado_registro=this.state.encargado_registro;
+                Axios.crear_impresora(values).then(res => {
                     message.loading({ content: 'Guardando datos...', key });
                     setTimeout(() => {
                         message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
@@ -71,8 +73,8 @@ class FormularioImpresora extends React.Component {
                 }).catch(err => {
                     console.log(err)
                     message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
-                }); 
-                
+                });
+
             }
         });
     }
@@ -128,6 +130,12 @@ class FormularioImpresora extends React.Component {
                     >
                         <InputComponent
                             class=""
+                            label="Código"
+                            id="codigo"
+                            decorator={getFieldDecorator} />
+                            
+                        <InputComponent
+                            class=""
                             label="Número de serie"
                             id="numero_serie"
                             decorator={getFieldDecorator} />
@@ -153,12 +161,6 @@ class FormularioImpresora extends React.Component {
                             class=""
                             id="id_marca"
                             required={true}
-                            decorator={getFieldDecorator} />
-
-                        <InputComponent
-                            class=""
-                            label="Código"
-                            id="codigo"
                             decorator={getFieldDecorator} />
 
                         <Form.Item label="Estado">

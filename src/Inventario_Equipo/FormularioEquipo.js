@@ -1,13 +1,6 @@
 import React from 'react';
 import '../App.css';
-import {
-    Form,
-    Input,
-    Button,
-    Layout,
-    message,
-    Select
-} from 'antd';
+import { Form, Input, Button, Layout, message, Select } from 'antd';
 import '../custom-antd.css';
 import InputComponent from '../Componentes/InputComponent'
 import AsignarSelect from '../Componentes/AsignarSelect'
@@ -18,6 +11,7 @@ import FormularioImpresora from '../Inventario_Impresora/FormularioImpresora'
 import FormularioDesktop from '../Inventario_Desktop/FormularioDesktop'
 import FormularioRouter from '../Inventario_Router/FormularioRouter'
 import FormularioLaptop from '../Inventario_Laptop/FormularioLaptop'
+import Axios from '../Servicios/AxiosTipo'
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -31,13 +25,14 @@ const layout = {
     wrapperCol: { span: 14 },
 };
 
+const key = 'updatable';
+
 class FormularioEquipo extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            estado: "disponible",
-            encargado: "",
+            encargado_registro: "admin",
             id: "",
             tipo_equipo: "",
             equipos: []
@@ -46,8 +41,23 @@ class FormularioEquipo extends React.Component {
     }
 
     componentDidMount = () => {
-        var comp = ["Servidor", "UPS", "Impresora", "Cpu", "Router"];
-        this.setState({ equipos: comp });
+        /* var comp = ["Cpu", "Impresora", "Laptop", "Router", "Otro"];
+        this.setState({ equipos: comp }); */
+        this.mostrar_tipo_equipos();
+    }
+
+    mostrar_tipo_equipos() {
+        let tipo = [];
+        Axios.mostrar_tipo_equipo().then(res => {
+            res.data.forEach(function (dato) {
+                tipo.push(dato.tipo_equipo);
+            });
+            tipo.push("Otro");
+            this.setState({ equipos: tipo });
+        }).catch(err => {
+            console.log(err)
+            message.error('No se pueden cargar los datos, revise la conexión con el servidor', 4);
+        });
     }
 
 
@@ -55,22 +65,32 @@ class FormularioEquipo extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log(values)
-                message.success('Registro guardado satisfactoriamente')
+                values.encargado_registro = this.state.encargado_registro;
+                Axios.crear_otro_equipo(values).then(res => {
+                    message.loading({ content: 'Guardando datos...', key });
+                    setTimeout(() => {
+                        message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+                    }, 1000);
+                }).catch(err => {
+                    console.log(err)
+                    message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
+                });
             }
         });
     }
 
     cargar_datos(info) {
         this.props.form.setFieldsValue({
-            nserie: info.nserie,
+            codigo: info.codigo,
+            numero_serie: info.numero_serie,
             modelo: info.modelo,
-            marca: info.marca,
+            id_marca: info.id_marca,
+            estado_operativo: info.estado_operativo,
             ip: info.ip,
-            principal: info.principal,
+            componente_principal: info.componente_principal,
             asignado: info.asignado,
             descripcion: info.descripcion,
-            tipo: info.tipo
+            /* tipo: info.tipo */
         })
     }
 
@@ -94,10 +114,26 @@ class FormularioEquipo extends React.Component {
                             layout="horizontal"
                             onSubmit={this.handle_guardar}
                         >
+                            {this.state.tipo_equipo.toLocaleLowerCase() === "otro" ?
+                                <InputComponent
+                                    class=""
+                                    label="Tipo de equipo"
+                                    id="tipo"
+                                    decorator={getFieldDecorator} />
+                                : null
+                            }
+
+
+                            <InputComponent
+                                class=""
+                                label="Código"
+                                id="codigo"
+                                decorator={getFieldDecorator} />
+
                             <InputComponent
                                 class=""
                                 label="Número de serie"
-                                id="nserie"
+                                id="numero_serie"
                                 decorator={getFieldDecorator} />
 
                             <InputComponent
@@ -108,9 +144,22 @@ class FormularioEquipo extends React.Component {
 
                             <MarcaSelect
                                 class=""
-                                id="marca"
+                                id="id_marca"
                                 required={true}
                                 decorator={getFieldDecorator} />
+
+                            <Form.Item label="Estado">
+                                {getFieldDecorator('estado_operativo', {
+                                    rules: [{ required: true, message: 'Debe seleccionar el estado' }],
+                                })(
+                                    <Select>
+                                        <Select.Option value="D">Disponible</Select.Option>
+                                        <Select.Option value="ER">En revisión</Select.Option>
+                                        <Select.Option value="R">Reparado</Select.Option>
+                                        <Select.Option value="B">De baja</Select.Option>
+                                    </Select>
+                                )}
+                            </Form.Item>
 
                             <IpSelect
                                 class=""
@@ -120,7 +169,7 @@ class FormularioEquipo extends React.Component {
 
                             <ComponentePrincipal
                                 class=""
-                                id="principal"
+                                id="componente_principal"
                                 required={false}
                                 decorator={getFieldDecorator} />
 
@@ -151,9 +200,9 @@ class FormularioEquipo extends React.Component {
                         onSubmit={this.handle_guardar}
                     >
                         <Form.Item
-                            label="Tipo de equipo"
+                            label="Seleccione el tipo de equipo"
                         >
-                            {getFieldDecorator('tipo', {
+                            {getFieldDecorator('tipo_equipo', {
                                 rules: [{ required: true, message: 'Debe completar este campo' }]
                             })(
                                 <Select
@@ -166,8 +215,8 @@ class FormularioEquipo extends React.Component {
                                     }}
                                 >
                                     {
-                                        this.state.equipos.map(dato =>
-                                            <Select.Option key={dato} value={dato}>{dato}</Select.Option>
+                                        this.state.equipos.map((dato,index) =>
+                                            <Select.Option key={index} value={dato}>{dato}</Select.Option>
                                         )
                                     }
                                 </Select>

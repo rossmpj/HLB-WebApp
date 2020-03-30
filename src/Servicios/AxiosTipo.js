@@ -43,7 +43,7 @@ export default class AxiosTipo {
         return AxiosTipo.instanceAxios.get(`/organizaciones`);
     }
 
-/******************************************************************************/
+    /******************************************************************************/
 
     /* Inventario IP */
     static crear_ip = (ip) => {
@@ -65,5 +65,17 @@ export default class AxiosTipo {
     }
 
 
+    /* Inventario otros equipos */
+    static crear_otro_equipo = (equipo) => {
+        return AxiosTipo.instanceAxios.post(`/otro_equipo`, equipo);
+    }
+
+    static mostrar_tipo_equipo = () => {
+        return AxiosTipo.instanceAxios.get(`/tipo_equipo`);
+    }
+
+    static mostrar_equipos = () => {
+        return AxiosTipo.instanceAxios.get(`/mostrar_equipos`);
+    }
 
 }

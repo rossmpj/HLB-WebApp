@@ -12,54 +12,8 @@ import {
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
+import Axios from '../Servicios/AxiosTipo'
 const { Title } = Typography;
-
-const datos = [
-    {
-        key: 1,
-        codigo: '0908102940',
-        nserie: 's0908102940',
-        estado: 'En revisión',
-        tipo: 'router',
-        modelo: 'GSV10970',
-        marca: 'Intel',
-        ip: '',
-        componente: '',
-        asignado: 'Juan Sempere',
-        registro: '2020-03-11',
-        descripcion: ''
-    },
-    {
-        key: 2,
-        codigo: '0908102960',
-        nserie: 's0908102960',
-        estado: 'Disponible',
-        tipo: 'Pluma digital',
-        modelo: 'GSV10969',
-        marca: 'Intel',
-        ip: '',
-        componente: '',
-        asignado: 'Juan Sempere',
-        registro: '2020-03-12',
-        descripcion: ''
-    },
-    {
-        key: 3,
-        codigo: '0908102990',
-        nserie: 's0908102990',
-        estado: 'Disponible',
-        tipo: 'impresora',
-        modelo: 'GSV10968',
-        marca: 'Intel',
-        ip: '',
-        componente: '',
-        asignado: 'Juan Sempere',
-        registro: '2020-03-10',
-        descripcion: ''
-    }
-]
-
-
 
 class TablaEquipo extends React.Component {
     constructor(props) {
@@ -81,6 +35,31 @@ class TablaEquipo extends React.Component {
     }
 
     llenar_tabla() {
+        let datos = [];
+        Axios.mostrar_equipos().then(res => {
+            res.data.forEach(function (dato) {
+                let equipos = {
+                    key: dato.id_equipo,
+                    estado_operativo: dato.estado_operativo,
+                    codigo: dato.codigo,
+                    tipo_equipo: dato.tipo_equipo,
+                    marca: dato.marca,                    
+                    modelo: dato.modelo,
+                    descripcion: dato.descripcion,
+                    numero_serie: dato.numero_serie,
+                    encargado_registro: dato.encargado_registro,
+                    componente_principal: dato.componente_principal,
+                    asignado: dato.asignado,
+                    fecha_registro: dato.fecha_registro,
+                    ip: dato.ip
+                }
+                datos.push(equipos)
+            });
+            this.setState({ dataSource: datos });
+        }).catch(err => {
+            console.log(err)
+            message.error('No se pueden cargar los datos, revise la conexión con el servidor', 4);
+        });
         this.setState({ dataSource: datos });
     }
 
@@ -333,33 +312,45 @@ class TablaEquipo extends React.Component {
             },
             {
                 title: 'Número de serie',
-                dataIndex: 'nserie',
-                key: 'nserie',
-                ...this.getColumnSearchProps('nserie')
+                dataIndex: 'numero_serie',
+                key: 'numero_serie',
+                ...this.getColumnSearchProps('numero_serie')
             },
             {
                 title: 'Estado',
-                dataIndex: 'estado',
-                key: 'estado',
+                dataIndex: 'estado_operativo',
+                key: 'estado_operativo',
                 filters: [
                     {
+                        text: 'Disponible',
+                        value: 'D',
+                    },
+                    {
                         text: 'Operativo',
-                        value: 'Operativo',
+                        value: 'O',
                     },
                     {
                         text: 'En revisión',
-                        value: 'En revisión',
+                        value: 'ER',
+                    },
+                    {
+                        text: 'Reparado',
+                        value: 'R',
+                    },
+                    {
+                        text: 'De baja',
+                        value: 'B',
                     }
                 ],
-                onFilter: (value, record) => record.estado.indexOf(value) === 0,
-                sorter: (a, b) => a.estado.length - b.estado.length
+                onFilter: (value, record) => record.estado_operativo.indexOf(value) === 0,
+                sorter: (a, b) => a.estado_operativo.length - b.estado_operativo.length
             },
 
             {
                 title: 'Tipo',
-                dataIndex: 'tipo',
-                key: 'tipo',
-                ...this.getColumnSearchProps('tipo')
+                dataIndex: 'tipo_equipo',
+                key: 'tipo_equipo',
+                ...this.getColumnSearchProps('tipo_equipo')
             },
             {
                 title: 'Modelo',
@@ -376,9 +367,9 @@ class TablaEquipo extends React.Component {
             },
             {
                 title: 'Fecha registro',
-                dataIndex: 'registro',
-                key: 'registro',
-                sorter: (a, b) => this.sortString(a.registro, b.registro)
+                dataIndex: 'fecha_registro',
+                key: 'fecha_registro',
+                sorter: (a, b) => this.sortString(a.fecha_registro, b.fecha_registro)
             },
             {
                 title: 'Asignado',
@@ -394,10 +385,10 @@ class TablaEquipo extends React.Component {
             },
             {
                 title: 'Componente principal',
-                dataIndex: 'componente',
-                key: 'componente',
+                dataIndex: 'componente_principal',
+                key: 'componente_principal',
                 render: text => <a href="/#">{text}</a>,
-                ...this.getColumnSearchProps('componente')
+                ...this.getColumnSearchProps('componente_principal')
             },
 
             {
