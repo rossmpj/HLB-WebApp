@@ -97,7 +97,7 @@ class FormularioRouter extends React.Component {
   cargar_datos(info) {
     console.log("record:",info);
     AxiosRouter.buscar_router_por_id(info).then(respuesta => {
-      respuesta.data.map(res => {
+      respuesta.data.forEach(res => {
       console.log(res)
         this.props.form.setFieldsValue({
           codigo: info,

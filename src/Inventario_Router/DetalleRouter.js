@@ -58,10 +58,8 @@ class DetalleRouter extends React.Component {
     })
     info.ip === " " ? this.setState({ip: "No asignada"}) : 
     MetodosAxios.buscar_ip_por_codigo(info.ip).then(res => {
-      res.data.map(registro => {
-        this.setState({
-          ip: registro.direccion_ip,
-        })
+      res.data.forEach(function (registro) {
+        this.setState({ ip: registro.direccion_ip })
       })
     })
   }

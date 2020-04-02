@@ -34,7 +34,7 @@ class DetalleIP extends React.Component {
 
   obtener_ip(codigo) {
     MetodosAxios.buscar_ip_por_codigo(codigo).then(res => {
-      res.data.map(registro => {
+      res.data.forEach(registro => {
         this.setState({
           codigo: registro.id_ip,
           asignado: registro.nombre_usuario,

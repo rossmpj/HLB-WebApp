@@ -30,7 +30,7 @@ class TablaRouter extends React.Component{
   obtener_datos = () => {
     let datos = [];
     AxiosRouter.listar_routers().then(res => {
-      res.data.map(registro => {
+      res.data.forEach(function (registro) {
         var dip = registro.ip === null ? ' ' : registro.ip;
         let router = {
           key: registro.id_router,
