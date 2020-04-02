@@ -54,6 +54,10 @@ export default class AxiosTipo {
         return AxiosTipo.instanceAxios.get(`/listar_ips`);
     }
 
+    static editar_ip = (ip) => {
+        return AxiosTipo.instanceAxios.put(`/editar_ip`,ip);
+    }
+
 
     /* Inventario Impresora */
     static crear_impresora = (impresora) => {
@@ -62,6 +66,10 @@ export default class AxiosTipo {
 
     static mostrar_impresoras = () => {
         return AxiosTipo.instanceAxios.get(`/impresoraxequipo`);
+    }
+
+    static editar_impresora = (impresora) => {
+        return AxiosTipo.instanceAxios.put(`/editar_impresora`,impresora);
     }
 
 
@@ -78,4 +86,7 @@ export default class AxiosTipo {
         return AxiosTipo.instanceAxios.get(`/mostrar_equipos`);
     }
 
+    static editar_equipo = (equipo) => {
+        return AxiosTipo.instanceAxios.put(`/editar_equipo`,equipo);
+    }
 }

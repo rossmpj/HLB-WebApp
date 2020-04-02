@@ -48,29 +48,20 @@ class TablaImpresora extends React.Component {
         return dpto;
     }
 
-    organizaciones() {
-        let org = [];
-        Axios.mostrar_organizaciones().then(res => {
-            res.data.forEach(function (dato) {
-                let dict = {
-                    text: dato.bspi_punto,
-                    value: dato.bspi_punto
-                }
-                org.push(dict);
-            });
-        }).catch(err => { console.log(err) });
-        return org;
-    }
-
     llenar_tabla() {
         let datos = [];
+        let empleado = ""
         Axios.mostrar_impresoras().then(res => {
+
             res.data.forEach(function (dato) {
+                if (dato.empleado !== null) {
+                    empleado = dato.empleado.concat(" ", dato.apellido);
+                }
                 let impresoras = {
                     key: dato.id_impresora,
                     numero_serie: dato.numero_serie,
                     bspi: dato.bspi_punto,
-                    asignado: dato.empleado.concat(" ", dato.apellido),
+                    asignado: empleado,
                     dpto: dato.nombre,
                     tipo: dato.tipo,
                     id_marca: dato.marca,
@@ -83,19 +74,26 @@ class TablaImpresora extends React.Component {
                     toner: dato.toner,
                     rodillo: dato.rodillo,
                     cinta: dato.cinta,
-                    rollo: dato.rollo
+                    rollo: dato.rollo,
+                    ip: dato.direccion_ip
                 }
                 datos.push(impresoras)
             });
             this.setState({ dataSource: datos });
         }).catch(err => {
             console.log(err)
-            message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
+            message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
         });
     }
 
     componentDidMount() {
         this.llenar_tabla();
+    }
+
+    stringSorter(a, b) {
+        let y = a || '';
+        let u = b || '';
+        return y.localeCompare(u);
     }
 
 
@@ -179,9 +177,26 @@ class TablaImpresora extends React.Component {
                 title: 'BSPI Punto',
                 dataIndex: 'bspi',
                 key: 'bspi',
-                filters: this.organizaciones(),
+                filters: [
+                    {
+                        text: 'Hogar Inés Chambers',
+                        value: 'Hogar Inés Chambers',
+                    },
+                    {
+                        text: 'Hospital León Becerra',
+                        value: 'Hospital León Becerra',
+                    },
+                    {
+                        text: 'Residencia Mercedes Begue',
+                        value: 'Residencia Mercedes Begue',
+                    },
+                    {
+                        text: 'Unidad Educativa San José del Buen Pastor',
+                        value: 'Unidad Educativa San José del Buen Pastor',
+                    }
+                ],
                 onFilter: (value, record) => record.bspi.indexOf(value) === 0,
-                sorter: (a, b) => a.bspi.length - b.bspi.length
+                sorter: (a, b) => this.stringSorter(a.bspi, b.bspi)
             },
             {
                 title: 'Departamento',
@@ -204,23 +219,23 @@ class TablaImpresora extends React.Component {
                 filters: [
                     {
                         text: 'Impresora',
-                        value: 'impresora',
+                        value: 'Impresora',
                     },
                     {
                         text: 'Matricial',
-                        value: 'matricial',
+                        value: 'Matricial',
                     },
                     {
                         text: 'Brazalete',
-                        value: 'brazalete',
+                        value: 'Brazalete',
                     },
                     {
-                        text: 'Escaner',
-                        value: 'escaner',
+                        text: 'Escáner',
+                        value: 'Escáner',
                     },
                     {
                         text: 'Multifuncional',
-                        value: 'multifuncional',
+                        value: 'Multifuncional',
                     },
                 ],
                 onFilter: (value, record) => record.tipo.indexOf(value) === 0,
@@ -267,6 +282,12 @@ class TablaImpresora extends React.Component {
                 dataIndex: 'modelo',
                 key: 'modelo',
                 ...this.getColumnSearchProps('modelo')
+            },
+            {
+                title: 'IP',
+                dataIndex: 'ip',
+                key: 'ip',
+                ...this.getColumnSearchProps('ip')
             },
             {
                 title: 'Tinta',
