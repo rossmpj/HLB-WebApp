@@ -1,7 +1,5 @@
 import React from 'react';
-import '../App.css';
 import { Form, Button, Select, Switch } from 'antd';
-import '../custom-antd.css';
 
 const { Option } = Select;
 const tailLayout = { wrapperCol: { offset: 10, span: 5 } };             
