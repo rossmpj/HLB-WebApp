@@ -5,6 +5,7 @@ import {
 } from 'antd';
 
 function SelectComponent(props) {
+    let n=null;
     return (
         <Form.Item
             label={props.label}
@@ -19,6 +20,7 @@ function SelectComponent(props) {
                     filterOption={(input, option) =>
                         option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                 >
+                     <Select.Option key="0" value={n}>----</Select.Option>
                     {
                         props.datos.map(dato =>
                             <Select.Option key={dato.id} value={dato.id}>{dato.dato}</Select.Option>

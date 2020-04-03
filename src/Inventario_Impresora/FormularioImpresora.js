@@ -43,7 +43,9 @@ class FormularioImpresora extends React.Component {
             rodillo: "",
             tinta: "",
             rollo: "",
-            encargado_registro: "admin"
+            encargado_registro: "admin",
+            editionMode: false,
+            key: ""
         };
         this.handle_guardar = this.handle_guardar.bind(this);
     }
@@ -54,6 +56,7 @@ class FormularioImpresora extends React.Component {
                 && typeof this.props.data.state.info !== 'undefined'
             ) {
                 this.cargar_datos(this.props.data.state.info);
+                this.setState({ editionMode: true });
             }
         }
     }
@@ -65,15 +68,29 @@ class FormularioImpresora extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 values.encargado_registro=this.state.encargado_registro;
-                Axios.crear_impresora(values).then(res => {
-                    message.loading({ content: 'Guardando datos...', key });
-                    setTimeout(() => {
-                        message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
-                    }, 1000);
-                }).catch(err => {
-                    console.log(err)
-                    message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
-                });
+                if(!this.state.editionMode){
+                    Axios.crear_impresora(values).then(res => {
+                        message.loading({ content: 'Guardando datos...', key });
+                        setTimeout(() => {
+                            message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+                        }, 1000);
+                    }).catch(err => {
+                        console.log(err)
+                        message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
+                    });
+                }else{
+                    values.key=this.state.key;
+                     Axios.editar_impresora(values).then(res => {
+                        message.loading({ content: 'Actualizando datos...', key });
+                        setTimeout(() => {
+                            message.success({ content: res.data.log, key, duration: 3 });
+                        }, 1000);
+                    }).catch(err => {
+                        console.log(err)
+                        message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
+                    }); 
+                }
+               
 
             }
         });
@@ -95,27 +112,28 @@ class FormularioImpresora extends React.Component {
 
         this.setState({ tipo: info.tipo });
 
-        if (info.tipo === "matricial") {
+        if (info.tipo.toLocaleLowerCase() === "matricial") {
             this.setState({ cinta: info.cinta, cartucho: info.cartucho });
         }
 
-        if (info.tipo === "impresora") {
+        if (info.tipo.toLocaleLowerCase() === "impresora") {
             this.setState({ tinta: info.tinta, cartucho: info.cartucho });
         }
 
-        if (info.tipo === "brazalete") {
+        if (info.tipo.toLocaleLowerCase() === "brazalete") {
             this.setState({ tinta: info.tinta, cartucho: info.cartucho });
             this.setState({ rollo: info.rolloBrazalete, toner: info.toner });
         }
 
-        if (info.tipo === "escaner") {
+        if (info.tipo.toLocaleLowerCase() === "escáner") {
             this.setState({ rodillo: info.rodillo });
         }
 
-        if (info.tipo === "multifuncional") {
+        if (info.tipo.toLocaleLowerCase() === "multifuncional") {
             this.setState({ rodillo: info.rodillo, toner: info.toner });
             this.setState({ cartucho: info.cartucho });
         }
+        this.setState({ key: info.key });
 
     }
 
@@ -148,11 +166,11 @@ class FormularioImpresora extends React.Component {
                                     onChange={(value) => {
                                         this.setState({ tipo: value });
                                     }}>
-                                    <Select.Option value="multifuncional">Multifuncional</Select.Option>
-                                    <Select.Option value="matricial">Matricial</Select.Option>
-                                    <Select.Option value="brazalete">Brazalete</Select.Option>
-                                    <Select.Option value="impresora">Impresora</Select.Option>
-                                    <Select.Option value="escaner">Escaner</Select.Option>
+                                    <Select.Option value="Multifuncional">Multifuncional</Select.Option>
+                                    <Select.Option value="Matricial">Matricial</Select.Option>
+                                    <Select.Option value="Brazalete">Brazalete</Select.Option>
+                                    <Select.Option value="Impresora">Impresora</Select.Option>
+                                    <Select.Option value="Escáner">Escáner</Select.Option>
                                 </Select>
                             )}
                         </Form.Item>
@@ -183,7 +201,7 @@ class FormularioImpresora extends React.Component {
                             decorator={getFieldDecorator} />
 
                         {
-                            this.state.tipo === "matricial" ?
+                            this.state.tipo.toLocaleLowerCase() === "matricial" ?
                                 <div>
                                     <Form.Item
                                         label="Cinta">
@@ -211,7 +229,7 @@ class FormularioImpresora extends React.Component {
                         }
 
                         {
-                            this.state.tipo === "impresora" ?
+                            this.state.tipo.toLocaleLowerCase() === "impresora" ?
                                 <div>
                                     <Form.Item
                                         label="Tinta">
@@ -235,7 +253,7 @@ class FormularioImpresora extends React.Component {
                         }
 
                         {
-                            this.state.tipo === "brazalete" ?
+                            this.state.tipo.toLocaleLowerCase() === "brazalete" ?
                                 <div>
                                     <Form.Item
                                         label="Rollo-Brazalete">
@@ -277,7 +295,7 @@ class FormularioImpresora extends React.Component {
                         }
 
                         {
-                            this.state.tipo === "escaner" ?
+                            this.state.tipo.toLocaleLowerCase() === "escáner" ?
                                 <div>
                                     <Form.Item
                                         label="Rodillo">
@@ -292,7 +310,7 @@ class FormularioImpresora extends React.Component {
                         }
 
                         {
-                            this.state.tipo === "multifuncional" ?
+                            this.state.tipo.toLocaleLowerCase() === "multifuncional" ?
                                 <div>
                                     <Form.Item
                                         label="Cartucho">

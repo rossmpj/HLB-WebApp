@@ -35,15 +35,22 @@ class FormularioEquipo extends React.Component {
             encargado_registro: "admin",
             id: "",
             tipo_equipo: "",
-            equipos: []
+            equipos: [],
+            editionMode: false
         };
         this.handle_guardar = this.handle_guardar.bind(this);
     }
 
     componentDidMount = () => {
-        /* var comp = ["Cpu", "Impresora", "Laptop", "Router", "Otro"];
-        this.setState({ equipos: comp }); */
         this.mostrar_tipo_equipos();
+        if (typeof this.props.data !== 'undefined') {
+            if (typeof this.props.data.state !== 'undefined'
+                && typeof this.props.data.state.info !== 'undefined'
+            ) {
+                this.cargar_datos(this.props.data.state.info);
+                this.setState({ editionMode: true });
+            }
+        }
     }
 
     mostrar_tipo_equipos() {
@@ -215,7 +222,7 @@ class FormularioEquipo extends React.Component {
                                     }}
                                 >
                                     {
-                                        this.state.equipos.map((dato,index) =>
+                                        this.state.equipos.map((dato, index) =>
                                             <Select.Option key={index} value={dato}>{dato}</Select.Option>
                                         )
                                     }
