@@ -83,10 +83,9 @@ class FormularioImpresora extends React.Component {
                      Axios.editar_impresora(values).then(res => {
                         message.loading({ content: 'Actualizando datos...', key });
                         setTimeout(() => {
-                            message.success({ content: res.data.log, key, duration: 3 });
+                            message.success({ content: 'Registro actualizado satisfactoriamente', key, duration: 3 });
                         }, 1000);
                     }).catch(err => {
-                        console.log(err)
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
                     }); 
                 }
@@ -186,6 +185,7 @@ class FormularioImpresora extends React.Component {
                                 rules: [{ required: true, message: 'Debe seleccionar el estado' }],
                             })(
                                 <Select>
+                                    <Select.Option value="O">Operativo</Select.Option>
                                     <Select.Option value="D">Disponible</Select.Option>
                                     <Select.Option value="ER">En revisión</Select.Option>
                                     <Select.Option value="R">Reparado</Select.Option>

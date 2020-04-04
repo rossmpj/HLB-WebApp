@@ -36,8 +36,12 @@ class TablaEquipo extends React.Component {
 
     llenar_tabla() {
         let datos = [];
+        let empleado ="";
         Axios.mostrar_equipos().then(res => {
             res.data.forEach(function (dato) {
+                if (dato.empleado !== null) {
+                    empleado = dato.empleado.concat(" ", dato.apellido);
+                }
                 let equipos = {
                     key: dato.id_equipo,
                     estado_operativo: dato.estado_operativo,
@@ -49,9 +53,9 @@ class TablaEquipo extends React.Component {
                     numero_serie: dato.numero_serie,
                     encargado_registro: dato.encargado_registro,
                     componente_principal: dato.componente_principal,
-                    asignado: dato.asignado,
+                    asignado: empleado,
                     fecha_registro: dato.fecha_registro,
-                    ip: dato.ip
+                    ip: dato.direccion_ip
                 }
                 datos.push(equipos)
             });
@@ -187,8 +191,25 @@ class TablaEquipo extends React.Component {
         /* message.error("Error al eliminar el registro, inténtelo más tarde"); */
     }
 
-    sortString(a, b) {
-        return a.localeCompare(b);
+    stringSorter(a, b) {
+        let y = a || '';
+        let u = b || '';
+        return y.localeCompare(u);
+    }
+
+    filtrar_array(arr, value) {
+        if (arr !== null) {
+            return arr.indexOf(value) === 0;
+        }
+    }
+
+    busqueda_array(arr,dataIndex,value) {
+        if (arr[dataIndex] !== null) {
+            return arr[dataIndex]
+                .toString()
+                .toLowerCase()
+                .includes(value.toLowerCase())
+        }
     }
 
     getColumnSearchProps = dataIndex => ({
@@ -220,11 +241,7 @@ class TablaEquipo extends React.Component {
         filterIcon: filtered => (
             <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
         ),
-        onFilter: (value, record) =>
-            record[dataIndex]
-                .toString()
-                .toLowerCase()
-                .includes(value.toLowerCase()),
+        onFilter: (value, record) => this.busqueda_array(record,dataIndex, value),
         onFilterDropdownVisibleChange: visible => {
             if (visible) {
                 setTimeout(() => this.searchInput.select());
@@ -248,7 +265,7 @@ class TablaEquipo extends React.Component {
 
     render() {
         const tipo_render = (record) => {
-            switch (record.tipo) {
+            switch (record.tipo_equipo.toLowerCase()) {
                 case "impresora":
                     return <Link to={{ pathname: '/impresora/form', state: { info: record, titulo: "Editar impresora" } }}>
                         <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
@@ -273,7 +290,7 @@ class TablaEquipo extends React.Component {
         }
 
         const tipo_link = (record) => {
-            switch (record.tipo) {
+            switch (record.tipo_equipo.toLowerCase()) {
                 case "impresora":
                     return '/impresora/view'
                 case "cpu":
@@ -288,7 +305,7 @@ class TablaEquipo extends React.Component {
         }
 
         const tipo_data = (record) => {
-            switch (record.tipo) {
+            switch (record.tipo_equipo.toLowerCase()) {
                 case "impresora":
                     return this.cargar_impresora(record.codigo);
                 case "cpu":
@@ -307,6 +324,7 @@ class TablaEquipo extends React.Component {
                 title: 'Código',
                 dataIndex: 'codigo',
                 key: 'codigo',
+                fixed: 'left',
                 render: (text, record) => <Link to={{ pathname: `${tipo_link(record)}`, state: { info: tipo_data(record) } }}>{text}</Link>,
                 ...this.getColumnSearchProps('codigo')
             },
@@ -342,8 +360,8 @@ class TablaEquipo extends React.Component {
                         value: 'B',
                     }
                 ],
-                onFilter: (value, record) => record.estado_operativo.indexOf(value) === 0,
-                sorter: (a, b) => a.estado_operativo.length - b.estado_operativo.length
+                onFilter: (value, record) => this.filtrar_array(record.estado_operativo, value),
+                sorter: (a, b) => this.stringSorter(a.estado_operativo, b.estado_operativo)
             },
 
             {
@@ -369,7 +387,7 @@ class TablaEquipo extends React.Component {
                 title: 'Fecha registro',
                 dataIndex: 'fecha_registro',
                 key: 'fecha_registro',
-                sorter: (a, b) => this.sortString(a.fecha_registro, b.fecha_registro)
+                sorter: (a, b) => this.stringSorter(a.fecha_registro, b.fecha_registro)
             },
             {
                 title: 'Asignado',
@@ -399,6 +417,7 @@ class TablaEquipo extends React.Component {
             {
                 title: 'Acción',
                 key: 'accion',
+                fixed: 'right',
                 render: (text, record) => (
                     <div>
                         {tipo_render(record)}

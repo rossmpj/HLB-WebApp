@@ -96,6 +96,20 @@ class TablaImpresora extends React.Component {
         return y.localeCompare(u);
     }
 
+    filtrar_array(arr, value) {
+        if (arr !== null) {
+            return arr.indexOf(value) === 0;
+        }
+    }
+
+    busqueda_array(arr,dataIndex,value) {
+        if (arr[dataIndex] !== null) {
+            return arr[dataIndex]
+                .toString()
+                .toLowerCase()
+                .includes(value.toLowerCase())
+        }
+    }
 
     handleDelete(key) {
         const dataSource = [...this.state.dataSource];
@@ -133,11 +147,7 @@ class TablaImpresora extends React.Component {
         filterIcon: filtered => (
             <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
         ),
-        onFilter: (value, record) =>
-            record[dataIndex]
-                .toString()
-                .toLowerCase()
-                .includes(value.toLowerCase()),
+        onFilter: (value, record) => this.busqueda_array(record,dataIndex, value),
         onFilterDropdownVisibleChange: visible => {
             if (visible) {
                 setTimeout(() => this.searchInput.select());
@@ -164,6 +174,7 @@ class TablaImpresora extends React.Component {
                 title: 'Código',
                 dataIndex: 'codigo',
                 key: 'codigo',
+                fixed: 'left',
                 render: (text, record) => <Link to={{ pathname: '/impresora/view', state: { info: record } }}>{text}</Link>,
                 ...this.getColumnSearchProps('codigo')
             },
@@ -195,7 +206,7 @@ class TablaImpresora extends React.Component {
                         value: 'Unidad Educativa San José del Buen Pastor',
                     }
                 ],
-                onFilter: (value, record) => record.bspi.indexOf(value) === 0,
+                onFilter: (value, record) => this.filtrar_array(record.bspi, value),
                 sorter: (a, b) => this.stringSorter(a.bspi, b.bspi)
             },
             {
@@ -203,8 +214,8 @@ class TablaImpresora extends React.Component {
                 dataIndex: 'dpto',
                 key: 'dpto',
                 filters: this.departamentos(),
-                onFilter: (value, record) => record.dpto.indexOf(value) === 0,
-                sorter: (a, b) => a.dpto.length - b.dpto.length
+                onFilter: (value, record) => this.filtrar_array(record.dpto, value),
+                sorter: (a, b) => this.stringSorter(a.dpto, b.dpto)
             },
             {
                 title: 'Asignado',
@@ -238,8 +249,8 @@ class TablaImpresora extends React.Component {
                         value: 'Multifuncional',
                     },
                 ],
-                onFilter: (value, record) => record.tipo.indexOf(value) === 0,
-                sorter: (a, b) => a.tipo.length - b.tipo.length
+                onFilter: (value, record) => this.filtrar_array(record.tipo, value),
+                sorter: (a, b) => this.stringSorter(a.tipo, b.tipo)
 
             },
             {
@@ -274,8 +285,8 @@ class TablaImpresora extends React.Component {
                         value: 'B',
                     }
                 ],
-                onFilter: (value, record) => record.estado_operativo.indexOf(value) === 0,
-                sorter: (a, b) => a.estado_operativo.length - b.estado_operativo.length
+                onFilter: (value, record) => this.filtrar_array(record.estado_operativo, value),
+                sorter: (a, b) => this.stringSorter(a.estado_operativo, b.estado_operativo)
             },
             {
                 title: 'Modelo',
@@ -333,6 +344,7 @@ class TablaImpresora extends React.Component {
             {
                 title: 'Acción',
                 key: 'accion',
+                fixed: 'right',
                 render: (text, record) => (
                     <div>
                         <Link to={{

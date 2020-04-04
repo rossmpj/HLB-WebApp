@@ -22,7 +22,6 @@ class VistaEquipo extends React.Component {
     componentDidMount() {
         if (typeof this.props.location.state !== 'undefined') {
             const { titulo } = this.props.location.state;
-            console.log(titulo);
             this.setState({ titulo: titulo });
         }
     }

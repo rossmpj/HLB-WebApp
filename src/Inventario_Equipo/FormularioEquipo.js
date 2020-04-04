@@ -36,7 +36,12 @@ class FormularioEquipo extends React.Component {
             id: "",
             tipo_equipo: "",
             equipos: [],
-            editionMode: false
+            editionMode: false,
+            codigo: "",
+            numero_serie: "",
+            modelo: "",
+            id_marca: "",
+            ip: ""
         };
         this.handle_guardar = this.handle_guardar.bind(this);
     }
@@ -73,31 +78,42 @@ class FormularioEquipo extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 values.encargado_registro = this.state.encargado_registro;
-                Axios.crear_otro_equipo(values).then(res => {
-                    message.loading({ content: 'Guardando datos...', key });
-                    setTimeout(() => {
-                        message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
-                    }, 1000);
-                }).catch(err => {
-                    console.log(err)
-                    message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
-                });
+                if (!this.state.editionMode) {
+                    Axios.crear_otro_equipo(values).then(res => {
+                        message.loading({ content: 'Guardando datos...', key });
+                        setTimeout(() => {
+                            message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+                        }, 1000);
+                    }).catch(err => {
+                        console.log(err)
+                        message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
+                    });
+                } else {
+                    Axios.editar_equipo(values).then(res => {
+                        message.loading({ content: 'Actualizando datos...', key });
+                        setTimeout(() => {
+                            message.success({ content: res.data.log, key, duration: 3 });
+                        }, 1000);
+                    }).catch(err => {
+                        console.log(err);
+                    });
+                }
             }
         });
     }
 
     cargar_datos(info) {
         this.props.form.setFieldsValue({
-            codigo: info.codigo,
-            numero_serie: info.numero_serie,
-            modelo: info.modelo,
-            id_marca: info.id_marca,
             estado_operativo: info.estado_operativo,
-            ip: info.ip,
+            codigo: info.codigo,
+            tipo_equipo: info.tipo_equipo,
+            id_marca: info.id_marca,
+            modelo: info.modelo,
+            descripcion: info.descripcion,
+            numero_serie: info.numero_serie,
             componente_principal: info.componente_principal,
             asignado: info.asignado,
-            descripcion: info.descripcion,
-            /* tipo: info.tipo */
+            ip: info.ip,
         })
     }
 

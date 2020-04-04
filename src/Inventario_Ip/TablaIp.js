@@ -15,54 +15,6 @@ import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosTipo';
 const { Title } = Typography;
 
-/* const ips = [
-    {
-        key: '1',
-        ip: '192.168.1.1',
-        estado: 'En uso',
-        asignacion: '2020-01-01',
-        hostname: 'Procyon',
-        subred: '192.168.0.0',
-        fortigate: 'Recepcion',
-        maquinas: 5,
-        asignado: 'Fermín Romero',
-        encargado: 'admin',
-        observacion: 'ninguna'
-
-    },
-    {
-        key: '2',
-        ip: '192.168.1.2',
-        estado: 'Libre',
-        asignacion: '2020-01-02',
-        hostname: 'Antares',
-        subred: '192.168.0.1',
-        fortigate: 'Recepcion',
-        maquinas: 1,
-        asignado: 'Juan Sempere',
-        encargado: 'yo',
-        observacion: 'ninguna'
-
-    },
-    {
-        key: '3',
-        ip: '192.168.1.3',
-        estado: 'Libre',
-        asignacion: '2020-01-02',
-        hostname: 'Betelgeuse',
-        subred: '192.168.0.0',
-        fortigate: 'Farmacia',
-        maquinas: 7,
-        asignado: 'Alicia Sempere',
-        encargado: 'yo',
-        observacion: 'ninguna'
-
-    }
-
-
-] */
-
-
 class TablaIp extends React.Component {
     constructor(props) {
         super(props);
@@ -123,7 +75,24 @@ class TablaIp extends React.Component {
     }
 
     stringSorter(a, b) {
-        return a.localeCompare(b);
+        let y = a || '';
+        let u = b || '';
+        return y.localeCompare(u);
+    }
+
+    filtrar_array(arr, value) {
+        if (arr !== null) {
+            return arr.indexOf(value) === 0;
+        }
+    }
+
+    busqueda_array(arr,dataIndex,value) {
+        if (arr[dataIndex] !== null) {
+            return arr[dataIndex]
+                .toString()
+                .toLowerCase()
+                .includes(value.toLowerCase())
+        }
     }
 
     getColumnSearchProps = dataIndex => ({
@@ -155,11 +124,7 @@ class TablaIp extends React.Component {
         filterIcon: filtered => (
             <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
         ),
-        onFilter: (value, record) =>
-            record[dataIndex]
-                .toString()
-                .toLowerCase()
-                .includes(value.toLowerCase()),
+        onFilter: (value, record) => this.busqueda_array(record,dataIndex, value),
         onFilterDropdownVisibleChange: visible => {
             if (visible) {
                 setTimeout(() => this.searchInput.select());
@@ -187,6 +152,7 @@ class TablaIp extends React.Component {
                 title: 'Ip',
                 dataIndex: 'ip',
                 key: 'ip',
+                fixed: 'left',
                 render: (text, record) => <Link to={{ pathname: '/ip/detail', state: { info: record } }}>{text}</Link>,
                 ...this.getColumnSearchProps('ip')
             },
@@ -204,8 +170,8 @@ class TablaIp extends React.Component {
                         value: 'Libre',
                     }
                 ],
-                onFilter: (value, record) => record.estado.indexOf(value) === 0,
-                sorter: (a, b) => a.estado.length - b.estado.length
+                onFilter: (value, record) => this.filtrar_array(record.estado, value),
+                sorter: (a, b) => this.stringSorter(a.estado, b.estado)
             },
             {
                 title: 'Fecha asignación',
@@ -230,27 +196,27 @@ class TablaIp extends React.Component {
                 title: 'Fortigate',
                 dataIndex: 'fortigate',
                 key: 'fortigate',
-                sorter: (a, b) => a.fortigate.length - b.fortigate.length
+                sorter: (a, b) => this.stringSorter(a.fortigate, b.fortigate)
             },
             {
                 title: 'Máquinas adicionales',
                 dataIndex: 'maquinas',
                 key: 'maquinas',
-                sorter: (a, b) => a.maquinas.length - b.maquinas.length
+                sorter: (a, b) => this.stringSorter(a.maquinas, b.maquinas)
 
             },
             {
                 title: 'Asignado',
                 dataIndex: 'asignado',
                 key: 'asignado',
-                sorter: (a, b) => a.asignado.length - b.asignado.length
+                sorter: (a, b) => this.stringSorter(a.asignado, b.asignado)
 
             },
             {
                 title: 'Encargado',
                 dataIndex: 'encargado',
                 key: 'encargado',
-                sorter: (a, b) => a.encargado.length - b.encargado.length
+                sorter: (a, b) => this.stringSorter(a.encargado, b.encargado)
             },
             {
                 title: 'Observación',
@@ -260,6 +226,7 @@ class TablaIp extends React.Component {
             {
                 title: 'Acción',
                 key: 'accion',
+                fixed: 'right',
                 render: (text, record) => (
                     <div>
                         <Link to={{
