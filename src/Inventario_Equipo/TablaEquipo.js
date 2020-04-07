@@ -23,7 +23,10 @@ class TablaEquipo extends React.Component {
             showTable: true,
             searchText: '',
             dataSource: [],
-            info: []
+            info: [],
+            filteredInfo: null,
+            sortedInfo: null,
+            index: 0
         };
         this.handleClick = this.handleClick.bind(this);
     }
@@ -36,7 +39,7 @@ class TablaEquipo extends React.Component {
 
     llenar_tabla() {
         let datos = [];
-        let empleado ="";
+        let empleado = "";
         Axios.mostrar_equipos().then(res => {
             res.data.forEach(function (dato) {
                 if (dato.empleado !== null) {
@@ -47,12 +50,12 @@ class TablaEquipo extends React.Component {
                     estado_operativo: dato.estado_operativo,
                     codigo: dato.codigo,
                     tipo_equipo: dato.tipo_equipo,
-                    marca: dato.marca,                    
+                    marca: dato.marca,
                     modelo: dato.modelo,
                     descripcion: dato.descripcion,
                     numero_serie: dato.numero_serie,
-                    encargado_registro: dato.encargado_registro,
-                    componente_principal: dato.componente_principal,
+                    encargado_registro: dato.encargado,
+                    componente_principal: dato.principal,
                     asignado: empleado,
                     fecha_registro: dato.fecha_registro,
                     ip: dato.direccion_ip
@@ -65,6 +68,32 @@ class TablaEquipo extends React.Component {
             message.error('No se pueden cargar los datos, revise la conexión con el servidor', 4);
         });
         this.setState({ dataSource: datos });
+    }
+
+    limpiarFiltros = () => {
+        this.setState({ filteredInfo: null });
+    };
+
+    handleChange = (pagination, filters, sorter) => {
+        console.log('Various parameters', pagination, filters, sorter);
+        this.setState({
+            filteredInfo: filters,
+            sortedInfo: sorter,
+        });
+    };
+
+    clearAll = () => {
+        this.setState({
+            filteredInfo: null,
+            sortedInfo: null,
+            index: this.state.index + 1
+        });
+    };
+
+    limpiarBusquedas = () => {
+        this.setState({
+            index: this.state.index + 1
+        })
     }
 
     componentDidMount() {
@@ -203,7 +232,7 @@ class TablaEquipo extends React.Component {
         }
     }
 
-    busqueda_array(arr,dataIndex,value) {
+    busqueda_array(arr, dataIndex, value) {
         if (arr[dataIndex] !== null) {
             return arr[dataIndex]
                 .toString()
@@ -241,7 +270,7 @@ class TablaEquipo extends React.Component {
         filterIcon: filtered => (
             <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
         ),
-        onFilter: (value, record) => this.busqueda_array(record,dataIndex, value),
+        onFilter: (value, record) => this.busqueda_array(record, dataIndex, value),
         onFilterDropdownVisibleChange: visible => {
             if (visible) {
                 setTimeout(() => this.searchInput.select());
@@ -268,23 +297,23 @@ class TablaEquipo extends React.Component {
             switch (record.tipo_equipo.toLowerCase()) {
                 case "impresora":
                     return <Link to={{ pathname: '/impresora/form', state: { info: record, titulo: "Editar impresora" } }}>
-                        <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
+                        <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
                     </Link>
                 case "cpu":
                     return <Link to={{ pathname: '/', state: { info: record, titulo: "Editar Desktop" } }}>
-                        <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
+                        <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
                     </Link>;
                 case "laptop":
                     return <Link to={{ pathname: '/', state: { info: record, titulo: "Editar Laptop" } }}>
-                        <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
+                        <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
                     </Link>;
                 case "router":
                     return <Link to={{ pathname: '/', state: { info: record, titulo: "Editar router" } }}>
-                        <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
+                        <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
                     </Link>;
                 default:
                     return <Link to={{ pathname: '/otrosequipos/form', state: { info: record, titulo: "Editar equipo" } }}>
-                        <Button style={{ marginRight: '2px' }} type="info" size="small" icon="edit" />
+                        <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
                     </Link>
             }
         }
@@ -427,7 +456,7 @@ class TablaEquipo extends React.Component {
                             cancelText="No"
                             onConfirm={() => this.handleDelete(record.key)}
                         >
-                            <Button size="small" type="error" icon="delete" />
+                            <Button size="small" type="danger" icon="delete" />
                         </Popconfirm>
                     </div>
                 ),
@@ -447,7 +476,7 @@ class TablaEquipo extends React.Component {
                     <div >
                         <Row>
                             <Col className='flexbox'>
-                                <ButtonGroup style={{ align: 'right' }}>
+                                <ButtonGroup>
                                     <Button type="primary" icon="import">Importar</Button>
                                     <Button type="primary" icon="cloud-download">Exportar</Button>
                                 </ButtonGroup>
@@ -455,7 +484,13 @@ class TablaEquipo extends React.Component {
                         </Row>
                     </div>
                     <br />
-                    <Table size="medium" tableLayout={undefined} scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
+                    <div className="table-operations">
+                        <Button onClick={this.limpiarFiltros}>Limpiar filtros</Button>
+                        <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>
+                        <Button onClick={this.clearAll}>Limpiar todo</Button>
+                    </div>
+                    <Table bordered key={this.state.index} onChange={this.handleChange} size="small"
+                        scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
             </div>
         );

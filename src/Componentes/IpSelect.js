@@ -14,7 +14,7 @@ class IpSelect extends React.Component {
     componentDidMount = () => {
       let datos = [];
       MetodosAxios.ips_libres().then(res => {
-      res.data.map(registro => {
+      res.data.forEach(function (registro) {
         let ip = {
           id: registro.id_ip,
           dato: registro.direccion_ip

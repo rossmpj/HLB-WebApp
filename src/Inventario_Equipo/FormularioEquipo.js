@@ -6,6 +6,7 @@ import InputComponent from '../Componentes/InputComponent'
 import AsignarSelect from '../Componentes/AsignarSelect'
 import MarcaSelect from '../Componentes/MarcaSelect'
 import IpSelect from '../Componentes/IpSelect'
+import EstadoSelect from '../Componentes/EstadoSelect'
 import ComponentePrincipal from '../Componentes/ComponentePrincipal'
 import FormularioImpresora from '../Inventario_Impresora/FormularioImpresora'
 import FormularioDesktop from '../Inventario_Desktop/FormularioDesktop'
@@ -41,7 +42,8 @@ class FormularioEquipo extends React.Component {
             numero_serie: "",
             modelo: "",
             id_marca: "",
-            ip: ""
+            ip: "",
+            key:""
         };
         this.handle_guardar = this.handle_guardar.bind(this);
     }
@@ -89,14 +91,16 @@ class FormularioEquipo extends React.Component {
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
                     });
                 } else {
-                    Axios.editar_equipo(values).then(res => {
+                    console.log(values);
+                    values.key=this.state.key;
+                     Axios.editar_equipo(values).then(res => {
                         message.loading({ content: 'Actualizando datos...', key });
                         setTimeout(() => {
                             message.success({ content: res.data.log, key, duration: 3 });
                         }, 1000);
                     }).catch(err => {
                         console.log(err);
-                    });
+                    }); 
                 }
             }
         });
@@ -104,17 +108,18 @@ class FormularioEquipo extends React.Component {
 
     cargar_datos(info) {
         this.props.form.setFieldsValue({
-            estado_operativo: info.estado_operativo,
-            codigo: info.codigo,
+             estado_operativo: info.estado_operativo,
+            codigo: info.codigo, 
             tipo_equipo: info.tipo_equipo,
-            id_marca: info.id_marca,
+             id_marca: info.marca,
             modelo: info.modelo,
             descripcion: info.descripcion,
             numero_serie: info.numero_serie,
             componente_principal: info.componente_principal,
             asignado: info.asignado,
-            ip: info.ip,
-        })
+            ip: info.ip
+        });
+        this.setState({ key: info.key });
     }
 
 
@@ -171,18 +176,11 @@ class FormularioEquipo extends React.Component {
                                 required={true}
                                 decorator={getFieldDecorator} />
 
-                            <Form.Item label="Estado">
-                                {getFieldDecorator('estado_operativo', {
-                                    rules: [{ required: true, message: 'Debe seleccionar el estado' }],
-                                })(
-                                    <Select>
-                                        <Select.Option value="D">Disponible</Select.Option>
-                                        <Select.Option value="ER">En revisión</Select.Option>
-                                        <Select.Option value="R">Reparado</Select.Option>
-                                        <Select.Option value="B">De baja</Select.Option>
-                                    </Select>
-                                )}
-                            </Form.Item>
+                            <EstadoSelect
+                                class=""
+                                id="estado_operativo"
+                                required={true}
+                                decorator={getFieldDecorator} />
 
                             <IpSelect
                                 class=""

@@ -25,7 +25,11 @@ class TablaIp extends React.Component {
             pagination: {},
             loading: false,
             searchText: '',
-            dataSource: []
+            dataSource: [],
+            filteredInfo: null,
+            sortedInfo: null,
+            index: 0
+
         };
         this.handleClick = this.handleClick.bind(this);
     }
@@ -62,6 +66,32 @@ class TablaIp extends React.Component {
         });
     }
 
+    limpiarFiltros = () => {
+        this.setState({ filteredInfo: null });
+    };
+
+    handleChange = (pagination, filters, sorter) => {
+        console.log('Various parameters', pagination, filters, sorter);
+        this.setState({
+            filteredInfo: filters,
+            sortedInfo: sorter,
+        });
+    };
+
+    clearAll = () => {
+        this.setState({
+            filteredInfo: null,
+            sortedInfo: null,
+            index: this.state.index + 1
+        });
+    };
+
+    limpiarBusquedas = () => {
+        this.setState({
+            index: this.state.index + 1
+        })
+    }
+
     componentDidMount() {
         this.llenar_tabla();
     }
@@ -86,7 +116,7 @@ class TablaIp extends React.Component {
         }
     }
 
-    busqueda_array(arr,dataIndex,value) {
+    busqueda_array(arr, dataIndex, value) {
         if (arr[dataIndex] !== null) {
             return arr[dataIndex]
                 .toString()
@@ -124,7 +154,7 @@ class TablaIp extends React.Component {
         filterIcon: filtered => (
             <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
         ),
-        onFilter: (value, record) => this.busqueda_array(record,dataIndex, value),
+        onFilter: (value, record) => this.busqueda_array(record, dataIndex, value),
         onFilterDropdownVisibleChange: visible => {
             if (visible) {
                 setTimeout(() => this.searchInput.select());
@@ -236,7 +266,7 @@ class TablaIp extends React.Component {
                                 titulo: "Editar dirección IP"
                             }
                         }} >
-                            <Button style={{ marginRight: '7px' }} size="small" type="info" icon="edit" />
+                            <Button style={{ marginRight: '2px' }} size="small" type="primary" icon="edit" />
                         </Link>
                         <Popconfirm
                             title="¿Desea eliminar este registro?"
@@ -244,7 +274,7 @@ class TablaIp extends React.Component {
                             cancelText="No"
                         /* onConfirm={} */
                         >
-                            <Button size="small" type="error" icon="delete" />
+                            <Button size="small" type="danger" icon="delete" />
                         </Popconfirm>
                     </div>
                 ),
@@ -273,7 +303,13 @@ class TablaIp extends React.Component {
                         </Row>
                     </div>
                     <br />
-                    <Table size="medium" tableLayout={undefined} scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
+                    <div className="table-operations">
+                        <Button onClick={this.limpiarFiltros}>Limpiar filtros</Button>
+                        <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>
+                        <Button onClick={this.clearAll}>Limpiar todo</Button>
+                    </div>
+                    <Table bordered key={this.state.index} onChange={this.handleChange} size="small"
+                        scroll={{ x: 'max-content' }} columns={columns}  dataSource={this.state.dataSource}></Table>
                 </div>
             </div>
         );

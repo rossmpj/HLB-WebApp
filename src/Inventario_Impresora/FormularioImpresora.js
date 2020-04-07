@@ -14,6 +14,7 @@ import AsignarSelect from '../Componentes/AsignarSelect'
 import MarcaSelect from '../Componentes/MarcaSelect'
 import IpSelect from '../Componentes/IpSelect'
 import ComponentePrincipal from '../Componentes/ComponentePrincipal'
+import EstadoSelect from '../Componentes/EstadoSelect'
 import Axios from '../Servicios/AxiosTipo'
 
 const { Content } = Layout;
@@ -67,8 +68,8 @@ class FormularioImpresora extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                values.encargado_registro=this.state.encargado_registro;
-                if(!this.state.editionMode){
+                values.encargado_registro = this.state.encargado_registro;
+                if (!this.state.editionMode) {
                     Axios.crear_impresora(values).then(res => {
                         message.loading({ content: 'Guardando datos...', key });
                         setTimeout(() => {
@@ -78,18 +79,18 @@ class FormularioImpresora extends React.Component {
                         console.log(err)
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
                     });
-                }else{
-                    values.key=this.state.key;
-                     Axios.editar_impresora(values).then(res => {
+                } else {
+                    values.key = this.state.key;
+                    Axios.editar_impresora(values).then(res => {
                         message.loading({ content: 'Actualizando datos...', key });
                         setTimeout(() => {
                             message.success({ content: 'Registro actualizado satisfactoriamente', key, duration: 3 });
                         }, 1000);
                     }).catch(err => {
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
-                    }); 
+                    });
                 }
-               
+
 
             }
         });
@@ -150,7 +151,7 @@ class FormularioImpresora extends React.Component {
                             label="Código"
                             id="codigo"
                             decorator={getFieldDecorator} />
-                            
+
                         <InputComponent
                             class=""
                             label="Número de serie"
@@ -180,19 +181,11 @@ class FormularioImpresora extends React.Component {
                             required={true}
                             decorator={getFieldDecorator} />
 
-                        <Form.Item label="Estado">
-                            {getFieldDecorator('estado_operativo', {
-                                rules: [{ required: true, message: 'Debe seleccionar el estado' }],
-                            })(
-                                <Select>
-                                    <Select.Option value="O">Operativo</Select.Option>
-                                    <Select.Option value="D">Disponible</Select.Option>
-                                    <Select.Option value="ER">En revisión</Select.Option>
-                                    <Select.Option value="R">Reparado</Select.Option>
-                                    <Select.Option value="B">De baja</Select.Option>
-                                </Select>
-                            )}
-                        </Form.Item>
+                        <EstadoSelect
+                            class=""
+                            id="estado_operativo"
+                            required={true}
+                            decorator={getFieldDecorator} />
 
                         <InputComponent
                             class=""
