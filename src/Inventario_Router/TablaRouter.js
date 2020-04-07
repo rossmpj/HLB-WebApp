@@ -3,6 +3,7 @@ import { Button, Row, Col, Table, Input, Icon, Popconfirm, Typography, message }
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import AxiosRouter from '../Servicios/AxiosRouter'
+import FuncionesAuxiliares from '../FuncionesAuxiliares'
 
 const { Title } = Typography;
 const key = 'updatable';
@@ -27,36 +28,36 @@ class TablaRouter extends React.Component{
     this.obtener_datos();
   }
 
-  obtener_datos = () => {
-    let datos = [];
-    AxiosRouter.listar_routers().then(res => {
-      res.data.forEach(function (registro) {
-        var dip = registro.ip === null ? ' ' : registro.ip;
-        let router = {
-          key: registro.id_router,
-          codigo: registro.id_router,
-          bspi: registro.bspi_punto,
-          departamento: registro.departamento,
-          nombre: registro.nombre,
-          pass: registro.pass,
-          penlace: registro.puerta_enlace,
-          usuario: registro.usuario,
-          clave: registro.clave,
-          marca: registro.marca,
-          modelo: registro.modelo,
-          num_serie: registro.numero_serie, 
-          estado: registro.estado_operativo,
-          ip: dip,
-          empleado: registro.nempleado+' '+registro.apellido,
-          descripcion: registro.descripcion
-        }
-        datos.push(router);
-      });
-      this.setState({ dataSource: datos });
-    }).catch(err => {
-      message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
-  });
-  }
+    obtener_datos = () => {
+        let datos = [];
+        AxiosRouter.listar_routers().then(res => {
+        res.data.forEach(function (registro) {
+            var dip = registro.ip === null ? ' ' : registro.ip.toString();
+            let router = {
+            key: registro.id_router,
+            codigo: registro.codigo,
+            bspi: registro.bspi_punto,
+            departamento: registro.departamento,
+            nombre: registro.nombre,
+            pass: registro.pass,
+            penlace: registro.puerta_enlace,
+            usuario: registro.usuario,
+            clave: registro.clave,
+            marca: registro.marca,
+            modelo: registro.modelo,
+            num_serie: registro.numero_serie, 
+            estado: registro.estado_operativo,
+            ip: dip,
+            empleado: registro.nempleado+' '+registro.apellido,
+            descripcion: registro.descripcion
+            }
+            datos.push(router);
+        });
+        this.setState({ dataSource: datos });
+        }).catch(err => {
+            message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
+        });
+    }
   
   componentDidMount = () => {
     this.obtener_datos();
@@ -149,10 +150,6 @@ class TablaRouter extends React.Component{
     this.setState({ dataSource: dataSource.filter(item => item.id !== id) });
   }
 
-  sortString(a,b){
-    return a.localeCompare(b);  
-  }
-
   handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     this.setState({
@@ -178,8 +175,8 @@ class TablaRouter extends React.Component{
           fixed: 'left',
           render: (text, record) => <Link to={{ pathname: '/router/view', state: { info: record } }} >{text}</Link>,
           ...this.getColumnSearchProps('codigo'),
-          //sorter: (a, b) => this.sortString(a.codigo,b.codigo),
-          //sortOrder: sortedInfo.columnKey === 'codigo' && sortedInfo.order,
+          sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.codigo, b.codigo),
+          sortOrder: sortedInfo.columnKey === 'codigo' && sortedInfo.order,
         },
         {
           title: 'BSPI Punto',
@@ -233,7 +230,7 @@ class TablaRouter extends React.Component{
           ],
           filteredValue: filteredInfo.departamento || null,
           onFilter: (value, record) => record.departamento.indexOf(value) === 0,
-          sorter: (a, b) => this.sortString(a.departamento, b.departamento),
+          sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.departamento, b.departamento),
           sortOrder: sortedInfo.columnKey === 'departamento' && sortedInfo.order,
         },
         {
@@ -241,7 +238,7 @@ class TablaRouter extends React.Component{
           dataIndex: 'empleado',
           key: 'empleado',
           ...this.getColumnSearchProps('empleado'),
-          sorter: (a, b) => this.sortString(a.empleado,b.empleado),
+          sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.empleado,b.empleado),
           sortOrder: sortedInfo.columnKey === 'empleado' && sortedInfo.order,
         },
         {
@@ -249,7 +246,7 @@ class TablaRouter extends React.Component{
           dataIndex: 'nombre',
           key: 'nombre',
           ...this.getColumnSearchProps('nombre'),
-          sorter: (a, b) => this.sortString(a.nombre, b.nombre),
+          sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.nombre, b.nombre),
           sortOrder: sortedInfo.columnKey === 'nombre' && sortedInfo.order,
         },  
         {
@@ -275,13 +272,15 @@ class TablaRouter extends React.Component{
           dataIndex: 'ip',
           key: 'ip',
           render: (text, record) => <Link to={{ pathname: '/ip/view', state: { info: record } }} >{text}</Link>,
+          sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.ip, b.ip),
+          sortOrder: sortedInfo.columnKey === 'ip' && sortedInfo.order,
         },
         {
           title: 'Puerta enlace',
           dataIndex: 'penlace',
           key: 'penlace',
           ...this.getColumnSearchProps('penlace'),
-          sorter: (a, b) => this.sortString(a.penlace,b.penlace),
+          sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.penlace,b.penlace),
           sortOrder: sortedInfo.columnKey === 'penlace' && sortedInfo.order,
           
         },
@@ -354,14 +353,14 @@ class TablaRouter extends React.Component{
           fixed: 'right',
           render: (text, record) => (
             <span> 
-              <Link to={{ pathname: '/router/form', state: { info: record.codigo, titulo: "Editar router", disabled: true } }} >
-                <Button style= {{marginRight: '2px'}} onClick={() => console.log("text", record.codigo)} type="primary" ghost size="small" icon="edit" />
+              <Link to={{ pathname: '/router/form', state: { info: record, titulo: "Editar router", disabled: true } }} >
+                <Button style= {{marginRight: '2px'}} type="primary" size="small" icon="edit" />
               </Link>
               
               <Popconfirm placement="topRight" 
               title="¿Desea eliminar este registro?" 
               okText="Si" cancelText="No" onConfirm={() => this.handleDelete(record.codigo)}>
-              <Button type="danger" icon="delete" ghost size="small" /></Popconfirm>
+              <Button type="danger" icon="delete" size="small" /></Popconfirm>
             </span>
           ),  
         },

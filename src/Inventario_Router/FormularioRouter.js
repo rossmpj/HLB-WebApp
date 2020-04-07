@@ -96,11 +96,11 @@ class FormularioRouter extends React.Component {
 
   cargar_datos(info) {
     console.log("record:",info);
-    AxiosRouter.buscar_router_por_id(info).then(respuesta => {
+    AxiosRouter.buscar_router_por_id(info.key).then(respuesta => {
       respuesta.data.forEach(res => {
       console.log(res)
         this.props.form.setFieldsValue({
-          codigo: info,
+          codigo: info.codigo,
           asignar: res.asignado,
           nombre: res.nombre,
           pass: res.pass,
@@ -149,7 +149,7 @@ class FormularioRouter extends React.Component {
                   {getFieldDecorator('clave', { rules: [{ required: true, message: 'Por favor, ingrese una contraseña' }],
                   })( <Input.Password /> )}
                 </Form.Item>
-                <MarcaSelect required={false} id="marca" decorator={getFieldDecorator} />
+                <MarcaSelect required={true} id="marca" decorator={getFieldDecorator} />
                 <InputComp label="Modelo" id="modelo" decorator={getFieldDecorator} /> 
                 <InputComp label="Número de serie" id="nserie" decorator={getFieldDecorator} />              
                 <EstadComp required={true} id="estado" decorator={getFieldDecorator} />

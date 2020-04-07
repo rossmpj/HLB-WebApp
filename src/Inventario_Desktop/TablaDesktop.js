@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Row, Col, Table, Input, Icon, Popconfirm, Tag, Typography } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
+import FuncionesAuxiliares from '../FuncionesAuxiliares'
 
 const { Title } = Typography;
 
@@ -189,10 +190,6 @@ class TablaDesktop extends React.Component{
     }
   });
 
-  sortString(a,b){
-    return a.localeCompare(b);
-  }
-
   handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     this.setState({
@@ -348,7 +345,7 @@ class TablaDesktop extends React.Component{
         filterMultiple: false,
         filteredValue: filteredInfo.so_type || null,
         onFilter: (value, record) => record.so_type.indexOf(value) === 0,
-        sorter: (a, b) => this.sortString(a.so_type,b.so_type),
+        sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.so_type,b.so_type),
         sortOrder: sortedInfo.columnKey === 'so_type' && sortedInfo.order,
       }, 
       {
@@ -369,7 +366,7 @@ class TablaDesktop extends React.Component{
         filterMultiple: false,
         filteredValue: filteredInfo.servpack || null,
         onFilter: (value, record) => record.servpack.indexOf(value) === 0,
-        sorter: (a, b) => this.sortString(a.servpack,b.servpack),
+        sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.servpack,b.servpack),
         sortOrder: sortedInfo.columnKey === 'servpack' && sortedInfo.order,
       }, 
       {
@@ -389,7 +386,7 @@ class TablaDesktop extends React.Component{
         filterMultiple: false,
         filteredValue: filteredInfo.licencia || null,
         onFilter: (value, record) => record.licencia.indexOf(value) === 0,
-        sorter: (a, b) => this.sortString(a.licencia,b.licencia),
+        sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.licencia,b.licencia),
         sortOrder: sortedInfo.columnKey === 'licencia' && sortedInfo.order,
       }, 
       {
@@ -420,7 +417,7 @@ class TablaDesktop extends React.Component{
         ],
         filteredValue: filteredInfo.office || null,
         onFilter: (value, record) => record.office.indexOf(value) === 0,
-        sorter: (a, b) => this.sortString(a.office,b.office),
+        sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.office,b.office),
         sortOrder: sortedInfo.columnKey === 'office' && sortedInfo.order,
       },
       {
@@ -551,12 +548,12 @@ class TablaDesktop extends React.Component{
           this.state.dataSource.length >= 1 ? (
             <span>
               <Link to={{ pathname: '/desktop/form', state: { info: record, titulo: "Editar computadora" } }} >
-                <Button style= {{marginRight: '2px'}} type="primary" icon="edit" />
+                <Button style= {{marginRight: '2px'}} size="small" type="primary" icon="edit" />
               </Link>
               <Popconfirm placement="topRight" 
               title="¿Desea eliminar este registro?" 
               okText="Si" cancelText="No" onConfirm={() => this.handleDelete(record.key)}>
-              <Button type="danger" icon="delete" /></Popconfirm>
+              <Button type="danger" size="small" icon="delete" /></Popconfirm>
             </span>
           ) : null 
         ),

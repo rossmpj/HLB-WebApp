@@ -12,9 +12,8 @@ import DetalleLaptop from './Inventario_Laptop/DetalleLaptop';
 import TablaDesktop from './Inventario_Desktop/TablaDesktop';
 import FormularioDesktop from './Inventario_Desktop/FormularioDesktop';
 import DetalleDesktop from './Inventario_Desktop/DetalleDesktop';
-import DetalleOtrosEquipos from './Inventario_Desktop/DetalleOtrosEquipos';
 import DetalleIP from './Inventario_Router/DetalleIP';
-import DetalleRamDisco from './Inventario_Laptop/DetalleRamDisco';
+import DetalleOtrosEquipos from './FormulariosPC/DetalleOtrosEquipos';
 import Impresora from './Inventario_Impresora/TablaImpresora';
 import VistaImpresora from './Inventario_Impresora/VistaImpresora'
 import TablaIp from './Inventario_Ip/TablaIp';
@@ -114,7 +113,6 @@ class App extends React.Component {
               <Route exact path='/laptop/form' component={FormularioLaptop} />
               <Route exact path='/otros/view' component={DetalleOtrosEquipos} />
               <Route exact path='/ip/view' component={DetalleIP} />
-              <Route exact path='/ram_disco/view' component={DetalleRamDisco} />
               <Route exact path='/impresora' component={Impresora} />
               <Route exact path='/ip' component={TablaIp} />
               <Route exact path='/otrosequipos' component={HomeEquipo} />

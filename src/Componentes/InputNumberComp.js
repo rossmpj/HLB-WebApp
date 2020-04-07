@@ -10,10 +10,11 @@ function InputNumberComp(props) {
             label={props.label}
             text={props.text!=="" ? `${props.text}` : null}
             className= {props.class!=="" ? `${props.class}` : null}
-            style={{ width: '50%' }}
+            //style={{ width: '50%' }}
             >
             {props.decorator(`${props.id}`, {
                 rules: [{ required: true, message: 'Debe completar este campo' }],
+                initialValue: props.initialValue === undefined ? null : `${props.initialValue}`
             })(
                 <InputNumber /> 
             )}

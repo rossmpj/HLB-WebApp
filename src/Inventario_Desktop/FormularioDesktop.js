@@ -1,465 +1,407 @@
-import React from 'react';
-import '../App.css';
-import { Form, Select, Button, Layout, Divider, Skeleton, Icon, Switch, Collapse, Radio, Row, Col, Typography } from 'antd';
-import '../custom-antd.css';
-import MarcaComp from '../Componentes/MarcaSelect';
-import InputComp from '../Componentes/InputComponent';
-import AsignComp from '../Componentes/AsignarSelect';
-import IpSelect from '../Componentes/IpSelect';
-import EstadComp from '../Componentes/EstadoSelect';
-import DescrComp from '../Componentes/DescripcionComponent';
-import CapacComp from '../Componentes/CapacidadComponent';
-import InNumComp from '../Componentes/InputNumberComp';
+import React, { Component } from 'react';
+import FormGral from '../FormulariosPC/FormGeneral';
+import FormSO from '../FormulariosPC/FormSistemaOperativo';
+import FormEquipo from '../FormulariosPC/FormComponente';
+import FormProcess from '../FormulariosPC/FormProcesador';
+import FormMainboard from '../FormulariosPC/FormMainboard';
+import FormDD from '../FormulariosPC/FormularioDinamico.js';
+import { Button, Layout, Row, Col, Typography } from 'antd';
 import { Link } from 'react-router-dom';
+import { DesktopOutlined, WindowsOutlined } from '@ant-design/icons';
+import { GiDesk, GiComputerFan } from "react-icons/gi";
+import { FiCpu, FiSpeaker, FiHardDrive } from "react-icons/fi";
+import { FaRegKeyboard, FaEthernet, FaMemory, FaPlug } from "react-icons/fa";
+import { MdMouse } from "react-icons/md";
+import { GoCircuitBoard, GoServer } from "react-icons/go";
+import { Steps } from 'antd';
 
-let id = 0;
-const { Panel } = Collapse;
+const { Step } = Steps;
 const { Content } = Layout;
-const { Option } = Select;
 const { Title } = Typography;
-const tailLayout = { wrapperCol: { offset: 9, span: 5 } };
-const buttonItemLayout = {   wrapperCol: { span: 14, offset: 8 } };
+const { CamposComunes } = { codigo: '', marca: '', modelo: '', nserie: '', descripcion: '' };
 
-const layout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 14 },
-};
-
-class FormularioDesktop extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      titulo: ""
-    };
-    this.handle_guardar = this.handle_guardar.bind(this);
-  }
-
-  state = {
-    value: 'Noaplica',
-    activo: false,
-  };
-
-  componentDidMount = () => {
-    if (typeof this.props.location !== 'undefined') {
-      const { info } = this.props.location.state;
-      const { titulo } = this.props.location.state;
-      if (titulo === "Editar computadora" && info !== undefined){
-        this.cargar_datos(info);
-      }   
-      this.cambiar_titulo(titulo);
+class FormularioDesktop extends Component {
+    state = {
+        step: 0,
+        titulo: "",
+        general: { codigo: '', asignar: '', nombre_pc: '', usuario_pc: '', ip: '', estado: '', descripcion: '' },
+        sistop: { so: '', tipo_so: '', sp1: false, licencia: false, office: '' },
+        monitor: { CamposComunes }, 
+        teclado: { CamposComunes }, 
+        mouse: { CamposComunes }, 
+        parlantes: { CamposComunes },
+        procesador: { codigo_proc: '', marca_proc: '', modelo_proc: '', nserie_proc: '', frec_proc: 0, nucleos_proc: 0, descr_proc: '' },
+        mainboard: { codigo: '', marca: '', modelo: '', nserie: '', ram_soportada: '', num_slots: '', conexiones_dd: '', descripcion: '' },
+        tarjeta_red: { CamposComunes },
+        carcasa: { CamposComunes },
+        fuente_poder: { CamposComunes },
+        ram_fields: { 
+            nombre: 'memoria RAM',
+            verDetalleRAM: true,
+            isStepFinal: false,        
+            ram_soportada: 0,
+            num_slots: 0,
+            indx:[] 
+        },
+        disco_duro_fields: {
+            nombre: 'disco duro',
+            verDetalleRAM: false,
+            isStepFinal: true,
+            indx: []
+        }
     }
-  }
 
-  cargar_datos(info) {
-    console.log(info);
-    this.props.form.setFieldsValue({
-      codigo_pc: info.codigo,
-      bspi: info.bspi,
-      departamento: info.departamento,
-      asignar_pc: info.empleado,
-      marca_pc: info.marca,
-      modelo_pc: info.modelo,
-      nserie_pc: info.num_serie,
-      nombre_pc: info.name_pc,
-      usuario_pc: info.user_pc,
-      estado_pc: info.estado,
-      so: info.so,
-      tipo_so: info.so_type,
-      sp1: info.servpack === 'Si' ? true : false,
-      licencia: info.licencia === 'Si' ? true : false,
-      office: info.office,
-      ip: info.ip,
-      codigo_monitor: info.monitor,
-      codigo_teclado: info.teclado,
-      codigo_mouse: info.mouse,
-      codigo_parlantes: info.parlantes,
-      codigo_procesador: info.procesador,
-      codigo_fuentepoder: info.f_poder,
-      codigo_case: info.case,
-      frec_procesador: info.frecuencia,
-      nucleos_procesador: info.nnucleos,
-      ram_soportada: info.ram_soportada,
-      codigo_alimentacion: info.f_alim,
-      codigo_tarjetamadre: info.mainboard,
-      codigo_tarjetared : info.tarj_red,
-      value: 'UPS',
-      activo: true,
-      num_slots: info.slots_ram,
-      codigo_ram: info.rams,
-      codigo_dd: info.discos,
-      descr_pc: info.descripcion
-    })
-  }
+    componentDidMount = () => {
+        if (typeof this.props.location !== 'undefined') {
+            const { info } = this.props.location.state;
+            const { titulo } = this.props.location.state;
+            if (titulo === "Editar computadora" && info !== undefined){
+                this.cargar_datos(info);
+            }   
+            this.setState({ titulo: titulo });
+        }
+    }
 
-  cambiar_titulo(titulo){
-    this.setState({titulo: titulo})
-  }
-
-  onChangeRadio = e => {
-    console.log('radio checked', e.target.value);
-    this.setState({
-      value: e.target.value,
-      activo: true, 
-      loading: true
-    });
-  };
-
-  handle_guardar = e => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log(values)
+    cargar_datos(info) {
+        let indcx = []
+        for (const element in info.rams) {
+            indcx.push({ codigo: element, marca: 1, modelo: "fgfgrgt", nserie: "rgrgtrtg", capacidad: 110, tipo: "sss", descr: ""})
+        }
+        this.setState({
+            general: {
+                codigo: info.codigo,
+                asignar: info.empleado,
+                nombre_pc: info.name_pc,
+                usuario_pc: info.user_pc,
+                estado: info.estado,
+                ip: info.ip,
+                descripcion: info.descripcion
+            },
+            so: {
+                so: info.so,
+                tipo_so: info.so_type,
+                sp1: info.servpack === 'Si' ? true : false,
+                licencia: info.licencia === 'Si' ? true : false,
+                office: info.office
+            },
+            monitor: {
+                name: 'monitor',
+                codigo: info.monitor,
+                marca: 'm',
+                modelo: 'm',
+                nserie: 'm',
+                descripcion: 'm'
+            },
+            teclado: {
+                name: 'teclado',
+                codigo: info.teclado,
+                marca: 'mmmm',
+                modelo: 'mmmm',
+                nserie: 'mmmm',
+                descripcion: 'mmmmmm'
+            },
+            mouse: {
+                name: 'mouse',
+                codigo: info.mouse,
+                marca: 'ww',
+                modelo: 'ww',
+                nserie: 'ww',
+                descripcion: 'ww'
+            },
+            parlantes: {
+                codigo: info.parlantes,
+                marca: 'ee',
+                modelo: 'ee',
+                nserie: 'ee',
+                descripcion: 'ee'
+            },
+            mainboard: {
+                codigo: info.mainboard,
+                marca: 'tt',
+                modelo: 'tt',
+                nserie: 'tt',
+                ram_soportada: 'tt',
+                num_slots: 'tt',
+                conexiones_dd: 'tt',
+                descripcion: 'tt'
+            },
+            procesador: {
+                codigo_proc: info.procesador,
+                marca_proc: 'rr',
+                modelo_proc: 'rr',
+                nserie_proc: 'rr',
+                frec_proc: info.frecuencia,
+                nucleos_proc: 0,
+                descr_proc: 'rr'
+            },
+            tarjeta_red: {
+                name: 'tarjeta_red',
+                codigo: info.tarj_red,
+                marca: 'rr',
+                modelo: 'rr',
+                nserie: 'rr',
+                descripcion: 'rr'
+            },
+            carcasa: {                
+                name: 'case',
+                codigo: info.case,
+                marca: 'rr',
+                modelo: 'r',
+                nserie: 'rrr',
+                descripcion: 'rr'
+            },
+            fuente_poder: {
+                name: 'fuente_poder',
+                codigo: info.f_poder,
+                marca: 'rr',
+                modelo: 'rr',
+                nserie: 'rr',
+                descripcion: 'rr'
+            },
+            ram_fields:{        
+                nombre: 'memoria RAM',
+                verDetalleRAM: true,
+                isStepFinal: false,
+                ram_soportada: info.ram_soportada,
+                num_slots: info.slots_ram,
+                indx: indcx
+            },
+            disco_duro_fields: {
+                nombre: 'disco duro',
+                verDetalleRAM: false,
+                isStepFinal: true,
+                indx: indcx
+            }
+        })
+        
       }
-    });
-  }
 
-  remove = k => {
-    const { form } = this.props;
-    const keys = form.getFieldValue('keys');
-    if (keys.length === 0) {
-      return;
+    next = () => {
+        const { step } = this.state;
+        this.setState({ step: step+1 });
     }
-    form.setFieldsValue({
-      keys: keys.filter(key => key !== k),
-    });
-  };
-
-  remove1 = k => {
-    const { form } = this.props;
-    // can use data-binding to get
-    const keys1 = form.getFieldValue('keys1');
-    // We need at least one passenger
-    if (keys1.length === 0) {
-      return;
+    
+    back = () => {
+        const { step } = this.state;
+        this.setState({ step: step-1 })
     }
 
-    // can use data-binding to set
-    form.setFieldsValue({
-      keys1: keys1.filter(key => key !== k),
-    });
-  };
+    confirm = (values) => {
+        const { step_final_fields } = this.state;
+        this.setState( { step_final_fields: { ...step_final_fields, ...values }}, () => console.log(this.state) );
+    }
 
-  add = () => {
-    const { form } = this.props;
-    const keys = form.getFieldValue('keys');
-    const nextKeys = keys.concat(id++);
-    form.setFieldsValue({
-      keys: nextKeys,
-    });
-  };
+    getFormGralValue = (values) => {
+        const { general } = this.state;
+        console.log(values);
+        this.setState({ general: { ...general, ...values }})
+    }
 
-  add1 = () => {
-    const { form } = this.props;
-    // can use data-binding to get
-    const keys1 = form.getFieldValue('keys1');
-    const nextKeys1 = keys1.concat(id++);
-    // can use data-binding to set
-    // important! notify form to detect changes
-    form.setFieldsValue({
-      keys1: nextKeys1,
-    });
-  };
+    getFormSOValue = (values) => { 
+        const { so } = this.state;
+        this.setState({ so: { ...so, ...values }})
+    }
 
-  handleSubmit = e => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        const { keys, names } = values;
-        console.log('Received values of form: ', values);
-        console.log('Merged values:', keys.map(key => names[key]));
-      }
-    });
-  };
+    getFormMonitorValue = (values) => {
+        const { monitor } = this.state;
+        this.setState({ monitor: { ...monitor, ...values }});
+    }
 
-  onChange = checked => {
-    this.setState({ loading: !checked });
-  };
+    getStepTecladoValue = (values) => {
+        const { teclado } = this.state;
+        this.setState({ teclado: { ...teclado, ...values }});
+    }
+    
+    getStepMouseValue = (values) => {
+        const { mouse } = this.state;
+        this.setState({ mouse: { ...mouse, ...values }});
+    }
 
-  render() {
-    const { loading } = this.state;
-    const { getFieldDecorator, getFieldValue } = this.props.form;
-    getFieldDecorator('keys', { initialValue: [] });
-    const keys = getFieldValue('keys');
-    getFieldDecorator('keys1', { initialValue: [] });
-    const keys1 = getFieldValue('keys1');
+    getStepParlantesValue = (values) => {
+        const { parlantes } = this.state;
+        this.setState({ parlantes: { ...parlantes, ...values }});
+    }
 
-    const formItems = keys.map((k, index) => (
-      <Collapse key={"colram"+index}>
-        <Panel  key={"ram_"+(index+1)} header={"RAM " + (index+1)} forceRender={true} extra = {keys.length > 0 ? ( 
-          <Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.remove(k)} />) : null} >
-          <InputComp label="Código"          id={"codigo_ram"+index} class="form2col" decorator={getFieldDecorator} />
-          <MarcaComp required={true}         id={"marca_ram"+index}  class="form2col" decorator={getFieldDecorator} />
-          <InputComp label="Modelo"          id={"modelo_ram"+index} class="form2col" decorator={getFieldDecorator} />
-          <InputComp label="Número de serie" id={"nserie_ram"+index} class="form2col" decorator={getFieldDecorator} />
-          <CapacComp label="Capacidad"       id={"capac_ram"+index}  class="form2col" decorator={getFieldDecorator} />
-          <InputComp label="Tipo"            id={"tipo_ram"+index}   class="form2col" decorator={getFieldDecorator} />
-          <DescrComp label="Descripción"     id={"descr_ram"+index}  class="form2col" decorator={getFieldDecorator} />
-        </Panel>         
-      </Collapse>
-    ));
+    getFormMainboardValue = (values) => {
+        const { mainboard } = this.state;
+        this.setState({ mainboard: { ...mainboard, ...values }});
+    }
+    
+    getStepCaseValue = (values) => {
+        const { carcasa } = this.state;
+        this.setState({ carcasa: { ...carcasa, ...values }});
+    }
 
-    const formuItems = keys1.map((k, index) => (
-      <Collapse key={"coldd"+index}>
-        <Panel  key={"dd"+(index+1)} header={"Disco duro " + (index+1)} forceRender={true} extra = {keys1.length > 0 ? ( 
-          <Icon className="dynamic-delete-button" type="minus-circle-o" onClick={() => this.remove1(k)} />) : null} >
-          <InputComp label="Código"          id={"codigo_dd"+index} class="form2col" decorator={getFieldDecorator} />
-          <MarcaComp required={true}         id={"marca_dd"+index}  class="form2col" decorator={getFieldDecorator} />
-          <InputComp label="Modelo"          id={"modelo_dd"+index} class="form2col" decorator={getFieldDecorator} />
-          <InputComp label="Número de serie" id={"nserie_dd"+index} class="form2col" decorator={getFieldDecorator} />
-          <CapacComp label="Capacidad"       id={"capac_dd"+index}  class="form2col" decorator={getFieldDecorator} />
-          <InputComp label="Tipo"            id={"tipo_dd"+index}   class="form2col" decorator={getFieldDecorator} />
-          <DescrComp label="Descripción"     id={"descr_dd"+index}  class="form2col" decorator={getFieldDecorator} />
-        </Panel>         
-      </Collapse>
-    ));
+    getStepTredValue = (values) => {
+        const { tarjeta_red } = this.state;
+        this.setState({ tarjeta_red: { ...tarjeta_red, ...values }});
+    }
 
-    return (
-      <Content>
-        <div className="div-container-title">      
-          <Row>
-            <Col span={12}><Title level={2}>{this.state.titulo}</Title></Col>
-            <Col className='flexbox'>
-              <Link to={{ pathname: '/desktop' }} ><Button type="primary" icon="left">Volver</Button></Link>
-            </Col>
-          </Row>  
-        <div className="div-border-top" >
-          <div className="div-container">
-            <Form {...layout} layout="horizontal" onSubmit={this.handle_guardar} >
-              <Divider orientation="left">DATOS GENERALES</Divider>
-              <InputComp label="Código PC"           id="codigo_pc"  class="form2col" decorator={getFieldDecorator} />
-              <AsignComp required={true}             id="asignar_pc" class="form2col" decorator={getFieldDecorator} />
-              {/* <IpSelect  required={true}             id="ip_pc"      class="form2col" decorator={getFieldDecorator} /> */}
-              <InputComp label="Nombre PC"           id="nombre_pc"  class="form2col" decorator={getFieldDecorator} />
-              <InputComp label="Usuario-PC"          id="usuario_pc" class="form2col" decorator={getFieldDecorator} />
-              <EstadComp required={true}             id="estado_pc"  class="form2col" decorator={getFieldDecorator} />
-              <DescrComp label="Descripción general" id= "descr_pc" class="form2col" decorator={getFieldDecorator} />
+    getStepFpoderValue = (values) => {
+        const { fuente_poder } = this.state;
+        this.setState({ fuente_poder: { ...fuente_poder, ...values }});
+    }
 
-              <Divider orientation="left">SISTEMA OPERATIVO</Divider>
-              <Form.Item className="form2col" label="SO">
-                {getFieldDecorator('so', {
-                  rules: [{required: true, message: 'Debe completar este campo' }]
-                })(
-                  <Select>
-                    <Select.Option value="win7">Windows 7</Select.Option>
-                    <Select.Option value="win10">Windows 10</Select.Option>
-                    <Select.Option value="linkali">Linux Kali</Select.Option>
-                  </Select>
-                )}
-              </Form.Item>
-              <Form.Item className="form2col" label="Tipo de SO">
-                {getFieldDecorator('tipo_so', {
-                  rules: [{required: true, message:  'Debe completar este campo' }]
-                })(
-                  <Select style={{ width: 80 }} >
-                  <Option value="x86">32</Option>
-                  <Option value="x64">64</Option>
-                </Select>
-                )} <span className="ant-form-text"> bits</span>
-              </Form.Item>
-              <Form.Item className="form2col" label="Service pack 1">
-                {getFieldDecorator('sp1', {
-                  valuePropName: 'checked',
-                  initialValue: false,
-                  rules: [{required: true, message: 'Debe completar este campo' }]
-                })( <Switch checkedChildren="Si" unCheckedChildren="No" /> )}
-              </Form.Item>
-              <Form.Item className="form2col" label="Licencia">
-                {getFieldDecorator('licencia', {
-                  valuePropName: 'checked',
-                  initialValue: false,
-                  rules: [{required: true, message: 'Debe completar este campo' }]
-                })( <Switch checkedChildren="Si" unCheckedChildren="No" /> )}
-              </Form.Item>
-              <Form.Item className="form2col" label="Office">
-                {getFieldDecorator('office', {
-                  rules: [{required: true, message: 'Debe completar este campo' }]
-                })(
-                  <Select>
-                    <Select.Option value="2007">Office 2007</Select.Option>
-                    <Select.Option value="2010">Office 2010</Select.Option>
-                    <Select.Option value="2013">Office 2013</Select.Option>
-                    <Select.Option value="2016">Office 2016</Select.Option>
-                    <Select.Option value="2019">Office 2019</Select.Option>
-                  </Select>
-                )}
-              </Form.Item>
+    getFormProcessValue = (values) => {
+        const { procesador } = this.state;
+        this.setState({ procesador: { ...procesador, ...values }});
+    }
 
-              <Divider orientation="left">DIRECCIÓN IP</Divider>
-              <Form.Item className="form2col" label="¿Asignar IP?">
-                {getFieldDecorator('dir_ip', {
-                  valuePropName: 'checked',
-                  initialValue: true,
-                  rules: [{required: false, message: 'Debe completar este campo' }]
-                })( <Switch checkedChildren="Si" unCheckedChildren="No" onChange={this.onChange} /> )}
-              </Form.Item>
-              <Skeleton active size="small" loading={loading}> 
-                <IpSelect class="form2col" required={!loading} id="ip" decorator={getFieldDecorator} />
-              </Skeleton> 
+    getFormDDValue = (values) => {
+        const { disco_duro_fields } = this.state;
+        this.setState({ disco_duro_fields: { ...disco_duro_fields, ...values }});
+    }
 
-              <Divider orientation="left">PERIFÉRICOS</Divider>
-              <Collapse accordion key="collapse_perifericos"> 
-                <Panel forceRender={true} header="Monitor" key="info_monitor">
-                  <InputComp label="Código"          id="codigo_monitor" class="form2col" decorator={getFieldDecorator} />
-                  <MarcaComp required={true}         id="marca_monitor"  class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Modelo"          id="modelo_monitor" class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Número de serie" id="nserie_monitor" class="form2col" decorator={getFieldDecorator} />
-                  <DescrComp label="Descripción"     id="descr_monitor"  class="form2col" decorator={getFieldDecorator} />
-                </Panel>
-              {/* </Collapse> 
-                
-              <br />*/}
-              {/* <Collapse key="collapse_teclado"> */}
-                <Panel forceRender={true} header="Teclado" key="info_teclado">
-                  <InputComp label="Código"          id="codigo_teclado" class="form2col" decorator={getFieldDecorator} />
-                  <MarcaComp required={true}         id="marca_teclado"  class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Modelo"          id="modelo_teclado" class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Número de serie" id="nserie_teclado" class="form2col" decorator={getFieldDecorator} />
-                  <DescrComp label="Descripción"     id="descr_teclado"  class="form2col" decorator={getFieldDecorator} />
-                </Panel>
-              {/* </Collapse> 
-              <br />*/}
+    getFormRAMValue = (values) => {
+        const { ram_fields } = this.state;
+        this.setState({ ram_fields: { ...ram_fields, ...values }});
+    }
 
-              {/* <Collapse key="collapse_parlantes"> */}
-                <Panel forceRender={true} header="Parlantes" key="info_partantes">
-                  <InputComp label="Código"          id="codigo_parlantes" class="form2col" decorator={getFieldDecorator} />
-                  <MarcaComp required={true}         id="marca_parlantes"  class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Modelo"          id="modelo_parlantes" class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Número de serie" id="nserie_parlantes" class="form2col" decorator={getFieldDecorator} />
-                  <DescrComp label="Descripción"     id="descr_parlantes"  class="form2col" decorator={getFieldDecorator} />
-                </Panel>
-              {/* </Collapse> 
-              <br />*/}
+    render() {
+        const { step, general, so, monitor, teclado, mouse, parlantes, mainboard, procesador, tarjeta_red, fuente_poder, carcasa,
+            ram_fields, disco_duro_fields } = this.state;
+        const steps = [
+            {           
+                icon: <GiDesk />,
+                content: 
+                    <div>
+                        <Title className="App" level={3}>General</Title>      
+                        <FormGral {...general} handleNextButton={this.next} submittedValues={this.getFormGralValue} />
+                    </div>
+            },
+            {
+                icon: <WindowsOutlined />,
+                content: 
+                    <div>
+                        <Title className="App" level={3}>Sistema operativo</Title>
+                        <FormSO {...so} handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getFormSOValue} />
+                    </div>
+            },
+            {
+                icon: <DesktopOutlined />,
+                content: 
+                    <div>
+                        <Title className="App" level={3}>Monitor</Title>
+                        <FormEquipo {...monitor} handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getFormMonitorValue} />    
+                    </div>
+            },
+            {
+                icon: <FaRegKeyboard />,
+                content: 
+                    <div>
+                        <Title className="App" level={3}>Teclado</Title>
+                        <FormEquipo {...teclado} handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getStepTecladoValue} />    
+                    </div>
+            },
+            {
+                icon: <MdMouse />,
+                content: 
+                    <div>
+                        <Title className="App" level={3}>Mouse</Title>
+                        <FormEquipo {...mouse} handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getStepMouseValue} />    
+                    </div>
+            },
+            {           
+                icon: <FiSpeaker />,
+                content: 
+                    <div>
+                        <Title className="App" level={3}>Parlantes</Title>
+                        <FormEquipo {...parlantes} handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getStepParlantesValue} />
+                    </div>
+            },
+            {            
+                icon: <GoCircuitBoard />,
+                content: 
+                <div>
+                    <Title className="App" level={3}>Tarjeta madre</Title>
+                    <FormMainboard {...mainboard} handleNextButton={this.next} handleBackButton={this.back}  submittedValues={this.getFormMainboardValue} />
+                </div>
+            },  
+            {
+                icon: <FiCpu />,
+                content: 
+                <div>
+                    <Title className="App" level={3}>Procesador</Title>
+                    <FormProcess {...procesador} handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getFormProcessValue} />    
+                </div>
+            },
+            {
+                icon: <FaMemory />,
+                content: 
+                <div>
+                    <Title className="App" level={3}>Memoria RAM</Title>
+                    <FormDD {...ram_fields}  handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getFormRAMValue} />    
+                </div>
+            },
+            {
+                icon: <FiHardDrive />,
+                content: 
+                <div>
+                    <Title className="App" level={3}>Disco duro</Title>
+                    <FormDD {...disco_duro_fields} handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getFormDDValue} />    
+                </div>
+            },
+            {
+                icon: <GoServer />,
+                content: 
+                    <div>
+                        <Title className="App" level={3}>Case</Title>
+                        <FormEquipo {...carcasa} handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getStepCaseValue} />    
+                    </div>
+            },
+            {
+                icon: <GiComputerFan />,
+                content: 
+                    <div>
+                        <Title className="App" level={3}>Fuente de poder</Title>
+                        <FormEquipo {...fuente_poder} handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getStepFpoderValue} />    
+                    </div>
+            },
+            {           
+                icon: <FaEthernet />,
+                content: 
+                    <div>
+                        <Title className="App" level={3}>Tarjeta de red</Title>
+                        <FormEquipo {...tarjeta_red} handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getStepTredValue} />
+                    </div>
+            }, 
+            {          
+                icon: <FaPlug />,
+                content: 
+                    <div>
+                        <Title className="App" level={3}>UPS/Regulador</Title>
+                        <FormGral {...general} handleConfirmButton={this.confirm} handleNextButton={this.next} submittedValues={this.getFormGralValue} />
+                    </div>
+            },   
+        ] 
 
-              {/* <Collapse key="collapse_mouse"> */}
-                <Panel forceRender={true} header="Mouse" key="info_mouse">
-                  <InputComp label="Código"          id="codigo_mouse" class="form2col" decorator={getFieldDecorator} />
-                  <MarcaComp required={true}         id="marca_mouse"  class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Modelo"          id="modelo_mouse" class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Número de serie" id="nserie_mouse" class="form2col" decorator={getFieldDecorator} />
-                  <DescrComp label="Descripción"     id="descr_mouse"  class="form2col" decorator={getFieldDecorator} />
-                </Panel>
-              </Collapse>
-              <br />
-              <Divider orientation="left">SISTEMA DE ALIMENTACIÓN</Divider>
-              <Radio.Group checked={this.state.activo} defaultValue={['Noaplica']} onChange={this.onChangeRadio} value={this.state.value}>
-                <Radio value='UPS'>UPS</Radio>
-                <Radio value='Regulador'>Regulador</Radio>
-                <Radio value="Noaplica">No aplica</Radio>
-              </Radio.Group>
-              <br /><br />
-              {this.state.value !== 'Noaplica' && this.state.activo === true?  
-                <Collapse key="collapse_alimentacion"> 
-                  <Panel forceRender={true} header={this.state.value} key="info_alimentacion">
-                    <InputComp label="Código"          id={"codigo_alimentacion"} class="form2col" decorator={getFieldDecorator} />
-                    <MarcaComp required={true}         id={"marca_"+this.state.value}  class="form2col" decorator={getFieldDecorator} />
-                    <InputComp label="Modelo"          id={"modelo_"+this.state.value} class="form2col" decorator={getFieldDecorator} />
-                    <InputComp label="Número de serie" id={"nserie_"+this.state.value} class="form2col" decorator={getFieldDecorator} />
-                    <DescrComp label="Descripción"     id={"descr_"+this.state.value}  class="form2col" decorator={getFieldDecorator} />
-                  </Panel>
-                </Collapse> : null
-              }
-
-              <Divider orientation="left">CPU</Divider>
-              <Collapse accordion key="collapse_cpu">
-                <Panel forceRender={true} header="Tarjeta Madre" key="info_tarjetamadre">
-                  <InputComp label="Código"                     id="codigo_tarjetamadre" class="form2col" decorator={getFieldDecorator} />
-                  <MarcaComp required={false}                   id="marca_tarjetamadre"  class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Modelo"                     id="modelo_tarjetamadre" class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Número de serie"            id="nserie_tarjetamadre" class="form2col" decorator={getFieldDecorator} />  
-                  <InNumComp label="RAM Soportada"              id="ram_soportada"       class="form2col" decorator={getFieldDecorator} text="GB" />
-                  <InNumComp label="Número slots"               id="num_slots"           class="form2col" decorator={getFieldDecorator} text=""  />
-                  <InNumComp label="Conexiones para disco duro" id="conexiones_dd"       class="form2col" decorator={getFieldDecorator} text=""  />
-                  <DescrComp label="Descripción"                id="descr_tarjetamadre"  class="form2col" decorator={getFieldDecorator} />
-                </Panel>
-              {/* </Collapse>
-              <br /> 
-              <Collapse key="collapse_ram">*/}
-                <Panel forceRender={true} header="Memoria RAM" key="info_ram">
-                  <InputComp label="Código"          id={"codigo_ram"} class="form2col" decorator={getFieldDecorator} />
-                  <MarcaComp required={true}         id={"marca_ram"}  class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Modelo"          id={"modelo_ram"} class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Número de serie" id={"nserie_ram"} class="form2col" decorator={getFieldDecorator} />
-                  <CapacComp label="Capacidad"       id={"capac_ram"}  class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Tipo"            id={"tipo_ram"}   class="form2col" decorator={getFieldDecorator} />
-                  <DescrComp label="Descripción"     id={"descr_ram"}  class="form2col" decorator={getFieldDecorator} />
-                  {formItems}
-                  <Form.Item {...buttonItemLayout}>
-                    <Button type="dashed" onClick={this.add} icon="plus"  style={{ width: '60%' }} > Agregar memoria RAM </Button>
-                  </Form.Item>
-                </Panel>
-              {/* </Collapse>
-              <br />
-              <Collapse key="collapse_dd"> */}
-                <Panel forceRender={true} header="Disco duro" key="info_dd">
-                  <InputComp label="Código"          id={"codigo_dd"} class="form2col" decorator={getFieldDecorator} />
-                  <MarcaComp required={true}         id={"marca_dd"}  class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Modelo"          id={"modelo_dd"} class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Número de serie" id={"nserie_dd"} class="form2col" decorator={getFieldDecorator} />
-                  <CapacComp label="Capacidad"       id={"capac_dd"}  class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Tipo"            id={"tipo_dd"}   class="form2col" decorator={getFieldDecorator} />
-                  <DescrComp label="Descripción"     id={"descr_dd"}  class="form2col" decorator={getFieldDecorator} />
-                  {formuItems}
-                  <Form.Item {...buttonItemLayout}>
-                    <Button type="dashed" onClick={this.add1} icon="plus"  style={{ width: '60%' }} > Agregar disco duro </Button>
-                  </Form.Item>
-                </Panel>
-              {/* </Collapse>
-              <br />
-              <Collapse key="collapse_procesador"> */}
-                <Panel forceRender={true} header="Procesador" key="info_procesador">
-                  <InputComp label="Código"          id="codigo_procesador" class="form2col" decorator={getFieldDecorator} />
-                  <MarcaComp required={false}        id="marca_procesador"  class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Modelo"          id="modelo_procesador" class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Número de serie" id="nserie_procesador" class="form2col" decorator={getFieldDecorator} />
-                  <InNumComp label="Frecuencia"      id="frec_procesador"   class="form2col" decorator={getFieldDecorator} text="GHz" />
-                  <InNumComp label="Núcleos"         id="num_nucleos"       class="form2col" decorator={getFieldDecorator} text="" />
-                  <DescrComp label="Descripción"     id="descr_procesador"  class="form2col" decorator={getFieldDecorator} />
-                </Panel>
-              {/* </Collapse>
-              <br />
-              <Collapse key="collapse_tarjetared"> */}
-                <Panel forceRender={true} header="Tarjeta de red" key="info_tarjetared">
-                  <InputComp label="Código"          id="codigo_tarjetared" class="form2col" decorator={getFieldDecorator} />
-                  <MarcaComp required={true}         id="marca_tarjetared"  class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Modelo"          id="modelo_tarjetared" class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Número de serie" id="nserie_tarjetared" class="form2col" decorator={getFieldDecorator} />
-                  <DescrComp label="Descripción"     id="descr_tarjetared"  class="form2col" decorator={getFieldDecorator} />
-                </Panel>
-              {/* </Collapse>
-              <br />
-              <Collapse key="collapse_case"> */}
-                <Panel forceRender={true} header="Case" key="info_case">
-                  <InputComp label="Código"          id="codigo_case" class="form2col" decorator={getFieldDecorator} />
-                  <MarcaComp required={true}         id="marca_case"  class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Modelo"          id="modelo_case" class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Número de serie" id="nserie_case" class="form2col" decorator={getFieldDecorator} />
-                  <DescrComp label="Descripción"     id="descr_case"  class="form2col" decorator={getFieldDecorator} />
-                </Panel>
-              {/* </Collapse>
-              <br />
-              <Collapse key="collapse_fuentepoder"> */}
-                <Panel forceRender={true} header="Fuente de poder" key="info_fuentepoder">
-                  <InputComp label="Código"          id="codigo_fuentepoder" class="form2col" decorator={getFieldDecorator} />
-                  <MarcaComp required={true}         id="marca_fuentepoder"  class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Modelo"          id="modelo_fuentepoder" class="form2col" decorator={getFieldDecorator} />
-                  <InputComp label="Número de serie" id="nserie_fuentepoder" class="form2col" decorator={getFieldDecorator} />
-                  <DescrComp label="Descripción"     id="descr_fuentepoder"  class="form2col" decorator={getFieldDecorator} />
-                </Panel>
-              </Collapse>
-              <br />
-
-              <Form.Item {...tailLayout}>
-                <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
-                <Button type="primary">Cancelar</Button>
-              </Form.Item>
-            </Form>
-          </div>
-        </div>
-        </div> 
-      </Content>
-    );
-  }
+        return(
+            <Content id={"contenit"}>
+                <div id={"content"} className="div-container-title">      
+                    <Row>
+                        <Col span={12}><Title level={2}>{this.state.titulo}</Title></Col>
+                        <Col className='flexbox'>
+                            <Link to={{ pathname: '/desktop' }} ><Button type="primary" icon="left">Volver</Button></Link>
+                        </Col>
+                    </Row>  
+                    <div id={"styleform"} className="div-border-top" >
+                        <div id={"cont"} className="div-container"> 
+                            <Steps id={"sre"}
+                                size="small"
+                                current={step}>  
+                                {steps.map((item,index) => (
+                                    <Step key={item.title+index} icon={item.icon} title={item.title} />
+                                ))}
+                            </Steps>           
+                            <div className="steps-content">
+                                {steps[step].content}
+                            </div>
+                        </div>  
+                    </div>
+                </div> 
+            </Content>  
+        ) 
+    }
 }
 
-FormularioDesktop = Form.create({})(FormularioDesktop);
 export default FormularioDesktop;

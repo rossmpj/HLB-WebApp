@@ -1,7 +1,9 @@
 import React from 'react';
-import { Button, Row, Col, Table, Input, Icon, Popconfirm, Tag, Typography } from 'antd';
+import { Button, Row, Col, Table, Input, Icon, Popconfirm, Tag, Typography, message } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
-import { Link } from 'react-router-dom';
+import { Link, Router } from 'react-router-dom';
+import AxiosLaptop from '../Servicios/AxiosLaptop'
+import FuncionesAuxiliares from '../FuncionesAuxiliares'
 
 const { Title } = Typography;
 
@@ -17,64 +19,108 @@ class TablaLaptop extends React.Component{
       searchedColumn: '',
       index: 0,
       dataSource : [
-        {
-          key: '1',
-          codigo: 'HLB_COMP_1',
-          bspi: 'Hospital León Becerra',
-          departamento: 'Proveeduría',
-          empleado: 'John Villamar',
-          marca: 'Lenovo',
-          modelo: 'h2343',
-          num_serie: 'tftyfBGPGTH1',
-          name_pc: 'Admin',
-          user_pc: 'UsADmin1',
-          estado: 'No Operativo',
-          so: 'Windows 10 Home Single Language',
-          so_type: '64 bits',
-          servpack: 'No',
-          licencia: 'Si',
-          office: '2010',
-          ip: '1',
-          nombre_procesador: 'Intel Core i7-5500U',
-          frecuencia: '3 GHz',
-          nnucleos: 4,
-          ram_soportada: '12 GB',
-          slots_ram: 2,
-          rams: ['HLB_S2', 'GGRGHGDGRGT-1', 'DFGHR22'],
-          discos: ['HLB_DD_9', 'HLB_DDD_1'],
-          descripcion: 'nn'
-        },
-        {
-          key: '2',
-          codigo: 'HL_1',
-          bspi: 'Unidad Educativa San José Buen Pastor',
-          departamento: 'UCI',
-          empleado: 'Carla Villamar',
-          marca: 'HP',
-          modelo: 'L450',
-          num_serie: '24954839605 BGPGTH1',
-          name_pc: 'UserHLB',
-          user_pc: 'Usuario',
-          estado: 'Operativo',
-          so: 'Windows 7',
-          so_type: '32 bits',
-          servpack: 'No',
-          licencia: 'No',
-          office: '2019',
-          ip: 'R3',
-          nombre_procesador: 'Intel Core i7-5500U',
-          frecuencia: '3 GHz',
-          nnucleos: 4,
-          ram_soportada: '12 GB',
-          slots_ram: 2,
-          rams: ['HLB_Sdg'],
-          discos: ['HLB_DD_3', 'FGGH24'],
-          descripcion: 'nn'
-        },
+        // {
+        //   key: '1',
+        //   codigo: 'HLB_COMP_1',
+        //   bspi: 'Hospital León Becerra',
+        //   departamento: 'Proveeduría',
+        //   empleado: 'John Villamar',
+        //   marca: 'Lenovo',
+        //   modelo: 'h2343',
+        //   num_serie: 'tftyfBGPGTH1',
+        //   name_pc: 'Admin',
+        //   user_pc: 'UsADmin1',
+        //   estado: 'No Operativo',
+        //   so: 'Windows 10 Home Single Language',
+        //   so_type: '64 bits',
+        //   servpack: 'No',
+        //   licencia: 'Si',
+        //   office: '2010',
+        //   ip: '1',
+        //   id_procesador: 'Intel Core i7-5500U',
+        //   frecuencia: '3 GHz',
+        //   nnucleos: 4,
+        //   ram_soportada: '12 GB',
+        //   slots_ram: 2,
+        //   rams: ['HLB_S2', 'GGRGHGDGRGT-1', 'DFGHR22'],
+        //   discos: ['HLB_DD_9', 'HLB_DDD_1'],
+        //   descripcion: 'nn'
+        // },
+        // {
+        //   key: '2',
+        //   codigo: 'HL_1',
+        //   bspi: 'Unidad Educativa San José Buen Pastor',
+        //   departamento: 'UCI',
+        //   empleado: 'Carla Villamar',
+        //   marca: 'HP',
+        //   modelo: 'L450',
+        //   num_serie: '24954839605 BGPGTH1',
+        //   name_pc: 'UserHLB',
+        //   user_pc: 'Usuario',
+        //   estado: 'Operativo',
+        //   so: 'Windows 7',
+        //   so_type: '32 bits',
+        //   servpack: 'No',
+        //   licencia: 'No',
+        //   office: '2019',
+        //   ip: 'R3',
+        //   id_procesador: 'Intel Core i7-5500U',
+        //   ram_soportada: '12 GB',
+        //   slots_ram: 2,
+        //   rams: ['HLB_Sdg'],
+        //   discos: ['HLB_DD_3', 'FGGH24'],
+        //   descripcion: 'nn'
+        // },
       ]
     };
     this.handleClick = this.handleClick.bind(this);
   }
+
+    obtener_datos = () => {
+        let datos = [];
+        AxiosLaptop.codigos_laptops().then(res => {
+        res.data.forEach(function (r) {
+            AxiosLaptop.obtenerInfoLaptop(r.id_equipo).then(ress => {
+                // ress.data.forEach( registro  => {
+                //     console.log("REG:",registro)
+            // var dip = registro.ip === null ? ' ' : registro.ip;
+            // var ram_soportada = registro.campo === 'ram_soportada' ? registro.dato : ''
+            // var num_slots = registro.campo === 'numero_slots' ? registro.dato : ''
+            let registro = ress.data
+            let router = {
+            key: registro.codigo,
+            codigo: registro.id_equipo,
+            bspi: registro.bspi,
+            departamento: registro.departamento,
+            marca: registro.marca,
+            modelo: registro.modelo,
+            num_serie: registro.numero_serie, 
+            estado: registro.estado_operativo,
+            ip: registro.ip,
+            empleado: registro.empleado+' '+registro.apellido,
+            so: registro.so,
+            servpack: registro.service_pack === '0' ? 'No' : 'Si',
+            so_type: registro.tipo_so,
+            name_pc: registro.nombre_pc,
+            user_pc: registro.usuario_pc,
+            licencia: registro.licencia === '0' ? 'No' : 'Si',
+            ram_soportada: registro.ram_soportada,
+            slots_ram: registro.numero_slots,
+            descripcion: registro.descripcion
+            }
+        datos.push(router);
+                // })
+            });
+        });
+        this.setState({ dataSource: datos });
+        }).catch(err => {
+            message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
+        });
+    }
+
+    componentDidMount = () => {
+        this.obtener_datos();
+      }
 
   handleClick() {
     this.setState({
@@ -107,10 +153,6 @@ class TablaLaptop extends React.Component{
     this.setState({
       index: this.state.index +1
     })
-  }
-
-  sortString(a,b){
-    return a.localeCompare(b);
   }
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -363,7 +405,7 @@ class TablaLaptop extends React.Component{
         filterMultiple: false,
         filteredValue: filteredInfo.so_type || null,
         onFilter: (value, record) => record.so_type.indexOf(value) === 0,
-        sorter: (a, b) => this.sortString(a.so_type,b.so_type),
+        sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.so_type,b.so_type),
         sortOrder: sortedInfo.columnKey === 'so_type' && sortedInfo.order,
       }, 
       {
@@ -384,7 +426,7 @@ class TablaLaptop extends React.Component{
         filterMultiple: false,
         filteredValue: filteredInfo.servpack || null,
         onFilter: (value, record) => record.servpack.indexOf(value) === 0,
-        sorter: (a, b) => this.sortString(a.servpack,b.servpack),
+        sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.servpack,b.servpack),
         sortOrder: sortedInfo.columnKey === 'servpack' && sortedInfo.order,
       }, 
       {
@@ -404,7 +446,7 @@ class TablaLaptop extends React.Component{
         filterMultiple: false,
         filteredValue: filteredInfo.licencia || null,
         onFilter: (value, record) => record.licencia.indexOf(value) === 0,
-        sorter: (a, b) => this.sortString(a.licencia,b.licencia),
+        sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.licencia,b.licencia),
         sortOrder: sortedInfo.columnKey === 'licencia' && sortedInfo.order,
       }, 
       {
@@ -435,7 +477,7 @@ class TablaLaptop extends React.Component{
         ],
         filteredValue: filteredInfo.office || null,
         onFilter: (value, record) => record.office.indexOf(value) === 0,
-        sorter: (a, b) => this.sortString(a.office,b.office),
+        sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.office,b.office),
         sortOrder: sortedInfo.columnKey === 'office' && sortedInfo.order,
       },
       {
@@ -449,34 +491,10 @@ class TablaLaptop extends React.Component{
       {
         title: 'Procesador',
         dataIndex: 'id_procesador',
-        key: 'id_procesador',
-        children: [
-          {
-            title: 'Nombre',
-            dataIndex: 'nombre_procesador',
-            key: 'nombre_procesador',
-            width: 120,
-            ...this.getColumnSearchProps('nombre_procesador'),
-            sorter: (a, b) => a.nombre_procesador.length - b.nombre_procesador.length,
-            sortOrder: sortedInfo.columnKey === 'nombre_procesador' && sortedInfo.order,
-          },
-          {
-            title: 'Frecuencia',
-            dataIndex: 'frecuencia',
-            key: 'frecuencia',
-            ...this.getColumnSearchProps('frecuencia'),
-            sorter: (a, b) => a.frecuencia.length - b.frecuencia.length,
-            sortOrder: sortedInfo.columnKey === 'frecuencia' && sortedInfo.order,
-          }, 
-          {
-            title: 'Núcleos',
-            dataIndex: 'nnucleos',
-            key: 'nnucleos',
-            ...this.getColumnSearchProps('nnucleos'),
-            sorter: (a, b) => a.nnucleos.length - b.nnucleos.length,
-            sortOrder: sortedInfo.columnKey === 'nnucleos' && sortedInfo.order,
-          },
-        ],
+        key: 'id_procesador',        
+        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'procesador'} }} >{text}</Link>,
+        sorter: (a, b) => a.nombre_procesador.length - b.nombre_procesador.length,
+        sortOrder: sortedInfo.columnKey === 'id_procesador' && sortedInfo.order,
       }, 
       {
         title: 'RAM',
@@ -508,13 +526,13 @@ class TablaLaptop extends React.Component{
             width: 70,
             render: (rams) => (
               <div>
-                {rams.map(id_memoria => {
+                {/* {rams.map(id_memoria => {
                   return (
-                    <Link key={id_memoria} to={{ pathname: '/ram_disco/view', state: { info: id_memoria, tipo_equipo: 'memoria RAM' } }} >
+                    <Link key={id_memoria} to={{ pathname: '/otros/view', state: { info: id_memoria, tipo_equipo: 'memoria RAM' } }} >
                       <Tag style={{margin: 2}} color="cyan" key={id_memoria.toString()}>{id_memoria}</Tag>
                     </Link>              
                   );
-                })}
+                })} */}
               </div>
             ),
           },  
@@ -527,13 +545,13 @@ class TablaLaptop extends React.Component{
         width: 70,
         render: (discos) => (
           <div>
-            {discos.map(id_disco => {
+            {/* {discos.map(id_disco => {
               return (
-                <Link key={id_disco} to={{ pathname: '/ram_disco/view', state: { info: id_disco, tipo_equipo: 'disco Duro' } }} >
+                <Link key={id_disco} to={{ pathname: '/otros/view', state: { info: id_disco, tipo_equipo: 'disco Duro' } }} >
                   <Tag style={{margin: 2}} color="blue" key={id_disco.toString()}>{id_disco}</Tag>
                 </Link>              
               );
-            })}
+            })} */}
           </div>
         ),
       },
@@ -549,12 +567,12 @@ class TablaLaptop extends React.Component{
         render: (text, record) => (
           <span>
             <Link to={{ pathname: '/laptop/form', state: { info: record, titulo: "Editar laptop" } }} >
-              <Button style= {{marginRight: '2px'}} type="primary" size="small" icon="edit" />
+              <Button style= {{marginRight: '2px'}} size="small" type="primary" icon="edit" />
             </Link>
             <Popconfirm placement="topRight" 
             title="¿Desea eliminar este registro?" 
             okText="Si" cancelText="No" onConfirm={() => this.handleDelete(record.key)}>
-            <Button type="danger" icon="delete" size="small" /></Popconfirm>
+            <Button type="danger" size="small" icon="delete" /></Popconfirm>
           </span>
         ),
       },

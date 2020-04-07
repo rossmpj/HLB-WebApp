@@ -14,6 +14,7 @@ function DescripcionComponent(props) {
             >
             {props.decorator(`${props.id}`, {
                 rules: [{ required: false }],
+                initialValue: props.initialValue === undefined ? null : `${props.initialValue}`,
             })(
                 <TextArea />
             )}

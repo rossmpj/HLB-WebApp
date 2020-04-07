@@ -13,6 +13,7 @@ function InputComponent(props) {
             >
             {props.decorator(`${props.id}`, {
                 rules: [{ required: true, message: 'Debe completar este campo' }],
+                initialValue: props.initialValue === undefined ? null : `${props.initialValue}`,          
             })(
                 <Input disabled={props.disabled}
                 />
