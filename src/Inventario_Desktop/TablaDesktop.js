@@ -468,7 +468,7 @@ class TablaDesktop extends React.Component{
           <div>
             {rams.map(id_memoria => {
               return (
-                <Link key={id_memoria} to={{ pathname: '/ram_disco/view', state: { info: id_memoria, tipo_equipo: 'memoria RAM' } }} >
+                <Link key={id_memoria} to={{ pathname: '/otros/view', state: { info: id_memoria, tipo_equipo: 'memoria RAM' } }} >
                   <Tag style={{margin: 2}} color="cyan" key={id_memoria.toString()}>{id_memoria}</Tag>
                 </Link>              
               );
@@ -485,7 +485,7 @@ class TablaDesktop extends React.Component{
           <div>
             {discos.map(id_disco => {
               return (
-                <Link key={id_disco} to={{ pathname: '/ram_disco/view', state: { info: id_disco, tipo_equipo: 'disco duro' } }} >
+                <Link key={id_disco} to={{ pathname: '/otros/view', state: { info: id_disco, tipo_equipo: 'disco duro' } }} >
                   <Tag style={{margin: 2}} color="blue" key={id_disco.toString()}>{id_disco}</Tag>
                 </Link>              
               );
@@ -551,12 +551,12 @@ class TablaDesktop extends React.Component{
           this.state.dataSource.length >= 1 ? (
             <span>
               <Link to={{ pathname: '/desktop/form', state: { info: record, titulo: "Editar computadora" } }} >
-                <Button style= {{marginRight: '2px'}} type="primary" size="small" icon="edit" />
+                <Button style= {{marginRight: '2px'}} type="primary" icon="edit" />
               </Link>
               <Popconfirm placement="topRight" 
               title="¿Desea eliminar este registro?" 
               okText="Si" cancelText="No" onConfirm={() => this.handleDelete(record.key)}>
-              <Button type="danger" icon="delete" size="small" /></Popconfirm>
+              <Button type="danger" icon="delete" /></Popconfirm>
             </span>
           ) : null 
         ),
@@ -567,7 +567,7 @@ class TablaDesktop extends React.Component{
       <div>
         <div className="div-container-title">    
           <Row>
-            <Col span={12}><Title level={2}>Inventario de laptops</Title></Col>
+            <Col span={12}><Title level={2}>Inventario de computadoras</Title></Col>
             <Col className='flexbox'>
               <Link to={{ pathname: '/desktop/form', state: { titulo: "Nueva computadora" } }} > 
                 <Button type="primary" icon="plus">Agregar computadora</Button>

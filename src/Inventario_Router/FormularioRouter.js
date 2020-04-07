@@ -67,28 +67,28 @@ class FormularioRouter extends React.Component {
           fecha_registro: '2020-03-26'
         }
         console.log("El router", router)
-        if(this.state.titulo === "Editar router"){
-          AxiosRouter.editar_equipo_router(router).then(res => {
-            message.loading({ content: 'Guardando modificaciones...', key });
-            setTimeout(() => {
-              message.success({ content: 'Registro modificado satisfactoriamente', key, duration: 3 });
-            }, 1000);
-            this.props.history.push("/router");
-          }).catch(err => {
-              console.log(err)
-              message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
-          });
-        }else{
-          AxiosRouter.crear_equipo_router(router).then(res => {
-            message.loading({ content: 'Guardando datos...', key });
-            setTimeout(() => {
-              message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
-            }, 1000);
-            this.props.history.push("/router");
-          }).catch(err => {
-              console.log(err)
-              message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
-          });
+        try{
+            if(this.state.titulo === "Editar router"){
+                AxiosRouter.editar_equipo_router(router).then(res => {
+                  message.loading({ content: 'Guardando modificaciones...', key });
+                  setTimeout(() => {
+                    message.success({ content: 'Registro modificado satisfactoriamente', key, duration: 3 });
+                  }, 1000);
+                  this.props.history.push("/router");
+                })
+            }else{
+                AxiosRouter.crear_equipo_router(router).then(res => {
+                message.loading({ content: 'Guardando datos...', key });
+                setTimeout(() => {
+                    message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+                }, 1000);
+                this.props.history.push("/router");
+                })
+            }
+        }
+        catch(error) {
+            console.log(error)
+            message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
         }
       }
     });
