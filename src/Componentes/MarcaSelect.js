@@ -35,7 +35,8 @@ class MarcaSelect extends React.Component {
                 class={this.props.class}
                 required={this.props.required}
                 decorator={this.props.decorator}
-                datos={this.state.marcas}></SelectComponent>
+                datos={this.state.marcas}
+                initialValue={this.props.initialValue}></SelectComponent>
         )
     }
 }

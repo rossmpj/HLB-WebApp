@@ -27,7 +27,8 @@ class EstadoSelect extends React.Component {
                 class={this.props.class}
                 required={this.props.required}
                 decorator={this.props.decorator}
-                datos={this.state.estados}></SelectComponent>
+                datos={this.state.estados}
+                initialValue={this.props.initialValue}></SelectComponent>
         )
     }
 }

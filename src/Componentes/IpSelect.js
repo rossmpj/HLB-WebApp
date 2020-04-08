@@ -35,7 +35,8 @@ class IpSelect extends React.Component {
            class={this.props.class}
            required={this.props.required}
            decorator={this.props.decorator} 
-           datos={this.state.ip}></SelectComponent>
+           datos={this.state.ip}
+           initialValue={this.props.initialValue}></SelectComponent>
         )
     }
 }

@@ -7,7 +7,7 @@ import AsignarSelect from '../Componentes/AsignarSelect'
 import MarcaSelect from '../Componentes/MarcaSelect'
 import IpSelect from '../Componentes/IpSelect'
 import EstadoSelect from '../Componentes/EstadoSelect'
-import ComponentePrincipal from '../Componentes/ComponentePrincipal'
+import ComponentePrincipal from '../Componentes/ComponentePrincipal' 
 import FormularioImpresora from '../Inventario_Impresora/FormularioImpresora'
 import FormularioDesktop from '../Inventario_Desktop/FormularioDesktop'
 import FormularioRouter from '../Inventario_Router/FormularioRouter'
@@ -34,7 +34,6 @@ class FormularioEquipo extends React.Component {
         super(props);
         this.state = {
             encargado_registro: "admin",
-            id: "",
             tipo_equipo: "",
             equipos: [],
             editionMode: false,
@@ -42,8 +41,12 @@ class FormularioEquipo extends React.Component {
             numero_serie: "",
             modelo: "",
             id_marca: "",
+            estado_operativo:"",
             ip: "",
-            key:""
+            componente_principal:"",
+            asignado: "",
+            descripcion: "",
+            key: ""
         };
         this.handle_guardar = this.handle_guardar.bind(this);
     }
@@ -92,15 +95,15 @@ class FormularioEquipo extends React.Component {
                     });
                 } else {
                     console.log(values);
-                    values.key=this.state.key;
-                     Axios.editar_equipo(values).then(res => {
+                    values.key = this.state.key;
+                    Axios.editar_equipo(values).then(res => {
                         message.loading({ content: 'Actualizando datos...', key });
                         setTimeout(() => {
                             message.success({ content: res.data.log, key, duration: 3 });
                         }, 1000);
                     }).catch(err => {
                         console.log(err);
-                    }); 
+                    });
                 }
             }
         });
@@ -108,18 +111,18 @@ class FormularioEquipo extends React.Component {
 
     cargar_datos(info) {
         this.props.form.setFieldsValue({
-             estado_operativo: info.estado_operativo,
-            codigo: info.codigo, 
+            codigo: info.codigo,
             tipo_equipo: info.tipo_equipo,
-             id_marca: info.marca,
             modelo: info.modelo,
             descripcion: info.descripcion,
-            numero_serie: info.numero_serie,
-            componente_principal: info.componente_principal,
-            asignado: info.asignado,
-            ip: info.ip
+            numero_serie: info.numero_serie
         });
         this.setState({ key: info.key });
+        this.setState({ estado_operativo: info.estado_operativo });
+        this.setState({ id_marca: info.marca });
+        this.setState({ componente_principal: info.componente_principal });
+        this.setState({ asignado: info.asignado });
+        this.setState({ ip: info.ip });
     }
 
 
@@ -152,59 +155,73 @@ class FormularioEquipo extends React.Component {
                             }
 
 
-                            <InputComponent
-                                class=""
-                                label="Código"
-                                id="codigo"
-                                decorator={getFieldDecorator} />
+                            <Form.Item
+                                label="Código">
+                                {getFieldDecorator('codigo', {
+                                    rules: [{ required: true, message: 'Debe completar este campo' }],
+                                    initialValue: this.state.codigo
+                                })
+                                    (<Input />)}
+                            </Form.Item>
 
-                            <InputComponent
-                                class=""
-                                label="Número de serie"
-                                id="numero_serie"
-                                decorator={getFieldDecorator} />
+                            <Form.Item
+                                label="Número de serie">
+                                {getFieldDecorator('numero_serie', {
+                                    rules: [{ required: true, message: 'Debe completar este campo' }],
+                                    initialValue: this.state.numero_serie
+                                })
+                                    (<Input />)}
+                            </Form.Item>
 
-                            <InputComponent
-                                class=""
-                                label="Modelo"
-                                id="modelo"
-                                decorator={getFieldDecorator} />
-
+                            <Form.Item
+                                label="Modelo">
+                                {getFieldDecorator('modelo', {
+                                    rules: [{ required: true, message: 'Debe completar este campo' }],
+                                    initialValue: this.state.modelo
+                                })
+                                    (<Input />)}
+                            </Form.Item>
+ 
                             <MarcaSelect
                                 class=""
                                 id="id_marca"
                                 required={true}
-                                decorator={getFieldDecorator} />
+                                decorator={getFieldDecorator}
+                                initialValue={this.state.id_marca} />
 
                             <EstadoSelect
                                 class=""
                                 id="estado_operativo"
                                 required={true}
-                                decorator={getFieldDecorator} />
+                                decorator={getFieldDecorator}
+                                initialValue={this.state.estado_operativo} />
 
                             <IpSelect
                                 class=""
                                 required={false}
                                 id="ip"
-                                decorator={getFieldDecorator} />
+                                decorator={getFieldDecorator}
+                                initialValue={this.state.ip} />
 
                             <ComponentePrincipal
                                 class=""
                                 id="componente_principal"
                                 required={false}
-                                decorator={getFieldDecorator} />
+                                decorator={getFieldDecorator}
+                                initialValue={this.state.componente_principal} />
 
                             <AsignarSelect
                                 class=""
                                 required={false}
                                 id="asignado"
-                                decorator={getFieldDecorator} />
+                                decorator={getFieldDecorator}
+                                initialValue={this.state.asignado} /> 
 
                             <Form.Item label="Descripción">
-                                {getFieldDecorator('descripcion')(
-                                    <TextArea />
-                                )}
+                                {getFieldDecorator('descripcion',{initialValue: this.state.descripcion})
+                                (<TextArea />)}
                             </Form.Item>
+
                             <Form.Item {...tailLayout}>
                                 <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
                                 <Button type="primary">Cancelar</Button>

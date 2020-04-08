@@ -27,7 +27,8 @@ class ComponentePrincipal extends React.Component {
                 class={this.props.class}
                 required={this.props.required}
                 decorator={this.props.decorator}
-                datos={this.state.componentes}></SelectComponent>
+                datos={this.state.componentes}
+                initialValue={this.props.initialValue}></SelectComponent>
         )
     }
 }

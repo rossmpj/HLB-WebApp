@@ -46,7 +46,8 @@ class FormularioImpresora extends React.Component {
             rollo: "",
             encargado_registro: "admin",
             editionMode: false,
-            key: ""
+            key: "",
+            baia: {}
         };
         this.handle_guardar = this.handle_guardar.bind(this);
     }
@@ -97,6 +98,40 @@ class FormularioImpresora extends React.Component {
     }
 
     cargar_datos(info) {
+        /*  if (typeof info.tabla_equipo !== 'undefined') {
+              let empleado = ""; 
+             Axios.impresora_id(9).then(res => {
+                  res.data.forEach(function (dato) {
+                     if (dato.empleado !== null) {
+                         empleado = dato.empleado.concat(" ", dato.apellido);
+                     }
+                     let registro ={
+                     key : dato.id_impresora,
+                     numero_serie : dato.numero_serie,
+                     asignado : empleado,
+                     tipo : dato.tipo,
+                    id_marca : dato.marca,
+                     codigo : dato.codigo,
+                     estado_operativo : dato.estado_operativo,
+                     modelo : dato.modelo,
+                     tinta : dato.tinta,
+                     cartucho : dato.cartucho,
+                     descripcion : dato.descripcion,
+                     toner : dato.toner,
+                     rodillo : dato.rodillo,
+                     cinta : dato.cinta,
+                     rollo : dato.rollo,
+                     ip : dato.direccion_ip,
+                     componente_principal: dato.componente_principal
+                     }  }); 
+                     this.setState({baia: res.data});
+ 
+             }).catch(err => {
+                 console.log(err)
+             });
+         }
+         console.log(this.state.baia);
+  */
         this.props.form.setFieldsValue({
             numero_serie: info.numero_serie,
             codigo: info.codigo,

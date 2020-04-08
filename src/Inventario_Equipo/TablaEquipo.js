@@ -28,13 +28,7 @@ class TablaEquipo extends React.Component {
             sortedInfo: null,
             index: 0
         };
-        this.handleClick = this.handleClick.bind(this);
-    }
-    handleClick() {
-        this.setState({
-            showComponent: true,
-            showTable: false,
-        });
+
     }
 
     llenar_tabla() {
@@ -188,26 +182,11 @@ class TablaEquipo extends React.Component {
         return lap;
     }
 
-    cargar_impresora(codigo) {
+    cargar_impresora(key) {
         let print = {
-            key: '3',
-            nserie: '3456',
-            bspi: 'Hospital León Becerra',
-            asignado: 'Carlos Ruiz Zafón',
-            dpto: 'Sistemas',
-            tipo: 'brazalete',
-            marca: 'Epson',
-            codigo: 123,
-            estado: 'Operativo',
-            modelo: 'RGB-102',
-            tinta: 'Z95',
-            cartucho: 'H96',
-            descripcion: 'Ninguna',
-            toner: 'J98',
-            rodillo: '',
-            cinta: '',
-            rolloBrazalete: 'Y97'
+            tabla_equipo: key
         }
+
         return print;
     }
 
@@ -296,7 +275,7 @@ class TablaEquipo extends React.Component {
         const tipo_render = (record) => {
             switch (record.tipo_equipo.toLowerCase()) {
                 case "impresora":
-                    return <Link to={{ pathname: '/impresora/form', state: { info: record, titulo: "Editar impresora" } }}>
+                    return <Link to={{ pathname: '/impresora/form', state: { info: this.cargar_impresora(record.key), titulo: "Editar impresora" } }}>
                         <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
                     </Link>
                 case "cpu":
@@ -336,13 +315,13 @@ class TablaEquipo extends React.Component {
         const tipo_data = (record) => {
             switch (record.tipo_equipo.toLowerCase()) {
                 case "impresora":
-                    return this.cargar_impresora(record.codigo);
+                    return this.cargar_impresora(record.key);
                 case "cpu":
-                    return this.cargar_desktop(record.codigo);
+                    return this.cargar_desktop(record.key);
                 case "laptop":
-                    return this.cargar_laptop(record.codigo);
+                    return this.cargar_laptop(record.key);
                 case "router":
-                    return this.cargar_router(record.codigo);
+                    return this.cargar_router(record.key);
                 default:
                     return record;
             }
