@@ -1,11 +1,12 @@
 import React from 'react';
-import { Tabs, Row, Col, Typography, Button, Descriptions, Badge } from 'antd';
+import { Tabs, Row, Col, Typography, Button, Descriptions, Badge, message } from 'antd';
 import { PrinterOutlined, UserOutlined } from '@ant-design/icons';
 import SinResultados from '../Componentes/SinResultados'
+import Axios from '../Servicios/AxiosTipo';
 const { TabPane } = Tabs;
 const { Title } = Typography;
 
-class DetalleIIp extends React.Component {
+class DetalleImpresora extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -18,13 +19,13 @@ class DetalleIIp extends React.Component {
             marca: "",
             estado: "",
             modelo: "",
-            tinta: "---",
-            cartucho: "---",
+            tinta: "",
+            cartucho: "",
             descripcion: "",
-            toner: "---",
-            rodillo: "---",
-            cinta: "---",
-            rollo: "---",
+            toner: "",
+            rodillo: "",
+            cinta: "",
+            rollo: "",
             componente: "",
             ip: "",
             nodata: false
@@ -35,47 +36,67 @@ class DetalleIIp extends React.Component {
         if (typeof this.props.location !== 'undefined' &&
             typeof this.props.location.state !== 'undefined') {
             const { info } = this.props.location.state;
-            this.cargar_datos(info);
+            this.inicializar_datos(info);
         } else {
             this.setState({ nodata: true });
         }
     }
 
+    inicializar_datos(info) {
+         let empleado = "";
+        let registro = {}; 
+        Axios.impresora_id(info.tabla_equipo).then(res => {
+             res.data.forEach(function (dato) {
+                if (dato.empleado !== null) {
+                    empleado = dato.empleado.concat(" ", dato.apellido);
+                }
+                registro.numero_serie = dato.numero_serie;
+                registro.asignado = empleado;
+                registro.tipo = dato.tipo;
+                registro.id_marca = dato.id_marca;
+                registro.codigo = dato.codigo;
+                registro.estado_operativo = dato.estado_operativo;
+                registro.modelo = dato.modelo;
+                registro.tinta = dato.tinta;
+                registro.cartucho = dato.cartucho;
+                registro.descripcion = dato.descripcion;
+                registro.toner = dato.toner;
+                registro.rodillo = dato.rodillo;
+                registro.cinta = dato.cinta;
+                registro.rollo = dato.rollo;
+                registro.ip = dato.direccion_ip;
+                registro.componente_principal = dato.componente_principal;
+                registro.bspi= dato.bspi_punto;
+                registro.dpto= dato.departamento;
+ 
+            });
+             this.cargar_datos(registro); 
+        }).catch(err => {
+            message.error('Problemas de conexión con el servidor, inténtelo más tarde', 4);
+        });
+    }
+
     cargar_datos(info) {
         this.setState({
             codigo: info.codigo,
-            nserie: info.nserie,
+            nserie: info.numero_serie,
             bspi: info.bspi,
             asignado: info.asignado,
             dpto: info.dpto,
             tipo: info.tipo,
-            marca: info.marca,
-            estado: info.estado,
+            marca: info.id_marca,
+            estado: info.estado_operativo,
             modelo: info.modelo,
             descripcion: info.descripcion,
-            componente: info.componente,
-            ip: info.ip
+            componente: info.componente_principal,
+            ip: info.ip,
+            tinta: info.tinta,
+            cartucho: info.cartucho,
+            toner: info.toner,
+            rodillo: info.rodillo,
+            cinta: info.cinta,
+            rollo: info.rollo
         });
-
-        if (info.tinta !== "" || typeof info.tinta!== "undefined") {
-            this.setState({ tinta: info.tinta })
-        }
-        if (info.cartucho !== "" || typeof info.cartucho!== "undefined") {
-            this.setState({ cartucho: info.cartucho })
-        }
-        if (info.toner !== "" || typeof info.toner!== "undefined") {
-            this.setState({ toner: info.toner})
-        }
-        if (info.rodillo !== "" || typeof info.rodillo!== "undefined") {
-            this.setState({ rodillo: info.rodillo})
-        }
-        if (info.cinta !== "" || typeof info.cinta!== "undefined") {
-            this.setState({ cinta: info.cinta})
-        }
-        if (info.rollo !== "" || typeof info.rollo!== "undefined") {
-            this.setState({ rollo: info.rollo})
-        }
-        
     }
 
     render() {
@@ -122,9 +143,8 @@ class DetalleIIp extends React.Component {
                             <TabPane tab={<span><UserOutlined />Asignación</span>} key="2">
                                 <Descriptions title="Información de la asignación" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
                                     <Descriptions.Item label="Asignado a" span={3}>{this.state.asignado}</Descriptions.Item>
-                                    <Descriptions.Item label="BSPI punto">Hospital LB</Descriptions.Item>
-                                    <Descriptions.Item label="Departamento">Sistemas</Descriptions.Item>
-                                    <Descriptions.Item label="Fecha de asignación">n/a</Descriptions.Item>
+                                    <Descriptions.Item label="BSPI punto">{this.state.bspi}</Descriptions.Item>
+                                    <Descriptions.Item label="Departamento">{this.state.dpto}</Descriptions.Item>
                                 </Descriptions>
                             </TabPane>
                         </Tabs>
@@ -136,4 +156,4 @@ class DetalleIIp extends React.Component {
 
 }
 
-export default DetalleIIp;
+export default DetalleImpresora;

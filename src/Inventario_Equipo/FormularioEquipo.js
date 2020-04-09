@@ -110,6 +110,7 @@ class FormularioEquipo extends React.Component {
     }
 
     cargar_datos(info) {
+        console.log(info)
         this.props.form.setFieldsValue({
             codigo: info.codigo,
             tipo_equipo: info.tipo_equipo,

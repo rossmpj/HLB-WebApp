@@ -47,7 +47,12 @@ class FormularioImpresora extends React.Component {
             encargado_registro: "admin",
             editionMode: false,
             key: "",
-            baia: {}
+            codigo: "",
+            id_marca: "",
+            estado_operativo: "O",
+            ip: "",
+            componente_principal: "",
+            asignado: "",
         };
         this.handle_guardar = this.handle_guardar.bind(this);
     }
@@ -57,7 +62,7 @@ class FormularioImpresora extends React.Component {
             if (typeof this.props.data.state !== 'undefined'
                 && typeof this.props.data.state.info !== 'undefined'
             ) {
-                this.cargar_datos(this.props.data.state.info);
+                this.inicializar_formulario(this.props.data.state.info);
                 this.setState({ editionMode: true });
             }
         }
@@ -97,54 +102,57 @@ class FormularioImpresora extends React.Component {
         });
     }
 
+    inicializar_formulario(info) {
+        if (typeof info.tabla_equipo !== 'undefined') {
+            let empleado = "";
+            let registro = {};
+            Axios.impresora_id(info.tabla_equipo).then(res => {
+                res.data.forEach(function (dato) {
+                    if (dato.empleado !== null) {
+                        empleado = dato.empleado.concat(" ", dato.apellido);
+                    }
+                    registro.key = dato.id_impresora;
+                    registro.numero_serie = dato.numero_serie;
+                    registro.asignado = empleado;
+                    registro.tipo = dato.tipo;
+                    registro.id_marca = dato.id_marca;
+                    registro.codigo = dato.codigo;
+                    registro.estado_operativo = dato.estado_operativo;
+                    registro.modelo = dato.modelo;
+                    registro.tinta = dato.tinta;
+                    registro.cartucho = dato.cartucho;
+                    registro.descripcion = dato.descripcion;
+                    registro.toner = dato.toner;
+                    registro.rodillo = dato.rodillo;
+                    registro.cinta = dato.cinta;
+                    registro.rollo = dato.rollo;
+                    registro.ip = dato.direccion_ip;
+                    registro.componente_principal = dato.componente_principal;
+                });
+                this.cargar_datos(registro);
+            }).catch(err => {
+                message.error('Problemas de conexión con el servidor, inténtelo más tarde', 4);
+            });
+        } else {
+            this.cargar_datos(info);
+        }
+    }
+
     cargar_datos(info) {
-        /*  if (typeof info.tabla_equipo !== 'undefined') {
-              let empleado = ""; 
-             Axios.impresora_id(9).then(res => {
-                  res.data.forEach(function (dato) {
-                     if (dato.empleado !== null) {
-                         empleado = dato.empleado.concat(" ", dato.apellido);
-                     }
-                     let registro ={
-                     key : dato.id_impresora,
-                     numero_serie : dato.numero_serie,
-                     asignado : empleado,
-                     tipo : dato.tipo,
-                    id_marca : dato.marca,
-                     codigo : dato.codigo,
-                     estado_operativo : dato.estado_operativo,
-                     modelo : dato.modelo,
-                     tinta : dato.tinta,
-                     cartucho : dato.cartucho,
-                     descripcion : dato.descripcion,
-                     toner : dato.toner,
-                     rodillo : dato.rodillo,
-                     cinta : dato.cinta,
-                     rollo : dato.rollo,
-                     ip : dato.direccion_ip,
-                     componente_principal: dato.componente_principal
-                     }  }); 
-                     this.setState({baia: res.data});
- 
-             }).catch(err => {
-                 console.log(err)
-             });
-         }
-         console.log(this.state.baia);
-  */
         this.props.form.setFieldsValue({
             numero_serie: info.numero_serie,
             codigo: info.codigo,
             modelo: info.modelo,
             estado_operativo: info.estado_operativo,
-            id_marca: info.id_marca,
-            ip: info.ip,
-            componente_principal: info.componente_principal,
-            asignado: info.asignado,
-            descripcion: info.descripcion,
-            tipo: info.tipo
+            descripcion: info.descripcion
         })
+        this.setState({ key: info.key });
 
+        this.setState({ id_marca: info.id_marca });
+        this.setState({ estado_operativo: info.estado_operativo });
+        this.setState({ ip: info.ip });
+        this.setState({ componente_principal: info.componente_principal });
+        this.setState({ asignado: info.asignado });
         this.setState({ tipo: info.tipo });
 
         if (info.tipo.toLocaleLowerCase() === "matricial") {
@@ -168,8 +176,6 @@ class FormularioImpresora extends React.Component {
             this.setState({ rodillo: info.rodillo, toner: info.toner });
             this.setState({ cartucho: info.cartucho });
         }
-        this.setState({ key: info.key });
-
     }
 
     render() {
@@ -195,7 +201,8 @@ class FormularioImpresora extends React.Component {
 
                         <Form.Item label="Tipo">
                             {getFieldDecorator('tipo', {
-                                rules: [{ required: true, message: 'Debe seleccionar el tipo de impresora' }]
+                                rules: [{ required: true, message: 'Debe seleccionar el tipo de impresora' }],
+                                initialValue: this.state.tipo
                             })(
                                 <Select
                                     onChange={(value) => {
@@ -214,12 +221,14 @@ class FormularioImpresora extends React.Component {
                             class=""
                             id="id_marca"
                             required={true}
+                            initialValue={this.state.id_marca}
                             decorator={getFieldDecorator} />
 
                         <EstadoSelect
                             class=""
                             id="estado_operativo"
                             required={true}
+                            initialValue={this.state.estado_operativo}
                             decorator={getFieldDecorator} />
 
                         <InputComponent
@@ -373,16 +382,19 @@ class FormularioImpresora extends React.Component {
                         <IpSelect class=""
                             required={false}
                             id="ip"
+                            initialValue={this.state.ip}
                             decorator={getFieldDecorator} />
 
                         <ComponentePrincipal class=""
                             required={false}
                             id="componente_principal"
+                            initialValue={this.state.componente_principal}
                             decorator={getFieldDecorator} />
 
                         <AsignarSelect class=""
                             required={false}
                             id="asignado"
+                            initialValue={this.state.asignado}
                             decorator={getFieldDecorator} />
 
                         <Form.Item label="Descripción">

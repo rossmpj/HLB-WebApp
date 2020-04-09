@@ -1,11 +1,12 @@
 import React from 'react';
-import { Tabs, Row, Col, Typography, Button, Descriptions, Badge } from 'antd';
+import { Tabs, Row, Col, Typography, Button, Descriptions, Badge, message } from 'antd';
 import { RobotOutlined, UserOutlined } from '@ant-design/icons';
 import SinResultados from '../Componentes/SinResultados'
+import Axios from '../Servicios/AxiosTipo';
 const { TabPane } = Tabs;
 const { Title } = Typography;
 
-class DetalleIIp extends React.Component {
+class DetalleEquipo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -21,7 +22,7 @@ class DetalleIIp extends React.Component {
             descripcion: "",
             componente: "",
             ip: "",
-            registro: "",
+             registro: "",
             nodata: false
         }
     }
@@ -30,11 +31,38 @@ class DetalleIIp extends React.Component {
         if (typeof this.props.location !== 'undefined' &&
             typeof this.props.location.state !== 'undefined') {
             const { info } = this.props.location.state;
-            this.cargar_datos(info);
+            this.inicializar_datos(info);
         } else {
             this.setState({ nodata: true });
         }
     }
+
+    inicializar_datos(info){
+        let empleado = "";
+        let registro = {}; 
+        Axios.equipo_id(info.key).then(res => {
+           res.data.forEach(function (dato) {
+            if (dato.empleado !== null) {
+                empleado = dato.empleado.concat(" ", dato.apellido);
+            }
+                registro.ip = dato.direccion_ip;
+                registro.codigo= dato.codigo;
+                registro.nserie = dato.numero_serie;
+                registro.bspi = dato.bspi_punto
+                registro.asignado = empleado;
+                registro.departamento = dato.departamento; 
+                registro.tipo = dato.tipo_equipo;
+                registro.marca = dato.marca;
+                registro.estado = dato.estado_operativo;
+                registro.modelo = dato.modelo;
+                registro.descripcion = dato.descripcion;
+                registro.componente = dato.componente_principal;
+            });
+             this.cargar_datos(registro); 
+        }).catch(err => {
+            message.error('Problemas de conexión con el servidor, inténtelo más tarde', 4);
+        }); 
+}
 
     cargar_datos(info) {
         this.setState({
@@ -49,7 +77,6 @@ class DetalleIIp extends React.Component {
             modelo: info.modelo,
             descripcion: info.descripcion,
             componente: info.componente,
-            registro: info.registro,
             ip: info.ip
         })
     }
@@ -90,9 +117,8 @@ class DetalleIIp extends React.Component {
                             <TabPane tab={<span><UserOutlined />Asignación</span>} key="2">
                                 <Descriptions title="Información de la asignación" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
                                     <Descriptions.Item label="Asignado a" span={3}>{this.state.asignado}</Descriptions.Item>
-                                    <Descriptions.Item label="BSPI punto">Hospital LB</Descriptions.Item>
-                                    <Descriptions.Item label="Departamento">Sistemas</Descriptions.Item>
-                                    <Descriptions.Item label="Fecha de asignación">n/a</Descriptions.Item>
+                                    <Descriptions.Item label="BSPI punto">{this.state.bspi}</Descriptions.Item>
+                                    <Descriptions.Item label="Departamento">{this.state.dpto}</Descriptions.Item>
                                 </Descriptions>
                             </TabPane>
                         </Tabs>
@@ -104,4 +130,4 @@ class DetalleIIp extends React.Component {
 
 }
 
-export default DetalleIIp;
+export default DetalleEquipo;

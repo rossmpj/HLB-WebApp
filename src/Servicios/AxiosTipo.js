@@ -45,7 +45,7 @@ export default class AxiosTipo {
 
     /******************************************************************************/
 
-    /* Inventario IP */
+    /*---------- Inventario IP ----------*/
     static crear_ip = (ip) => {
         return AxiosTipo.instanceAxios.post(`/crear_ip`, ip);
     }
@@ -58,8 +58,12 @@ export default class AxiosTipo {
         return AxiosTipo.instanceAxios.put(`/editar_ip`,ip);
     }
 
+    static buscar_ip=(id_ip) =>{
+        return AxiosTipo.instanceAxios.get(`/ip_id/${id_ip}`);
+    }
 
-    /* Inventario Impresora */
+
+    /*---------- Inventario Impresora ----------*/
     static crear_impresora = (impresora) => {
         return AxiosTipo.instanceAxios.post(`/impresora`, impresora);
     }
@@ -72,8 +76,12 @@ export default class AxiosTipo {
         return AxiosTipo.instanceAxios.put(`/editar_impresora`,impresora);
     }
 
+    static impresora_id = (id_equipo) => {
+        return AxiosTipo.instanceAxios.get(`/impresora_id/${id_equipo}`);
+    }
 
-    /* Inventario otros equipos */
+
+    /*---------- Inventario otros equipos ----------*/
     static crear_otro_equipo = (equipo) => {
         return AxiosTipo.instanceAxios.post(`/otro_equipo`, equipo);
     }
@@ -88,9 +96,9 @@ export default class AxiosTipo {
 
     static editar_equipo = (equipo) => {
         return AxiosTipo.instanceAxios.put(`/editar_equipo`,equipo);
-    }
+    }  
 
-    static impresora_id = (id_equipo) => {
-        return AxiosTipo.instanceAxios.get(`/impresora_id/${id_equipo}`);
+    static equipo_id = (id_equipo) => {
+        return AxiosTipo.instanceAxios.get(`/equipo_id/${id_equipo}`);
     }
 }

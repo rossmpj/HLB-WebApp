@@ -94,100 +94,11 @@ class TablaEquipo extends React.Component {
         this.llenar_tabla();
     }
 
-
-    cargar_desktop(codigo) {
-        let desk = {
-            key: '1',
-            codigo: 'HLB_COMP_3',
-            bspi: 'Hospital León Becerra',
-            departamento: 'Financiero',
-            empleado: 'Victor Toral',
-            name_pc: 'Contador-PC',
-            user_pc: 'Contador',
-            estado: 'Operativo',
-            so: 'Windows 7 Professional',
-            so_type: '32 bits',
-            servpack: 'No',
-            licencia: 'No',
-            office: '2013',
-            ip: '8',
-            monitor: 'HLB_MNT_1',
-            teclado: 'HLB_TEC_12',
-            mouse: 'HLB_MOU_35',
-            parlantes: 'HLB_PAR_23',
-            mainboard: 'HLB_MNB_34',
-            rams: ['1', 'gfh'],
-            discos: ['HLB_DD_4'],
-            procesador: 'HLB_PRC',
-            tarj_red: 'hlb_tred_1',
-            case: 'hlb_cas_4',
-            f_alim: 'UPS',
-            f_poder: 'HLB_fpod_1',
-            descripcion: 'revisar'
-        }
-        return desk;
-    }
-
-    cargar_router(codigo) {
-        let router = {
-            codigo: '0',
-            key: 'num_serie',
-            bspi: 'Hogar Inés Chambers',
-            departamento: 'Proveeduría',
-            asignar: 'Tae woon',
-            nombre: 'John Brown',
-            pass: 'gjgkd32',
-            usuario: 'drgd5547',
-            clave: '345',
-            marca: 'LG',
-            modelo: 'ergr',
-            nserie: 23,
-            estado: 'Operativo',
-            ip: '2',
-            penlace: '192.168.1.0',
-            descripcion: 'muy bueno'
-        }
-        return router;
-    }
-
-
-    cargar_laptop(codigo) {
-        let lap = {
-            key: '1',
-            codigo: 'HLB_COMP_1',
-            bspi: 'Hospital León Becerra',
-            departamento: 'Proveeduría',
-            empleado: 'John Villamar',
-            marca: 'Lenovo',
-            modelo: 'h2343',
-            num_serie: 'tftyfBGPGTH1',
-            name_pc: 'Admin',
-            user_pc: 'UsADmin1',
-            estado: 'No Operativo',
-            so: 'Windows 10 Home Single Language',
-            so_type: '64 bits',
-            servpack: 'No',
-            licencia: 'Si',
-            office: '2010',
-            ip: '1',
-            nombre_procesador: 'Intel Core i7-5500U',
-            frecuencia: '3 GHz',
-            nnucleos: 4,
-            ram_soportada: '12 GB',
-            slots_ram: 2,
-            rams: ['HLB_S2', 'GGRGHGDGRGT-1', 'DFGHR22'],
-            discos: ['HLB_DD_9', 'HLB_DDD_1'],
-            descripcion: 'nn'
-        }
-        return lap;
-    }
-
-    cargar_impresora(key) {
-        let print = {
+    codigo_equipo(key) {
+        let equipo = {
             tabla_equipo: key
         }
-
-        return print;
+        return equipo;
     }
 
 
@@ -275,19 +186,19 @@ class TablaEquipo extends React.Component {
         const tipo_render = (record) => {
             switch (record.tipo_equipo.toLowerCase()) {
                 case "impresora":
-                    return <Link to={{ pathname: '/impresora/form', state: { info: this.cargar_impresora(record.key), titulo: "Editar impresora" } }}>
+                    return <Link to={{ pathname: '/impresora/form', state: { info: this.codigo_equipo(record.key), titulo: "Editar impresora" } }}>
                         <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
                     </Link>
                 case "cpu":
-                    return <Link to={{ pathname: '/', state: { info: record, titulo: "Editar Desktop" } }}>
+                    return <Link to={{ pathname: '/', state: { info: this.codigo_equipo(record.key), titulo: "Editar Desktop" } }}>
                         <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
                     </Link>;
                 case "laptop":
-                    return <Link to={{ pathname: '/', state: { info: record, titulo: "Editar Laptop" } }}>
+                    return <Link to={{ pathname: '/', state: { info: this.codigo_equipo(record.key), titulo: "Editar Laptop" } }}>
                         <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
                     </Link>;
                 case "router":
-                    return <Link to={{ pathname: '/', state: { info: record, titulo: "Editar router" } }}>
+                    return <Link to={{ pathname: '/', state: { info: this.codigo_equipo(record.key), titulo: "Editar router" } }}>
                         <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
                     </Link>;
                 default:
@@ -315,13 +226,13 @@ class TablaEquipo extends React.Component {
         const tipo_data = (record) => {
             switch (record.tipo_equipo.toLowerCase()) {
                 case "impresora":
-                    return this.cargar_impresora(record.key);
+                    return this.codigo_equipo(record.key);
                 case "cpu":
-                    return this.cargar_desktop(record.key);
+                    return this.codigo_equipo(record.key);
                 case "laptop":
-                    return this.cargar_laptop(record.key);
+                    return this.codigo_equipo(record.key);
                 case "router":
-                    return this.cargar_router(record.key);
+                    return this.codigo_equipo(record.key);
                 default:
                     return record;
             }

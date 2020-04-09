@@ -79,7 +79,8 @@ class TablaImpresora extends React.Component {
                     cinta: dato.cinta,
                     rollo: dato.rollo,
                     ip: dato.direccion_ip,
-                    componente_principal: dato.componente_principal
+                    componente_principal: dato.componente_principal,
+                    tabla_equipo: dato.id_equipo
                 }
                 datos.push(impresoras)
             });

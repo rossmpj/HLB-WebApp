@@ -1,7 +1,8 @@
 import React from 'react';
-import { Tabs, Row, Col, Typography, Button, Descriptions, Badge } from 'antd';
+import { Tabs, Row, Col, Typography, Button, Descriptions, Badge, message } from 'antd';
 import { WifiOutlined, UserOutlined } from '@ant-design/icons';
 import SinResultados from '../Componentes/SinResultados'
+import Axios from '../Servicios/AxiosTipo';
 const { TabPane } = Tabs;
 const { Title } = Typography;
 
@@ -16,9 +17,12 @@ class DetalleIIp extends React.Component {
             fortigate: "",
             maquinas: "",
             observacion: "",
-            asignacion: "",
             asignado: "",
-            data: false
+            data: false,
+            punto: "",
+            departamento: "",
+            equipo: "",
+            tipo: ""
         }
     }
 
@@ -26,10 +30,46 @@ class DetalleIIp extends React.Component {
         if (typeof this.props.location !== 'undefined' &&
             typeof this.props.location.state !== 'undefined') {
             const { info } = this.props.location.state;
-            this.cargar_datos(info);
+            this.inicializar_datos(info);
         } else {
             this.setState({ data: true });
         }
+    }
+
+    inicializar_datos(info){
+            let empleado = "";
+            let punto = "";
+            let departamento = "";
+            let equipo = "";
+            let tipo = "";
+            let registro = {}; 
+            Axios.buscar_ip(info.key).then(res => {
+               res.data.forEach(function (dato) {
+                    
+                     if (dato.nombre !== null) {
+                        empleado = dato.nombre.concat(" ", dato.apellido);
+                        punto= dato.bspi_punto;
+                        departamento= dato.departamento;
+                        equipo= dato.codigo;
+                        tipo= dato.tipo_equipo;
+                    }
+                    registro.ip = dato.direccion_ip;
+                    registro.hostname= dato.hostname;
+                    registro.asignado = empleado;
+                    registro.subred = dato.subred;
+                    registro.fortigate = dato.fortigate;
+                    registro.maquinas = dato.maquinas;
+                    registro.observacion = dato.observacion;
+                    registro.estado = dato.estado;
+                    registro.punto = punto;
+                    registro.departamento = departamento; 
+                    registro.equipo = equipo;
+                    registro.tipo = tipo;
+                });
+                 this.cargar_datos(registro); 
+            }).catch(err => {
+                message.error('Problemas de conexión con el servidor, inténtelo más tarde', 4);
+            }); 
     }
 
     cargar_datos(info) {
@@ -41,8 +81,11 @@ class DetalleIIp extends React.Component {
             maquinas: info.maquinas,
             observacion: info.observacion,
             estado: info.estado,
-            asignacion: info.asignacion,
-            asignado: info.asignado
+            asignado: info.asignado,
+            punto: info.punto,
+            departamento: info.departamento,
+            tipo: info.tipo,
+            equipo: info.equipo
         })
     }
 
@@ -81,9 +124,10 @@ class DetalleIIp extends React.Component {
                             <TabPane tab={<span><UserOutlined />Asignación</span>} key="2">
                                 <Descriptions title="Información de la asignación" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
                                     <Descriptions.Item label="Asignado a" span={3}>{this.state.asignado}</Descriptions.Item>
-                                    <Descriptions.Item label="BSPI punto">Hospital LB</Descriptions.Item>
-                                    <Descriptions.Item label="Departamento">Sistemas</Descriptions.Item>
-                                    <Descriptions.Item label="Fecha de asignación">{this.state.asignacion}</Descriptions.Item>
+                                    <Descriptions.Item label="BSPI punto">{this.state.punto}</Descriptions.Item>
+                                    <Descriptions.Item label="Departamento">{this.state.departamento}</Descriptions.Item>
+                                    <Descriptions.Item label="Código equipo">{this.state.equipo}</Descriptions.Item>
+                                    <Descriptions.Item label="Tipo">{this.state.tipo}</Descriptions.Item>
                                 </Descriptions>
                             </TabPane>
                         </Tabs>
