@@ -10,6 +10,7 @@ import { GiProcessor } from "react-icons/gi";
 import { Button, Layout, Row, Col, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import { Steps } from 'antd';
+import Axios from '../Servicios/AxiosLaptop'
 
 const { Step } = Steps;
 const { Content } = Layout;
@@ -22,7 +23,7 @@ class FormularioLaptop extends Component {
     general_fields: {
         codigo: '',
         asignar: '',
-        marca: '',
+        marca: null,
         modelo: '',
         nserie: '',
         nombre_pc: '',
@@ -40,7 +41,7 @@ class FormularioLaptop extends Component {
     },
     procesador_fields: {
         codigo_proc: '', 
-        marca_proc: '', 
+        marca_proc: undefined, 
         modelo_proc: '', 
         nserie_proc: '', 
         frec_procesador: 0,
@@ -74,17 +75,26 @@ class FormularioLaptop extends Component {
       }
     }
     cargar_datos(info) {
-        console.log(info);
+        console.log(info.rams);
         let indcx = []
         for (const element in info.rams) {
-            indcx.push({ codigo: element, marca: 1, modelo: "fgfgrgt", nserie: "rgrgtrtg", capacidad: 110, tipo: "sss", descr: ""})
+            //console.log(info.rams[element])
+            indcx.push({ codigo: info.rams[element], marca: 1, modelo: "fgfgrgt", nserie: "rgrgtrtg", capacidad: 110, tipo: "sss", descr: ""})
+        }
+        let inddcx = []
+        for (const element in info.discos) {
+            //console.log(info.rams[element])
+            inddcx.push({ codigo: info.discos[element], marca: 1, modelo: "fgfgrgt", nserie: "rgrgtrtg", capacidad: 110, tipo: "sss", descr: ""})
         }
         console.log("indx", indcx)
+        Axios.obtenerInfoLaptop(info.key).then(res => {
+            let registro = res.data;
+            console.log("registro:",registro);
         this.setState({
             general_fields: {
                 codigo: info.codigo,
                 asignar: info.empleado,
-                marca: info.marca,
+                marca: registro.id_marca,
                 modelo: info.modelo,
                 nserie: info.num_serie,
                 nombre_pc: info.name_pc,
@@ -101,13 +111,13 @@ class FormularioLaptop extends Component {
                 office: info.office
             },
             procesador_fields: {
-                codigo_proc: info.nombre_procesador,
-                marca_proc: 'rr',
-                modelo_proc: 'rr',
-                nserie_proc: 'rr',
+                codigo_proc: info.id_procesador,
+                marca_proc: registro.pc_procesador.id_marca,
+                modelo_proc: registro.pc_procesador.modelo,
+                nserie_proc: registro.pc_procesador.numero_serie,
                 frec_proc: info.frecuencia,
                 nucleos_proc: info.nnucleos,
-                descr_proc: 'rr'
+                descr_proc: registro.pc_procesador.descripcion
             },
             ram_fields:{        
                 nombre: 'memoria RAM',
@@ -121,10 +131,10 @@ class FormularioLaptop extends Component {
                 nombre: 'disco duro',
                 verDetalleRAM: false,
                 isStepFinal: true,
-                indx: indcx
+                indx: inddcx
             }
         })
-        
+    })
       }
 
     handleNextButton = () => {

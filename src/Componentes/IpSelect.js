@@ -21,11 +21,9 @@ class IpSelect extends React.Component {
         }
         datos.push(ip);
       });
-      this.setState({ ip: datos }, () => { console.log('ips: ', this.state.ip); });
+      this.setState({ ip: datos });
     });
     }
-
-    
     
     render() {
         return (

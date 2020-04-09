@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Row, Col, Table, Input, Icon, Popconfirm, Tag, Typography, message } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
-import { Link, Router } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import AxiosLaptop from '../Servicios/AxiosLaptop'
 import FuncionesAuxiliares from '../FuncionesAuxiliares'
 
@@ -78,39 +78,37 @@ class TablaLaptop extends React.Component{
 
     obtener_datos = () => {
         let datos = [];
-        AxiosLaptop.codigos_laptops().then(res => {
+        AxiosLaptop.listar_laptops().then(res => {
         res.data.forEach(function (r) {
-            AxiosLaptop.obtenerInfoLaptop(r.id_equipo).then(ress => {
-                // ress.data.forEach( registro  => {
-                //     console.log("REG:",registro)
-            // var dip = registro.ip === null ? ' ' : registro.ip;
-            // var ram_soportada = registro.campo === 'ram_soportada' ? registro.dato : ''
-            // var num_slots = registro.campo === 'numero_slots' ? registro.dato : ''
-            let registro = ress.data
+            let registro = r.original
+            var dip = registro.ip === null ? ' ' : registro.ip.toString();
             let router = {
-            key: registro.codigo,
-            codigo: registro.id_equipo,
-            bspi: registro.bspi,
-            departamento: registro.departamento,
-            marca: registro.marca,
-            modelo: registro.modelo,
-            num_serie: registro.numero_serie, 
-            estado: registro.estado_operativo,
-            ip: registro.ip,
-            empleado: registro.empleado+' '+registro.apellido,
-            so: registro.so,
-            servpack: registro.service_pack === '0' ? 'No' : 'Si',
-            so_type: registro.tipo_so,
-            name_pc: registro.nombre_pc,
-            user_pc: registro.usuario_pc,
-            licencia: registro.licencia === '0' ? 'No' : 'Si',
-            ram_soportada: registro.ram_soportada,
-            slots_ram: registro.numero_slots,
-            descripcion: registro.descripcion
+                key: registro.id_equipo,
+                codigo: registro.codigo,
+                bspi: registro.bspi,
+                departamento: registro.departamento,
+                marca: registro.marca,
+                modelo: registro.modelo,
+                num_serie: registro.numero_serie, 
+                estado: registro.estado_operativo,
+                ip: dip,
+                empleado: registro.empleado+' '+registro.apellido,
+                so: registro.so,
+                servpack: registro.service_pack === '0' ? 'No' : 'Si',
+                so_type: registro.tipo_so,
+                name_pc: registro.nombre_pc,
+                user_pc: registro.usuario_pc,
+                licencia: registro.licencia === '0' ? 'No' : 'Si',
+                ram_soportada: registro.ram_soportada,
+                slots_ram: registro.numero_slots,
+                frecuencia: registro.frecuencia+' GHz',
+                nnucleos: registro.nnucleos,
+                descripcion: registro.descripcion,
+                id_procesador: registro.id_procesador,
+                rams: registro.rams,
+                discos: registro.discos,
             }
-        datos.push(router);
-                // })
-            });
+            datos.push(router);
         });
         this.setState({ dataSource: datos });
         }).catch(err => {
@@ -278,7 +276,7 @@ class TablaLaptop extends React.Component{
         ],
         filteredValue: filteredInfo.departamento || null,
         onFilter: (value, record) => record.departamento.indexOf(value) === 0,
-        sorter: (a, b) => a.departamento.length - b.departamento.length,
+        sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.departamento, b.departamento),
         sortOrder: sortedInfo.columnKey === 'departamento' && sortedInfo.order,
       },
       {
@@ -525,15 +523,15 @@ class TablaLaptop extends React.Component{
             key: 'rams',
             width: 70,
             render: (rams) => (
-              <div>
-                {/* {rams.map(id_memoria => {
-                  return (
-                    <Link key={id_memoria} to={{ pathname: '/otros/view', state: { info: id_memoria, tipo_equipo: 'memoria RAM' } }} >
-                      <Tag style={{margin: 2}} color="cyan" key={id_memoria.toString()}>{id_memoria}</Tag>
-                    </Link>              
-                  );
-                })} */}
-              </div>
+                <div>
+                    {rams.map(id_memoria => {
+                        return (
+                            <Link key={id_memoria} to={{ pathname: '/otros/view', state: { info: id_memoria, tipo_equipo: 'memoria RAM' } }} >
+                            <Tag style={{margin: 2}} color="cyan" key={id_memoria.toString()}>{id_memoria}</Tag>
+                            </Link>              
+                        );
+                    })}
+                </div>
             ),
           },  
         ],
@@ -544,15 +542,15 @@ class TablaLaptop extends React.Component{
         key: 'discos',
         width: 70,
         render: (discos) => (
-          <div>
-            {/* {discos.map(id_disco => {
-              return (
-                <Link key={id_disco} to={{ pathname: '/otros/view', state: { info: id_disco, tipo_equipo: 'disco Duro' } }} >
-                  <Tag style={{margin: 2}} color="blue" key={id_disco.toString()}>{id_disco}</Tag>
-                </Link>              
-              );
-            })} */}
-          </div>
+            <div>
+                {discos.map(id_disco => {
+                    return (
+                        <Link key={id_disco} to={{ pathname: '/otros/view', state: { info: id_disco, tipo_equipo: 'disco Duro' } }} >
+                        <Tag style={{margin: 2}} color="blue" key={id_disco.toString()}>{id_disco}</Tag>
+                        </Link>              
+                    );
+                })}
+            </div>
         ),
       },
       {

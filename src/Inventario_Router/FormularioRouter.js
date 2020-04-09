@@ -23,6 +23,7 @@ class FormularioRouter extends React.Component {
     super(props);
     this.state = {
         titulo: "",
+        id_router: "",
         disabled: false
     };
     this.handle_guardar = this.handle_guardar.bind(this);
@@ -48,23 +49,24 @@ class FormularioRouter extends React.Component {
       if (!err) {
         console.log("valores al guardar:",values)
         let router = {
-          codigo: values.codigo,
-          tipo_equipo: "Router",
-          id_marca: values.marca,
-          modelo: values.modelo,
-          numero_serie: values.nserie,
-          asignado: values.asignar,
-          encargado_registro: 'admin',
-          componente_principal: null,
-          ip: values.ip,
-          nombre: values.nombre,
-          pass: values.pass,
-          usuario: values.usuario,
-          clave: values.clave,
-          estado_operativo: values.estado,
-          puerta_enlace: values.penlace,
-          descripcion: values.descripcion,
-          fecha_registro: '2020-03-26'
+            id_equipo: this.state.id_router,
+            codigo: values.codigo,
+            tipo_equipo: "Router",
+            id_marca: values.marca,
+            modelo: values.modelo,
+            numero_serie: values.nserie,
+            asignado: values.asignar,
+            encargado_registro: 'admin',
+            componente_principal: null,
+            ip: values.ip,
+            nombre: values.nombre,
+            pass: values.pass,
+            usuario: values.usuario,
+            clave: values.clave,
+            estado_operativo: values.estado,
+            puerta_enlace: values.penlace,
+            descripcion: values.descripcion,
+            fecha_registro: '2020-03-26'
         }
         console.log("El router", router)
         try{
@@ -96,6 +98,7 @@ class FormularioRouter extends React.Component {
 
   cargar_datos(info) {
     console.log("record:",info);
+    this.setState({id_router: info.key})
     AxiosRouter.buscar_router_por_id(info.key).then(respuesta => {
       respuesta.data.forEach(res => {
       console.log(res)

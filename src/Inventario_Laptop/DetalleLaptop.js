@@ -4,6 +4,8 @@ import { LaptopOutlined, WindowsOutlined } from '@ant-design/icons';
 import { FiHardDrive } from "react-icons/fi";
 import { FaMemory } from "react-icons/fa";
 import { GiProcessor } from "react-icons/gi";
+import MetodosAxios from '../Servicios/AxiosRouter'
+import Axios from '../Servicios/AxiosLaptop'
 
 const { TabPane } = Tabs;
 const { Title } = Typography; 
@@ -28,7 +30,14 @@ class DetalleLaptop extends React.Component {
       servpack: '',
       licencia: '',
       office: '',
-      nombre_procesador: '',
+      id_procesador: '',
+      procesador: {
+        modelo: '',
+        descripcion: '',
+        numero_serie: '',
+        id_marca: '',
+    },
+      modelo_procesador: '',
       frecuencia: '',
       nnucleos: '',
       ram_soportada: '',
@@ -47,32 +56,42 @@ class DetalleLaptop extends React.Component {
   }
 
   cargar_datos(info) {
-    console.log(info);
-    this.setState({
-      codigo: info.codigo,
-      bspi: info.bspi,
-      departamento: info.departamento,
-      empleado: info.empleado,
-      marca: info.marca,
-      modelo: info.modelo,
-      num_serie: info.num_serie,
-      name_pc: info.name_pc,
-      user_pc: info.user_pc,
-      estado: info.estado,
-      so: info.so,
-      so_type: info.so_type,
-      servpack: info.servpack,
-      licencia: info.licencia,
-      office: info.office,
-      ip: info.ip,
-      nombre_procesador: info.nombre_procesador,
-      frecuencia: info.frecuencia,
-      nnucleos: info.nnucleos,
-      ram_soportada: info.ram_soportada,
-      slots_ram: info.slots_ram,
-      rams: info.rams,
-      discos: info.discos,
-      descripcion: info.descripcion
+    Axios.obtenerInfoLaptop(info.key).then(res => {
+      let registro = res.data;
+      console.log("registro:",registro);
+        this.setState({
+            codigo: info.codigo,
+            bspi: info.bspi,
+            departamento: info.departamento,
+            empleado: info.empleado,
+            marca: info.marca,
+            modelo: info.modelo,
+            num_serie: info.num_serie,
+            name_pc: info.name_pc,
+            user_pc: info.user_pc,
+            estado: info.estado,
+            so: info.so,
+            so_type: info.so_type,
+            servpack: info.servpack,
+            licencia: info.licencia,
+            office: info.office,
+            id_procesador: info.id_procesador,
+            procesador: registro.pc_procesador,
+            frecuencia: info.frecuencia,
+            nnucleos: info.nnucleos,
+            ram_soportada: info.ram_soportada,
+            slots_ram: info.slots_ram,
+            rams: info.rams,
+            discos: info.discos,
+            descripcion: info.descripcion
+          })
+    })
+    // console.log("2i",info);
+    info.ip === " " ? this.setState({ip: "No asignada"}) : 
+    MetodosAxios.buscar_ip_por_codigo(info.ip).then(res => {      
+        res.data.forEach((registro) => {
+            this.setState({ ip: registro.direccion_ip })
+        })
     })
   }
 
@@ -125,13 +144,13 @@ class DetalleLaptop extends React.Component {
 
               <TabPane tab={<span><GiProcessor className="anticon" />Procesador</span>} key="3" >
                 <Descriptions title="Procesador" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                  <Descriptions.Item label="Código">{this.state.nombre_procesador}</Descriptions.Item>
-                  <Descriptions.Item label="Marca"></Descriptions.Item>
-                  <Descriptions.Item label="Modelo"></Descriptions.Item>
-                  <Descriptions.Item label="Número de serie"></Descriptions.Item>
+                  <Descriptions.Item label="Código">{this.state.id_procesador}</Descriptions.Item>
+                  <Descriptions.Item label="Marca">{this.state.procesador.marca}</Descriptions.Item>
+                  <Descriptions.Item label="Modelo">{this.state.procesador.modelo}</Descriptions.Item>
+                  <Descriptions.Item label="Número de serie">{this.state.procesador.numero_serie}</Descriptions.Item>
                   <Descriptions.Item label="Frecuencia">{this.state.frecuencia}</Descriptions.Item>
                   <Descriptions.Item label="Número de núcleos">{this.state.nnucleos}</Descriptions.Item>
-                  <Descriptions.Item label="Descripción"></Descriptions.Item>
+                  <Descriptions.Item label="Descripción">{this.state.procesador.descripcion}</Descriptions.Item>
                 </Descriptions>
                 <br />                     
               </TabPane>

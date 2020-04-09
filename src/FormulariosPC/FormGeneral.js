@@ -25,7 +25,7 @@ const FormGeneral = Form.create({
     return (
         <Form {...layout} layout="horizontal" onSubmit={validateInput}>
             <InputComp label="Código" id="codigo" initialValue={props.codigo} decorator={getFieldDecorator} />
-            <AsignComp required={true} id="asignar" initialValue={props.asignar} decorator={getFieldDecorator} />
+            <AsignComp required={false} id="asignar" initialValue={props.asignar} decorator={getFieldDecorator} />
             {(props.marca === undefined) && (props.modelo === undefined) && (props.nserie === undefined) ? null : 
             <div>
                 <MarcaComp required={true} id="marca" initialValue={props.marca} decorator={getFieldDecorator} />

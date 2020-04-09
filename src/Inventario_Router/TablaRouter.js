@@ -32,7 +32,7 @@ class TablaRouter extends React.Component{
         let datos = [];
         AxiosRouter.listar_routers().then(res => {
         res.data.forEach(function (registro) {
-            var dip = registro.ip === null ? ' ' : registro.ip.toString();
+            var dip = registro.ip === null ? ' ' : registro.ip;
             let router = {
             key: registro.id_router,
             codigo: registro.codigo,
@@ -272,8 +272,6 @@ class TablaRouter extends React.Component{
           dataIndex: 'ip',
           key: 'ip',
           render: (text, record) => <Link to={{ pathname: '/ip/view', state: { info: record } }} >{text}</Link>,
-          sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.ip, b.ip),
-          sortOrder: sortedInfo.columnKey === 'ip' && sortedInfo.order,
         },
         {
           title: 'Puerta enlace',

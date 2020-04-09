@@ -5,8 +5,8 @@ export default class AxiosLaptop {
     baseURL: 'http://localhost:8000/api',
   });
 
-  static codigos_laptops = () => {
-    return AxiosLaptop.instanceAxios.get(`/codigos_laptops`);
+  static listar_laptops = () => {
+    return AxiosLaptop.instanceAxios.get(`/listar_laptops`);
   }
 
   static obtenerInfoLaptop = (id_ip) => {

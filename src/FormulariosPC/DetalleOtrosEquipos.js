@@ -39,8 +39,8 @@ class DetalleOtrosEquipos extends React.Component {
             capacidad: info.capacidad,
             tipo: info.tipo,
             descripcion: info.descripcion,
-            frecuencia: '2',
-            nnucleos: '4'
+            frecuencia: info.frecuencia,
+            nnucleos: info.nnucleos
         })
     }     
 
