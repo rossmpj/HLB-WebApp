@@ -27,13 +27,6 @@ class TablaImpresora extends React.Component {
             sortedInfo: null,
             index: 0
         };
-        this.handleClick = this.handleClick.bind(this);
-    }
-    handleClick() {
-        this.setState({
-            showComponent: true,
-            showTable: false,
-        });
     }
 
     departamentos() {
@@ -53,10 +46,9 @@ class TablaImpresora extends React.Component {
 
     llenar_tabla() {
         let datos = [];
-        let empleado = ""
         Axios.mostrar_impresoras().then(res => {
-
             res.data.forEach(function (dato) {
+                let empleado = ""
                 if (dato.empleado !== null) {
                     empleado = dato.empleado.concat(" ", dato.apellido);
                 }
@@ -85,6 +77,7 @@ class TablaImpresora extends React.Component {
                 datos.push(impresoras)
             });
             this.setState({ dataSource: datos });
+            console.log(datos);
         }).catch(err => {
             console.log(err)
             message.error('No se pueden cargar los datos, inténtelo más tarde', 4);

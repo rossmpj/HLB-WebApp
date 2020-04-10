@@ -50,9 +50,9 @@ class FormularioImpresora extends React.Component {
             codigo: "",
             id_marca: "",
             estado_operativo: "O",
-            ip: "",
-            componente_principal: "",
-            asignado: "",
+            ip: undefined,
+            componente_principal: undefined,
+            asignado: undefined,
         };
         this.handle_guardar = this.handle_guardar.bind(this);
     }
@@ -84,7 +84,7 @@ class FormularioImpresora extends React.Component {
                     }).catch(err => {
                         console.log(err)
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
-                    });
+                    }); 
                 } else {
                     values.key = this.state.key;
                     Axios.editar_impresora(values).then(res => {
@@ -143,16 +143,22 @@ class FormularioImpresora extends React.Component {
             numero_serie: info.numero_serie,
             codigo: info.codigo,
             modelo: info.modelo,
-            estado_operativo: info.estado_operativo,
             descripcion: info.descripcion
         })
         this.setState({ key: info.key });
 
         this.setState({ id_marca: info.id_marca });
         this.setState({ estado_operativo: info.estado_operativo });
-        this.setState({ ip: info.ip });
-        this.setState({ componente_principal: info.componente_principal });
-        this.setState({ asignado: info.asignado });
+        if (info.ip !== null) {
+            this.setState({ ip: info.ip });
+        }
+        if (info.componente_principal !== null) {
+            this.setState({ componente_principal: info.componente_principal });
+        }
+
+        if (info.asignado !== null || info.asignado !== '') {
+            this.setState({ asignado: info.asignado });
+        }
         this.setState({ tipo: info.tipo });
 
         if (info.tipo.toLocaleLowerCase() === "matricial") {

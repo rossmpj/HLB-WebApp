@@ -5,16 +5,16 @@ import {
     Row,
     Col
 } from 'antd';
-import FormularioTipo from './FormularioTipo';
+import FormularioMarca from './FormularioMarca';
 import { Link } from 'react-router-dom';
 const { Title } = Typography;
 
-class VistaTipo extends React.Component {
+class VistaMarca extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            titulo: "Inventario de Equipos informáticos",
+            titulo: "Inventario de Marcas",
             data: this.props.location
         };
     }
@@ -32,15 +32,15 @@ class VistaTipo extends React.Component {
                 <Row>
                     <Col span={12}><Title level={2}>{this.state.titulo}</Title></Col>
                     <Col className='flexbox'>
-                        <Link to={{ pathname: '/tipo' }} ><Button type="primary" icon="left">Volver</Button></Link>
+                        <Link to={{ pathname: '/marca' }} ><Button type="primary" icon="left">Volver</Button></Link>
                     </Col>
                 </Row>
                 <div className="div-border-top" >
-                    <FormularioTipo data={this.state.data}></FormularioTipo>
+                    <FormularioMarca data={this.state.data}></FormularioMarca>
                 </div>
             </div>
 
         )
     }
 }
-export default VistaTipo;
+export default VistaMarca;

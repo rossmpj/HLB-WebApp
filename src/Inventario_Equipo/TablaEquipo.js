@@ -33,9 +33,9 @@ class TablaEquipo extends React.Component {
 
     llenar_tabla() {
         let datos = [];
-        let empleado = "";
         Axios.mostrar_equipos().then(res => {
             res.data.forEach(function (dato) {
+                let empleado = "";
                 if (dato.empleado !== null) {
                     empleado = dato.empleado.concat(" ", dato.apellido);
                 }

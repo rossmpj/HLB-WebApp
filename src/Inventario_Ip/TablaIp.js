@@ -98,10 +98,14 @@ class TablaIp extends React.Component {
 
 
     handleDelete(key) {
+        Axios.eliminar_ip(key).then(res => {
+            message.success({ content: 'Registro eliminado satisfactoriamente', key, duration: 3 });
+        }).catch(err => {
+            console.log(err)
+            message.error('Error al eliminar el registro, inténtelo más tarde', 4);
+        });
         const dataSource = [...this.state.dataSource];
         this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
-        message.success("Registro eliminado exitosamente");
-        /* message.error("Error al eliminar el registro, inténtelo más tarde"); */
     }
 
     stringSorter(a, b) {
@@ -272,8 +276,7 @@ class TablaIp extends React.Component {
                             title="¿Desea eliminar este registro?"
                             okText="Si"
                             cancelText="No"
-                        /* onConfirm={} */
-                        >
+                            onConfirm={() => this.handleDelete(record.key)}>
                             <Button size="small" type="danger" icon="delete" />
                         </Popconfirm>
                     </div>
@@ -309,7 +312,7 @@ class TablaIp extends React.Component {
                         <Button onClick={this.clearAll}>Limpiar todo</Button>
                     </div>
                     <Table bordered key={this.state.index} onChange={this.handleChange} size="small"
-                        scroll={{ x: 'max-content' }} columns={columns}  dataSource={this.state.dataSource}></Table>
+                     columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
             </div>
         );

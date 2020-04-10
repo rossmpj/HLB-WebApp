@@ -5,15 +5,18 @@ export default class AxiosTipo {
         baseURL: 'http://localhost:8000/api',
     });
 
-    /* Sección tipo de equipos */
 
-    static almacenar_datos = (tipo) => {
-        return AxiosTipo.instanceAxios.post(`/crear_tipo`, tipo);
+    /* Sección Inventario Marcas */
+
+    static crear_marca = (tipo) => {
+        return AxiosTipo.instanceAxios.post(`/crear_marca`, tipo);
     }
 
-    static mostrar_datos = () => {
-        return AxiosTipo.instanceAxios.get(`/ver_tipos`);
+    static editar_marca = (marca) => {
+        return AxiosTipo.instanceAxios.put(`/editar_marca`, marca);
     }
+
+
 
     /* Componente AsignarSelect*/
 
@@ -60,6 +63,10 @@ export default class AxiosTipo {
 
     static buscar_ip=(id_ip) =>{
         return AxiosTipo.instanceAxios.get(`/ip_id/${id_ip}`);
+    }
+
+    static eliminar_ip=(id_ip)=>{
+        return AxiosTipo.instanceAxios.delete(`/eliminar_ip/${id_ip}`);
     }
 
 

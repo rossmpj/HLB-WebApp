@@ -7,7 +7,7 @@ import AsignarSelect from '../Componentes/AsignarSelect'
 import MarcaSelect from '../Componentes/MarcaSelect'
 import IpSelect from '../Componentes/IpSelect'
 import EstadoSelect from '../Componentes/EstadoSelect'
-import ComponentePrincipal from '../Componentes/ComponentePrincipal' 
+import ComponentePrincipal from '../Componentes/ComponentePrincipal'
 import FormularioImpresora from '../Inventario_Impresora/FormularioImpresora'
 import FormularioDesktop from '../Inventario_Desktop/FormularioDesktop'
 import FormularioRouter from '../Inventario_Router/FormularioRouter'
@@ -41,10 +41,10 @@ class FormularioEquipo extends React.Component {
             numero_serie: "",
             modelo: "",
             id_marca: "",
-            estado_operativo:"",
-            ip: "",
-            componente_principal:"",
-            asignado: "",
+            estado_operativo: "",
+            ip: undefined,
+            componente_principal: undefined,
+            asignado: undefined,
             descripcion: "",
             key: ""
         };
@@ -94,12 +94,11 @@ class FormularioEquipo extends React.Component {
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
                     });
                 } else {
-                    console.log(values);
                     values.key = this.state.key;
                     Axios.editar_equipo(values).then(res => {
                         message.loading({ content: 'Actualizando datos...', key });
                         setTimeout(() => {
-                            message.success({ content: res.data.log, key, duration: 3 });
+                            message.success({ content: "Edición realizada satisfactoriamente", key, duration: 3 });
                         }, 1000);
                     }).catch(err => {
                         console.log(err);
@@ -121,9 +120,17 @@ class FormularioEquipo extends React.Component {
         this.setState({ key: info.key });
         this.setState({ estado_operativo: info.estado_operativo });
         this.setState({ id_marca: info.marca });
-        this.setState({ componente_principal: info.componente_principal });
-        this.setState({ asignado: info.asignado });
-        this.setState({ ip: info.ip });
+
+        if (info.componente_principal !== null) {
+            this.setState({ componente_principal: info.componente_principal });
+        }
+        if (info.asignado !== null || info.asignado !== '') {
+            this.setState({ asignado: info.asignado });
+        }
+        if (info.ip !== null) {
+            this.setState({ ip: info.ip });
+        }
+
     }
 
 
@@ -182,7 +189,7 @@ class FormularioEquipo extends React.Component {
                                 })
                                     (<Input />)}
                             </Form.Item>
- 
+
                             <MarcaSelect
                                 class=""
                                 id="id_marca"
@@ -216,11 +223,11 @@ class FormularioEquipo extends React.Component {
                                 required={false}
                                 id="asignado"
                                 decorator={getFieldDecorator}
-                                initialValue={this.state.asignado} /> 
+                                initialValue={this.state.asignado} />
 
                             <Form.Item label="Descripción">
-                                {getFieldDecorator('descripcion',{initialValue: this.state.descripcion})
-                                (<TextArea />)}
+                                {getFieldDecorator('descripcion', { initialValue: this.state.descripcion })
+                                    (<TextArea />)}
                             </Form.Item>
 
                             <Form.Item {...tailLayout}>

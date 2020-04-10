@@ -3,13 +3,12 @@ import '../../App.css';
 import {
     Form,
     Button,
-    Switch,
     message
 } from 'antd';
 import '../../custom-antd.css';
 import InputComponent from '../../Componentes/InputComponent';
 import { Link } from 'react-router-dom';
-import AxiosTipo from '../../Servicios/AxiosTipo';
+import Axios from '../../Servicios/AxiosTipo';
 
 const tailLayout = {
     wrapperCol: { offset: 9, span: 5 }
@@ -22,11 +21,14 @@ const layout = {
 
 const key = 'updatable';
 
-class FormularioTipo extends React.Component {
+class FormularioMarca extends React.Component {
 
     constructor(props) {
         super(props);
-
+        this.state = {
+            key: "",
+            editionMode: false,
+        }
         this.handle_guardar = this.handle_guardar.bind(this);
     }
 
@@ -34,42 +36,35 @@ class FormularioTipo extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                let valor;
-                if (values.ip) {
-                    valor = "s";
+                if (!this.state.editionMode) {
+                    Axios.crear_marca(values).then(res => {
+                        message.loading({ content: 'Guardando datos...', key });
+                        setTimeout(() => {
+                            message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+                        }, 1000);
+                    }).catch(err => {
+                        message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
+                    });
                 } else {
-                    valor = "n";
+                    values.key = this.state.key;
+                    Axios.editar_marca(values).then(res => {
+                        message.loading({ content: 'Actualizando datos...', key });
+                        setTimeout(() => {
+                            message.success({ content: "Edición realizada satisfactoriamente", key, duration: 3 });
+                        }, 1000);
+                    }).catch(err => {
+                        console.log(err);
+                    });
                 }
-                let tipo = {
-                    tipo: values.tipo.toLocaleLowerCase(),
-                    usa_ip: valor
-                }
-                AxiosTipo.almacenar_datos(tipo).then(res => {
-                    message.loading({ content: 'Guardando datos...', key });
-                    setTimeout(() => {
-                        message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
-                    }, 1000);
-                }).catch(err => {
-                    message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
-                });
             }
         });
     }
 
     cargar_datos(info) {
         this.props.form.setFieldsValue({
-            tipo: info.tipo,
+            nombre: info.nombre,
         })
-        if (info.ip === 'n') {
-            this.props.form.setFieldsValue({
-                ip: false
-            })
-        } else {
-            this.props.form.setFieldsValue({
-                ip: true
-            })
-
-        }
+        this.setState({ key: info.key });
     }
 
     componentDidMount() {
@@ -78,6 +73,7 @@ class FormularioTipo extends React.Component {
                 && typeof this.props.data.state.info !== 'undefined'
             ) {
                 this.cargar_datos(this.props.data.state.info);
+                this.setState({ editionMode: true });
             }
         }
     }
@@ -93,19 +89,13 @@ class FormularioTipo extends React.Component {
                 >
                     <InputComponent
                         class=""
-                        label="Tipo de equipo"
-                        id="tipo"
+                        label="Nombre de la marca"
+                        id="nombre"
                         decorator={getFieldDecorator} />
 
-                    <Form.Item label="¿Utiliza dirección IP?">
-                        {getFieldDecorator('ip', {
-                            valuePropName: 'checked',
-                            initialValue: false,
-                        })(<Switch checkedChildren="Si" unCheckedChildren="No"></Switch>)}
-                    </Form.Item>
                     <Form.Item {...tailLayout}>
                         <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
-                        <Link to='/tipo'>
+                        <Link to='/marca'>
                             <Button type="primary">Cancelar</Button>
                         </Link>
                     </Form.Item>
@@ -114,5 +104,5 @@ class FormularioTipo extends React.Component {
         );
     }
 }
-FormularioTipo = Form.create({})(FormularioTipo);
-export default FormularioTipo;
+FormularioMarca = Form.create({})(FormularioMarca);
+export default FormularioMarca;
