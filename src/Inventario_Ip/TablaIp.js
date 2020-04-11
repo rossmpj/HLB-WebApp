@@ -55,8 +55,7 @@ class TablaIp extends React.Component {
                     maquinas: dato.maquinas_adicionales,
                     asignado: dato.nombre_usuario,
                     encargado: dato.encargado_registro,
-                    observacion: dato.observacion,
-                    asignacion: dato.created_at
+                    observacion: dato.observacion
                 }
                 datos.push(registro)
             });
@@ -71,7 +70,6 @@ class TablaIp extends React.Component {
     };
 
     handleChange = (pagination, filters, sorter) => {
-        console.log('Various parameters', pagination, filters, sorter);
         this.setState({
             filteredInfo: filters,
             sortedInfo: sorter,
@@ -208,12 +206,6 @@ class TablaIp extends React.Component {
                 sorter: (a, b) => this.stringSorter(a.estado, b.estado)
             },
             {
-                title: 'Fecha asignación',
-                dataIndex: 'asignacion',
-                key: 'asignacion',
-                sorter: (a, b) => this.stringSorter(a.asignacion, b.asignacion)
-            },
-            {
                 title: 'Hostname',
                 dataIndex: 'hostname',
                 key: 'hostname',
@@ -312,7 +304,7 @@ class TablaIp extends React.Component {
                         <Button onClick={this.clearAll}>Limpiar todo</Button>
                     </div>
                     <Table bordered key={this.state.index} onChange={this.handleChange} size="small"
-                     columns={columns} dataSource={this.state.dataSource}></Table>
+                     scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
             </div>
         );

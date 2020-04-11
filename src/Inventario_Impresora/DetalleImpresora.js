@@ -3,6 +3,7 @@ import { Tabs, Row, Col, Typography, Button, Descriptions, Badge, message } from
 import { PrinterOutlined, UserOutlined } from '@ant-design/icons';
 import SinResultados from '../Componentes/SinResultados'
 import Axios from '../Servicios/AxiosTipo';
+import { Link } from 'react-router-dom';
 const { TabPane } = Tabs;
 const { Title } = Typography;
 
@@ -43,10 +44,10 @@ class DetalleImpresora extends React.Component {
     }
 
     inicializar_datos(info) {
-         let empleado = "";
-        let registro = {}; 
-        Axios.impresora_id(info.tabla_equipo).then(res => {
-             res.data.forEach(function (dato) {
+        let empleado = "";
+        let registro = {};
+        Axios.impresora_id(info.id_equipo).then(res => {
+            res.data.forEach(function (dato) {
                 if (dato.empleado !== null) {
                     empleado = dato.empleado.concat(" ", dato.apellido);
                 }
@@ -64,13 +65,13 @@ class DetalleImpresora extends React.Component {
                 registro.rodillo = dato.rodillo;
                 registro.cinta = dato.cinta;
                 registro.rollo = dato.rollo;
-                registro.ip = dato.direccion_ip;
+                registro.ip = dato.ip;
                 registro.componente_principal = dato.componente_principal;
-                registro.bspi= dato.bspi_punto;
-                registro.dpto= dato.departamento;
- 
+                registro.bspi = dato.bspi_punto;
+                registro.dpto = dato.departamento;
+
             });
-             this.cargar_datos(registro); 
+            this.cargar_datos(registro);
         }).catch(err => {
             message.error('Problemas de conexión con el servidor, inténtelo más tarde', 4);
         });
@@ -110,7 +111,9 @@ class DetalleImpresora extends React.Component {
                             <Title level={2}>Detalle de impresora</Title>
                         </Col>
                         <Col className='flexbox'>
-                            <Button type="primary" icon="left">Volver</Button>
+                            <Link to={{ pathname: '/impresora' }}>
+                                <Button type="primary" icon="left">Volver</Button>
+                            </Link>
                         </Col>
                     </Row>
 

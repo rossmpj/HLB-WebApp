@@ -104,10 +104,13 @@ class TablaEquipo extends React.Component {
 
 
     handleDelete(key) {
-        const dataSource = [...this.state.dataSource];
-        this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
-        message.success("Registro eliminado exitosamente");
-        /* message.error("Error al eliminar el registro, inténtelo más tarde"); */
+        Axios.eliminar_equipo(key).then(res => {
+            message.success({ content: 'Equipo dado de baja satisfactoriamente', key, duration: 3 });
+            this.llenar_tabla();
+        }).catch(err => {
+            console.log(err)
+            message.error('Error al eliminar el registro, inténtelo más tarde', 4);
+        });    
     }
 
     stringSorter(a, b) {
@@ -341,7 +344,7 @@ class TablaEquipo extends React.Component {
                     <div>
                         {tipo_render(record)}
                         <Popconfirm
-                            title="¿Desea eliminar este registro?"
+                            title="¿Desea dar de baja este equipo?"
                             okText="Si"
                             cancelText="No"
                             onConfirm={() => this.handleDelete(record.key)}

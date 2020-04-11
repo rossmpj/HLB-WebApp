@@ -72,12 +72,11 @@ class TablaImpresora extends React.Component {
                     rollo: dato.rollo,
                     ip: dato.direccion_ip,
                     componente_principal: dato.componente_principal,
-                    tabla_equipo: dato.id_equipo
+                    id_equipo: dato.id_equipo
                 }
                 datos.push(impresoras)
             });
             this.setState({ dataSource: datos });
-            console.log(datos);
         }).catch(err => {
             console.log(err)
             message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
@@ -136,10 +135,13 @@ class TablaImpresora extends React.Component {
     }
 
     handleDelete(key) {
-        const dataSource = [...this.state.dataSource];
-        this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
-        message.success("Registro eliminado exitosamente");
-        /* message.error("Error al eliminar el registro, inténtelo más tarde"); */
+        Axios.eliminar_equipo(key).then(res => {
+            message.success({ content: 'Equipo dado de baja satisfactoriamente', key, duration: 3 });
+            this.llenar_tabla();
+        }).catch(err => {
+            console.log(err)
+            message.error('Error al eliminar el registro, inténtelo más tarde', 4);
+        });        
     }
 
     getColumnSearchProps = dataIndex => ({
@@ -207,45 +209,6 @@ class TablaImpresora extends React.Component {
                 dataIndex: 'numero_serie',
                 key: 'numero_serie',
                 ...this.getColumnSearchProps('numero_serie')
-            },
-            {
-                title: 'BSPI Punto',
-                dataIndex: 'bspi',
-                key: 'bspi',
-                filters: [
-                    {
-                        text: 'Hogar Inés Chambers',
-                        value: 'Hogar Inés Chambers',
-                    },
-                    {
-                        text: 'Hospital León Becerra',
-                        value: 'Hospital León Becerra',
-                    },
-                    {
-                        text: 'Residencia Mercedes Begue',
-                        value: 'Residencia Mercedes Begue',
-                    },
-                    {
-                        text: 'Unidad Educativa San José del Buen Pastor',
-                        value: 'Unidad Educativa San José del Buen Pastor',
-                    }
-                ],
-                onFilter: (value, record) => this.filtrar_array(record.bspi, value),
-                sorter: (a, b) => this.stringSorter(a.bspi, b.bspi)
-            },
-            {
-                title: 'Departamento',
-                dataIndex: 'dpto',
-                key: 'dpto',
-                filters: this.departamentos(),
-                onFilter: (value, record) => this.filtrar_array(record.dpto, value),
-                sorter: (a, b) => this.stringSorter(a.dpto, b.dpto)
-            },
-            {
-                title: 'Asignado',
-                dataIndex: 'asignado',
-                key: 'asignado',
-                ...this.getColumnSearchProps('asignado')
             },
             {
                 title: 'Tipo',
@@ -325,6 +288,45 @@ class TablaImpresora extends React.Component {
                 ...this.getColumnSearchProps('ip')
             },
             {
+                title: 'BSPI Punto',
+                dataIndex: 'bspi',
+                key: 'bspi',
+                filters: [
+                    {
+                        text: 'Hogar Inés Chambers',
+                        value: 'Hogar Inés Chambers',
+                    },
+                    {
+                        text: 'Hospital León Becerra',
+                        value: 'Hospital León Becerra',
+                    },
+                    {
+                        text: 'Residencia Mercedes Begue',
+                        value: 'Residencia Mercedes Begue',
+                    },
+                    {
+                        text: 'Unidad Educativa San José del Buen Pastor',
+                        value: 'Unidad Educativa San José del Buen Pastor',
+                    }
+                ],
+                onFilter: (value, record) => this.filtrar_array(record.bspi, value),
+                sorter: (a, b) => this.stringSorter(a.bspi, b.bspi)
+            },
+            {
+                title: 'Departamento',
+                dataIndex: 'dpto',
+                key: 'dpto',
+                filters: this.departamentos(),
+                onFilter: (value, record) => this.filtrar_array(record.dpto, value),
+                sorter: (a, b) => this.stringSorter(a.dpto, b.dpto)
+            },
+            {
+                title: 'Asignado',
+                dataIndex: 'asignado',
+                key: 'asignado',
+                ...this.getColumnSearchProps('asignado')
+            },
+            {
                 title: 'Tinta',
                 dataIndex: 'tinta',
                 key: 'tinta',
@@ -381,10 +383,10 @@ class TablaImpresora extends React.Component {
                             <Button style={{ marginRight: '2px' }} size="small" type="primary" icon="edit" />
                         </Link>
                         <Popconfirm
-                            title="¿Desea eliminar este registro?"
+                            title="¿Desea dar de baja este equipo?"
                             okText="Si"
                             cancelText="No"
-                            onConfirm={() => this.handleDelete(record.key)}
+                            onConfirm={() => this.handleDelete(record.id_equipo)}
                         >
                             <Button size="small" type="danger" icon="delete" />
                         </Popconfirm>
@@ -422,7 +424,7 @@ class TablaImpresora extends React.Component {
                         <Button onClick={this.clearAll}>Limpiar todo</Button>
                     </div>
                     <Table bordered key={this.state.index} onChange={this.handleChange} size="small"
-                        scroll={{ x: 'max-content' }} columns={columns}  dataSource={this.state.dataSource}></Table>
+                        scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
             </div>
         );

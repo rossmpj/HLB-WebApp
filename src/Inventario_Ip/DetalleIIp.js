@@ -3,6 +3,7 @@ import { Tabs, Row, Col, Typography, Button, Descriptions, Badge, message } from
 import { WifiOutlined, UserOutlined } from '@ant-design/icons';
 import SinResultados from '../Componentes/SinResultados'
 import Axios from '../Servicios/AxiosTipo';
+import { Link } from 'react-router-dom';
 const { TabPane } = Tabs;
 const { Title } = Typography;
 
@@ -36,40 +37,39 @@ class DetalleIIp extends React.Component {
         }
     }
 
-    inicializar_datos(info){
-            let empleado = "";
-            let punto = "";
-            let departamento = "";
-            let equipo = "";
-            let tipo = "";
-            let registro = {}; 
-            Axios.buscar_ip(info.key).then(res => {
-               res.data.forEach(function (dato) {
-                    
-                     if (dato.nombre !== null) {
-                        empleado = dato.nombre.concat(" ", dato.apellido);
-                        punto= dato.bspi_punto;
-                        departamento= dato.departamento;
-                        equipo= dato.codigo;
-                        tipo= dato.tipo_equipo;
-                    }
-                    registro.ip = dato.direccion_ip;
-                    registro.hostname= dato.hostname;
-                    registro.asignado = empleado;
-                    registro.subred = dato.subred;
-                    registro.fortigate = dato.fortigate;
-                    registro.maquinas = dato.maquinas;
-                    registro.observacion = dato.observacion;
-                    registro.estado = dato.estado;
-                    registro.punto = punto;
-                    registro.departamento = departamento; 
-                    registro.equipo = equipo;
-                    registro.tipo = tipo;
-                });
-                 this.cargar_datos(registro); 
-            }).catch(err => {
-                message.error('Problemas de conexión con el servidor, inténtelo más tarde', 4);
-            }); 
+    inicializar_datos(info) {
+        let registro = {};
+        Axios.buscar_ip(info.key).then(res => {
+            res.data.forEach(function (dato) {
+                let empleado = "";
+                let punto = "";
+                let departamento = "";
+                let equipo = "";
+                let tipo = "";
+                if (dato.nombre !== null) {
+                    empleado = dato.nombre.concat(" ", dato.apellido);
+                    punto = dato.bspi_punto;
+                    departamento = dato.departamento;
+                }
+                equipo = dato.codigo;
+                tipo = dato.tipo_equipo;
+                registro.ip = dato.direccion_ip;
+                registro.hostname = dato.hostname;
+                registro.asignado = empleado;
+                registro.subred = dato.subred;
+                registro.fortigate = dato.fortigate;
+                registro.maquinas = dato.maquinas;
+                registro.observacion = dato.observacion;
+                registro.estado = dato.estado;
+                registro.punto = punto;
+                registro.departamento = departamento;
+                registro.equipo = equipo;
+                registro.tipo = tipo;
+            });
+            this.cargar_datos(registro);
+        }).catch(err => {
+            message.error('Problemas de conexión con el servidor, inténtelo más tarde', 4);
+        });
     }
 
     cargar_datos(info) {
@@ -100,39 +100,41 @@ class DetalleIIp extends React.Component {
                             <Title level={2}>Detalle de dirección IP</Title>
                         </Col>
                         <Col className='flexbox'>
-                            <Button type="primary" icon="left">Volver</Button>
+                            <Link to={{pathname: '/ip'}}>
+                                    <Button type="primary" icon="left">Volver</Button>
+                            </Link>
                         </Col>
                     </Row>
 
-                    <div className="div-container">
-                        <Tabs defaultActiveKey="1">
-                            <TabPane tab={<span><WifiOutlined />General</span>} key="1">
-                                <Descriptions title="Datos generales de la dirección IP" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                                    <Descriptions.Item label="Dirección Ip" span={3}>{this.state.ip}</Descriptions.Item>
-                                    <Descriptions.Item label="Subred" span={3}>{this.state.subred}</Descriptions.Item>
-                                    <Descriptions.Item label="Hostname" span={3}>{this.state.hostname}</Descriptions.Item>
-                                    <Descriptions.Item label="Estado">
-                                        <Badge status="processing" text={this.state.estado} />
-                                    </Descriptions.Item>
-                                    <Descriptions.Item label="Fortigate">{this.state.fortigate}</Descriptions.Item>
-                                    <Descriptions.Item label="Máquinas">{this.state.maquinas}</Descriptions.Item>
-                                    <Descriptions.Item label="Observaciones">{this.state.observacion}</Descriptions.Item>
-                                </Descriptions>
-                            </TabPane>
+                <div className="div-container">
+                    <Tabs defaultActiveKey="1">
+                        <TabPane tab={<span><WifiOutlined />General</span>} key="1">
+                            <Descriptions title="Datos generales de la dirección IP" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
+                                <Descriptions.Item label="Dirección Ip" span={3}>{this.state.ip}</Descriptions.Item>
+                                <Descriptions.Item label="Subred" span={3}>{this.state.subred}</Descriptions.Item>
+                                <Descriptions.Item label="Hostname" span={3}>{this.state.hostname}</Descriptions.Item>
+                                <Descriptions.Item label="Estado">
+                                    <Badge status="processing" text={this.state.estado} />
+                                </Descriptions.Item>
+                                <Descriptions.Item label="Fortigate">{this.state.fortigate}</Descriptions.Item>
+                                <Descriptions.Item label="Máquinas">{this.state.maquinas}</Descriptions.Item>
+                                <Descriptions.Item label="Observaciones">{this.state.observacion}</Descriptions.Item>
+                            </Descriptions>
+                        </TabPane>
 
 
-                            <TabPane tab={<span><UserOutlined />Asignación</span>} key="2">
-                                <Descriptions title="Información de la asignación" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                                    <Descriptions.Item label="Asignado a" span={3}>{this.state.asignado}</Descriptions.Item>
-                                    <Descriptions.Item label="BSPI punto">{this.state.punto}</Descriptions.Item>
-                                    <Descriptions.Item label="Departamento">{this.state.departamento}</Descriptions.Item>
-                                    <Descriptions.Item label="Código equipo">{this.state.equipo}</Descriptions.Item>
-                                    <Descriptions.Item label="Tipo">{this.state.tipo}</Descriptions.Item>
-                                </Descriptions>
-                            </TabPane>
-                        </Tabs>
-                    </div>
+                        <TabPane tab={<span><UserOutlined />Asignación</span>} key="2">
+                            <Descriptions title="Información de la asignación" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
+                                <Descriptions.Item label="Asignado a" span={3}>{this.state.asignado}</Descriptions.Item>
+                                <Descriptions.Item label="BSPI punto">{this.state.punto}</Descriptions.Item>
+                                <Descriptions.Item label="Departamento">{this.state.departamento}</Descriptions.Item>
+                                <Descriptions.Item label="Código equipo">{this.state.equipo}</Descriptions.Item>
+                                <Descriptions.Item label="Tipo">{this.state.tipo}</Descriptions.Item>
+                            </Descriptions>
+                        </TabPane>
+                    </Tabs>
                 </div>
+                </div >
             )
         }
     }

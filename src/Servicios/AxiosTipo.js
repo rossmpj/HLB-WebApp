@@ -76,7 +76,7 @@ export default class AxiosTipo {
     }
 
     static mostrar_impresoras = () => {
-        return AxiosTipo.instanceAxios.get(`/impresoraxequipo`);
+        return AxiosTipo.instanceAxios.get(`/impresora_equipo`);
     }
 
     static editar_impresora = (impresora) => {
@@ -108,4 +108,8 @@ export default class AxiosTipo {
     static equipo_id = (id_equipo) => {
         return AxiosTipo.instanceAxios.get(`/equipo_id/${id_equipo}`);
     }
+
+    static eliminar_equipo = (id_equipo) => {
+        return AxiosTipo.instanceAxios.put(`/eliminar_equipo/${id_equipo}`);
+    }  
 }

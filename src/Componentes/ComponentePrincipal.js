@@ -23,7 +23,7 @@ class ComponentePrincipal extends React.Component {
         return (
             <SelectComponent
                 label="Asignar componente principal"
-                name="componente"
+                name={this.props.id}
                 class={this.props.class}
                 required={this.props.required}
                 decorator={this.props.decorator}

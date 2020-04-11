@@ -76,6 +76,7 @@ class FormularioImpresora extends React.Component {
             if (!err) {
                 values.encargado_registro = this.state.encargado_registro;
                 if (!this.state.editionMode) {
+                    console.log(values);
                     Axios.crear_impresora(values).then(res => {
                         message.loading({ content: 'Guardando datos...', key });
                         setTimeout(() => {
@@ -84,9 +85,10 @@ class FormularioImpresora extends React.Component {
                     }).catch(err => {
                         console.log(err)
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
-                    }); 
+                    });
                 } else {
                     values.key = this.state.key;
+                    console.log(values);
                     Axios.editar_impresora(values).then(res => {
                         message.loading({ content: 'Actualizando datos...', key });
                         setTimeout(() => {
@@ -96,18 +98,16 @@ class FormularioImpresora extends React.Component {
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
                     });
                 }
-
-
             }
         });
     }
 
     inicializar_formulario(info) {
         if (typeof info.tabla_equipo !== 'undefined') {
-            let empleado = "";
             let registro = {};
             Axios.impresora_id(info.tabla_equipo).then(res => {
                 res.data.forEach(function (dato) {
+                    let empleado = "";
                     if (dato.empleado !== null) {
                         empleado = dato.empleado.concat(" ", dato.apellido);
                     }
@@ -126,7 +126,7 @@ class FormularioImpresora extends React.Component {
                     registro.rodillo = dato.rodillo;
                     registro.cinta = dato.cinta;
                     registro.rollo = dato.rollo;
-                    registro.ip = dato.direccion_ip;
+                    registro.ip = dato.ip;
                     registro.componente_principal = dato.componente_principal;
                 });
                 this.cargar_datos(registro);
