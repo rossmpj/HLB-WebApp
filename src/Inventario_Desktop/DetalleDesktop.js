@@ -2,6 +2,8 @@ import React from 'react';
 import { Tabs, Row, Col, Typography, Button, Descriptions, Badge } from 'antd';
 import { DesktopOutlined, WindowsOutlined } from '@ant-design/icons';
 import { FiCpu, FiSpeaker } from "react-icons/fi";
+import MetodosAxios from '../Servicios/AxiosRouter'
+import Axios from '../Servicios/AxiosDesktop'
 
 const { TabPane } = Tabs;
 const { Title } = Typography;
@@ -23,22 +25,84 @@ class DetalleDesktop extends React.Component {
       servpack: '',
       licencia: '',
       office: '',
-      procesador: '',
-      frecuencia: '',
-      nnucleos: '',
-      ram_soportada: '',
-      slots_ram: '',
+      procesador: {
+        codigo: '',
+        marca: '',
+        modelo: '',
+        frecuencia: '',
+        nucleos: '',
+        numero_serie: '',
+        descripcion: ''
+      },      
       rams: [],
       discos: [],
-      monitor: '',
-      teclado: '',
-      mouse: '',
-      parlantes: '',
-      mainboard: '',
-      tarj_red: '',
-      case: '',
-      f_alim: '',
-      f_poder: '',
+      monitor: {
+        codigo: '',
+        marca: '',
+        modelo: '',
+        numero_serie: '',
+        descripcion: ''
+      },
+      teclado: {
+        codigo: '',
+        marca: '',
+        modelo: '',
+        numero_serie: '',
+        descripcion: ''
+      },
+      mouse: {
+        codigo: '',
+        marca: '',
+        modelo: '',
+        numero_serie: '',
+        descripcion: ''
+      },
+      parlantes: {
+        codigo: '',
+        marca: '',
+        modelo: '',
+        numero_serie: '',
+        descripcion: ''
+      },
+      mainboard: {
+        codigo: '',
+        marca: '',
+        modelo: '',
+        numero_serie: '',
+        descripcion: '', 
+        ram_soportada: '',
+        slots_ram: '',
+        conexiones_dd: ''
+      },
+      tarj_red: {
+        codigo: '',
+        marca: '',
+        modelo: '',
+        numero_serie: '',
+        descripcion: ''
+      },
+      case: {
+        codigo: '',
+        marca: '',
+        modelo: '',
+        numero_serie: '',
+        descripcion: ''
+      },
+      f_alim: {
+        codigo: '',
+        marca: '',
+        modelo: '',
+        numero_serie: '',
+        tipo_equipo: '',
+        descripcion: ''
+      },
+      f_poder: {
+        codigo: '',
+        marca: '',
+        modelo: '',
+        numero_serie: '',
+        descripcion: ''
+      },
       descripcion: ''
     };
   }
@@ -51,38 +115,42 @@ class DetalleDesktop extends React.Component {
   }
 
   cargar_datos(info) {
-    console.log("desktop", info);
-    this.setState({
-        codigo: info.codigo,
-        bspi: info.bspi,
-        departamento: info.departamento,
-        empleado: info.empleado,
-        name_pc: info.name_pc,
-        user_pc: info.user_pc,
-        estado: info.estado,
-        ip: info.ip,
-        so: info.so,
-        so_type: info.so_type,
-        servpack: info.servpack,
-        licencia: info.licencia,
-        office: info.office,
-        procesador: info.procesador,
-        frecuencia: info.frecuencia,
-        nnucleos: info.nnucleos,
-        ram_soportada: info.ram_soportada,
-        slots_ram: info.slots_ram,
-        rams: info.rams,
-        discos: info.discos,
-        monitor: info.monitor,
-        teclado: info.teclado,
-        mouse: info.mouse,
-        parlantes: info.parlantes,
-        mainboard: info.mainboard,
-        tarj_red: info.tarj_red,
-        case: info.case,
-        f_alim: info.f_alim,
-        f_poder: info.f_poder,
-        descripcion: info.descripcion
+    Axios.obtenerInfoDesktop(info.key).then(res => {
+        let registro = res.data;
+        console.log("registro:",registro.general.bspi);
+          this.setState({
+            codigo: info.codigo,
+            bspi: registro.general.bspi,
+            departamento: registro.general.departamento,
+            empleado: registro.general.empleado,
+            name_pc: info.name_pc,
+            user_pc: info.user_pc,
+            estado: info.estado,
+            so: info.so,
+            so_type: info.so_type,
+            servpack: info.servpack,
+            licencia: info.licencia,
+            office: info.office,
+            procesador: info.procesador,
+            rams: info.rams,
+            discos: info.discos,
+            monitor: registro.monitor,
+            teclado: registro.teclado,
+            mouse: registro.mouse,
+            parlantes: registro.parlantes,
+            mainboard: info.mainboard,
+            tarj_red: info.tarj_red,
+            case: info.case,
+            f_alim: registro.f_alim,
+            f_poder: info.f_poder,
+            descripcion: info.descripcion,
+            })
+      })
+    info.ip === " " ? this.setState({ip: "No asignada"}) : 
+    MetodosAxios.buscar_ip_por_codigo(info.ip).then(res => {      
+        res.data.forEach((registro) => {
+            this.setState({ ip: registro.direccion_ip })
+        })
     })
   }
 
@@ -103,9 +171,11 @@ class DetalleDesktop extends React.Component {
               <TabPane tab={<span><DesktopOutlined />General</span>} key="1">
                 <Descriptions title="Datos generales del equipo" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
                   <Descriptions.Item label="Codigo PC" span={3}>{this.state.codigo}</Descriptions.Item>
+                  {this.state.bspi === undefined ? null :    
+                  <>         
                   <Descriptions.Item label="BSPI-Punto">{this.state.bspi}</Descriptions.Item>
                   <Descriptions.Item label="Departamento">{this.state.departamento}</Descriptions.Item>
-                  <Descriptions.Item label="Empleado a cargo">{this.state.empleado}</Descriptions.Item>
+                  <Descriptions.Item label="Empleado a cargo">{this.state.empleado}</Descriptions.Item></>}
                   <Descriptions.Item label="Nombre PC">{this.state.name_pc}</Descriptions.Item>
                   <Descriptions.Item label="Usuario PC">{this.state.user_pc}</Descriptions.Item>
                   <Descriptions.Item label="Estado">
@@ -132,70 +202,71 @@ class DetalleDesktop extends React.Component {
 
               <TabPane tab={<span><FiSpeaker className="anticon" />Periféricos</span>} key="3" >
                 <Descriptions title="Monitor" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                  <Descriptions.Item label="Código">{this.state.monitor}</Descriptions.Item>
-                  <Descriptions.Item label="Marca"> </Descriptions.Item>
-                  <Descriptions.Item label="Modelo"> </Descriptions.Item>
-                  <Descriptions.Item label="Número de serie"> </Descriptions.Item>
-                  <Descriptions.Item label="Descripción"> </Descriptions.Item>
+                  <Descriptions.Item label="Código">{this.state.monitor.codigo}</Descriptions.Item>
+                  <Descriptions.Item label="Marca">{this.state.monitor.marca} </Descriptions.Item>
+                  <Descriptions.Item label="Modelo">{this.state.monitor.modelo} </Descriptions.Item>
+                  <Descriptions.Item label="Número de serie">{this.state.monitor.numero_serie} </Descriptions.Item>
+                  <Descriptions.Item label="Descripción">{this.state.monitor.descripcion} </Descriptions.Item>
                 </Descriptions>
                 <br />
                 <Descriptions title="Teclado" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                  <Descriptions.Item label="Código">{this.state.teclado}</Descriptions.Item>
-                  <Descriptions.Item label="Marca"> </Descriptions.Item>
-                  <Descriptions.Item label="Modelo"> </Descriptions.Item>
-                  <Descriptions.Item label="Número de serie"> </Descriptions.Item>
-                  <Descriptions.Item label="Descripción"> </Descriptions.Item>
+                  <Descriptions.Item label="Código">{this.state.teclado.codigo}</Descriptions.Item>
+                  <Descriptions.Item label="Marca">{this.state.teclado.marca} </Descriptions.Item>
+                  <Descriptions.Item label="Modelo">{this.state.teclado.modelo} </Descriptions.Item>
+                  <Descriptions.Item label="Número de serie">{this.state.teclado.numero_serie} </Descriptions.Item>
+                  <Descriptions.Item label="Descripción">{this.state.teclado.descripcion} </Descriptions.Item>
                 </Descriptions>
                 <br />
                 <Descriptions title="Mouse" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                  <Descriptions.Item label="Código">{this.state.mouse}</Descriptions.Item>
-                  <Descriptions.Item label="Marca"> </Descriptions.Item>
-                  <Descriptions.Item label="Modelo"> </Descriptions.Item>
-                  <Descriptions.Item label="Número de serie"> </Descriptions.Item>
-                  <Descriptions.Item label="Descripción"> </Descriptions.Item>
+                  <Descriptions.Item label="Código">{this.state.mouse.codigo}</Descriptions.Item>
+                  <Descriptions.Item label="Marca">{this.state.mouse.marca} </Descriptions.Item>
+                  <Descriptions.Item label="Modelo">{this.state.mouse.modelo} </Descriptions.Item>
+                  <Descriptions.Item label="Número de serie">{this.state.mouse.numero_serie} </Descriptions.Item>
+                  <Descriptions.Item label="Descripción">{this.state.mouse.descripcion} </Descriptions.Item>
                 </Descriptions>    
                 <br />
                 <Descriptions title="Parlantes" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                  <Descriptions.Item label="Código">{this.state.parlantes}</Descriptions.Item>
-                  <Descriptions.Item label="Marca"> </Descriptions.Item>
-                  <Descriptions.Item label="Modelo"> </Descriptions.Item>
-                  <Descriptions.Item label="Número de serie"> </Descriptions.Item>
-                  <Descriptions.Item label="Descripción"> </Descriptions.Item>
+                  <Descriptions.Item label="Código">{this.state.parlantes.codigo}</Descriptions.Item>
+                  <Descriptions.Item label="Marca">{this.state.parlantes.marca} </Descriptions.Item>
+                  <Descriptions.Item label="Modelo">{this.state.parlantes.modelo} </Descriptions.Item>
+                  <Descriptions.Item label="Número de serie">{this.state.parlantes.numero_serie} </Descriptions.Item>
+                  <Descriptions.Item label="Descripción">{this.state.parlantes.descripcion} </Descriptions.Item>
                 </Descriptions> 
                 <br />           
-                <Descriptions title="UPS/Regulador" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                  <Descriptions.Item label="Código">{this.state.f_alim}</Descriptions.Item>
-                  <Descriptions.Item label="Marca"> </Descriptions.Item>
-                  <Descriptions.Item label="Modelo"> </Descriptions.Item>
-                  <Descriptions.Item label="Número de serie"> </Descriptions.Item>
-                  <Descriptions.Item label="Descripción"> </Descriptions.Item>
-                </Descriptions>
+                {this.state.f_alim === undefined ? null : <>
+                <Descriptions title={this.state.f_alim.tipo_equipo === 'ups' ? 'UPS' : 'Regulador'} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
+                  <Descriptions.Item label="Código">{this.state.f_alim.codigo}</Descriptions.Item>
+                  <Descriptions.Item label="Marca">{this.state.f_alim.marca} </Descriptions.Item>
+                  <Descriptions.Item label="Modelo">{this.state.f_alim.modelo} </Descriptions.Item>
+                  <Descriptions.Item label="Número de serie">{this.state.f_alim.numero_serie} </Descriptions.Item>
+                  <Descriptions.Item label="Descripción">{this.state.f_alim.descripcion} </Descriptions.Item>
+                </Descriptions></>}
               </TabPane>
 
               <TabPane tab={<span><FiCpu className="anticon" />CPU</span>} key="4" >
                 <Descriptions title="Tarjeta madre" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                  <Descriptions.Item label="Código">{this.state.mainboard}</Descriptions.Item>
-                  <Descriptions.Item label="Marca"> </Descriptions.Item>
-                  <Descriptions.Item label="Modelo"> </Descriptions.Item>
-                  <Descriptions.Item label="Número de serie"> </Descriptions.Item>
-                  <Descriptions.Item label="RAM soportada"> </Descriptions.Item>
-                  <Descriptions.Item label="Número de slots"> </Descriptions.Item>
-                  <Descriptions.Item label="Conexiones para disco duro"> </Descriptions.Item>
-                  <Descriptions.Item label="Descripción"> </Descriptions.Item>
+                  <Descriptions.Item label="Código">{this.state.mainboard.codigo}</Descriptions.Item>
+                  <Descriptions.Item label="Marca">{this.state.mainboard.marca} </Descriptions.Item>
+                  <Descriptions.Item label="Modelo">{this.state.mainboard.modelo} </Descriptions.Item>
+                  <Descriptions.Item label="Número de serie">{this.state.mainboard.numero_serie} </Descriptions.Item>
+                  <Descriptions.Item label="RAM soportada">{this.state.mainboard.ram_soportada} </Descriptions.Item>
+                  <Descriptions.Item label="Número de slots">{this.state.mainboard.slots_ram} </Descriptions.Item>
+                  <Descriptions.Item label="Conexiones para disco duro">{this.state.mainboard.conexiones_dd} </Descriptions.Item>
+                  <Descriptions.Item label="Descripción">{this.state.mainboard.descripcion} </Descriptions.Item>
                 </Descriptions>
                 <br />
                 <div>
-                  {this.state.rams.map((ram, index) => {
+                  {this.state.rams.map((ram, i) => {
                     return (
-                      <div key={index}>
-                        <Descriptions title={"Memoria RAM "+(index+1)} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                          <Descriptions.Item label="Código">{ram}</Descriptions.Item>
-                          <Descriptions.Item label="Marca"></Descriptions.Item>
-                          <Descriptions.Item label="Modelo"></Descriptions.Item>
-                          <Descriptions.Item label="Número de serie"></Descriptions.Item>
-                          <Descriptions.Item label="Capacidad"></Descriptions.Item>
-                          <Descriptions.Item label="Tipo"></Descriptions.Item>
-                          <Descriptions.Item label="Descripción"></Descriptions.Item>
+                      <div key={ram.id_equipo}>
+                        <Descriptions title={"Memoria RAM "+(i+1)} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
+                          <Descriptions.Item label="Código">{ram.codigo} </Descriptions.Item>
+                          <Descriptions.Item label="Marca">{ram.marca} </Descriptions.Item>
+                          <Descriptions.Item label="Modelo">{ram.modelo} </Descriptions.Item>
+                          <Descriptions.Item label="Número de serie">{ram.numero_serie} </Descriptions.Item>
+                          <Descriptions.Item label="Capacidad">{ram.capacidad} </Descriptions.Item>
+                          <Descriptions.Item label="Tipo">{ram.tipo} </Descriptions.Item>
+                          <Descriptions.Item label="Descripción">{ram.descripcion} </Descriptions.Item>
                         </Descriptions>       
                         <br /> 
                       </div>     
@@ -204,17 +275,17 @@ class DetalleDesktop extends React.Component {
                 </div>
                 <br />
                 <div>
-                  {this.state.discos.map((dd, index) => {
+                {this.state.discos.map((dd, i) => {
                     return (
-                      <div key={index}>
-                        <Descriptions title={"Disco duro "+(index+1)} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                          <Descriptions.Item label="Código">{dd}</Descriptions.Item>
-                          <Descriptions.Item label="Marca"></Descriptions.Item>
-                          <Descriptions.Item label="Modelo"></Descriptions.Item>
-                          <Descriptions.Item label="Número de serie"></Descriptions.Item>
-                          <Descriptions.Item label="Capacidad"></Descriptions.Item>
-                          <Descriptions.Item label="Tipo"></Descriptions.Item>
-                          <Descriptions.Item label="Descripción"></Descriptions.Item>
+                      <div key={dd.id_equipo}>
+                        <Descriptions title={"Disco duro "+(i+1)} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
+                          <Descriptions.Item label="Código">{dd.codigo} </Descriptions.Item>
+                          <Descriptions.Item label="Marca">{dd.marca} </Descriptions.Item>
+                          <Descriptions.Item label="Modelo">{dd.modelo} </Descriptions.Item>
+                          <Descriptions.Item label="Número de serie">{dd.numero_serie} </Descriptions.Item>
+                          <Descriptions.Item label="Capacidad">{dd.capacidad} </Descriptions.Item>
+                          <Descriptions.Item label="Tipo">{dd.tipo} </Descriptions.Item>
+                          <Descriptions.Item label="Descripción">{dd.descripcion} </Descriptions.Item>
                         </Descriptions>       
                         <br /> 
                       </div>     
@@ -223,37 +294,37 @@ class DetalleDesktop extends React.Component {
                 </div>   
                 <br />
                 <Descriptions title="Procesador" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                  <Descriptions.Item label="Código">{this.state.procesador}</Descriptions.Item>
-                  <Descriptions.Item label="Marca"> </Descriptions.Item>
-                  <Descriptions.Item label="Modelo"> </Descriptions.Item>
-                  <Descriptions.Item label="Número de serie"> </Descriptions.Item>
-                  <Descriptions.Item label="Frecuencia"> </Descriptions.Item>
-                  <Descriptions.Item label="Número de núcleos"> </Descriptions.Item>
-                  <Descriptions.Item label="Descripción"> </Descriptions.Item>
+                  <Descriptions.Item label="Código">{this.state.procesador.codigo}</Descriptions.Item>
+                  <Descriptions.Item label="Marca">{this.state.procesador.marca} </Descriptions.Item>
+                  <Descriptions.Item label="Modelo">{this.state.procesador.modelo} </Descriptions.Item>
+                  <Descriptions.Item label="Número de serie">{this.state.procesador.numero_serie} </Descriptions.Item>
+                  <Descriptions.Item label="Frecuencia">{this.state.procesador.frecuencia} </Descriptions.Item>
+                  <Descriptions.Item label="Número de núcleos">{this.state.procesador.nucleos} </Descriptions.Item>
+                  <Descriptions.Item label="Descripción">{this.state.procesador.descripcion} </Descriptions.Item>
                 </Descriptions>
                 <br />
                 <Descriptions title="Tarjeta de red" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                  <Descriptions.Item label="Código">{this.state.tarj_red}</Descriptions.Item>
-                  <Descriptions.Item label="Marca"> </Descriptions.Item>
-                  <Descriptions.Item label="Modelo"> </Descriptions.Item>
-                  <Descriptions.Item label="Número de serie"> </Descriptions.Item>
-                  <Descriptions.Item label="Descripción"> </Descriptions.Item>
+                  <Descriptions.Item label="Código">{this.state.tarj_red.codigo} </Descriptions.Item>
+                  <Descriptions.Item label="Marca">{this.state.tarj_red.marca} </Descriptions.Item>
+                  <Descriptions.Item label="Modelo">{this.state.tarj_red.modelo} </Descriptions.Item>
+                  <Descriptions.Item label="Número de serie">{this.state.tarj_red.numero_serie} </Descriptions.Item>
+                  <Descriptions.Item label="Descripción">{this.state.tarj_red.descripcion} </Descriptions.Item>
                 </Descriptions>
                 <br />
                 <Descriptions title="Case" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                  <Descriptions.Item label="Código">{this.state.case}</Descriptions.Item>
-                  <Descriptions.Item label="Marca"> </Descriptions.Item>
-                  <Descriptions.Item label="Modelo"> </Descriptions.Item>
-                  <Descriptions.Item label="Número de serie"> </Descriptions.Item>
-                  <Descriptions.Item label="Descripción"> </Descriptions.Item>
+                  <Descriptions.Item label="Código">{this.state.case.codigo} </Descriptions.Item>
+                  <Descriptions.Item label="Marca">{this.state.case.marca} </Descriptions.Item>
+                  <Descriptions.Item label="Modelo">{this.state.case.modelo} </Descriptions.Item>
+                  <Descriptions.Item label="Número de serie">{this.state.case.numero_serie} </Descriptions.Item>
+                  <Descriptions.Item label="Descripción">{this.state.case.descripcion} </Descriptions.Item>
                 </Descriptions>
                 <br />
                 <Descriptions title="Fuente de poder" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                  <Descriptions.Item label="Código">{this.state.f_poder}</Descriptions.Item>
-                  <Descriptions.Item label="Marca">Lenovo</Descriptions.Item>
-                  <Descriptions.Item label="Modelo">SGGT2GTX</Descriptions.Item>
-                  <Descriptions.Item label="Número de serie">13353435346</Descriptions.Item>
-                  <Descriptions.Item label="Descripción">-</Descriptions.Item>
+                  <Descriptions.Item label="Código">{this.state.f_poder.codigo} </Descriptions.Item>
+                  <Descriptions.Item label="Marca">{this.state.f_poder.marca} </Descriptions.Item>
+                  <Descriptions.Item label="Modelo">{this.state.f_poder.modelo}</Descriptions.Item>
+                  <Descriptions.Item label="Número de serie">{this.state.f_poder.numero_serie}</Descriptions.Item>
+                  <Descriptions.Item label="Descripción">{this.state.f_poder.descripcion}</Descriptions.Item>
                 </Descriptions>
               </TabPane>
             </Tabs>

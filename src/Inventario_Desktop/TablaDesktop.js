@@ -1,8 +1,9 @@
 import React from 'react';
-import { Button, Row, Col, Table, Input, Icon, Popconfirm, Tag, Typography } from 'antd';
+import { Button, Row, Col, Table, Input, Icon, Popconfirm, Tag, Typography, message } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import FuncionesAuxiliares from '../FuncionesAuxiliares'
+import Axios from '../Servicios/AxiosDesktop' 
 
 const { Title } = Typography;
 
@@ -17,97 +18,60 @@ class TablaDesktop extends React.Component{
       searchText: '',
       searchedColumn: '',
       index: 0,
-      dataSource: [
-        {
-          key:'1',
-          codigo: 'HLB_COMP_3',
-          bspi: 'Hospital León Becerra',
-          departamento: 'Financiero',
-          empleado: 'Victor Toral',
-          name_pc: 'Contador-PC',
-          user_pc: 'Contador',
-          estado: 'Operativo',
-          so: 'Windows 7 Professional',
-          so_type: '32 bits',
-          servpack: 'No',
-          licencia: 'No',
-          office: '2013',
-          ip: '8',
-          monitor: 'HLB_MNT_1',
-          teclado: 'HLB_TEC_12',
-          mouse: 'HLB_MOU_35',
-          parlantes: 'HLB_PAR_23',
-          mainboard: 'HLB_MNB_34',
-          rams: ['1', 'gfh'],
-          discos: ['HLB_DD_4'],
-          procesador: 'HLB_PRC',
-          tarj_red: 'hlb_tred_1',
-          case: 'hlb_cas_4',
-          f_alim: 'UPS',
-          f_poder: 'HLB_fpod_1',
-          descripcion: 'revisar'
-        },
-        {
-          key:'2',
-          codigo: 'HLB_COMP_1',
-          bspi: 'Hospital León Becerra',
-          departamento: 'Proveeduría',
-          empleado: 'John Villamar',
-          name_pc: 'UserHLB',
-          user_pc: 'Usuario',
-          estado: 'No Operativo',
-          so: 'Windows 10 Home Single Language',
-          so_type: '64 bits',
-          servpack: 'Si',
-          licencia: 'Si',
-          office: '2019',
-          ip: 'R3',
-          monitor: 'HLB_MNT_2',
-          teclado: 'HLB_TEC_13',
-          mouse: 'HLB_MOU_36',
-          parlantes: 'HLB_PAR_22',
-          mainboard: 'HLB_MNB_32',
-          rams: ['HLB_RAM_1', 'HFDGFSt2', 'GHTH43_34'],
-          discos: ['HLB_DD_3', 'THRTE2534'],
-          procesador: 'HLB_PRC_0',
-          tarj_red: 'hlb_tred_1',
-          case: 'hlb_cas_3',
-          f_alim: 'Regulador',
-          f_poder: 'HLB_fpod_2',
-          descripcion: ''
-        },
-        {
-          key:'63',
-          codigo: 'HLB_COMP_1',
-          bspi: 'Residencia Mercedes Begué',
-          departamento: 'Auditoría',
-          empleado: 'John Villamar',
-          name_pc: 'UserHLB',
-          user_pc: 'Usuario',
-          estado: 'No Operativo',
-          so: 'Windows 8.1 Pro',
-          so_type: '32 bits',
-          servpack: 'No',
-          licencia: 'Si',
-          office: '2007',
-          ip: 'R3',
-          monitor: 'HLB_MNT_2',
-          teclado: 'HLB_TEC_13',
-          mouse: 'HLB_MOU_36',
-          parlantes: 'HLB_PAR_22',
-          mainboard: 'HLB_MNB_32',
-          rams: ['HLB_RAM_1'],
-          discos: ['HLB_DD_3'],
-          procesador: 'HLB_PRC_0',
-          tarj_red: 'hlb_tred_1',
-          case: 'hlb_cas_3',
-          f_alim: 'UPS',          
-          f_poder: 'HLB_fpod_3',
-          descripcion: ''
-        },
-      ],
+      dataSource: [],
     };
     this.handleClick = this.handleClick.bind(this);
+  }
+
+  obtener_datos = () => {
+    let datos = [];
+    Axios.listar_desktops().then(res => {
+    res.data.forEach(function (r) {
+        let registro = r.original
+        console.log(registro.f_alim)
+        var dip = registro.general.ip === null ? ' ' : registro.general.ip.toString();
+        let router = {
+            key: registro.general.id_equipo,
+            codigo: registro.general.codigo,
+            bspi: registro.general.bspi === undefined ? '' : registro.general.bspi,
+            departamento: registro.general.departamento === undefined ? '' : registro.general.departamento,
+            empleado: registro.general.empleado === undefined ? '' : registro.general.empleado+' '+registro.general.apellido,
+            marca: registro.general.marca,
+            modelo: registro.general.modelo,
+            num_serie: registro.general.numero_serie, 
+            estado: registro.general.estado_operativo,
+            ip: dip,
+            so: registro.so.so,
+            servpack: registro.so.service_pack === '0' ? 'No' : 'Si',
+            so_type: registro.so.tipo_so,
+            name_pc: registro.so.nombre_pc,
+            user_pc: registro.so.usuario_pc,
+            licencia: registro.so.licencia === '0' ? 'No' : 'Si',
+            office: registro.so.office,
+            tarj_red: registro.tarjeta_red,
+            monitor: registro.monitor,
+            teclado: registro.teclado,
+            parlantes: registro.parlantes,
+            mouse: registro.mouse,
+            mainboard: registro.tarjeta_madre,
+            case: registro.case,
+            f_poder: registro.fuente_poder,
+            f_alim: registro.f_alim === undefined ? [] : registro.f_alim,
+            descripcion: registro.general.descripcion,
+            procesador: registro.procesador,
+            rams: registro.rams,
+            discos: registro.discos,
+         }
+         datos.push(router);
+    });
+    this.setState({ dataSource: datos });
+    }).catch(err => {
+        message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
+    });
+}
+
+componentDidMount = () => {
+    this.obtener_datos();
   }
 
   handleDelete = key => {
@@ -430,31 +394,46 @@ class TablaDesktop extends React.Component{
         title: 'Monitor',
         dataIndex: 'monitor',
         key: 'monitor',
-        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'monitor'} }} >{text}</Link>,
+        render: monitor => <Link key={monitor.codigo} to={{ pathname: '/otros/view', state: { info: monitor, tipo_equipo: 'monitor' } }} >
+        {monitor.codigo}
+     </Link>,
+        // text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'monitor'} }} >{text}</Link>,
       },
       {
         title: 'Teclado',
         dataIndex: 'teclado',
         key: 'teclado',
-        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'teclado'} }} >{text}</Link>,
+        render: teclado => <Link key={teclado.codigo} to={{ pathname: '/otros/view', state: { info: teclado, tipo_equipo: 'teclado' } }} >
+        {teclado.codigo}
+     </Link>,
+        //text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'teclado'} }} >{text}</Link>,
       }, 
       {
         title: 'Parlantes',
         dataIndex: 'parlantes',
         key: 'parlantes',
-        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'parlantes'} }} >{text}</Link>,
+        render: parlantes => <Link key={parlantes.codigo} to={{ pathname: '/otros/view', state: { info: parlantes, tipo_equipo: 'parlantes' } }} >
+        {parlantes.codigo}
+     </Link>,
+        //text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'parlantes'} }} >{text}</Link>,
       },
       {
         title: 'Mouse',
         dataIndex: 'mouse',
         key: 'mouse',
-        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'mouse'} }} >{text}</Link>,
+        render: mouse => <Link key={mouse.codigo} to={{ pathname: '/otros/view', state: { info: mouse, tipo_equipo: 'mouse' } }} >
+        {mouse.codigo}
+     </Link>,
+        //text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'mouse'} }} >{text}</Link>,
       },
       {
         title: 'Mainboard',
         dataIndex: 'mainboard',
         key: 'mainboard',
-        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'mainboard'} }} >{text}</Link>,
+        render: mainboard => <Link key={mainboard.codigo} to={{ pathname: '/otros/view', state: { info: mainboard, tipo_equipo: 'tarjeta madre' } }} >
+        {mainboard.codigo}
+     </Link>,
+        //text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'mainboard'} }} >{text}</Link>,
       }, 
       {
         title: 'Memorias RAM',
@@ -463,13 +442,13 @@ class TablaDesktop extends React.Component{
         width: 70,
         render: (rams) => (
           <div>
-            {rams.map(id_memoria => {
-              return (
-                <Link key={id_memoria} to={{ pathname: '/otros/view', state: { info: id_memoria, tipo_equipo: 'memoria RAM' } }} >
-                  <Tag style={{margin: 2}} color="cyan" key={id_memoria.toString()}>{id_memoria}</Tag>
-                </Link>              
-              );
-            })}
+            {rams.map(memoria => {
+                        return (
+                            <Link key={memoria.codigo} to={{ pathname: '/otros/view', state: { info: memoria, tipo_equipo: 'memoria RAM' } }} >
+                            <Tag style={{margin: 2}} color="cyan" key={memoria.id_equipo}>{memoria.codigo}</Tag>
+                            </Link>              
+                        );
+                    })}
           </div>
         ),
       },  
@@ -480,13 +459,13 @@ class TablaDesktop extends React.Component{
         width: 70,
         render: (discos) => (
           <div>
-            {discos.map(id_disco => {
-              return (
-                <Link key={id_disco} to={{ pathname: '/otros/view', state: { info: id_disco, tipo_equipo: 'disco duro' } }} >
-                  <Tag style={{margin: 2}} color="blue" key={id_disco.toString()}>{id_disco}</Tag>
-                </Link>              
-              );
-            })}
+             {discos.map(disco => {
+                    return (
+                        <Link key={disco.codigo} to={{ pathname: '/otros/view', state: { info: disco, tipo_equipo: 'disco duro' } }} >
+                        <Tag style={{margin: 2}} color="blue" key={disco.id_equipo}>{disco.codigo}</Tag>
+                        </Link>              
+                    );
+                })}
           </div>
         ),
       }, 
@@ -494,31 +473,46 @@ class TablaDesktop extends React.Component{
         title: 'Procesador',
         dataIndex: 'procesador',
         key: 'procesador',
-        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'procesador'} }} >{text}</Link>,
+        render: proces => <Link key={proces.codigo} to={{ pathname: '/otros/view', state: { info: proces, tipo_equipo: 'procesador' } }} >
+        {proces.codigo}
+     </Link>,
+        //text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'procesador'} }} >{text}</Link>,
       }, 
       {
         title: 'Tarjeta de red',
         dataIndex: 'tarj_red',
         key: 'tarj_red',
-        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'tarjeta de red'} }} >{text}</Link>,
+        render: tred => <Link key={tred.codigo} to={{ pathname: '/otros/view', state: { info: tred, tipo_equipo: 'tarjeta de red' } }} >
+        {tred.codigo}
+     </Link>,
+        //text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'tarjeta de red'} }} >{text}</Link>,
       },
       {
         title: 'Case',
         dataIndex: 'case',
         key: 'case',
-        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'case'} }} >{text}</Link>,
+        render: carcasa => <Link key={carcasa.codigo} to={{ pathname: '/otros/view', state: { info: carcasa, tipo_equipo: 'carcasa' } }} >
+        {carcasa.codigo}
+     </Link>,
+        //text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'case'} }} >{text}</Link>,
       },
       {
         title: 'Fuente poder',
         dataIndex: 'f_poder',
         key: 'f_poder',
-        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'fuente de poder' } }} >{text}</Link>,
+        render: f_poder => <Link key={f_poder.codigo} to={{ pathname: '/otros/view', state: { info: f_poder, tipo_equipo: 'fuente de poder' } }} >
+        {f_poder.codigo}
+     </Link>,
+        //text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'fuente de poder' } }} >{text}</Link>,
       },
       {
         title: 'Alimentación',
         dataIndex: 'f_alim',
         key: 'f_alim',
-        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'fuente de alimentación'} }} >{text}</Link>,
+        render: f_alim => <Link key={f_alim.codigo} to={{ pathname: '/otros/view', state: { info: f_alim, tipo_equipo: f_alim.tipo_equipo } }} >
+        {f_alim.codigo}
+     </Link>,
+        //text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'fuente de alimentación'} }} >{text}</Link>,
         filters: [
           {
               text: 'UPS',

@@ -12,7 +12,7 @@ function SelectComponent(props) {
             className={props.class !== "" ? `${props.class}` : null}
         >
             {props.decorator(`${props.name}`, {
-                rules: [{ required: props.required, message: 'Debe completar este campo' }],                
+                rules: [{ required: props.required, message: 'Debe completar este campo' }],           
                 initialValue: props.initialValue === undefined ? null : `${props.initialValue}`
             })(
                 <Select
@@ -24,8 +24,9 @@ function SelectComponent(props) {
                      <Select.Option key="0" value={n}>----</Select.Option>
                     {
                         props.datos.map(dato =>
-                            <Select.Option key={dato.id} value={dato.id}>{dato.dato}</Select.Option>
+                            <Select.Option key={dato.id} value={ dato.id }>{dato.dato}</Select.Option>
                         )
+                        //props.initialValue === null ? dato.id : props.initialValue
                     }
                 </Select>
             )

@@ -32,15 +32,15 @@ class DetalleOtrosEquipos extends React.Component {
     cargar_datos(info) {
         console.log("INFO",info);
         this.setState({
-            codigo: info,
+            codigo: info.codigo,
             marca: info.marca,
             modelo: info.modelo,
-            num_serie: info.num_serie,
+            num_serie: info.numero_serie,
             capacidad: info.capacidad,
             tipo: info.tipo,
             descripcion: info.descripcion,
             frecuencia: info.frecuencia,
-            nnucleos: info.nnucleos
+            nnucleos: info.nucleos
         })
     }     
 

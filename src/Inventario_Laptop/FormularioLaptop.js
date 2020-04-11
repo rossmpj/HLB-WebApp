@@ -22,8 +22,8 @@ class FormularioLaptop extends Component {
     titulo: "",
     general_fields: {
         codigo: '',
-        asignar: '',
-        marca: null,
+        asignar: undefined,
+        marca: '',
         modelo: '',
         nserie: '',
         nombre_pc: '',
@@ -76,25 +76,25 @@ class FormularioLaptop extends Component {
     }
     cargar_datos(info) {
         console.log(info.rams);
-        let indcx = []
+        Axios.obtenerInfoLaptop(info.key).then(res => {
+            let registro = res.data;
+            console.log("registro:",registro);
+            let indcx = []
         for (const element in info.rams) {
-            //console.log(info.rams[element])
-            indcx.push({ codigo: info.rams[element], marca: 1, modelo: "fgfgrgt", nserie: "rgrgtrtg", capacidad: 110, tipo: "sss", descr: ""})
+            console.log(info.rams[element].modelo)
+            indcx.push({ codigo: info.rams[element].codigo, marca: info.rams[element].marca, modelo: info.rams[element].modelo, 
+                         nserie: info.rams[element].numero_serie, capacidad: info.rams[element].capacidad, tipo: info.rams[element].tipo, descr: info.rams[element].descripcion})
         }
         let inddcx = []
         for (const element in info.discos) {
             //console.log(info.rams[element])
             inddcx.push({ codigo: info.discos[element], marca: 1, modelo: "fgfgrgt", nserie: "rgrgtrtg", capacidad: 110, tipo: "sss", descr: ""})
         }
-        console.log("indx", indcx)
-        Axios.obtenerInfoLaptop(info.key).then(res => {
-            let registro = res.data;
-            console.log("registro:",registro);
         this.setState({
             general_fields: {
                 codigo: info.codigo,
                 asignar: info.empleado,
-                marca: registro.id_marca,
+                marca: info.marca,
                 modelo: info.modelo,
                 nserie: info.num_serie,
                 nombre_pc: info.name_pc,
@@ -111,13 +111,13 @@ class FormularioLaptop extends Component {
                 office: info.office
             },
             procesador_fields: {
-                codigo_proc: info.id_procesador,
-                marca_proc: registro.pc_procesador.id_marca,
-                modelo_proc: registro.pc_procesador.modelo,
-                nserie_proc: registro.pc_procesador.numero_serie,
-                frec_proc: info.frecuencia,
-                nucleos_proc: info.nnucleos,
-                descr_proc: registro.pc_procesador.descripcion
+                codigo_proc: registro.procesador.codigo,
+                marca_proc: registro.procesador.marca,
+                modelo_proc: registro.procesador.modelo,
+                nserie_proc: registro.procesador.numero_serie,
+                frec_proc: registro.procesador.frecuencia,
+                nucleos_proc: registro.procesador.nnucleos,
+                descr_proc: registro.procesador.descripcion
             },
             ram_fields:{        
                 nombre: 'memoria RAM',

@@ -109,11 +109,11 @@ class FormularioRouter extends React.Component {
           pass: res.pass,
           usuario: res.usuario,
           clave: res.clave,
-          marca: res.id_marca,
+          marca: res.id_marca.toString(),
           modelo: res.modelo,
           nserie: res.numero_serie,
           estado: res.estado_operativo,
-          ip: res.ip,
+          ip: res.ip === null ? null : res.ip.toString(),
           penlace: res.puerta_enlace,
           descripcion: res.descripcion
         })

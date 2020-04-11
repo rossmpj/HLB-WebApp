@@ -18,60 +18,7 @@ class TablaLaptop extends React.Component{
       searchText: '',
       searchedColumn: '',
       index: 0,
-      dataSource : [
-        // {
-        //   key: '1',
-        //   codigo: 'HLB_COMP_1',
-        //   bspi: 'Hospital León Becerra',
-        //   departamento: 'Proveeduría',
-        //   empleado: 'John Villamar',
-        //   marca: 'Lenovo',
-        //   modelo: 'h2343',
-        //   num_serie: 'tftyfBGPGTH1',
-        //   name_pc: 'Admin',
-        //   user_pc: 'UsADmin1',
-        //   estado: 'No Operativo',
-        //   so: 'Windows 10 Home Single Language',
-        //   so_type: '64 bits',
-        //   servpack: 'No',
-        //   licencia: 'Si',
-        //   office: '2010',
-        //   ip: '1',
-        //   id_procesador: 'Intel Core i7-5500U',
-        //   frecuencia: '3 GHz',
-        //   nnucleos: 4,
-        //   ram_soportada: '12 GB',
-        //   slots_ram: 2,
-        //   rams: ['HLB_S2', 'GGRGHGDGRGT-1', 'DFGHR22'],
-        //   discos: ['HLB_DD_9', 'HLB_DDD_1'],
-        //   descripcion: 'nn'
-        // },
-        // {
-        //   key: '2',
-        //   codigo: 'HL_1',
-        //   bspi: 'Unidad Educativa San José Buen Pastor',
-        //   departamento: 'UCI',
-        //   empleado: 'Carla Villamar',
-        //   marca: 'HP',
-        //   modelo: 'L450',
-        //   num_serie: '24954839605 BGPGTH1',
-        //   name_pc: 'UserHLB',
-        //   user_pc: 'Usuario',
-        //   estado: 'Operativo',
-        //   so: 'Windows 7',
-        //   so_type: '32 bits',
-        //   servpack: 'No',
-        //   licencia: 'No',
-        //   office: '2019',
-        //   ip: 'R3',
-        //   id_procesador: 'Intel Core i7-5500U',
-        //   ram_soportada: '12 GB',
-        //   slots_ram: 2,
-        //   rams: ['HLB_Sdg'],
-        //   discos: ['HLB_DD_3', 'FGGH24'],
-        //   descripcion: 'nn'
-        // },
-      ]
+      dataSource : []
     };
     this.handleClick = this.handleClick.bind(this);
   }
@@ -81,34 +28,37 @@ class TablaLaptop extends React.Component{
         AxiosLaptop.listar_laptops().then(res => {
         res.data.forEach(function (r) {
             let registro = r.original
-            var dip = registro.ip === null ? ' ' : registro.ip.toString();
+            console.log("as:#",registro.general.asignado)
+            console.log("de:#",registro.general.departamento)
+            console.log("em:#",registro.general.empleado)
+            console.log("ap:#",registro.general.apellido)
+            var dip = registro.general.ip === null ? ' ' : registro.general.ip.toString();
             let router = {
-                key: registro.id_equipo,
-                codigo: registro.codigo,
-                bspi: registro.bspi,
-                departamento: registro.departamento,
-                marca: registro.marca,
-                modelo: registro.modelo,
-                num_serie: registro.numero_serie, 
-                estado: registro.estado_operativo,
+                key: registro.general.id_equipo,
+                codigo: registro.general.codigo,
+                bspi: registro.general.bspi === undefined ? '' : registro.general.bspi,
+                departamento: registro.general.departamento === undefined ? '' : registro.general.departamento,
+                empleado: registro.general.empleado === undefined ? '' : registro.general.empleado+' '+registro.general.apellido,
+                marca: registro.general.marca,
+                modelo: registro.general.modelo,
+                num_serie: registro.general.numero_serie, 
+                estado: registro.general.estado_operativo,
                 ip: dip,
-                empleado: registro.empleado+' '+registro.apellido,
-                so: registro.so,
-                servpack: registro.service_pack === '0' ? 'No' : 'Si',
-                so_type: registro.tipo_so,
-                name_pc: registro.nombre_pc,
-                user_pc: registro.usuario_pc,
-                licencia: registro.licencia === '0' ? 'No' : 'Si',
+                so: registro.so.so,
+                servpack: registro.so.service_pack === '0' ? 'No' : 'Si',
+                so_type: registro.so.tipo_so,
+                name_pc: registro.so.nombre_pc,
+                user_pc: registro.so.usuario_pc,
+                licencia: registro.so.licencia === '0' ? 'No' : 'Si',
+                office: registro.so.office,
                 ram_soportada: registro.ram_soportada,
                 slots_ram: registro.numero_slots,
-                frecuencia: registro.frecuencia+' GHz',
-                nnucleos: registro.nnucleos,
-                descripcion: registro.descripcion,
-                id_procesador: registro.id_procesador,
+                descripcion: registro.general.descripcion,
+                id_procesador: registro.procesador,
                 rams: registro.rams,
                 discos: registro.discos,
-            }
-            datos.push(router);
+             }
+             datos.push(router);
         });
         this.setState({ dataSource: datos });
         }).catch(err => {
@@ -327,22 +277,6 @@ class TablaLaptop extends React.Component{
         sortOrder: sortedInfo.columnKey === 'num_serie' && sortedInfo.order,
       },
       {
-        title: 'Nombre PC',
-        dataIndex: 'name_pc',
-        key: 'name_pc',
-        ...this.getColumnSearchProps('name_pc'),
-        sorter: (a, b) => a.name_pc.length - b.name_pc.length,
-        sortOrder: sortedInfo.columnKey === 'name_pc' && sortedInfo.order,
-      },
-      {
-        title: 'Usuario PC',
-        dataIndex: 'user_pc',
-        key: 'user_pc',
-        ...this.getColumnSearchProps('user_pc'),
-        sorter: (a, b) => a.user_pc.length - b.user_pc.length,
-        sortOrder: sortedInfo.columnKey === 'user_pc' && sortedInfo.order,
-      },
-      {
         title: 'Estado',
         dataIndex: 'estado',
         key: 'estado',
@@ -360,6 +294,22 @@ class TablaLaptop extends React.Component{
         onFilter: (value, record) => record.estado.indexOf(value) === 0,
         sorter: (a, b) => a.estado.length - b.estado.length,
         sortOrder: sortedInfo.columnKey === 'estado' && sortedInfo.order,
+      },
+      {
+        title: 'Nombre PC',
+        dataIndex: 'name_pc',
+        key: 'name_pc',
+        ...this.getColumnSearchProps('name_pc'),
+        sorter: (a, b) => a.name_pc.length - b.name_pc.length,
+        sortOrder: sortedInfo.columnKey === 'name_pc' && sortedInfo.order,
+      },
+      {
+        title: 'Usuario PC',
+        dataIndex: 'user_pc',
+        key: 'user_pc',
+        ...this.getColumnSearchProps('user_pc'),
+        sorter: (a, b) => a.user_pc.length - b.user_pc.length,
+        sortOrder: sortedInfo.columnKey === 'user_pc' && sortedInfo.order,
       },
       {
         title: 'Sistema operativo',
@@ -489,8 +439,10 @@ class TablaLaptop extends React.Component{
       {
         title: 'Procesador',
         dataIndex: 'id_procesador',
-        key: 'id_procesador',        
-        render: text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'procesador'} }} >{text}</Link>,
+        key: 'id_procesador',       
+        render: proces => <Link key={proces.codigo} to={{ pathname: '/otros/view', state: { info: proces, tipo_equipo: 'procesador' } }} >
+                            {proces.codigo}
+                         </Link>,
         sorter: (a, b) => a.nombre_procesador.length - b.nombre_procesador.length,
         sortOrder: sortedInfo.columnKey === 'id_procesador' && sortedInfo.order,
       }, 
@@ -524,10 +476,10 @@ class TablaLaptop extends React.Component{
             width: 70,
             render: (rams) => (
                 <div>
-                    {rams.map(id_memoria => {
+                    {rams.map(memoria => {
                         return (
-                            <Link key={id_memoria} to={{ pathname: '/otros/view', state: { info: id_memoria, tipo_equipo: 'memoria RAM' } }} >
-                            <Tag style={{margin: 2}} color="cyan" key={id_memoria.toString()}>{id_memoria}</Tag>
+                            <Link key={memoria.codigo} to={{ pathname: '/otros/view', state: { info: memoria, tipo_equipo: 'memoria RAM' } }} >
+                            <Tag style={{margin: 2}} color="cyan" key={memoria.id_equipo}>{memoria.codigo}</Tag>
                             </Link>              
                         );
                     })}
@@ -543,10 +495,10 @@ class TablaLaptop extends React.Component{
         width: 70,
         render: (discos) => (
             <div>
-                {discos.map(id_disco => {
+                {discos.map(disco => {
                     return (
-                        <Link key={id_disco} to={{ pathname: '/otros/view', state: { info: id_disco, tipo_equipo: 'disco Duro' } }} >
-                        <Tag style={{margin: 2}} color="blue" key={id_disco.toString()}>{id_disco}</Tag>
+                        <Link key={disco.codigo} to={{ pathname: '/otros/view', state: { info: disco, tipo_equipo: 'disco Duro' } }} >
+                        <Tag style={{margin: 2}} color="blue" key={disco.id_equipo}>{disco.codigo}</Tag>
                         </Link>              
                     );
                 })}

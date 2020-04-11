@@ -32,14 +32,14 @@ class DetalleLaptop extends React.Component {
       office: '',
       id_procesador: '',
       procesador: {
+        codigo: '',
         modelo: '',
         descripcion: '',
         numero_serie: '',
-        id_marca: '',
+        marca: '',
+        frecuencia: '',
+        nnucleos: '',
     },
-      modelo_procesador: '',
-      frecuencia: '',
-      nnucleos: '',
       ram_soportada: '',
       slots_ram: '',
       rams: [],
@@ -75,18 +75,14 @@ class DetalleLaptop extends React.Component {
             servpack: info.servpack,
             licencia: info.licencia,
             office: info.office,
-            id_procesador: info.id_procesador,
-            procesador: registro.pc_procesador,
-            frecuencia: info.frecuencia,
-            nnucleos: info.nnucleos,
-            ram_soportada: info.ram_soportada,
-            slots_ram: info.slots_ram,
+            procesador: registro.procesador[0],
+            ram_soportada: registro.ram_soportada,
+            slots_ram: registro.numero_slots,
             rams: info.rams,
             discos: info.discos,
             descripcion: info.descripcion
           })
     })
-    // console.log("2i",info);
     info.ip === " " ? this.setState({ip: "No asignada"}) : 
     MetodosAxios.buscar_ip_por_codigo(info.ip).then(res => {      
         res.data.forEach((registro) => {
@@ -144,12 +140,12 @@ class DetalleLaptop extends React.Component {
 
               <TabPane tab={<span><GiProcessor className="anticon" />Procesador</span>} key="3" >
                 <Descriptions title="Procesador" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                  <Descriptions.Item label="Código">{this.state.id_procesador}</Descriptions.Item>
+                  <Descriptions.Item label="Código">{this.state.procesador.codigo}</Descriptions.Item>
                   <Descriptions.Item label="Marca">{this.state.procesador.marca}</Descriptions.Item>
                   <Descriptions.Item label="Modelo">{this.state.procesador.modelo}</Descriptions.Item>
                   <Descriptions.Item label="Número de serie">{this.state.procesador.numero_serie}</Descriptions.Item>
-                  <Descriptions.Item label="Frecuencia">{this.state.frecuencia}</Descriptions.Item>
-                  <Descriptions.Item label="Número de núcleos">{this.state.nnucleos}</Descriptions.Item>
+                  <Descriptions.Item label="Frecuencia">{this.state.procesador.frecuencia+" GHz"}</Descriptions.Item>
+                  <Descriptions.Item label="Número de núcleos">{this.state.procesador.nnucleos}</Descriptions.Item>
                   <Descriptions.Item label="Descripción">{this.state.procesador.descripcion}</Descriptions.Item>
                 </Descriptions>
                 <br />                     
@@ -162,17 +158,17 @@ class DetalleLaptop extends React.Component {
                 </Descriptions>
                 <br />
                 <div>
-                  {this.state.rams.map((ram, index) => {
+                  {this.state.rams.map((ram, i) => {
                     return (
-                      <div key={index}>
-                        <Descriptions title={"Memoria RAM "+(index+1)} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                          <Descriptions.Item label="Código">{ram}</Descriptions.Item>
-                          <Descriptions.Item label="Marca"></Descriptions.Item>
-                          <Descriptions.Item label="Modelo"></Descriptions.Item>
-                          <Descriptions.Item label="Número de serie"></Descriptions.Item>
-                          <Descriptions.Item label="Capacidad"></Descriptions.Item>
-                          <Descriptions.Item label="Tipo"></Descriptions.Item>
-                          <Descriptions.Item label="Descripción"></Descriptions.Item>
+                      <div key={ram.id_equipo}>
+                        <Descriptions title={"Memoria RAM "+(i+1)} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
+                          <Descriptions.Item label="Código">{ram.codigo} </Descriptions.Item>
+                          <Descriptions.Item label="Marca">{ram.marca} </Descriptions.Item>
+                          <Descriptions.Item label="Modelo">{ram.modelo} </Descriptions.Item>
+                          <Descriptions.Item label="Número de serie">{ram.numero_serie} </Descriptions.Item>
+                          <Descriptions.Item label="Capacidad">{ram.capacidad} </Descriptions.Item>
+                          <Descriptions.Item label="Tipo">{ram.tipo} </Descriptions.Item>
+                          <Descriptions.Item label="Descripción">{ram.descripcion} </Descriptions.Item>
                         </Descriptions>       
                         <br /> 
                       </div>     
@@ -183,17 +179,17 @@ class DetalleLaptop extends React.Component {
 
               <TabPane tab={<span><FiHardDrive className="anticon" />Disco Duro</span>} key="5" >
               <div>
-                  {this.state.discos.map((dd, index) => {
+                  {this.state.discos.map((dd, i) => {
                     return (
-                      <div key={index}>
-                        <Descriptions title={"Disco duro "+(index+1)} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                          <Descriptions.Item label="Código">{dd}</Descriptions.Item>
-                          <Descriptions.Item label="Marca"></Descriptions.Item>
-                          <Descriptions.Item label="Modelo"></Descriptions.Item>
-                          <Descriptions.Item label="Número de serie"></Descriptions.Item>
-                          <Descriptions.Item label="Capacidad"></Descriptions.Item>
-                          <Descriptions.Item label="Tipo"></Descriptions.Item>
-                          <Descriptions.Item label="Descripción"></Descriptions.Item>
+                      <div key={dd.id_equipo}>
+                        <Descriptions title={"Disco duro "+(i+1)} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
+                          <Descriptions.Item label="Código">{dd.codigo} </Descriptions.Item>
+                          <Descriptions.Item label="Marca">{dd.marca} </Descriptions.Item>
+                          <Descriptions.Item label="Modelo">{dd.modelo} </Descriptions.Item>
+                          <Descriptions.Item label="Número de serie">{dd.numero_serie} </Descriptions.Item>
+                          <Descriptions.Item label="Capacidad">{dd.capacidad} </Descriptions.Item>
+                          <Descriptions.Item label="Tipo">{dd.tipo} </Descriptions.Item>
+                          <Descriptions.Item label="Descripción">{dd.descripcion} </Descriptions.Item>
                         </Descriptions>       
                         <br /> 
                       </div>     

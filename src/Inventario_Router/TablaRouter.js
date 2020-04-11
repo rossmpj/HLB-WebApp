@@ -19,6 +19,7 @@ class TablaRouter extends React.Component{
       searchText: '',
       searchedColumn: '',
       index: 0,
+      id_router: 0,
       dataSource: []
     };
     this.handleClick = this.handleClick.bind(this);
@@ -36,8 +37,8 @@ class TablaRouter extends React.Component{
             let router = {
             key: registro.id_router,
             codigo: registro.codigo,
-            bspi: registro.bspi_punto,
-            departamento: registro.departamento,
+            bspi: registro.bspi_punto === null ? '' : registro.bspi_punto,
+            departamento: registro.departamento === null ? '' : registro.departamento,
             nombre: registro.nombre,
             pass: registro.pass,
             penlace: registro.puerta_enlace,
@@ -48,7 +49,7 @@ class TablaRouter extends React.Component{
             num_serie: registro.numero_serie, 
             estado: registro.estado_operativo,
             ip: dip,
-            empleado: registro.nempleado+' '+registro.apellido,
+            empleado: registro.nempleado === null ? '' : registro.nempleado+' '+registro.apellido,
             descripcion: registro.descripcion
             }
             datos.push(router);
@@ -140,14 +141,11 @@ class TablaRouter extends React.Component{
   handleDelete(id) {
     console.log("clave a eliminar",id)
     AxiosRouter.eliminar_router(id).then(res => {
-      message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+      message.success({ content: 'Registro eliminado satisfactoriamente', key, duration: 3 });
       this.recargar_datos();
     }).catch(err => {
-      console.log(err)
-      message.error('Error al eliminar el registro, inténtelo más tarde', 4);
+      message.error("Imposible eliminar. El registro ya ha sido dado de baja", 4);
     });
-    const dataSource = [...this.state.dataSource];
-    this.setState({ dataSource: dataSource.filter(item => item.id !== id) });
   }
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -357,7 +355,7 @@ class TablaRouter extends React.Component{
               
               <Popconfirm placement="topRight" 
               title="¿Desea eliminar este registro?" 
-              okText="Si" cancelText="No" onConfirm={() => this.handleDelete(record.codigo)}>
+              okText="Si" cancelText="No" onConfirm={() => this.handleDelete(record.key)}>
               <Button type="danger" icon="delete" size="small" /></Popconfirm>
             </span>
           ),  
