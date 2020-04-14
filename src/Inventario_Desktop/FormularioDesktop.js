@@ -333,14 +333,14 @@ class FormularioDesktop extends Component {
                     <FormDD {...ram_fields}  handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getFormRAMValue} />    
                 </div>
             },
-            {
-                icon: <FiHardDrive />,
-                content: 
-                <div>
-                    <Title className="App" level={3}>Disco duro</Title>
-                    <FormDD {...disco_duro_fields} handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getFormDDValue} />    
-                </div>
-            },
+            // {
+            //     icon: <FiHardDrive />,
+            //     content: 
+            //     <div>
+            //         <Title className="App" level={3}>Disco duro</Title>
+            //         <FormDD {...disco_duro_fields} handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getFormDDValue} />    
+            //     </div>
+            // },
             {
                 icon: <GoServer />,
                 content: 
@@ -377,16 +377,17 @@ class FormularioDesktop extends Component {
 
         return(
             <Content id={"contenit"}>
-                <div id={"content"} className="div-container-title">      
+                <div id={"content1"} className="div-container-title">      
                     <Row>
                         <Col span={12}><Title level={2}>{this.state.titulo}</Title></Col>
                         <Col className='flexbox'>
                             <Link to={{ pathname: '/desktop' }} ><Button type="primary" icon="left">Volver</Button></Link>
                         </Col>
                     </Row>  
-                    <div id={"styleform"} className="div-border-top" >
-                        <div id={"cont"} className="div-container"> 
+                    <div id={"styleform1"} className="div-border-top" >
+                        <div id={"cont1"} className="div-container"> 
                             <Steps id={"sre"}
+                            key={step+"fht"}
                                 size="small"
                                 current={step}>  
                                 {steps.map((item,index) => (

@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import FormGral from '../FormulariosPC/FormGeneral';
 import FormSO from '../FormulariosPC/FormSistemaOperativo';
 import FormCPU from '../FormulariosPC/FormProcesador';
-import FormDD from '../FormulariosPC/FormularioDinamico.js';
+import FormRAM from '../FormulariosPC/FormularioDinamico.js';
+import FormFinal from '../FormulariosPC/FormularioDinamicoDD.js';
 import { LaptopOutlined, WindowsOutlined } from '@ant-design/icons';
 import { FiHardDrive } from "react-icons/fi";
 import { FaMemory } from "react-icons/fa";
@@ -23,13 +24,13 @@ class FormularioLaptop extends Component {
     general_fields: {
         codigo: '',
         asignar: undefined,
-        marca: '',
+        marca: undefined,
         modelo: '',
         nserie: '',
         nombre_pc: '',
         usuario_pc: '',
-        ip: '',
-        estado: '',
+        ip: undefined,
+        estado: undefined,
         descripcion: ''
     },
     so_fields: {
@@ -54,13 +55,15 @@ class FormularioLaptop extends Component {
         isStepFinal: false,        
         ram_soportada: 0,
         num_slots: 0,
-        indx:[] 
+        indx: [],
+        editionMode: false,
     },
     disco_duro_fields: {
         nombre: 'disco duro',
         verDetalleRAM: false,
         isStepFinal: true,
-        indx: []
+        index: [],
+        editionMode: false,
     }
     }
 
@@ -70,6 +73,11 @@ class FormularioLaptop extends Component {
         const { titulo } = this.props.location.state;
         if (titulo === "Editar laptop" && info !== undefined){
           this.cargar_datos(info);
+          this.setState({
+              ram_fields: {
+                editionMode: true
+              }          
+            })
         }   
         this.setState({titulo: titulo});
       }
@@ -80,16 +88,24 @@ class FormularioLaptop extends Component {
             let registro = res.data;
             console.log("registro:",registro);
             let indcx = []
-        for (const element in info.rams) {
-            console.log(info.rams[element].modelo)
-            indcx.push({ codigo: info.rams[element].codigo, marca: info.rams[element].marca, modelo: info.rams[element].modelo, 
-                         nserie: info.rams[element].numero_serie, capacidad: info.rams[element].capacidad, tipo: info.rams[element].tipo, descr: info.rams[element].descripcion})
-        }
+            if(info.rams !== []){
+                for (const element in info.rams) {
+                    console.log("ramfgg",info.rams[element].capacidad.split(" ")[1], info.rams[element].capacidad.split(" ")[0])
+                    indcx.push({ codigo: info.rams[element].codigo, marca: info.rams[element].marca, modelo: info.rams[element].modelo, 
+                                 nserie: info.rams[element].numero_serie, capacidad: { cant: info.rams[element].capacidad.split(" ")[0], 
+                                 un: info.rams[element].capacidad.split(" ")[1]}, tipo: info.rams[element].tipo, descr: info.rams[element].descripcion})
+                }
+             }
+        
+        console.log("objram",indcx)
         let inddcx = []
         for (const element in info.discos) {
             //console.log(info.rams[element])
-            inddcx.push({ codigo: info.discos[element], marca: 1, modelo: "fgfgrgt", nserie: "rgrgtrtg", capacidad: 110, tipo: "sss", descr: ""})
+            inddcx.push({ codigo: info.discos[element].codigo, marca: info.discos[element].marca, modelo: info.discos[element].modelo,
+                 nserie: info.discos[element].numero_serie, capacidad: {cant: info.discos[element].capacidad.split(" ")[0], 
+                 un: info.discos[element].capacidad.split(" ")[1]}, tipo: info.discos[element].tipo, descr: info.discos[element].descripcion})
         }
+        console.log("objdd",inddcx)
         this.setState({
             general_fields: {
                 codigo: info.codigo,
@@ -116,7 +132,7 @@ class FormularioLaptop extends Component {
                 modelo_proc: registro.procesador.modelo,
                 nserie_proc: registro.procesador.numero_serie,
                 frec_proc: registro.procesador.frecuencia,
-                nucleos_proc: registro.procesador.nnucleos,
+                nucleos_proc: registro.procesador.nucleos,
                 descr_proc: registro.procesador.descripcion
             },
             ram_fields:{        
@@ -131,9 +147,11 @@ class FormularioLaptop extends Component {
                 nombre: 'disco duro',
                 verDetalleRAM: false,
                 isStepFinal: true,
-                indx: inddcx
+                index: inddcx
             }
         })
+        console.log(this.state.indx)
+        console.log(this.state.index)
     })
       }
 
@@ -214,7 +232,7 @@ class FormularioLaptop extends Component {
                 content: 
                 <div>
                     <Title className="App" level={3}>Memoria RAM</Title>
-                    <FormDD {...ram_fields} handleNextButton={this.handleNextButton} handleBackButton={this.handleBackButton} submittedValues={this.getFormRAMValue} />    
+                    <FormRAM {...ram_fields} handleNextButton={this.handleNextButton} handleBackButton={this.handleBackButton} submittedValues={this.getFormRAMValue} />    
                 </div>
             },
             {
@@ -223,7 +241,7 @@ class FormularioLaptop extends Component {
                 content: 
                 <div>
                     <Title className="App" level={3}>Disco duro</Title>
-                    <FormDD {...disco_duro_fields} handleConfirmButton={this.handleConfirmButton} handleBackButton={this.handleBackButton} submittedValues={this.getFormDDValue} />
+                    <FormFinal {...disco_duro_fields} handleConfirmButton={this.handleConfirmButton} handleBackButton={this.handleBackButton} submittedValues={this.getFormDDValue} />
                 </div>
             },
         ] 
@@ -241,7 +259,8 @@ class FormularioLaptop extends Component {
                         <div className="div-container"> 
                             <Steps 
                                 size="small"
-                                current={step}>
+                                current={step}
+                                key={"lap"+step}>
                                 {steps.map(item => ( <Step key={item.title} icon={item.icon} title={item.title} /> ))}
                             </Steps>   
                             <div className="steps-content">

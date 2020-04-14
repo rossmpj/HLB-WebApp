@@ -13,4 +13,11 @@ export default class AxiosLaptop {
     return AxiosLaptop.instanceAxios.get(`/obtenerInfoLaptop/${id_ip}`)
   }
 
+  static listar_so = () => {
+    return AxiosLaptop.instanceAxios.get(`/listar_so`);
+  }
+
+  static listar_office = () => {
+    return AxiosLaptop.instanceAxios.get(`/listar_office`);
+  }
 }

@@ -10,9 +10,9 @@ const InputGroup = Input.Group;
 const buttonItemLayout = { wrapperCol: {span: 14, offset: 8} };
 const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };
 
-const FormularioDinamico = Form.create({
+const FormularioDinamicoDD = Form.create({
     name:'Dinamico'})( props => {
-        const blankCat = { codigo: '', marca: '', modelo: '', nserie: '', capacidad: {cant: 0, un: "Mb"}, tipo: '', descr: '' };
+        const blank = { codigo: '', marca: '', modelo: '', nserie: '', capacidad: {cant: 0, un: "Mb"}, tipo: '', descr: '' };
         var obj = [];
         var r = [];
         const [marca, setMarcas] = useState([]);
@@ -36,7 +36,7 @@ const FormularioDinamico = Form.create({
         // console.log("a",props.indx)
         // console.log("b",props.index)
         if (props.editionMode ===false) { 
-            obj.push(blankCat)
+            obj.push(blank)
         }else{
             if(props.nombre ==="disco duro")
             {
@@ -51,7 +51,7 @@ const FormularioDinamico = Form.create({
             }
             
         }
-        //obj.push(blankCat)
+        //obj.push(blank)
         const [registro, setRegistro] = useState(obj);  
     // console.log(registro)
     //     console.log("f",obj)
@@ -63,7 +63,7 @@ const FormularioDinamico = Form.create({
             const keys1 = form.getFieldValue('keys1');
             const nextKeys1 = keys1.concat(id++);
             const values = [...registro];
-            values.push(blankCat);
+            values.push(blank);
             setRegistro(values);
             form.setFieldsValue({
             keys1: nextKeys1,
@@ -83,17 +83,17 @@ const FormularioDinamico = Form.create({
             keys1: keys1.filter(key => key !== k),
             });
         };
-
         const op = (index) =>{
              return(
                 <Select onSelect={(value, e) => handleInputChange(index, value, 'marca', e)}>
-                                {marca.map(m=>
+               { marca.map(m=>
                     <Option key={m.id} value={m.id}>{m.dato}</Option>
-                ) }
-                             </Select>  
-                             
-             )
+                )}
+             </Select>   
+
+         )
         }
+
         const selec = (index) => {
             return(
                 <Form.Item
@@ -106,11 +106,12 @@ const FormularioDinamico = Form.create({
                                 initialValue: registro[index].marca,
                                 validateTrigger: ["onChange", "onBlur"], 
                             })(
-                                   op(index)                          
+                                 op(index)                          
                             )}
                         </Form.Item>   
             )     
         }
+
         const handleInputChange = (index, value, name, event) => {
             const values = [...registro];
             if (name === 'codigo') {
@@ -165,7 +166,7 @@ const FormularioDinamico = Form.create({
                                 <Input />
                             )}
                         </Form.Item>  
-                        {/* <Form.Item
+                        <Form.Item
                         label="Marca" 
                         disabled={false}
                         className="form2col"            
@@ -177,12 +178,11 @@ const FormularioDinamico = Form.create({
                             })(
                                 <Select onSelect={(value, e) => handleInputChange(index, value, 'marca', e)}>
                                     { marca.map(m=>
-                                        <Option key={m.id} value={m.id}>{m.dato}</Option>
-                                    )}
-                                 </Select>                                      
+                                            <Option key={m.id} value={m.id}>{m.dato}</Option>
+                                        )}
+                                </Select>                      
                             )}
-                        </Form.Item> */}
-                        {selec(index)}
+                        </Form.Item> 
                         <Form.Item
                         label="Número de serie" 
                         disabled={false}
@@ -366,4 +366,4 @@ const FormularioDinamico = Form.create({
     );
 });
 
-export default FormularioDinamico;
+export default FormularioDinamicoDD;

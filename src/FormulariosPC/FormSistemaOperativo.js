@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Select, Switch } from 'antd';
+import Axios from '../Servicios/AxiosLaptop'
 
 const { Option } = Select;
 const tailLayout = { wrapperCol: { offset: 10, span: 5 } };             
@@ -8,6 +9,16 @@ const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };
 const FormSistemaOperativo = Form.create({
     name:'SistOp'})( props => {
     const { getFieldDecorator, validateFields, getFieldsValue } = props.form;
+    const [office, setOffice] = useState([]);
+    const [so, setSo] = useState([]);
+    useEffect(() => {
+        Axios.listar_so().then(res => {
+          setSo(res.data); });    
+      }, []);
+    useEffect(() => {
+    Axios.listar_office().then(res => {
+        setOffice(res.data); });    
+    }, []);
     const validateInput = (e) => {
         e.preventDefault();
         validateFields((err, values) => {
@@ -30,16 +41,14 @@ const FormSistemaOperativo = Form.create({
                   initialValue: props.so
                 })(
                     <Select>
-                        <Select.Option value="win7">Windows 7</Select.Option>
-                        <Select.Option value="win10">Windows 10</Select.Option>
-                        <Select.Option value="linkali">Linux Kali</Select.Option>
+                        { so.map(m=><Option key={m} value={m}>{m}</Option>)}
                     </Select>
                 )}
             </Form.Item>
             <Form.Item label="Tipo de SO">
                 {getFieldDecorator('tipo_so', {
                     rules: [{required: true, message: 'Debe completar este campo' }],
-                    initialValue: props.tipo_so
+                    initialValue: props.tipo_so.split(" ")[0]
                 })(
                 <Select style={{ width: 80 }} >
                     <Option value="x86">32</Option>
@@ -66,9 +75,8 @@ const FormSistemaOperativo = Form.create({
                     rules: [{required: true, message: 'Debe completar este campo' }],
                     initialValue: props.office
                 })(
-                <Select>
-                    <Select.Option value="2010">Office 2010</Select.Option>
-                    <Select.Option value="2013">Office 2013</Select.Option>
+                <Select>                    
+                    { office.map(m=> <Option key={m} value={m}>{m}</Option>)}
                 </Select>
                 )}
             </Form.Item>

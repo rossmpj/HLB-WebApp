@@ -75,7 +75,7 @@ class DetalleLaptop extends React.Component {
             servpack: info.servpack,
             licencia: info.licencia,
             office: info.office,
-            procesador: registro.procesador[0],
+            procesador: registro.procesador,
             ram_soportada: registro.ram_soportada,
             slots_ram: registro.numero_slots,
             rams: info.rams,
