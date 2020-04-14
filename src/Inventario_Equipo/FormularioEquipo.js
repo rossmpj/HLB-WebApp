@@ -141,7 +141,7 @@ class FormularioEquipo extends React.Component {
             switch (this.state.tipo_equipo.toLocaleLowerCase()) {
                 case "impresora":
                     return <FormularioImpresora data={undefined}> </FormularioImpresora>;
-                case "cpu":
+                case "desktop":
                     return <FormularioDesktop data={undefined}></FormularioDesktop>;
                 case "laptop":
                     return <FormularioLaptop data={undefined}></FormularioLaptop>;
@@ -232,7 +232,6 @@ class FormularioEquipo extends React.Component {
 
                             <Form.Item {...tailLayout}>
                                 <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
-                                <Button type="primary">Cancelar</Button>
                             </Form.Item>
                         </Form>
                     </div>;

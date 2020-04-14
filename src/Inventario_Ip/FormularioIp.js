@@ -10,7 +10,6 @@ import {
 } from 'antd';
 import '../custom-antd.css';
 import InputComponent from '../Componentes/InputComponent'
-import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosTipo';
 const { TextArea } = Input;
 
@@ -114,15 +113,28 @@ class FormularioIp extends React.Component {
                     layout="horizontal"
                     onSubmit={this.handle_guardar}
                 >
-                    <InputComponent
+                    {/* <InputComponent
                         class=""
                         label="Ip"
                         id="ip"
-                        decorator={getFieldDecorator} />
+                        decorator={getFieldDecorator} /> */}
+
+                    <Form.Item label="Dirección IP">
+                        {getFieldDecorator('ip',
+                           {
+                                rules: [{ required: true, message: 'Debe colocar una dirección IP' }]
+                           })(
+                                <Input
+                                    placeholder="[0-255].[0-255].[0-255].[0-255]"
+                                />
+                            )}
+                    </Form.Item>
+
 
                     <Form.Item label="Estado">
                         {getFieldDecorator('estado', {
                             rules: [{ required: true, message: 'Debe seleccionar el estado' }],
+                            initialValue: 'EU'
                         })(
                             <Select>
                                 <Select.Option value="EU">En uso</Select.Option>
@@ -176,9 +188,6 @@ class FormularioIp extends React.Component {
 
                     <Form.Item {...tailLayout}>
                         <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
-                        <Link to='/ip'>
-                            <Button type="primary">Cancelar</Button>
-                        </Link>
                     </Form.Item>
                 </Form>
             </div>

@@ -101,7 +101,12 @@ class TablaEquipo extends React.Component {
         return equipo;
     }
 
-
+    id_equipo(key) {
+        let equipo = {
+            id_equipo: key
+        }
+        return equipo;
+    }
 
     handleDelete(key) {
         Axios.eliminar_equipo(key).then(res => {
@@ -110,7 +115,7 @@ class TablaEquipo extends React.Component {
         }).catch(err => {
             console.log(err)
             message.error('Error al eliminar el registro, inténtelo más tarde', 4);
-        });    
+        });
     }
 
     stringSorter(a, b) {
@@ -192,7 +197,7 @@ class TablaEquipo extends React.Component {
                     return <Link to={{ pathname: '/impresora/form', state: { info: this.codigo_equipo(record.key), titulo: "Editar impresora" } }}>
                         <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
                     </Link>
-                case "cpu":
+                case "desktop":
                     return <Link to={{ pathname: '/', state: { info: this.codigo_equipo(record.key), titulo: "Editar Desktop" } }}>
                         <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
                     </Link>;
@@ -229,13 +234,9 @@ class TablaEquipo extends React.Component {
         const tipo_data = (record) => {
             switch (record.tipo_equipo.toLowerCase()) {
                 case "impresora":
-                    return this.codigo_equipo(record.key);
-                case "cpu":
-                    return this.codigo_equipo(record.key);
-                case "laptop":
-                    return this.codigo_equipo(record.key);
+                    return this.id_equipo(record.key);
                 case "router":
-                    return this.codigo_equipo(record.key);
+                    return this.id_equipo(record.key);
                 default:
                     return record;
             }
@@ -327,7 +328,6 @@ class TablaEquipo extends React.Component {
                 title: 'Componente principal',
                 dataIndex: 'componente_principal',
                 key: 'componente_principal',
-                render: text => <a href="/#">{text}</a>,
                 ...this.getColumnSearchProps('componente_principal')
             },
 

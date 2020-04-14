@@ -147,7 +147,7 @@ class FormularioImpresora extends React.Component {
         })
         this.setState({ key: info.key });
 
-        this.setState({ id_marca: info.id_marca });
+        this.setState({ id_marca: info.marca });
         this.setState({ estado_operativo: info.estado_operativo });
         if (info.ip !== null) {
             this.setState({ ip: info.ip });
@@ -411,7 +411,6 @@ class FormularioImpresora extends React.Component {
 
                         <Form.Item {...tailLayout}>
                             <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
-                            <Button type="primary" >Cancelar</Button>
 
                         </Form.Item>
                     </Form>

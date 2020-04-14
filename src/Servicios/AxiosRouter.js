@@ -29,4 +29,8 @@ export default class AxiosRouter {
     return AxiosRouter.instanceAxios.get(`/buscar_router_por_id/${id_router}`)
   }
 
+  static router_id = (id_equipo) => {
+    return AxiosRouter.instanceAxios.get(`/router_id/${id_equipo}`)
+  }
+
 }

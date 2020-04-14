@@ -5,7 +5,6 @@ import {
     Row,
     Col,
 } from 'antd';
-import { Link } from 'react-router-dom';
 import FormularioImpresora from './FormularioImpresora';
 
 const { Title } = Typography;
@@ -32,7 +31,7 @@ class VistaImpresora extends React.Component {
                 <Row>
                     <Col span={12}><Title level={2}>{this.state.titulo}</Title></Col>
                     <Col className='flexbox'>
-                        <Link to={{ pathname: '/impresora' }} ><Button type="primary" icon="left">Volver</Button></Link>
+                        <Button type="primary" icon="left" onClick={this.props.history.goBack} >Volver</Button>
                     </Col>
                 </Row>
                 <div className="div-miniborder-top" >

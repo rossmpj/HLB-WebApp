@@ -3,7 +3,6 @@ import { Tabs, Row, Col, Typography, Button, Descriptions, Badge, message } from
 import { PrinterOutlined, UserOutlined } from '@ant-design/icons';
 import SinResultados from '../Componentes/SinResultados'
 import Axios from '../Servicios/AxiosTipo';
-import { Link } from 'react-router-dom';
 const { TabPane } = Tabs;
 const { Title } = Typography;
 
@@ -54,7 +53,7 @@ class DetalleImpresora extends React.Component {
                 registro.numero_serie = dato.numero_serie;
                 registro.asignado = empleado;
                 registro.tipo = dato.tipo;
-                registro.id_marca = dato.id_marca;
+                registro.marca = dato.id_marca;
                 registro.codigo = dato.codigo;
                 registro.estado_operativo = dato.estado_operativo;
                 registro.modelo = dato.modelo;
@@ -85,7 +84,7 @@ class DetalleImpresora extends React.Component {
             asignado: info.asignado,
             dpto: info.dpto,
             tipo: info.tipo,
-            marca: info.id_marca,
+            marca: info.marca,
             estado: info.estado_operativo,
             modelo: info.modelo,
             descripcion: info.descripcion,
@@ -111,9 +110,7 @@ class DetalleImpresora extends React.Component {
                             <Title level={2}>Detalle de impresora</Title>
                         </Col>
                         <Col className='flexbox'>
-                            <Link to={{ pathname: '/impresora' }}>
-                                <Button type="primary" icon="left">Volver</Button>
-                            </Link>
+                                <Button type="primary" icon="left" onClick={this.props.history.goBack}>Volver</Button>
                         </Col>
                     </Row>
 

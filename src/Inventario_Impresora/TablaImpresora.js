@@ -59,7 +59,7 @@ class TablaImpresora extends React.Component {
                     asignado: empleado,
                     dpto: dato.nombre,
                     tipo: dato.tipo,
-                    id_marca: dato.marca,
+                    marca: dato.marca,
                     codigo: dato.codigo,
                     estado_operativo: dato.estado_operativo,
                     modelo: dato.modelo,
@@ -242,9 +242,9 @@ class TablaImpresora extends React.Component {
             },
             {
                 title: 'Marca',
-                dataIndex: 'id_marca',
-                key: 'id_marca',
-                ...this.getColumnSearchProps('id_marca')
+                dataIndex: 'marca',
+                key: 'marca',
+                ...this.getColumnSearchProps('marca')
             },
             {
                 title: 'Estado',

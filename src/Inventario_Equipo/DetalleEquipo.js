@@ -3,6 +3,7 @@ import { Tabs, Row, Col, Typography, Button, Descriptions, Badge, message } from
 import { RobotOutlined, UserOutlined } from '@ant-design/icons';
 import SinResultados from '../Componentes/SinResultados'
 import Axios from '../Servicios/AxiosTipo';
+import { Link } from 'react-router-dom';
 const { TabPane } = Tabs;
 const { Title } = Typography;
 
@@ -22,7 +23,7 @@ class DetalleEquipo extends React.Component {
             descripcion: "",
             componente: "",
             ip: "",
-             registro: "",
+            registro: "",
             nodata: false
         }
     }
@@ -37,20 +38,20 @@ class DetalleEquipo extends React.Component {
         }
     }
 
-    inicializar_datos(info){
+    inicializar_datos(info) {
         let empleado = "";
-        let registro = {}; 
+        let registro = {};
         Axios.equipo_id(info.key).then(res => {
-           res.data.forEach(function (dato) {
-            if (dato.empleado !== null) {
-                empleado = dato.empleado.concat(" ", dato.apellido);
-            }
+            res.data.forEach(function (dato) {
+                if (dato.empleado !== null) {
+                    empleado = dato.empleado.concat(" ", dato.apellido);
+                }
                 registro.ip = dato.direccion_ip;
-                registro.codigo= dato.codigo;
+                registro.codigo = dato.codigo;
                 registro.nserie = dato.numero_serie;
                 registro.bspi = dato.bspi_punto
                 registro.asignado = empleado;
-                registro.departamento = dato.departamento; 
+                registro.departamento = dato.departamento;
                 registro.tipo = dato.tipo_equipo;
                 registro.marca = dato.marca;
                 registro.estado = dato.estado_operativo;
@@ -58,11 +59,11 @@ class DetalleEquipo extends React.Component {
                 registro.descripcion = dato.descripcion;
                 registro.componente = dato.componente_principal;
             });
-             this.cargar_datos(registro); 
+            this.cargar_datos(registro);
         }).catch(err => {
             message.error('Problemas de conexión con el servidor, inténtelo más tarde', 4);
-        }); 
-}
+        });
+    }
 
     cargar_datos(info) {
         this.setState({
@@ -92,7 +93,9 @@ class DetalleEquipo extends React.Component {
                             <Title level={2}>Detalle equipo informático</Title>
                         </Col>
                         <Col className='flexbox'>
-                            <Button type="primary" icon="left">Volver</Button>
+                            <Link to={{ pathname: '/otrosequipos' }}>
+                                <Button type="primary" icon="left">Volver</Button>
+                            </Link>
                         </Col>
                     </Row>
 
