@@ -8,10 +8,6 @@ import MarcaSelect from '../Componentes/MarcaSelect'
 import IpSelect from '../Componentes/IpSelect'
 import EstadoSelect from '../Componentes/EstadoSelect'
 import ComponentePrincipal from '../Componentes/ComponentePrincipal'
-import FormularioImpresora from '../Inventario_Impresora/FormularioImpresora'
-import FormularioDesktop from '../Inventario_Desktop/FormularioDesktop'
-import FormularioRouter from '../Inventario_Router/FormularioRouter'
-import FormularioLaptop from '../Inventario_Laptop/FormularioLaptop'
 import Axios from '../Servicios/AxiosTipo'
 
 const { Content } = Layout;
@@ -41,7 +37,7 @@ class FormularioEquipo extends React.Component {
             numero_serie: "",
             modelo: "",
             id_marca: "",
-            estado_operativo: "",
+            estado_operativo: "O",
             ip: undefined,
             componente_principal: undefined,
             asignado: undefined,
@@ -137,109 +133,9 @@ class FormularioEquipo extends React.Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const condicional = () => {
-            switch (this.state.tipo_equipo.toLocaleLowerCase()) {
-                case "impresora":
-                    return <FormularioImpresora data={undefined}> </FormularioImpresora>;
-                case "desktop":
-                    return <FormularioDesktop data={undefined}></FormularioDesktop>;
-                case "laptop":
-                    return <FormularioLaptop data={undefined}></FormularioLaptop>;
-                case "router":
-                    return <FormularioRouter data={undefined}> </FormularioRouter>;
-                default:
-                    return <div className="div-container">
-                        <Form {...layout}
-                            layout="horizontal"
-                            onSubmit={this.handle_guardar}
-                        >
-                            {this.state.tipo_equipo.toLocaleLowerCase() === "otro" ?
-                                <InputComponent
-                                    class=""
-                                    label="Tipo de equipo"
-                                    id="tipo"
-                                    decorator={getFieldDecorator} />
-                                : null
-                            }
-
-
-                            <Form.Item
-                                label="Código">
-                                {getFieldDecorator('codigo', {
-                                    rules: [{ required: true, message: 'Debe completar este campo' }],
-                                    initialValue: this.state.codigo
-                                })
-                                    (<Input />)}
-                            </Form.Item>
-
-                            <Form.Item
-                                label="Número de serie">
-                                {getFieldDecorator('numero_serie', {
-                                    rules: [{ required: true, message: 'Debe completar este campo' }],
-                                    initialValue: this.state.numero_serie
-                                })
-                                    (<Input />)}
-                            </Form.Item>
-
-                            <Form.Item
-                                label="Modelo">
-                                {getFieldDecorator('modelo', {
-                                    rules: [{ required: true, message: 'Debe completar este campo' }],
-                                    initialValue: this.state.modelo
-                                })
-                                    (<Input />)}
-                            </Form.Item>
-
-                            <MarcaSelect
-                                class=""
-                                id="id_marca"
-                                required={true}
-                                decorator={getFieldDecorator}
-                                initialValue={this.state.id_marca} />
-
-                            <EstadoSelect
-                                class=""
-                                id="estado_operativo"
-                                required={true}
-                                decorator={getFieldDecorator}
-                                initialValue={this.state.estado_operativo} />
-
-                            <IpSelect
-                                class=""
-                                required={false}
-                                id="ip"
-                                decorator={getFieldDecorator}
-                                initialValue={this.state.ip} />
-
-                            <ComponentePrincipal
-                                class=""
-                                id="componente_principal"
-                                required={false}
-                                decorator={getFieldDecorator}
-                                initialValue={this.state.componente_principal} />
-
-                            <AsignarSelect
-                                class=""
-                                required={false}
-                                id="asignado"
-                                decorator={getFieldDecorator}
-                                initialValue={this.state.asignado} />
-
-                            <Form.Item label="Descripción">
-                                {getFieldDecorator('descripcion', { initialValue: this.state.descripcion })
-                                    (<TextArea />)}
-                            </Form.Item>
-
-                            <Form.Item {...tailLayout}>
-                                <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
-                            </Form.Item>
-                        </Form>
-                    </div>;
-            }
-        }
         return (
             <Content>
-                <div className="div-background">
+                <div className="div-container">
                     <Form {...layout}
                         layout="horizontal"
                         onSubmit={this.handle_guardar}
@@ -268,10 +164,88 @@ class FormularioEquipo extends React.Component {
                             )
                             }
                         </Form.Item >
+
+                        {this.state.tipo_equipo.toLocaleLowerCase() === "otro" ?
+                            <InputComponent
+                                class=""
+                                label="Tipo de equipo"
+                                id="tipo"
+                                decorator={getFieldDecorator} />
+                            : null
+                        }
+
+
+                        <Form.Item
+                            label="Código">
+                            {getFieldDecorator('codigo', {
+                                rules: [{ required: true, message: 'Debe completar este campo' }],
+                                initialValue: this.state.codigo
+                            })
+                                (<Input />)}
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Número de serie">
+                            {getFieldDecorator('numero_serie', {
+                                rules: [{ required: true, message: 'Debe completar este campo' }],
+                                initialValue: this.state.numero_serie
+                            })
+                                (<Input />)}
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Modelo">
+                            {getFieldDecorator('modelo', {
+                                rules: [{ required: true, message: 'Debe completar este campo' }],
+                                initialValue: this.state.modelo
+                            })
+                                (<Input />)}
+                        </Form.Item>
+
+                        <MarcaSelect
+                            class=""
+                            id="id_marca"
+                            required={true}
+                            decorator={getFieldDecorator}
+                            initialValue={this.state.id_marca} />
+
+                        <EstadoSelect
+                            class=""
+                            id="estado_operativo"
+                            required={true}
+                            decorator={getFieldDecorator}
+                            initialValue={this.state.estado_operativo} />
+
+                        <IpSelect
+                            class=""
+                            required={false}
+                            id="ip"
+                            decorator={getFieldDecorator}
+                            initialValue={this.state.ip} />
+
+                        <ComponentePrincipal
+                            class=""
+                            id="componente_principal"
+                            required={false}
+                            decorator={getFieldDecorator}
+                            initialValue={this.state.componente_principal} />
+
+                        <AsignarSelect
+                            class=""
+                            required={false}
+                            id="asignado"
+                            decorator={getFieldDecorator}
+                            initialValue={this.state.asignado} />
+
+                        <Form.Item label="Descripción">
+                            {getFieldDecorator('descripcion', { initialValue: this.state.descripcion })
+                                (<TextArea />)}
+                        </Form.Item>
+
+                        <Form.Item {...tailLayout}>
+                            <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
+                        </Form.Item>
                     </Form>
-                </div>
-                <div className="div-miniborder-top" >
-                    {condicional()}
                 </div>
             </Content >
         );

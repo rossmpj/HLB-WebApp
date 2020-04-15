@@ -35,7 +35,9 @@ class VistaEquipo extends React.Component {
                         <Link to={{ pathname: '/otrosequipos' }} ><Button type="primary" icon="left">Volver</Button></Link>
                     </Col>
                 </Row>
+                <div className="div-miniborder-top" >
                     <FormularioEquipo data={this.state.data}></FormularioEquipo>
+                </div>
             </div>
 
         )

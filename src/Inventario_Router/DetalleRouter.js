@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs, Row, Col, Typography, Button, Descriptions, Badge, message } from 'antd';
+import { Tabs, Row, Col, Typography, Button, Descriptions, Badge } from 'antd';
 import { FaNetworkWired } from "react-icons/fa";
 import { MdRouter } from "react-icons/md";
 import { AiOutlineSetting } from "react-icons/ai";
@@ -34,41 +34,6 @@ class DetalleRouter extends React.Component {
   componentDidMount = () => {
     if (typeof this.props.location !== 'undefined') {
       const { info } = this.props.location.state;
-      this.inicializar_datos(info);
-    }
-  }
-
-  inicializar_datos(info) {
-    if (typeof info.id_equipo !== 'undefined') {
-      let empleado = "";
-      let objeto = {};
-      MetodosAxios.router_id(info.id_equipo).then(res => {
-        res.data.forEach(function (dato) {
-          if (dato.empleado !== null) {
-            empleado = dato.empleado.concat(" ", dato.apellido);
-          }
-          objeto.codigo = dato.codigo;
-          objeto.bspi = dato.bspi_punto;
-          objeto.departamento = dato.departamento;
-          objeto.asignar = empleado;
-          objeto.nombre = dato.nombre;
-          objeto.pass = dato.pass;
-          objeto.usuario = dato.usuario;
-          objeto.clave = dato.clave;
-          objeto.marca = dato.marca;
-          objeto.modelo = dato.modelo;
-          objeto.nserie = dato.numero_serie;
-          objeto.estado = dato.estado_operativo;
-          objeto.penlace = dato.puerta_enlace;
-          objeto.descripcion = dato.descripcion;
-          objeto.descripcion = dato.descripcion;
-          objeto.ip= dato.ip;
-        });
-        this.cargar_datos(objeto);
-      }).catch(err => {
-        message.error('Problemas de conexión con el servidor, inténtelo más tarde', 4);
-      });
-    } else {
       this.cargar_datos(info);
     }
   }
@@ -91,7 +56,7 @@ class DetalleRouter extends React.Component {
       penlace: info.penlace,
       descripcion: info.descripcion
     })
-    info.ip === " " || info.ip == null   ? this.setState({ ip: "No asignada" }) :
+    info.ip === " " ? this.setState({ ip: "No asignada" }) :
       MetodosAxios.buscar_ip_por_codigo(info.ip).then(res => {
         res.data.foreach((registro) => {
           this.setState({ ip: registro.direccion_ip })

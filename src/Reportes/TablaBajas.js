@@ -6,16 +6,14 @@ import {
     Table,
     Input,
     Icon,
-    Popconfirm,
     message,
     Typography
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
-import { Link } from 'react-router-dom';
-import Axios from '../Servicios/AxiosTipo'
+import Axios from '../Servicios/AxiosReporte'
 const { Title } = Typography;
 
-class TablaEquipo extends React.Component {
+class TablaBajas extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -33,26 +31,17 @@ class TablaEquipo extends React.Component {
 
     llenar_tabla() {
         let datos = [];
-        Axios.mostrar_equipos().then(res => {
+        Axios.reporte_bajas().then(res => {
             res.data.forEach(function (dato) {
-                let empleado = "";
-                if (dato.empleado !== null) {
-                    empleado = dato.empleado.concat(" ", dato.apellido);
-                }
                 let equipos = {
                     key: dato.id_equipo,
-                    estado_operativo: dato.estado_operativo,
-                    codigo: dato.codigo,
                     tipo_equipo: dato.tipo_equipo,
+                    codigo: dato.codigo,
                     marca: dato.marca,
                     modelo: dato.modelo,
-                    descripcion: dato.descripcion,
+                    estado_operativo: dato.estado_operativo,
                     numero_serie: dato.numero_serie,
-                    encargado_registro: dato.encargado,
-                    componente_principal: dato.principal,
-                    asignado: empleado,
-                    fecha_registro: dato.fecha_registro,
-                    ip: dato.direccion_ip
+                    descripcion: dato.descripcion,
                 }
                 datos.push(equipos)
             });
@@ -61,6 +50,7 @@ class TablaEquipo extends React.Component {
             console.log(err)
             message.error('No se pueden cargar los datos, revise la conexión con el servidor', 4);
         });
+        this.setState({ dataSource: datos });
     }
 
     limpiarFiltros = () => {
@@ -91,16 +81,6 @@ class TablaEquipo extends React.Component {
 
     componentDidMount() {
         this.llenar_tabla();
-    }
-
-    handleDelete(key) {
-        Axios.eliminar_equipo(key).then(res => {
-            message.success({ content: 'Equipo dado de baja satisfactoriamente', key, duration: 3 });
-            this.llenar_tabla();
-        }).catch(err => {
-            console.log(err)
-            message.error('Error al eliminar el registro, inténtelo más tarde', 4);
-        });
     }
 
     stringSorter(a, b) {
@@ -178,12 +158,28 @@ class TablaEquipo extends React.Component {
     render() {
         const columns = [
             {
+                title: 'Equipo',
+                dataIndex: 'tipo_equipo',
+                key: 'tipo_equipo',
+                ...this.getColumnSearchProps('tipo_equipo')
+            },
+            {
                 title: 'Código',
                 dataIndex: 'codigo',
                 key: 'codigo',
-                fixed: 'left',
-                render: (text, record) => <Link to={{ pathname: '/equipo/view', state: { info: record } }}>{text}</Link>,
                 ...this.getColumnSearchProps('codigo')
+            },
+            {
+                title: 'Marca',
+                dataIndex: 'marca',
+                key: 'marca',
+                ...this.getColumnSearchProps('marca')
+            },
+            {
+                title: 'Modelo',
+                dataIndex: 'modelo',
+                key: 'modelo',
+                ...this.getColumnSearchProps('modelo')
             },
             {
                 title: 'Número de serie',
@@ -220,92 +216,23 @@ class TablaEquipo extends React.Component {
                 onFilter: (value, record) => this.filtrar_array(record.estado_operativo, value),
                 sorter: (a, b) => this.stringSorter(a.estado_operativo, b.estado_operativo)
             },
-
-            {
-                title: 'Tipo',
-                dataIndex: 'tipo_equipo',
-                key: 'tipo_equipo',
-                ...this.getColumnSearchProps('tipo_equipo')
-            },
-            {
-                title: 'Modelo',
-                dataIndex: 'modelo',
-                key: 'modelo',
-                ...this.getColumnSearchProps('modelo')
-            },
-
-            {
-                title: 'Marca',
-                dataIndex: 'marca',
-                key: 'marca',
-                ...this.getColumnSearchProps('marca')
-            },
-            {
-                title: 'Fecha registro',
-                dataIndex: 'fecha_registro',
-                key: 'fecha_registro',
-                sorter: (a, b) => this.stringSorter(a.fecha_registro, b.fecha_registro)
-            },
-            {
-                title: 'Asignado',
-                dataIndex: 'asignado',
-                key: 'asignado',
-                ...this.getColumnSearchProps('asignado')
-            },
-            {
-                title: 'Ip',
-                dataIndex: 'ip',
-                key: 'ip',
-                ...this.getColumnSearchProps('ip')
-            },
-            {
-                title: 'Componente principal',
-                dataIndex: 'componente_principal',
-                key: 'componente_principal',
-                ...this.getColumnSearchProps('componente_principal')
-            },
             {
                 title: 'Descripción',
                 dataIndex: 'descripcion',
-                key: 'descripcion'
-            },
-            {
-                title: 'Acción',
-                key: 'accion',
-                fixed: 'right',
-                render: (text, record) => (
-                    <div>
-                        <Link to={{ pathname: '/otrosequipos/form', state: { info: record, titulo: "Editar equipo" } }}>
-                            <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
-                        </Link>
-                        <Popconfirm
-                            title="¿Desea dar de baja este equipo?"
-                            okText="Si"
-                            cancelText="No"
-                            onConfirm={() => this.handleDelete(record.key)}
-                        >
-                            <Button size="small" type="danger" icon="delete" />
-                        </Popconfirm>
-                    </div>
-                ),
-            },
+                key: 'descripcion',
+                ...this.getColumnSearchProps('descripcion')
+            }
         ];
         return (
             <div className="div-container-title">
                 <Row>
-                    <Col span={12}><Title level={2}>Inventario equipos informáticos</Title></Col>
-                    <Col className='flexbox'>
-                        <Link to={{ pathname: '/otrosequipos/form', state: { titulo: "Nuevo equipo" } }} >
-                            <Button type="primary" icon="plus">Agregar tipo de equipo</Button>
-                        </Link>
-                    </Col>
+                    <Col span={12}><Title level={3}>Reporte de equipos informáticos de baja</Title></Col>
                 </Row>
                 <div className="div-container">
                     <div >
                         <Row>
                             <Col className='flexbox'>
                                 <ButtonGroup>
-                                    <Button type="primary" icon="import">Importar</Button>
                                     <Button type="primary" icon="cloud-download">Exportar</Button>
                                 </ButtonGroup>
                             </Col>
@@ -325,4 +252,4 @@ class TablaEquipo extends React.Component {
     }
 }
 
-export default TablaEquipo;
+export default TablaBajas;

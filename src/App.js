@@ -22,9 +22,11 @@ import DetalleIIp from './Inventario_Ip/DetalleIIp'
 import HomeEquipo from './Inventario_Equipo/TablaEquipo'
 import VistaEquipo from './Inventario_Equipo/VistaEquipo'
 import TablaMarca from './Extras/Marcas/TablaMarca'
-import VistaMarca from './Extras/Marcas/VistaMarca'; 
+import VistaMarca from './Extras/Marcas/VistaMarca';
 import DetalleImpresora from './Inventario_Impresora/DetalleImpresora';
 import DetalleEquipo from './Inventario_Equipo/DetalleEquipo';
+import TablaReporte from './Reportes/TablaReporte';
+import TablaBajas from './Reportes/TablaBajas';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -92,8 +94,27 @@ class App extends React.Component {
                 <Menu.Item key="marcas"><Icon type="global" />Marcas
                   <Link to="/marca" />
                 </Menu.Item>
-               
               </SubMenu>
+
+              <SubMenu
+                key="rep"
+                title={
+                  <span>
+                    <Icon type="bar-chart" />
+                    <span>Reportes</span>
+                  </span>
+                }
+              >
+                <Menu.Item key="general"><Icon type="control"/>General
+                  <Link to="/reportes/general" />
+                </Menu.Item>
+
+                <Menu.Item key="baja"><Icon type="fall"/>Equipos de baja
+                  <Link to="/reportes/de-baja" />
+                </Menu.Item>
+              </SubMenu>
+
+              
             </Menu>
           </Sider>
           <Layout className="site-layout">
@@ -114,13 +135,15 @@ class App extends React.Component {
               <Route exact path='/ip' component={TablaIp} />
               <Route exact path='/otrosequipos' component={HomeEquipo} />
               <Route exact path='/otrosequipos/form' component={VistaEquipo} />
-               <Route exact path='/marca' component={TablaMarca} />
-              <Route exact path='/marca/form' component={VistaMarca} /> 
+              <Route exact path='/marca' component={TablaMarca} />
+              <Route exact path='/marca/form' component={VistaMarca} />
               <Route exact path='/ip/form' component={VistaIp} />
               <Route exact path='/ip/detail' component={DetalleIIp} />
               <Route exact path='/impresora/form' component={VistaImpresora} />
               <Route exact path='/impresora/view' component={DetalleImpresora} />
               <Route exact path='/equipo/view' component={DetalleEquipo} />
+              <Route exact path='/reportes/general' component={TablaReporte} />
+              <Route exact path='/reportes/de-baja' component={TablaBajas} />
             </Content>
             <Footer className="style-footer">Inventario Hospital León Becerra ©2020 Creado por EasySoft [ESPOL]</Footer>
           </Layout>
