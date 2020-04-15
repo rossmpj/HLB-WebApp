@@ -7,7 +7,7 @@ import AsignComp from '../Componentes/AsignarSelect';
 import IpSelect from '../Componentes/IpSelect';
 import EstadComp from '../Componentes/EstadoSelect';
 
-const tailLayout = { wrapperCol: { offset: 10, span: 5 } };
+const tailLayout = { wrapperCol: { offset: 12, span: 5 } };
 const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };
 
 const FormGeneral = Form.create({

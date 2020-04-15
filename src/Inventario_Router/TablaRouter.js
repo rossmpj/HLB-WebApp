@@ -144,7 +144,7 @@ class TablaRouter extends React.Component{
       message.success({ content: 'Registro eliminado satisfactoriamente', key, duration: 3 });
       this.recargar_datos();
     }).catch(err => {
-      message.error("Imposible eliminar. El registro ya ha sido dado de baja", 4);
+      message.error("Ha ocurrido un error al procesar la petición, inténtelo más tarde", 4);
     });
   }
 
@@ -356,7 +356,9 @@ class TablaRouter extends React.Component{
               <Popconfirm placement="topRight" 
               title="¿Desea eliminar este registro?" 
               okText="Si" cancelText="No" onConfirm={() => this.handleDelete(record.key)}>
-              <Button type="danger" icon="delete" size="small" /></Popconfirm>
+                  {record.estado === 'B' ? 
+              <Button disabled type="danger" icon="delete" size="small" /> : <Button type="danger" icon="delete" size="small" /> }
+              </Popconfirm> 
             </span>
           ),  
         },

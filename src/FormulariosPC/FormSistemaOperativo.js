@@ -3,7 +3,7 @@ import { Form, Button, Select, Switch } from 'antd';
 import Axios from '../Servicios/AxiosLaptop'
 
 const { Option } = Select;
-const tailLayout = { wrapperCol: { offset: 10, span: 5 } };             
+const tailLayout = { wrapperCol: { offset: 12, span: 5 } };             
 const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };
 
 const FormSistemaOperativo = Form.create({
@@ -82,7 +82,7 @@ const FormSistemaOperativo = Form.create({
             </Form.Item>
             <Form.Item {...tailLayout}>
                 <Button type="primary" style={{marginRight: 3}} onClick={validateInput}>Siguiente</Button>
-                <Button type="default" onClick={storeValues} >Regresar</Button>
+                {/* <Button type="default" onClick={storeValues} >Regresar</Button> */}
             </Form.Item>
         </Form>
     );

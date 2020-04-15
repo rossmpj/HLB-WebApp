@@ -5,7 +5,7 @@ import DescrComp from '../Componentes/DescripcionComponent';
 import MarcaComp from '../Componentes/MarcaSelect';
 import InNumComp from '../Componentes/InputNumberComp';
 
-const tailLayout = { wrapperCol: { offset: 10, span: 5 } };              
+const tailLayout = { wrapperCol: { offset: 12, span: 5 } };              
 const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };
 
 const FormProcesador = Form.create({
@@ -36,7 +36,7 @@ const FormProcesador = Form.create({
             <DescrComp label="Descripción"     id="descr_proc"   initialValue={props.descr_proc}   decorator={getFieldDecorator} />
             <Form.Item {...tailLayout}>
                 <Button type="primary" style={{marginRight: 3}} onClick={validateInput}>Siguiente</Button>
-                <Button type="default" onClick={storeValues} >Regresar</Button>
+                {/* <Button type="default" onClick={storeValues} >Regresar</Button> */}
             </Form.Item>
         </Form>
     );

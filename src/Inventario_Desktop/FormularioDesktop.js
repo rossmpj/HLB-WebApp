@@ -18,7 +18,7 @@ import { Steps } from 'antd';
 const { Step } = Steps;
 const { Content } = Layout;
 const { Title } = Typography;
-const { CamposComunes } = { codigo: '', marca: '', modelo: '', nserie: '', descripcion: '' };
+const { CamposComunes } = { name: '', codigo: '', marca: '', modelo: '', nserie: '', descripcion: '' };
 
 class FormularioDesktop extends Component {
     state = {
@@ -35,6 +35,7 @@ class FormularioDesktop extends Component {
         tarjeta_red: { CamposComunes },
         carcasa: { CamposComunes },
         fuente_poder: { CamposComunes },
+        fuente_alimentacion: { name: '', tipo: '', codigo: '', marca: '', modelo: '', nserie: '', descripcion: '' },
         ram_fields: { 
             nombre: 'memoria RAM',
             verDetalleRAM: true,
@@ -158,6 +159,15 @@ class FormularioDesktop extends Component {
                 nserie: 'rr',
                 descripcion: 'rr'
             },
+            fuente_alimentacion: { 
+                name: 'fuente_alimentacion', 
+                tipo: 'Ninguno', 
+                codigo: 'd', 
+                marca: 'd', 
+                modelo: 'd', 
+                nserie: 'd', 
+                descripcion: 'd' 
+            },
             ram_fields:{        
                 nombre: 'memoria RAM',
                 verDetalleRAM: true,
@@ -242,6 +252,11 @@ class FormularioDesktop extends Component {
         this.setState({ fuente_poder: { ...fuente_poder, ...values }});
     }
 
+    getStepFalimValue = (values) => {
+        const { fuente_alimentacion } = this.state;
+        this.setState({ fuente_poder: { ...fuente_alimentacion, ...values }});
+    }
+
     getFormProcessValue = (values) => {
         const { procesador } = this.state;
         this.setState({ procesador: { ...procesador, ...values }});
@@ -259,7 +274,7 @@ class FormularioDesktop extends Component {
 
     render() {
         const { step, general, so, monitor, teclado, mouse, parlantes, mainboard, procesador, tarjeta_red, fuente_poder, carcasa,
-            ram_fields, disco_duro_fields } = this.state;
+            ram_fields, disco_duro_fields, fuente_alimentacion } = this.state;
         const steps = [
             {           
                 icon: <GiDesk />,
@@ -325,14 +340,14 @@ class FormularioDesktop extends Component {
                     <FormProcess {...procesador} handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getFormProcessValue} />    
                 </div>
             },
-            {
-                icon: <FaMemory />,
-                content: 
-                <div>
-                    <Title className="App" level={3}>Memoria RAM</Title>
-                    <FormDD {...ram_fields}  handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getFormRAMValue} />    
-                </div>
-            },
+            // {
+            //     icon: <FaMemory />,
+            //     content: 
+            //     <div>
+            //         <Title className="App" level={3}>Memoria RAM</Title>
+            //         <FormDD {...ram_fields}  handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getFormRAMValue} />    
+            //     </div>
+            // },
             // {
             //     icon: <FiHardDrive />,
             //     content: 
@@ -370,7 +385,7 @@ class FormularioDesktop extends Component {
                 content: 
                     <div>
                         <Title className="App" level={3}>UPS/Regulador</Title>
-                        <FormGral {...general} handleConfirmButton={this.confirm} handleNextButton={this.next} submittedValues={this.getFormGralValue} />
+                        <FormEquipo {...fuente_alimentacion} handleConfirmButton={this.confirm} handleNextButton={this.next} submittedValues={this.getStepFalimValue} />
                     </div>
             },   
         ] 

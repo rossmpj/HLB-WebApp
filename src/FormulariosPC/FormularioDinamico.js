@@ -4,7 +4,7 @@ import InNumComp from '../Componentes/InputNumberComp';
 import Axios from '../Servicios/AxiosTipo'
 
 let id = 0;
-const tailLayout = {  wrapperCol: { offset: 10, span: 5 } };          
+const tailLayout = {  wrapperCol: { offset: 12, span: 5 } };          
 const { Option } = Select;    
 const InputGroup = Input.Group;  
 const buttonItemLayout = { wrapperCol: {span: 14, offset: 8} };
@@ -15,45 +15,38 @@ const FormularioDinamico = Form.create({
         const blankCat = { codigo: '', marca: '', modelo: '', nserie: '', capacidad: {cant: 0, un: "Mb"}, tipo: '', descr: '' };
         var obj = [];
         var r = [];
+        const [myValidateHelp, setMyValidateHelp] = useState();
+        const [myValidateStatus, setMyValidateStatus] = useState();
+        
         const [marca, setMarcas] = useState([]);
+    
         
-         useEffect(() => {
-        Axios.mostrar_marcas().then(res => {
-            res.data.forEach(function (dato) {
-                let users = {
-                    id: dato.id_marca,
-                    dato: dato.nombre
-                }
-                r.push(users);
-            });
-            setMarcas(r);   
-      }, []);
-        
-            //console.log("rrrrrrrrrr",marca)
+           // console.log("rrrrrrrrrr",props.editionMode)
         // }).catch(err => {
         //     console.log(err);
-         });
+        //   });
         // console.log("a",props.indx)
-        // console.log("b",props.index)
-        if (props.editionMode ===false) { 
-            obj.push(blankCat)
-        }else{
-            if(props.nombre ==="disco duro")
-            {
-                props.index.map( (elem) =>(
-                    obj.push(elem)
-                )) 
-            }else if (props.nombre==="memoria RAM")
-            {
+        // console.log("b",props.index)    
+        // if (props.editionMode === false || props.indx === []) { 
+        //     obj.push(blankCat)
+        // }else{
+            // if(props.nombre ==="disco duro")
+            // {
+            //     props.index.map( (elem) =>(
+            //         obj.push(elem)
+            //     )) 
+            // }else if (props.nombre==="memoria RAM")
+            // {
                 props.indx.map( (elem) =>(
                 obj.push(elem)
+            // 
             )) 
-            }
+            //  }
             
-        }
+        // }
         //obj.push(blankCat)
         const [registro, setRegistro] = useState(obj);  
-    // console.log(registro)
+    console.log("refdg",registro)
     //     console.log("f",obj)
         const { getFieldDecorator, validateFields, getFieldsValue } = props.form;
         getFieldDecorator('keys1', { initialValue: [0] });
@@ -84,38 +77,11 @@ const FormularioDinamico = Form.create({
             });
         };
 
-        const op = (index) =>{
-             return(
-                <Select onSelect={(value, e) => handleInputChange(index, value, 'marca', e)}>
-                                {marca.map(m=>
-                    <Option key={m.id} value={m.id}>{m.dato}</Option>
-                ) }
-                             </Select>  
-                             
-             )
-        }
-        const selec = (index) => {
-            return(
-                <Form.Item
-                        label="Marca" 
-                        disabled={false}
-                        className="form2col"            
-                        >
-                            {getFieldDecorator(`marca${index}`+props.nombre, {
-                                rules: [{ required: true, message: 'Debe completar este campo' }],
-                                initialValue: registro[index].marca,
-                                validateTrigger: ["onChange", "onBlur"], 
-                            })(
-                                   op(index)                          
-                            )}
-                        </Form.Item>   
-            )     
-        }
+       
         const handleInputChange = (index, value, name, event) => {
             const values = [...registro];
             if (name === 'codigo') {
                 values[index].codigo = event.currentTarget.value;
-                //console.log(values[index].codigo, event.currentTarget.value, event.currentTarget.name)
             } else if (name ==='marca') {
                 values[index].marca = value;
             } else if (name ==='modelo') {
@@ -124,7 +90,6 @@ const FormularioDinamico = Form.create({
                 values[index].nserie = event.currentTarget.value;
             } else if (name ==='capac') {
                 values[index].capacidad.cant = value;
-                //console.log("c",values[index].capacidad.cant)
             }else if (name ==='un') {
                 values[index].capacidad.un = value;
             } else if (name ==='tipo') {
@@ -165,7 +130,7 @@ const FormularioDinamico = Form.create({
                                 <Input />
                             )}
                         </Form.Item>  
-                        {/* <Form.Item
+                        <Form.Item
                         label="Marca" 
                         disabled={false}
                         className="form2col"            
@@ -176,13 +141,12 @@ const FormularioDinamico = Form.create({
                                 validateTrigger: ["onChange", "onBlur"], 
                             })(
                                 <Select onSelect={(value, e) => handleInputChange(index, value, 'marca', e)}>
-                                    { marca.map(m=>
+                                    { props.marcas.map(m=>
                                         <Option key={m.id} value={m.id}>{m.dato}</Option>
                                     )}
                                  </Select>                                      
                             )}
-                        </Form.Item> */}
-                        {selec(index)}
+                        </Form.Item>
                         <Form.Item
                         label="Número de serie" 
                         disabled={false}
@@ -268,42 +232,51 @@ const FormularioDinamico = Form.create({
         e.preventDefault();
         validateFields((err, values) => {
             //setRegistro(registro)
-            //props.indx.push(registro)
-            
+            // if(props.editionMode === false){///
+            //     registro.map( function(element, index){
+            //                     props.indx.push(element)
+            //         })
+                
+            // }//
             console.log("val inp",props.indx)
             //if (registro !== []){
-              if (props.nombre ==="memoria RAM"){
-                registro.map( function(element, index) {
-                    if (props.indx[index].codigo !== undefined && element.codigo !== undefined){
-                        if (element.codigo !== props.indx[index].codigo) {
-                            obj.push(element);
-                            //console.log(element.capacidad.split(" ")[0])
-                        } 
-                    }    
+            //   if (props.nombre ==="memoria RAM"){
+            //     registro.map( function(element, index) {
+            //         if (props.indx[index].codigo !== undefined && element.codigo !== undefined){
+            //             if (element.codigo !== props.indx[index].codigo) {
+            //                 obj.push(element);
+            //                 //console.log(element.capacidad.split(" ")[0])
+            //             } 
+            //         }    
                     
                          
-                    })  
-              }else if (props.nombre==="disco duro"){
-                registro.map( function(element, index) {
-                    if (props.index[index].codigo !== undefined && element.codigo !== undefined){
-                        if (element.codigo !== props.index[index].codigo) {
-                            obj.push(element);
-                            //console.log(element.capacidad.split(" ")[0])
-                        } 
-                    }    
+                    // })  
+            //   }else if (props.nombre==="disco duro"){
+            //     registro.map( function(element, index) {
+            //         if (props.index[index].codigo !== undefined && element.codigo !== undefined){
+            //             if (element.codigo !== props.index[index].codigo) {
+            //                 obj.push(element);
+            //                 //console.log(element.capacidad.split(" ")[0])
+            //             } 
+            //         }    
                     
                          
-                    })  
-              }
+            //         })  
+            //   }
            
        // }
                 //console.log("el.cod",element.codigo)
              //  );
-            if(!err) {
+             if(!err) {
+            //     if (err.capac || err.un) {
+            //           setMyValidateHelp('Please enter A and B')
+            //           setMyValidateStatus('error')
+            //       }
                 if (props.isStepFinal === true){
-                    props.handleConfirmButton(obj)
+                    props.handleConfirmButton(registro)
                 } else{
-                    props.submittedValues(obj)
+
+                    props.submittedValues(registro)
                     props.handleNextButton()
                 } 
             }
@@ -312,29 +285,54 @@ const FormularioDinamico = Form.create({
     
     const storeValues = () => {
         const values = getFieldsValue();
+        //console.log("vv",values)
         //props.indx.push(registro)
-        console.log("valores", values)
-        //setRegistro(registro)
+    //     if(props.editionMode === false){
+    //      //   props.indx =[] 
+    // //props.indx = obj
+    //         props.submittedValues(obj)
+    //     }
+    
+// }
+// console.log("valokkres", registro)
+  
+setRegistro(registro)
+
+
+// if(props.editionMode === false){
+//         registro.map( function(element, index){
+//                         props.indx.push(element)
+//             })
+            
+            
+//     }
+//     console.log("valokkres1", registro)
+    
+
+// console.log("valokkresindex", props.indx)
+// setRegistro(props.indx)
+        props.submittedValues(registro)
+        
             //console.log("val inp",registro)
             // registro.map( function(element, index){
             //     if (element.codigo !== obj[index].codigo) {
             //         obj.push(element);
             //      } 
-            if(props.nombre==="memoria RAM"){
-                registro.map( function(element, index){
-                    props.indx.push(element)
+        //     if(props.nombre==="memoria RAM"){
+        //         registro.map( function(element, index){
+        //             props.indx.push(element)
                     
-         }   )
+        //  }   )
          
-        props.submittedValues(props.indx);
-            }else if (props.nombre ==="disco duro"){
-                registro.map( function(element, index){
-                    props.index.push(element)
+        // props.submittedValues(props.indx);
+        //     }else if (props.nombre ==="disco duro"){
+        //         registro.map( function(element, index){
+        //             props.index.push(element)
                     
-         }   )
+        //  }   )
          
-        props.submittedValues(props.index);
-        }
+        // props.submittedValues(registro);
+        // }
             // })
         props.handleBackButton();
     }
@@ -360,7 +358,7 @@ const FormularioDinamico = Form.create({
                     <Button type="primary" style={{marginRight: 3}} htmlType="submit">Guardar</Button> :
                     <Button type="primary" style={{marginRight: 3}} onClick={validateInput}>Siguiente</Button>
                 }
-                <Button type="default" onClick={storeValues} >Regresar</Button>
+                {/* <Button type="default" onClick={storeValues} >Regresar</Button> */}
             </Form.Item>
         </Form>
     );

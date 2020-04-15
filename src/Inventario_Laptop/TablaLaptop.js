@@ -28,10 +28,6 @@ class TablaLaptop extends React.Component{
         AxiosLaptop.listar_laptops().then(res => {
         res.data.forEach(function (r) {
             let registro = r.original
-            console.log("as:#",registro.general.asignado)
-            console.log("de:#",registro.general.departamento)
-            console.log("em:#",registro.general.empleado)
-            console.log("ap:#",registro.general.apellido)
             var dip = registro.general.ip === null ? ' ' : registro.general.ip.toString();
             let router = {
                 key: registro.general.id_equipo,

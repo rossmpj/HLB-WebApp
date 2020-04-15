@@ -12,6 +12,7 @@ import { Button, Layout, Row, Col, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import { Steps } from 'antd';
 import Axios from '../Servicios/AxiosLaptop'
+import AxiosTipo from '../Servicios/AxiosTipo'
 
 const { Step } = Steps;
 const { Content } = Layout;
@@ -21,6 +22,7 @@ class FormularioLaptop extends Component {
   state = {
     step: 0,
     titulo: "",
+    marc:[],
     general_fields: {
         codigo: '',
         asignar: undefined,
@@ -45,7 +47,7 @@ class FormularioLaptop extends Component {
         marca_proc: undefined, 
         modelo_proc: '', 
         nserie_proc: '', 
-        frec_procesador: 0,
+        frec_proc: 0,
         nucleos_proc: 0,
         descr_proc: ''
     },
@@ -57,6 +59,7 @@ class FormularioLaptop extends Component {
         num_slots: 0,
         indx: [],
         editionMode: false,
+        marcas: []
     },
     disco_duro_fields: {
         nombre: 'disco duro',
@@ -64,25 +67,90 @@ class FormularioLaptop extends Component {
         isStepFinal: true,
         index: [],
         editionMode: false,
+        marcas: []
     }
     }
 
     componentDidMount = () => {
-      if (typeof this.props.location !== 'undefined') {
+        // this.cargar()
+        if (typeof this.props.location !== 'undefined') {
         const { info } = this.props.location.state;
         const { titulo } = this.props.location.state;
+        
         if (titulo === "Editar laptop" && info !== undefined){
           this.cargar_datos(info);
-          this.setState({
-              ram_fields: {
-                editionMode: true
-              }          
-            })
-        }   
+        //   this.cargar()
+        //   this.setState({
+        //       ram_fields: {
+        //         editionMode: true
+        //       }          
+        //     })
+        }
+        //       }          
+        // }
+        //      }          
+        //  }
+        if(titulo === "Nueva laptop"){
+            this.cargar()
+        }
+        // else{
+        //     this.cargar()
+        // }
+        //   else{
+        //     this.setState({
+        //         ram_fields: {
+        //           editionMode: false
+        //         }          
+        //       })
+        // } 
+        // this.cargar()
         this.setState({titulo: titulo});
       }
     }
+    cargar() {
+        let r = []
+        AxiosTipo.mostrar_marcas().then(res => {
+            res.data.forEach(function (dato) {
+                let users = {
+                    id: dato.id_marca,
+                    dato: dato.nombre
+                }
+                r.push(users);
+            });
+        });
+        this.setState({marc: r})
+        this.setState({ram_fields: {
+                        nombre: 'memoria RAM',
+                        verDetalleRAM: true,
+                        isStepFinal: false,
+                        ram_soportada: 0,
+                        num_slots: 0,
+                        indx: [{ codigo: '', marca: '', modelo: '', nserie: '', capacidad: {cant: 0, un: "Mb"}, tipo: '', descr: '' }], 
+                        marcas: r,
+                        editionMode:false
+                    }, 
+                     disco_duro_fields: {
+                        nombre: 'disco duro',
+                        verDetalleRAM: false,
+                        isStepFinal: true,
+                        index: [], 
+                        marcas: r,
+                        editionMode: false
+                    }})
+    }
+
     cargar_datos(info) {
+        let r = []
+        AxiosTipo.mostrar_marcas().then(res => {
+
+            res.data.forEach(function (dato) {
+                let users = {
+                    id: dato.id_marca,
+                    dato: dato.nombre
+                }
+                r.push(users);
+            });
+      });
         console.log(info.rams);
         Axios.obtenerInfoLaptop(info.key).then(res => {
             let registro = res.data;
@@ -141,17 +209,19 @@ class FormularioLaptop extends Component {
                 isStepFinal: false,
                 ram_soportada: info.ram_soportada,
                 num_slots: info.slots_ram,
-                indx: indcx
+                indx: indcx, 
+                marcas: r,
+                editionMode: true
             },
             disco_duro_fields: {
                 nombre: 'disco duro',
                 verDetalleRAM: false,
                 isStepFinal: true,
-                index: inddcx
+                index: inddcx, 
+                marcas: r,
+                editionMode: true
             }
         })
-        console.log(this.state.indx)
-        console.log(this.state.index)
     })
       }
 

@@ -5,7 +5,7 @@ import InNumComp from '../Componentes/InputNumberComp';
 import DescrComp from '../Componentes/DescripcionComponent';
 import MarcaComp from '../Componentes/MarcaSelect';
 
-const tailLayout = { wrapperCol: { offset: 10, span: 5 } };
+const tailLayout = { wrapperCol: { offset: 12, span: 5 } };
 const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };
 
 const FormMainboard = Form.create({
@@ -40,7 +40,7 @@ const FormMainboard = Form.create({
             </div>
             <Form.Item {...tailLayout}>
                 <Button type="primary" style={{marginRight: 3}} onClick={validateInput}>Siguiente</Button>
-                <Button type="default" onClick={storeValues} >Regresar</Button>
+                {/* <Button type="default" onClick={storeValues} >Regresar</Button> */}
             </Form.Item>
         </Form>
     );
