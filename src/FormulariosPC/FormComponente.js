@@ -4,7 +4,7 @@ import InputComp from '../Componentes/InputComponent';
 import DescrComp from '../Componentes/DescripcionComponent';
 import MarcaComp from '../Componentes/MarcaSelect';
 
-const tailLayout = { wrapperCol: { offset: 12, span: 5 } };
+const tailLayout = { wrapperCol: { offset: 11, span: 5 } };
 const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };        
 const { Option } = Select;    
 
@@ -27,7 +27,7 @@ const FormComponente = Form.create({
     }
 
     return (
-        <Form {...layout} layout="horizontal" onSubmit={validateInput}>
+        <Form {...layout} key={props.name} layout="horizontal" onSubmit={validateInput}>
             <div style={{marginLeft: 40, marginRight: 40, marginBottom: 40 }} > 
             {props.name=== 'fuente_alimentacion' ? 
             <Form.Item
@@ -48,8 +48,8 @@ const FormComponente = Form.create({
         
             }
                  {props.tipo==="Ninguno"
-            ? null :   <>
-                <InputComp label="Código"          id={"codigo"+props.name} class="" initialValue={props.codigo} decorator={getFieldDecorator} />
+            ? <div className="App">No aplica</div> :   <>
+                <InputComp label="Código"          id={"codigo"+props.name} class="" initialValue={props.codigo} decorator={getFieldDecorator} disabled={props.disabled} />
                 <MarcaComp required={true}          id={"marca"+props.name}  class="" initialValue={props.marca} decorator={getFieldDecorator} />
                 <InputComp label="Modelo"          id={"modelo"+props.name} class="" initialValue={props.modelo} decorator={getFieldDecorator} />
                 <InputComp label="Número de serie" id={"nserie"+props.name} class="" initialValue={props.nserie} decorator={getFieldDecorator} />

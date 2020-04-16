@@ -6,6 +6,7 @@ import AxiosLaptop from '../Servicios/AxiosLaptop'
 import FuncionesAuxiliares from '../FuncionesAuxiliares'
 
 const { Title } = Typography;
+const key = 'updatable';
 
 class TablaLaptop extends React.Component{
   constructor(props) {
@@ -22,6 +23,10 @@ class TablaLaptop extends React.Component{
     };
     this.handleClick = this.handleClick.bind(this);
   }
+
+    recargar_datos(){
+        this.obtener_datos();
+    }
 
     obtener_datos = () => {
         let datos = [];
@@ -97,6 +102,16 @@ class TablaLaptop extends React.Component{
     this.setState({
       index: this.state.index +1
     })
+  }
+
+  handleDelete(id) {
+    console.log("clave a eliminar",id)
+    AxiosLaptop.darDeBajaEquipoID(id,'laptop').then(res => {
+      message.success({ content: 'Registro eliminado satisfactoriamente', key, duration: 3 });
+      this.recargar_datos();
+    }).catch(err => {
+      message.error("Ha ocurrido un error al procesar la petición, inténtelo más tarde", 4);
+    });
   }
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -512,13 +527,15 @@ class TablaLaptop extends React.Component{
         fixed: 'right',
         render: (text, record) => (
           <span>
-            <Link to={{ pathname: '/laptop/form', state: { info: record, titulo: "Editar laptop" } }} >
+            <Link to={{ pathname: '/laptop/form', state: { info: record, titulo: "Editar laptop", disabled: true } }} >
               <Button style= {{marginRight: '2px'}} size="small" type="primary" icon="edit" />
             </Link>
             <Popconfirm placement="topRight" 
             title="¿Desea eliminar este registro?" 
             okText="Si" cancelText="No" onConfirm={() => this.handleDelete(record.key)}>
-            <Button type="danger" size="small" icon="delete" /></Popconfirm>
+            {record.estado === 'B' ? 
+              <Button onClick={()=>console.log("reocoodr",record)} disabled type="danger" icon="delete" size="small" /> : <Button type="danger" icon="delete" size="small" /> }
+            </Popconfirm>
           </span>
         ),
       },

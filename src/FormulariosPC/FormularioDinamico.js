@@ -1,10 +1,9 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Form, Input, Icon, Button, InputNumber, Select } from 'antd';
 import InNumComp from '../Componentes/InputNumberComp';
-import Axios from '../Servicios/AxiosTipo'
 
 let id = 0;
-const tailLayout = {  wrapperCol: { offset: 12, span: 5 } };          
+const tailLayout = {  wrapperCol: { offset: 11, span: 5 } };          
 const { Option } = Select;    
 const InputGroup = Input.Group;  
 const buttonItemLayout = { wrapperCol: {span: 14, offset: 8} };
@@ -14,12 +13,8 @@ const FormularioDinamico = Form.create({
     name:'Dinamico'})( props => {
         const blankCat = { codigo: '', marca: '', modelo: '', nserie: '', capacidad: {cant: 0, un: "Mb"}, tipo: '', descr: '' };
         var obj = [];
-        var r = [];
-        const [myValidateHelp, setMyValidateHelp] = useState();
-        const [myValidateStatus, setMyValidateStatus] = useState();
-        
-        const [marca, setMarcas] = useState([]);
-    
+        // const [myValidateHelp, setMyValidateHelp] = useState();
+        // const [myValidateStatus, setMyValidateStatus] = useState();   
         
            // console.log("rrrrrrrrrr",props.editionMode)
         // }).catch(err => {
@@ -114,7 +109,7 @@ const FormularioDinamico = Form.create({
                                 initialValue: registro[index].codigo,
                                 onChange: (e) => handleInputChange(index, null, 'codigo', e)
                             })(
-                                <Input name='codigo'/>
+                                <Input disabled={props.disabled} />
                             )}
                         </Form.Item>    
                         <Form.Item
@@ -284,7 +279,7 @@ const FormularioDinamico = Form.create({
     }
     
     const storeValues = () => {
-        const values = getFieldsValue();
+        //const values = getFieldsValue();
         //console.log("vv",values)
         //props.indx.push(registro)
     //     if(props.editionMode === false){

@@ -4,7 +4,8 @@ import FormSO from '../FormulariosPC/FormSistemaOperativo';
 import FormEquipo from '../FormulariosPC/FormComponente';
 import FormProcess from '../FormulariosPC/FormProcesador';
 import FormMainboard from '../FormulariosPC/FormMainboard';
-import FormDD from '../FormulariosPC/FormularioDinamico.js';
+import FormRAM from '../FormulariosPC/FormularioDinamico.js';
+import FormDD from '../FormulariosPC/FormularioDinamicoDD.js';
 import { Button, Layout, Row, Col, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import { DesktopOutlined, WindowsOutlined } from '@ant-design/icons';
@@ -14,43 +15,52 @@ import { FaRegKeyboard, FaEthernet, FaMemory, FaPlug } from "react-icons/fa";
 import { MdMouse } from "react-icons/md";
 import { GoCircuitBoard, GoServer } from "react-icons/go";
 import { Steps } from 'antd';
+import Axios from '../Servicios/AxiosDesktop'
+import AxiosTipo from '../Servicios/AxiosTipo'
 
 const { Step } = Steps;
 const { Content } = Layout;
 const { Title } = Typography;
-const { CamposComunes } = { name: '', codigo: '', marca: '', modelo: '', nserie: '', descripcion: '' };
+const { CamposComunes } = { disabled: false, name: '', codigo: '', marca: '', modelo: '', nserie: '', descripcion: '' };
 
-class FormularioDesktop extends Component {
-    state = {
+class FormularioDesktop extends React.Component {
+    constructor(props) {
+        super(props);
+    this.state = {
         step: 0,
         titulo: "",
-        general: { codigo: '', asignar: '', nombre_pc: '', usuario_pc: '', ip: '', estado: '', descripcion: '' },
-        sistop: { so: '', tipo_so: '', sp1: false, licencia: false, office: '' },
+        general: { disabled: false, codigo: '', asignar: undefined, nombre_pc: '', usuario_pc: '', ip: undefined, estado: undefined, descripcion: '' },
+        so: { disabled: false, so: '', tipo_so: '', sp1: false, licencia: false, office: '' },
         monitor: { CamposComunes }, 
         teclado: { CamposComunes }, 
         mouse: { CamposComunes }, 
         parlantes: { CamposComunes },
-        procesador: { codigo_proc: '', marca_proc: '', modelo_proc: '', nserie_proc: '', frec_proc: 0, nucleos_proc: 0, descr_proc: '' },
-        mainboard: { codigo: '', marca: '', modelo: '', nserie: '', ram_soportada: '', num_slots: '', conexiones_dd: '', descripcion: '' },
+        procesador: { disabled: false, codigo_proc: '', marca_proc: '', modelo_proc: '', nserie_proc: '', frec_proc: 0, nucleos_proc: 0, descr_proc: '' },
+        mainboard: { disabled: false, codigo: '', marca: '', modelo: '', nserie: '', ram_soportada: '', num_slots: '', conexiones_dd: '', descripcion: '' },
         tarjeta_red: { CamposComunes },
         carcasa: { CamposComunes },
         fuente_poder: { CamposComunes },
-        fuente_alimentacion: { name: '', tipo: '', codigo: '', marca: '', modelo: '', nserie: '', descripcion: '' },
+        fuente_alimentacion: { disabled: false, name: '', tipo: '', codigo: '', marca: '', modelo: '', nserie: '', descripcion: '' },
         ram_fields: { 
+            disabled: false, 
             nombre: 'memoria RAM',
             verDetalleRAM: true,
-            isStepFinal: false,        
-            ram_soportada: 0,
-            num_slots: 0,
-            indx:[] 
+            isStepFinal: false, 
+            indx:[],      
+            marcas: [],
+            editionMode:false 
         },
         disco_duro_fields: {
+            disabled: false, 
             nombre: 'disco duro',
             verDetalleRAM: false,
             isStepFinal: true,
-            indx: []
+            indx: [],
+            marcas: [],
+            editionMode:false
         }
     }
+}
 
     componentDidMount = () => {
         if (typeof this.props.location !== 'undefined') {
@@ -58,19 +68,96 @@ class FormularioDesktop extends Component {
             const { titulo } = this.props.location.state;
             if (titulo === "Editar computadora" && info !== undefined){
                 this.cargar_datos(info);
-            }   
-            this.setState({ titulo: titulo });
+            }
+            if(titulo === "Nueva computadora"){
+                this.cargar()
+            }
+            this.setState({titulo: titulo});
         }
     }
 
+    cargar() {
+        let r = []
+        AxiosTipo.mostrar_marcas().then(res => {
+            res.data.forEach(function (dato) {
+                let users = {
+                    id: dato.id_marca,
+                    dato: dato.nombre
+                }
+                r.push(users);
+            });
+        });
+        this.setState({ram_fields: {
+                        nombre: 'memoria RAM',
+                        verDetalleRAM: false,
+                        isStepFinal: false,
+                        indx: [{ codigo: '', marca: '', modelo: '', nserie: '', capacidad: {cant: 0, un: "Mb"}, tipo: '', descr: '' }], 
+                        marcas: r,
+                        editionMode:false
+                    }, 
+                     disco_duro_fields: {
+                        nombre: 'disco duro',
+                        verDetalleRAM: false,
+                        isStepFinal: true,
+                        index: [], 
+                        marcas: r,
+                        editionMode: false
+                    }})
+    }
     cargar_datos(info) {
-        let indcx = []
-        for (const element in info.rams) {
-            indcx.push({ codigo: element, marca: 1, modelo: "fgfgrgt", nserie: "rgrgtrtg", capacidad: 110, tipo: "sss", descr: ""})
+        let r = []
+        AxiosTipo.mostrar_marcas().then(res => {
+
+            res.data.forEach(function (dato) {
+                let users = {
+                    id: dato.id_marca,
+                    dato: dato.nombre
+                }
+                r.push(users);
+            });
+      });
+        console.log("infoo",info);
+        Axios.obtenerInfoDesktop(info.key).then(res => {
+            let registro = res.data;
+            console.log("registro:",registro);
+            let indcx = []
+            if(info.rams !== []){
+                for (const element in info.rams) {
+                    console.log("ramfgg",info.rams[element].capacidad.split(" ")[1], info.rams[element].capacidad.split(" ")[0])
+                    indcx.push({ codigo: info.rams[element].codigo, marca: info.rams[element].marca, modelo: info.rams[element].modelo, 
+                                 nserie: info.rams[element].numero_serie, capacidad: { cant: info.rams[element].capacidad.split(" ")[0], 
+                                 un: info.rams[element].capacidad.split(" ")[1]}, tipo: info.rams[element].tipo, descr: info.rams[element].descripcion})
+                }
+             }
+        
+        console.log("objram",indcx)
+        let inddcx = []
+        for (const element in info.discos) {
+            //console.log(info.rams[element])
+            inddcx.push({ codigo: info.discos[element].codigo, marca: info.discos[element].marca, modelo: info.discos[element].modelo,
+                 nserie: info.discos[element].numero_serie, capacidad: {cant: info.discos[element].capacidad.split(" ")[0], 
+                 un: info.discos[element].capacidad.split(" ")[1]}, tipo: info.discos[element].tipo, descr: info.discos[element].descripcion})
         }
+        console.log("objdd",inddcx)
+        
+            registro.f_alim === undefined ? this.setState({fuente: "n", fuente_alimentacion:
+                {tipo: "Ninguno"}}) : 
+            this.setState({
+                fuente_alimentacion:
+                {     
+                disabled: true,
+                name: 'fuente_alimentacion', 
+                tipo: registro.f_alim.tipo_equipo, 
+                codigo: registro.f_alim.codigo, 
+                marca: registro.f_alim.marca, 
+                modelo: registro.f_alim.modelo, 
+                nserie: registro.f_alim.numero_serie, 
+                descripcion: registro.f_alim.descripcion }
+        })        
         this.setState({
             general: {
-                codigo: info.codigo,
+                disabled: true,
+                codigo: registro.general.codigo,
                 asignar: info.empleado,
                 nombre_pc: info.name_pc,
                 usuario_pc: info.user_pc,
@@ -79,111 +166,118 @@ class FormularioDesktop extends Component {
                 descripcion: info.descripcion
             },
             so: {
+                disabled: true,
                 so: info.so,
-                tipo_so: info.so_type,
+                tipo_so: registro.so.tipo_so,
                 sp1: info.servpack === 'Si' ? true : false,
                 licencia: info.licencia === 'Si' ? true : false,
                 office: info.office
             },
             monitor: {
+                disabled: true,
                 name: 'monitor',
-                codigo: info.monitor,
-                marca: 'm',
-                modelo: 'm',
-                nserie: 'm',
-                descripcion: 'm'
+                codigo: registro.monitor.codigo,
+                marca: registro.monitor.marca,
+                modelo: registro.monitor.modelo,
+                nserie: registro.monitor.numero_serie,
+                descripcion: registro.monitor.descripcion
             },
             teclado: {
+                disabled: true,
                 name: 'teclado',
-                codigo: info.teclado,
-                marca: 'mmmm',
-                modelo: 'mmmm',
-                nserie: 'mmmm',
-                descripcion: 'mmmmmm'
+                codigo: registro.teclado.codigo,
+                marca: registro.teclado.marca,
+                modelo: registro.teclado.modelo,
+                nserie: registro.teclado.numero_serie,
+                descripcion: registro.teclado.descripcion
             },
             mouse: {
+                disabled: true,
                 name: 'mouse',
-                codigo: info.mouse,
-                marca: 'ww',
-                modelo: 'ww',
-                nserie: 'ww',
-                descripcion: 'ww'
+                codigo: registro.mouse.codigo,
+                marca: registro.mouse.marca,
+                modelo: registro.mouse.modelo,
+                nserie: registro.mouse.numero_serie,
+                descripcion: registro.mouse.descripcion
             },
             parlantes: {
-                codigo: info.parlantes,
-                marca: 'ee',
-                modelo: 'ee',
-                nserie: 'ee',
-                descripcion: 'ee'
+                disabled: true,
+                name: 'parlantes',
+                codigo: registro.parlantes.codigo,
+                marca: registro.parlantes.marca,
+                modelo: registro.parlantes.modelo,
+                nserie: registro.parlantes.numero_serie,
+                descripcion: registro.parlantes.descripcion
             },
             mainboard: {
-                codigo: info.mainboard,
-                marca: 'tt',
-                modelo: 'tt',
-                nserie: 'tt',
-                ram_soportada: 'tt',
-                num_slots: 'tt',
-                conexiones_dd: 'tt',
-                descripcion: 'tt'
-            },
-            procesador: {
-                codigo_proc: info.procesador,
-                marca_proc: 'rr',
-                modelo_proc: 'rr',
-                nserie_proc: 'rr',
-                frec_proc: info.frecuencia,
-                nucleos_proc: 0,
-                descr_proc: 'rr'
+                disabled: true,
+                name: 'tarjeta_madre',
+                codigo: registro.tarjeta_madre.codigo,
+                marca: registro.tarjeta_madre.marca,
+                modelo: registro.tarjeta_madre.modelo,
+                nserie: registro.tarjeta_madre.numero_serie,
+                ram_soportada: registro.tarjeta_madre.ram_soportada,
+                num_slots: registro.tarjeta_madre.numero_slots,
+                conexiones_dd: registro.tarjeta_madre.conexiones_dd,
+                descripcion: registro.tarjeta_madre.descripcion
             },
             tarjeta_red: {
+                disabled: true,
                 name: 'tarjeta_red',
-                codigo: info.tarj_red,
-                marca: 'rr',
-                modelo: 'rr',
-                nserie: 'rr',
-                descripcion: 'rr'
+                codigo: registro.tarjeta_red.codigo,
+                marca: registro.tarjeta_red.marca,
+                modelo: registro.tarjeta_red.modelo,
+                nserie: registro.tarjeta_red.numero_serie,
+                descripcion: registro.tarjeta_red.descripcion
             },
-            carcasa: {                
+            carcasa: {   
+                disabled: true,             
                 name: 'case',
-                codigo: info.case,
-                marca: 'rr',
-                modelo: 'r',
-                nserie: 'rrr',
-                descripcion: 'rr'
+                codigo: registro.case.codigo,
+                marca: registro.case.marca,
+                modelo: registro.case.modelo,
+                nserie: registro.case.numero_serie,
+                descripcion: registro.case.descripcion
             },
             fuente_poder: {
+                disabled: true,
                 name: 'fuente_poder',
-                codigo: info.f_poder,
-                marca: 'rr',
-                modelo: 'rr',
-                nserie: 'rr',
-                descripcion: 'rr'
+                codigo: registro.fuente_poder.codigo,
+                marca: registro.fuente_poder.marca,
+                modelo: registro.fuente_poder.modelo,
+                nserie: registro.fuente_poder.numero_serie,
+                descripcion: registro.fuente_poder.descripcion
             },
-            fuente_alimentacion: { 
-                name: 'fuente_alimentacion', 
-                tipo: 'Ninguno', 
-                codigo: 'd', 
-                marca: 'd', 
-                modelo: 'd', 
-                nserie: 'd', 
-                descripcion: 'd' 
+            procesador: {
+                disabled: true,
+                codigo_proc: registro.procesador.codigo,
+                marca_proc: registro.procesador.marca,
+                modelo_proc: registro.procesador.modelo,
+                nserie_proc: registro.procesador.numero_serie,
+                frec_proc: registro.procesador.frecuencia,
+                nucleos_proc: registro.procesador.nucleos,
+                descr_proc: registro.procesador.descripcion
             },
-            ram_fields:{        
+            ram_fields:{ 
+                disabled: true,       
                 nombre: 'memoria RAM',
-                verDetalleRAM: true,
+                verDetalleRAM: false,
                 isStepFinal: false,
-                ram_soportada: info.ram_soportada,
-                num_slots: info.slots_ram,
-                indx: indcx
+                indx: indcx, 
+                marcas: r,
+                editionMode: true
             },
             disco_duro_fields: {
+                disabled: true,
                 nombre: 'disco duro',
                 verDetalleRAM: false,
                 isStepFinal: true,
-                indx: indcx
+                index: inddcx, 
+                marcas: r,
+                editionMode: true
             }
         })
-        
+    })
       }
 
     next = () => {
@@ -203,7 +297,6 @@ class FormularioDesktop extends Component {
 
     getFormGralValue = (values) => {
         const { general } = this.state;
-        console.log(values);
         this.setState({ general: { ...general, ...values }})
     }
 
@@ -340,22 +433,6 @@ class FormularioDesktop extends Component {
                     <FormProcess {...procesador} handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getFormProcessValue} />    
                 </div>
             },
-            // {
-            //     icon: <FaMemory />,
-            //     content: 
-            //     <div>
-            //         <Title className="App" level={3}>Memoria RAM</Title>
-            //         <FormDD {...ram_fields}  handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getFormRAMValue} />    
-            //     </div>
-            // },
-            // {
-            //     icon: <FiHardDrive />,
-            //     content: 
-            //     <div>
-            //         <Title className="App" level={3}>Disco duro</Title>
-            //         <FormDD {...disco_duro_fields} handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getFormDDValue} />    
-            //     </div>
-            // },
             {
                 icon: <GoServer />,
                 content: 
@@ -383,16 +460,33 @@ class FormularioDesktop extends Component {
             {          
                 icon: <FaPlug />,
                 content: 
-                    <div>
+                <div>
                         <Title className="App" level={3}>UPS/Regulador</Title>
                         <FormEquipo {...fuente_alimentacion} handleConfirmButton={this.confirm} handleNextButton={this.next} submittedValues={this.getStepFalimValue} />
                     </div>
+                    
             },   
+            {
+                icon: <FaMemory />,
+                content: 
+                <div>
+                    <Title className="App" level={3}>Memoria RAM</Title>
+                    <FormRAM {...ram_fields}  handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getFormRAMValue} />    
+                </div>
+            },
+            {
+                icon: <FiHardDrive />,
+                content: 
+                <div>
+                    <Title className="App" level={3}>Disco duro</Title>
+                    <FormDD {...disco_duro_fields} handleNextButton={this.next} handleBackButton={this.back} submittedValues={this.getFormDDValue} />    
+                </div>
+            },
         ] 
 
         return(
-            <Content id={"contenit"}>
-                <div id={"content1"} className="div-container-title">      
+            <Content id={"conteniht"}>
+                <div id={"contenth1"} className="div-container-title">      
                     <Row>
                         <Col span={12}><Title level={2}>{this.state.titulo}</Title></Col>
                         <Col className='flexbox'>
@@ -400,16 +494,16 @@ class FormularioDesktop extends Component {
                         </Col>
                     </Row>  
                     <div id={"styleform1"} className="div-border-top" >
-                        <div id={"cont1"} className="div-container"> 
-                            <Steps id={"sre"}
+                        <div id={"conth1"} className="div-container"> 
+                            <Steps id={"srhe"}
                             key={step+"fht"}
                                 size="small"
                                 current={step}>  
                                 {steps.map((item,index) => (
-                                    <Step key={item.title+index} icon={item.icon} title={item.title} />
+                                    <Step key={index} icon={item.icon} title={item.title} />
                                 ))}
                             </Steps>           
-                            <div className="steps-content">
+                            <div id={"rtg"} className="steps-content">
                                 {steps[step].content}
                             </div>
                         </div>  

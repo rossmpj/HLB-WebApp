@@ -20,4 +20,9 @@ export default class AxiosLaptop {
   static listar_office = () => {
     return AxiosLaptop.instanceAxios.get(`/listar_office`);
   }
+
+  static darDeBajaEquipoID = (id_equipo, tipo) => {
+    return AxiosLaptop.instanceAxios.put(`/darDeBajaEquipoID/${id_equipo}/${tipo}`);
+  }  
+
 }

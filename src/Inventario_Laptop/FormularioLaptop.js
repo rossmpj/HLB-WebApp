@@ -18,12 +18,15 @@ const { Step } = Steps;
 const { Content } = Layout;
 const { Title } = Typography;
 
-class FormularioLaptop extends Component {
-  state = {
+class FormularioLaptop extends React.Component {
+    constructor(props) {
+        super(props);
+  this.state = {
     step: 0,
     titulo: "",
-    marc:[],
+    disabled: false,
     general_fields: {
+        disabled: false,
         codigo: '',
         asignar: undefined,
         marca: undefined,
@@ -36,6 +39,7 @@ class FormularioLaptop extends Component {
         descripcion: ''
     },
     so_fields: {
+        disabled: false,
         so: '',
         tipo_so: '',
         sp1: false,
@@ -43,6 +47,7 @@ class FormularioLaptop extends Component {
         office: ''
     },
     procesador_fields: {
+        disabled: false,
         codigo_proc: '', 
         marca_proc: undefined, 
         modelo_proc: '', 
@@ -52,6 +57,7 @@ class FormularioLaptop extends Component {
         descr_proc: ''
     },
     ram_fields: { 
+        disabled: false,
         nombre: 'memoria RAM',
         verDetalleRAM: true,
         isStepFinal: false,        
@@ -62,6 +68,7 @@ class FormularioLaptop extends Component {
         marcas: []
     },
     disco_duro_fields: {
+        disabled: false,
         nombre: 'disco duro',
         verDetalleRAM: false,
         isStepFinal: true,
@@ -69,14 +76,15 @@ class FormularioLaptop extends Component {
         editionMode: false,
         marcas: []
     }
-    }
+    }  
+}
 
     componentDidMount = () => {
         // this.cargar()
         if (typeof this.props.location !== 'undefined') {
         const { info } = this.props.location.state;
         const { titulo } = this.props.location.state;
-        
+        const { disabled } = this.props.location.state;
         if (titulo === "Editar laptop" && info !== undefined){
           this.cargar_datos(info);
         //   this.cargar()
@@ -104,7 +112,8 @@ class FormularioLaptop extends Component {
         //       })
         // } 
         // this.cargar()
-        this.setState({titulo: titulo});
+        this.setState({titulo: titulo});        
+        this.setState({disabled: disabled})
       }
     }
     cargar() {
@@ -176,6 +185,7 @@ class FormularioLaptop extends Component {
         console.log("objdd",inddcx)
         this.setState({
             general_fields: {
+                disabled: true,
                 codigo: info.codigo,
                 asignar: info.empleado,
                 marca: info.marca,
@@ -188,6 +198,7 @@ class FormularioLaptop extends Component {
                 descripcion: info.descripcion
             },
             so_fields: {
+                disabled: true,
                 so: info.so,
                 tipo_so: info.so_type,
                 sp1: info.servpack === 'Si' ? true : false,
@@ -195,6 +206,7 @@ class FormularioLaptop extends Component {
                 office: info.office
             },
             procesador_fields: {
+                disabled: true,
                 codigo_proc: registro.procesador.codigo,
                 marca_proc: registro.procesador.marca,
                 modelo_proc: registro.procesador.modelo,
@@ -203,7 +215,8 @@ class FormularioLaptop extends Component {
                 nucleos_proc: registro.procesador.nucleos,
                 descr_proc: registro.procesador.descripcion
             },
-            ram_fields:{        
+            ram_fields:{       
+                disabled: true, 
                 nombre: 'memoria RAM',
                 verDetalleRAM: true,
                 isStepFinal: false,
@@ -214,6 +227,7 @@ class FormularioLaptop extends Component {
                 editionMode: true
             },
             disco_duro_fields: {
+                disabled: true,
                 nombre: 'disco duro',
                 verDetalleRAM: false,
                 isStepFinal: true,

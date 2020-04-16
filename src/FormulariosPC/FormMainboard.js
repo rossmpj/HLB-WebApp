@@ -5,7 +5,7 @@ import InNumComp from '../Componentes/InputNumberComp';
 import DescrComp from '../Componentes/DescripcionComponent';
 import MarcaComp from '../Componentes/MarcaSelect';
 
-const tailLayout = { wrapperCol: { offset: 12, span: 5 } };
+const tailLayout = { wrapperCol: { offset: 11, span: 5 } };
 const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };
 
 const FormMainboard = Form.create({
@@ -29,7 +29,7 @@ const FormMainboard = Form.create({
     return (
         <Form {...layout} layout="horizontal" onSubmit={validateInput}>
             <div style={{marginLeft: 40, marginRight: 40, marginBottom: 40 }} >    
-                <InputComp label="Código"                id="codigo_mainb"  initialValue={props.codigo} decorator={getFieldDecorator} />
+                <InputComp label="Código"                id="codigo_mainb"  initialValue={props.codigo} decorator={getFieldDecorator} disabled={props.disabled} />
                 <MarcaComp required={false}              id="marca_mainb"   initialValue={props.marca} decorator={getFieldDecorator} />
                 <InputComp label="Modelo"                id="modelo_mainb"  initialValue={props.modelo} decorator={getFieldDecorator} />
                 <InputComp label="Número de serie"       id="nserie_mainb"  initialValue={props.nserie} decorator={getFieldDecorator} />  

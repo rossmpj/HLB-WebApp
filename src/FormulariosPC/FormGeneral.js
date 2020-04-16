@@ -7,7 +7,7 @@ import AsignComp from '../Componentes/AsignarSelect';
 import IpSelect from '../Componentes/IpSelect';
 import EstadComp from '../Componentes/EstadoSelect';
 
-const tailLayout = { wrapperCol: { offset: 12, span: 5 } };
+const tailLayout = { wrapperCol: { offset: 11, span: 5 } };
 const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };
 
 const FormGeneral = Form.create({
@@ -23,10 +23,10 @@ const FormGeneral = Form.create({
         });
     }
     return (
-        <Form {...layout} layout="horizontal" onSubmit={validateInput}>
-            <InputComp label="Código" id="codigo" initialValue={props.codigo} decorator={getFieldDecorator} />
+        <Form {...layout} key={props.name} layout="horizontal" onSubmit={validateInput}>
+            <InputComp label="Código" id="codigo" initialValue={props.codigo} decorator={getFieldDecorator} disabled={props.disabled} />
             <AsignComp required={false} id="asignar" initialValue={props.asignar} decorator={getFieldDecorator} />
-            {(props.marca === undefined) && (props.modelo === undefined) && (props.nserie === undefined) ? null : 
+            {(props.modelo === undefined) || props.modelo=== null || (props.nserie === undefined) ? null : 
             <div>
                 <MarcaComp required={true} id="marca" initialValue={props.marca} decorator={getFieldDecorator} />
                 <InputComp label="Modelo" id="modelo" initialValue={props.modelo} decorator={getFieldDecorator} />

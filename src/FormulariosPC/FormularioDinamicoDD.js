@@ -1,11 +1,9 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Form, Input, Icon, Button, InputNumber, Select } from 'antd';
 import InNumComp from '../Componentes/InputNumberComp';
-import Axios from '../Servicios/AxiosTipo'
-import FuncionesAuxiliares from '../FuncionesAuxiliares'
 
 let id = 0;
-const tailLayout = {  wrapperCol: { offset: 12, span: 5 } };          
+const tailLayout = {  wrapperCol: { offset: 11, span: 5 } };          
 const { Option } = Select;    
 const InputGroup = Input.Group;  
 const buttonItemLayout = { wrapperCol: {span: 14, offset: 8} };
@@ -15,8 +13,6 @@ const FormularioDinamicoDD = Form.create({
     name:'Dinamico'})( props => {
         const blankCat = { codigo: '', marca: '', modelo: '', nserie: '', capacidad: {cant: 0, un: "Mb"}, tipo: '', descr: '' };
         var obj = [];
-        var r = [];
-        const [marca, setMarcas] = useState([]);
         
             //console.log("rrrrrrrrrr",marca)
         // }).catch(err => {
@@ -77,7 +73,6 @@ const FormularioDinamicoDD = Form.create({
             const values = [...registro];
             if (name === 'codigo') {
                 values[index].codigo = event.currentTarget.value;
-                //console.log(values[index].codigo, event.currentTarget.value, event.currentTarget.name)
             } else if (name ==='marca') {
                 values[index].marca = value;
             } else if (name ==='modelo') {
@@ -86,7 +81,6 @@ const FormularioDinamicoDD = Form.create({
                 values[index].nserie = event.currentTarget.value;
             } else if (name ==='capac') {
                 values[index].capacidad.cant = value;
-                //console.log("c",values[index].capacidad.cant)
             }else if (name ==='un') {
                 values[index].capacidad.un = value;
             } else if (name ==='tipo') {
@@ -111,7 +105,7 @@ const FormularioDinamicoDD = Form.create({
                                 initialValue: registro[index].codigo,
                                 onChange: (e) => handleInputChange(index, null, 'codigo', e)
                             })(
-                                <Input name='codigo'/>
+                                <Input disabled={props.disabled} />
                             )}
                         </Form.Item>    
                         <Form.Item
@@ -166,9 +160,7 @@ const FormularioDinamicoDD = Form.create({
                                 {getFieldDecorator(`capac${index}`+props.nombre, {
                                     rules: [{ required: true, message: 'Debe completar este campo' }],
                                     initialValue: registro[index].capacidad.cant,
-                                    //onChange: e => handleInputChange(index, 'capac', e)
                                 })(
-                                    //<Input />
                                     <InputNumber onChange={(value, e) => handleInputChange(index, value, 'capac', e)} style={{ width: '70%' }} />
                                 )}
                                 {getFieldDecorator(`un${index}`+props.nombre, {

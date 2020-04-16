@@ -5,7 +5,7 @@ import DescrComp from '../Componentes/DescripcionComponent';
 import MarcaComp from '../Componentes/MarcaSelect';
 import InNumComp from '../Componentes/InputNumberComp';
 
-const tailLayout = { wrapperCol: { offset: 12, span: 5 } };              
+const tailLayout = { wrapperCol: { offset: 11, span: 5 } };              
 const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };
 
 const FormProcesador = Form.create({
@@ -27,7 +27,7 @@ const FormProcesador = Form.create({
     }
     return (
         <Form {...layout} layout="horizontal" onSubmit={validateInput}>
-            <InputComp label="Código"          id="codigo_proc"  initialValue={props.codigo_proc}  decorator={getFieldDecorator} />
+            <InputComp label="Código"          id="codigo_proc"  initialValue={props.codigo_proc}  decorator={getFieldDecorator} disabled={props.disabled} />
             <MarcaComp required={true}         id="marca_proc"   initialValue={props.marca_proc}   decorator={getFieldDecorator} />
             <InputComp label="Modelo"          id="modelo_proc"  initialValue={props.modelo_proc}  decorator={getFieldDecorator} />
             <InputComp label="Número de serie" id="nserie_proc"  initialValue={props.nserie_proc}  decorator={getFieldDecorator} />    

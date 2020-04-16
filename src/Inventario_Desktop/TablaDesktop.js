@@ -4,8 +4,10 @@ import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import FuncionesAuxiliares from '../FuncionesAuxiliares'
 import Axios from '../Servicios/AxiosDesktop' 
+import AxiosLaptop from '../Servicios/AxiosLaptop'
 
 const { Title } = Typography;
+const key = 'updatable';
 
 class TablaDesktop extends React.Component{
   constructor(props) {
@@ -22,13 +24,17 @@ class TablaDesktop extends React.Component{
     };
     this.handleClick = this.handleClick.bind(this);
   }
+  
+  recargar_datos(){
+    this.obtener_datos();
+  }
 
   obtener_datos = () => {
     let datos = [];
     Axios.listar_desktops().then(res => {
     res.data.forEach(function (r) {
         let registro = r.original
-        console.log(registro.f_alim)
+        console.log("fuente",registro.f_alim)
         var dip = registro.general.ip === null ? ' ' : registro.general.ip.toString();
         let router = {
             key: registro.general.id_equipo,
@@ -74,11 +80,15 @@ componentDidMount = () => {
     this.obtener_datos();
   }
 
-  handleDelete = key => {
-    const dataSource = [...this.state.dataSource];
-    //this.setState({ dataSource: dataSource.estado = "De baja"})
-     this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
-  };
+  handleDelete(id) {
+    console.log("clave a eliminar",id)
+    AxiosLaptop.darDeBajaEquipoID(id,'laptop').then(res => {
+      message.success({ content: 'Registro eliminado satisfactoriamente', key, duration: 3 });
+      this.recargar_datos();
+    }).catch(err => {
+      message.error("Ha ocurrido un error al procesar la petición, inténtelo más tarde", 4);
+    });
+  }
 
   handleClick() {
     this.setState({
@@ -539,17 +549,17 @@ componentDidMount = () => {
         key: 'accion',
         fixed: 'right',
         render: (text, record) => (
-          this.state.dataSource.length >= 1 ? (
             <span>
-              <Link to={{ pathname: '/desktop/form', state: { info: record, titulo: "Editar computadora" } }} >
+              <Link to={{ pathname: '/desktop/form', state: { info: record, titulo: "Editar computadora", disabled: true } }} >
                 <Button style= {{marginRight: '2px'}} size="small" type="primary" icon="edit" />
               </Link>
               <Popconfirm placement="topRight" 
               title="¿Desea eliminar este registro?" 
               okText="Si" cancelText="No" onConfirm={() => this.handleDelete(record.key)}>
-              <Button type="danger" size="small" icon="delete" /></Popconfirm>
+              {record.estado === 'B' ? 
+              <Button disabled type="danger" icon="delete" size="small" /> : <Button type="danger" icon="delete" size="small" /> }
+              </Popconfirm>
             </span>
-          ) : null 
         ),
       },
     ];

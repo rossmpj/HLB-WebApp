@@ -3,7 +3,7 @@ import { Form, Button, Select, Switch } from 'antd';
 import Axios from '../Servicios/AxiosLaptop'
 
 const { Option } = Select;
-const tailLayout = { wrapperCol: { offset: 12, span: 5 } };             
+const tailLayout = { wrapperCol: { offset: 11, span: 5 } };             
 const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };
 
 const FormSistemaOperativo = Form.create({
