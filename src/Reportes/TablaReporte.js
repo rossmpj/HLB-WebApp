@@ -1,15 +1,9 @@
 import React from 'react';
 import {
-    Button,
-    Row,
-    Col,
-    Table,
-    Input,
-    Icon,
-    message,
-    Typography
+    Button, Row, Col, Table, Input, Icon, message, Typography, Modal, Radio
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
+import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosReporte'
 const { Title } = Typography;
 
@@ -24,7 +18,10 @@ class TablaReporte extends React.Component {
             info: [],
             filteredInfo: null,
             sortedInfo: null,
-            index: 0
+            index: 0,
+            visible: false,
+            confirmLoading: false,
+            archivo: ""
         };
 
     }
@@ -49,17 +46,6 @@ class TablaReporte extends React.Component {
                 datos.push(registro)
             });
             this.setState({ dataSource: datos });
-
-            /*  objeto.key = dato.id_equipo;
-                objeto.bspi = dato.bspi_punto;
-                objeto.empleado = 
-                objeto.tipo_equipo = dato.tipo_equipo;
-                objeto.marca = dato.marca;
-                objeto.modelo = dato.modelo;
-                objeto.numero_serie = dato.numero_serie;
-                objeto.ip = dato.direccion_ip;
-                objeto.estado_operativo = dato.estado_operativo;
-                datos.push(objeto);  */
         }).catch(err => {
             console.log(err)
             message.error('No se pueden cargar los datos, revise la conexión con el servidor', 4);
@@ -71,7 +57,6 @@ class TablaReporte extends React.Component {
     };
 
     handleChange = (pagination, filters, sorter) => {
-        console.log('Various parameters', pagination, filters, sorter);
         this.setState({
             filteredInfo: filters,
             sortedInfo: sorter,
@@ -166,9 +151,57 @@ class TablaReporte extends React.Component {
         this.setState({ searchText: '' });
     };
 
+    /* Métodos del modal */
+    showModal = () => {
+        this.setState({
+            visible: true,
+        });
+    };
+
+
+    handleOk = () => {
+        this.setState({
+            confirmLoading: true,
+        });
+        setTimeout(() => {
+            this.setState({
+                visible: false,
+                confirmLoading: false,
+            });
+        }, 2000);
+    };
+
+    handleCancel = () => {
+        this.setState({
+            visible: false,
+        });
+    };
+
+    tipo_archivo = e => {
+        console.log('radio checked', e.target.value);
+        this.setState({
+            archivo: e.target.value,
+        });
+    };
+
 
 
     render() {
+        const { visible, confirmLoading } = this.state;
+        const tipo_link = (record) => {
+            switch (record.tipo_equipo.toLowerCase()) {
+                case "impresora":
+                    return '/impresora/view'
+                case "desktop":
+                    return '/desktop/view'
+                case "laptop":
+                    return '/laptop/view'
+                case "router":
+                    return '/router/view'
+                default:
+                    return '/equipo/view'
+            }
+        }
         const columns = [
             {
                 title: 'Departamento',
@@ -218,6 +251,7 @@ class TablaReporte extends React.Component {
                 title: 'Código',
                 dataIndex: 'codigo',
                 key: 'codigo',
+                render: (text, record) => <Link to={{ pathname: `${tipo_link(record)}`, state: { info: record } }}>{text}</Link>,
                 ...this.getColumnSearchProps('codigo')
             },
             {
@@ -278,18 +312,19 @@ class TablaReporte extends React.Component {
             <div className="div-container-title">
                 <Row>
                     <Col span={12}><Title level={3}>Reporte de equipos informáticos asignados</Title></Col>
+                    <Col className='flexbox'>
+                        <ButtonGroup>
+                            <Button type="primary" icon="cloud-download" onClick={this.showModal}>Exportar</Button>
+                        </ButtonGroup>
+                    </Col>
                 </Row>
                 <div className="div-container">
-                    <div >
+                    {/* <div >
                         <Row>
-                            <Col className='flexbox'>
-                                <ButtonGroup>
-                                    <Button type="primary" icon="cloud-download">Exportar</Button>
-                                </ButtonGroup>
-                            </Col>
+                           
                         </Row>
-                    </div>
-                    <br />
+                    </div> 
+                    <br />*/}
                     <div className="table-operations">
                         <Button onClick={this.limpiarFiltros}>Limpiar filtros</Button>
                         <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>
@@ -298,6 +333,26 @@ class TablaReporte extends React.Component {
                     <Table bordered key={this.state.index} onChange={this.handleChange} size="small"
                         scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
+                <Modal
+                    title="Descargar reporte general de equipos asignados"
+                    visible={visible}
+                    cancelText="Cancelar"
+                    okText="Descargar"
+                    onOk={this.handleOk}
+                    confirmLoading={confirmLoading}
+                    onCancel={this.handleCancel}
+                >
+                    <div style={{ textAlign: "center" }}>
+                        <img className="center" src="/save.png" alt=":)"></img>
+                        <p>Seleccione un formato de descarga</p>
+                        <Radio.Group defaultValue="xlsx" buttonStyle="solid"
+                            onChange={this.tipo_archivo}>
+                            <Radio.Button value="xlsx">.XLSX</Radio.Button>
+                            <Radio.Button value="csv">.CSV</Radio.Button>
+                        </Radio.Group>
+                    </div>
+
+                </Modal>
             </div>
         );
     }

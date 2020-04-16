@@ -83,8 +83,8 @@ export default class AxiosTipo {
         return AxiosTipo.instanceAxios.put(`/editar_impresora`,impresora);
     }
 
-    static impresora_id = (id_equipo) => {
-        return AxiosTipo.instanceAxios.get(`/impresora_id/${id_equipo}`);
+    static impresora_id = (id_impresora) => {
+        return AxiosTipo.instanceAxios.get(`/impresora_id/${id_impresora}`);
     }
 
 

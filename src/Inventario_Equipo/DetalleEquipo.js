@@ -78,8 +78,9 @@ class DetalleEquipo extends React.Component {
             modelo: info.modelo,
             descripcion: info.descripcion,
             componente: info.componente,
-            ip: info.ip
         })
+        info.ip === " " || info.ip == null ? this.setState({ ip: "No asignada" }) :
+            this.setState({ ip: info.ip })
     }
 
     render() {

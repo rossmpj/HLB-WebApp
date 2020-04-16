@@ -45,7 +45,7 @@ class DetalleImpresora extends React.Component {
     inicializar_datos(info) {
         let empleado = "";
         let registro = {};
-        Axios.impresora_id(info.id_equipo).then(res => {
+        Axios.impresora_id(info.key).then(res => {
             res.data.forEach(function (dato) {
                 if (dato.empleado !== null) {
                     empleado = dato.empleado.concat(" ", dato.apellido);
@@ -89,7 +89,6 @@ class DetalleImpresora extends React.Component {
             modelo: info.modelo,
             descripcion: info.descripcion,
             componente: info.componente_principal,
-            ip: info.ip,
             tinta: info.tinta,
             cartucho: info.cartucho,
             toner: info.toner,
@@ -97,6 +96,8 @@ class DetalleImpresora extends React.Component {
             cinta: info.cinta,
             rollo: info.rollo
         });
+        info.ip === " " || info.ip == null ? this.setState({ ip: "No asignada" }) :
+            this.setState({ ip: info.ip })
     }
 
     render() {
@@ -110,7 +111,7 @@ class DetalleImpresora extends React.Component {
                             <Title level={2}>Detalle de impresora</Title>
                         </Col>
                         <Col className='flexbox'>
-                                <Button type="primary" icon="left" onClick={this.props.history.goBack}>Volver</Button>
+                            <Button type="primary" icon="left" onClick={this.props.history.goBack}>Volver</Button>
                         </Col>
                     </Row>
 

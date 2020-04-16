@@ -10,6 +10,7 @@ import {
     Typography
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
+import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosReporte'
 const { Title } = Typography;
 
@@ -58,7 +59,6 @@ class TablaBajas extends React.Component {
     };
 
     handleChange = (pagination, filters, sorter) => {
-        console.log('Various parameters', pagination, filters, sorter);
         this.setState({
             filteredInfo: filters,
             sortedInfo: sorter,
@@ -156,6 +156,20 @@ class TablaBajas extends React.Component {
 
 
     render() {
+        const tipo_link = (record) => {
+            switch (record.tipo_equipo.toLowerCase()) {
+                case "impresora":
+                    return '/impresora/view'
+                case "desktop":
+                    return '/desktop/view'
+                case "laptop":
+                    return '/laptop/view'
+                case "router":
+                    return '/router/view'
+                default:
+                    return '/equipo/view'
+            }
+        }
         const columns = [
             {
                 title: 'Equipo',
@@ -167,6 +181,7 @@ class TablaBajas extends React.Component {
                 title: 'Código',
                 dataIndex: 'codigo',
                 key: 'codigo',
+                render: (text, record) => <Link to={{ pathname:`${tipo_link(record)}`, state: { info: record } }}>{text}</Link>,
                 ...this.getColumnSearchProps('codigo')
             },
             {
@@ -227,24 +242,19 @@ class TablaBajas extends React.Component {
             <div className="div-container-title">
                 <Row>
                     <Col span={12}><Title level={3}>Reporte de equipos informáticos de baja</Title></Col>
+                    <Col className='flexbox'>
+                        <ButtonGroup>
+                            <Button type="primary" icon="cloud-download">Exportar</Button>
+                        </ButtonGroup>
+                    </Col>
                 </Row>
                 <div className="div-container">
-                    <div >
-                        <Row>
-                            <Col className='flexbox'>
-                                <ButtonGroup>
-                                    <Button type="primary" icon="cloud-download">Exportar</Button>
-                                </ButtonGroup>
-                            </Col>
-                        </Row>
-                    </div>
-                    <br />
                     <div className="table-operations">
                         <Button onClick={this.limpiarFiltros}>Limpiar filtros</Button>
                         <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>
                         <Button onClick={this.clearAll}>Limpiar todo</Button>
                     </div>
-                    <Table bordered key={this.state.index} onChange={this.handleChange} size="small"
+                    <Table bordered key={this.state.index} onChange={this.handleChange} size="middle"
                         scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
             </div>

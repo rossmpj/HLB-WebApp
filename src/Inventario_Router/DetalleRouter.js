@@ -1,9 +1,8 @@
 import React from 'react';
-import { Tabs, Row, Col, Typography, Button, Descriptions, Badge } from 'antd';
+import { Tabs, Row, Col, Typography, Button, Descriptions, Badge, message } from 'antd';
 import { FaNetworkWired } from "react-icons/fa";
 import { MdRouter } from "react-icons/md";
 import { AiOutlineSetting } from "react-icons/ai";
-import { Link } from 'react-router-dom';
 import MetodosAxios from '../Servicios/AxiosRouter'
 
 const { TabPane } = Tabs;
@@ -34,9 +33,44 @@ class DetalleRouter extends React.Component {
   componentDidMount = () => {
     if (typeof this.props.location !== 'undefined') {
       const { info } = this.props.location.state;
+      this.inicializar_datos(info);
+    }
+  }
+
+  inicializar_datos(info) {
+    if (typeof info.key !== 'undefined') {
+      let empleado = "";
+      let objeto = {};
+      MetodosAxios.router_id(info.key).then(res => {
+        res.data.forEach(function (dato) {
+          if (dato.empleado !== null) {
+            empleado = dato.empleado.concat(" ", dato.apellido);
+          }
+          objeto.codigo = dato.codigo;
+          objeto.bspi = dato.bspi_punto;
+          objeto.departamento = dato.departamento;
+          objeto.empleado = empleado;
+          objeto.nombre = dato.nombre;
+          objeto.pass = dato.pass;
+          objeto.usuario = dato.usuario;
+          objeto.clave = dato.clave;
+          objeto.marca = dato.marca;
+          objeto.modelo = dato.modelo;
+          objeto.num_serie = dato.numero_serie;
+          objeto.estado = dato.estado_operativo;
+          objeto.penlace = dato.puerta_enlace;
+          objeto.descripcion = dato.descripcion;
+          objeto.ip = dato.ip;
+        });
+        this.cargar_datos(objeto);
+      }).catch(err => {
+        message.error('Problemas de conexión con el servidor, inténtelo más tarde', 4);
+      });
+    } else {
       this.cargar_datos(info);
     }
   }
+
 
   cargar_datos(info) {
     console.log("router: ", info);
@@ -56,7 +90,7 @@ class DetalleRouter extends React.Component {
       penlace: info.penlace,
       descripcion: info.descripcion
     })
-    info.ip === " " ? this.setState({ ip: "No asignada" }) :
+    info.ip === " " || info.ip == null ? this.setState({ ip: "No asignada" }) :
       MetodosAxios.buscar_ip_por_codigo(info.ip).then(res => {
         res.data.foreach((registro) => {
           this.setState({ ip: registro.direccion_ip })
@@ -73,7 +107,7 @@ class DetalleRouter extends React.Component {
               <Title level={2}>Detalle de router</Title>
             </Col>
             <Col className='flexbox'>
-              <Link to={{ pathname: '/router' }} ><Button type="primary" icon="left">Volver</Button></Link>
+              <Button type="primary" icon="left" onClick={this.props.history.goBack}>Volver</Button>
             </Col>
           </Row>
           <div className="div-container">
