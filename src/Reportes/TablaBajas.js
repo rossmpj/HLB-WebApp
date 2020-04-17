@@ -12,7 +12,13 @@ import {
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosReporte'
+import ModalDownload from '../Componentes/ModalDownload';
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
+
 const { Title } = Typography;
+const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+const fileExtension = '.xlsx';
 
 class TablaBajas extends React.Component {
     constructor(props) {
@@ -25,7 +31,9 @@ class TablaBajas extends React.Component {
             info: [],
             filteredInfo: null,
             sortedInfo: null,
-            index: 0
+            index: 0,
+            visible: false,
+            archivo: ""
         };
 
     }
@@ -51,7 +59,6 @@ class TablaBajas extends React.Component {
             console.log(err)
             message.error('No se pueden cargar los datos, revise la conexión con el servidor', 4);
         });
-        this.setState({ dataSource: datos });
     }
 
     limpiarFiltros = () => {
@@ -153,6 +160,61 @@ class TablaBajas extends React.Component {
         this.setState({ searchText: '' });
     };
 
+    /* Métodos del modal */
+    showModal = () => {
+        this.setState({
+            visible: true,
+        });
+    };
+
+
+    handleOk = () => {
+        switch (this.state.archivo) {
+            case "xlsx":
+                Axios.resumen_bajas().then(res => {
+                    let datos = [];
+                    res.data.forEach(function (dato) {
+                        let resumen = {
+                            tipo_equipo: dato.tipo_equipo,
+                            cantidad: dato.cantidad
+                        }
+                        datos.push(resumen)
+                    });
+                    const ws = XLSX.utils.json_to_sheet(datos);
+                    const wb = { Sheets: { 'Resumen': ws }, SheetNames: ['Resumen'] };
+                    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+                    const data = new Blob([excelBuffer], { type: fileType });
+                    FileSaver.saveAs(data, "reporte_equipos_baja" + fileExtension);
+
+                }).catch(err => {
+                    console.log(err)
+                    message.error('No se pudieron cargar los datos, revise la conexión con el servidor', 4);
+                });
+                break;
+            case "csv":
+                message.info('Extraño a mi mamá :"x ');
+                break;
+            default:
+                message.error('Debe seleccionar un formato de descarga');
+        }
+        this.setState({
+            visible: false,
+            archivo: ""
+        });
+    };
+
+    handleCancel = () => {
+        this.setState({
+            visible: false,
+        });
+    };
+
+    tipo_archivo = e => {
+        this.setState({
+            archivo: e.target.value,
+        });
+    };
+
 
 
     render() {
@@ -181,7 +243,7 @@ class TablaBajas extends React.Component {
                 title: 'Código',
                 dataIndex: 'codigo',
                 key: 'codigo',
-                render: (text, record) => <Link to={{ pathname:`${tipo_link(record)}`, state: { info: record } }}>{text}</Link>,
+                render: (text, record) => <Link to={{ pathname: `${tipo_link(record)}`, state: { info: record } }}>{text}</Link>,
                 ...this.getColumnSearchProps('codigo')
             },
             {
@@ -244,7 +306,7 @@ class TablaBajas extends React.Component {
                     <Col span={12}><Title level={3}>Reporte de equipos informáticos de baja</Title></Col>
                     <Col className='flexbox'>
                         <ButtonGroup>
-                            <Button type="primary" icon="cloud-download">Exportar</Button>
+                            <Button type="primary" icon="cloud-download" onClick={this.showModal}>Exportar</Button>
                         </ButtonGroup>
                     </Col>
                 </Row>
@@ -257,6 +319,13 @@ class TablaBajas extends React.Component {
                     <Table bordered key={this.state.index} onChange={this.handleChange} size="middle"
                         scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
+                <ModalDownload
+                    title="Descargar reporte de equipos dados de baja"
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    onChange={this.tipo_archivo}
+                ></ModalDownload>
             </div>
         );
     }

@@ -13,4 +13,8 @@ export default class AxiosReporte {
         return AxiosReporte.instanceAxios.get(`/reporte-bajas`);
     }
 
+    static resumen_bajas = () => {
+        return AxiosReporte.instanceAxios.get(`/resumen-bajas`);
+    }
+
 }

@@ -9,15 +9,14 @@ class ModalDownload extends React.Component {
         visible={this.props.visible}
         cancelText="Cancelar"
         okText="Descargar"
-        onOk={this.props.handleOk}
-        confirmLoading={this.props.confirmLoading}
-        onCancel={this.props.handleCancel}
+        onOk={this.props.onOk}
+        onCancel={this.props.onCancel}
       >
         <div style={{ textAlign: "center" }}>
           <img className="center" src="/save.png" alt=":)"></img>
           <p>Seleccione un formato de descarga</p>
-          <Radio.Group defaultValue="xlsx" buttonStyle="solid"
-            onChange={this.tipo_archivo}>
+          <Radio.Group buttonStyle="solid"
+            onChange={this.props.onChange}>
             <Radio.Button value="xlsx">.XLSX</Radio.Button>
             <Radio.Button value="csv">.CSV</Radio.Button>
           </Radio.Group>
