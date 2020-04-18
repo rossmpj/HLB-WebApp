@@ -1,11 +1,16 @@
 import React from 'react';
 import {
-    Button, Row, Col, Table, Input, Icon, message, Typography, Modal, Radio
+    Button, Row, Col, Table, Input, Icon, message, Typography
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosReporte'
+import ModalDownload from '../Componentes/ModalDownload';
+/* import {saveAs} from 'file-saver';
+import * as XLSX from 'xlsx'; */
+
 const { Title } = Typography;
+/* const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'; */
 
 class TablaReporte extends React.Component {
     constructor(props) {
@@ -155,20 +160,48 @@ class TablaReporte extends React.Component {
     showModal = () => {
         this.setState({
             visible: true,
+            archivo: ""
         });
     };
 
 
-    handleOk = () => {
+    handleOk = (extension) => {
+       /*  let fileExtension = ""; */
+        switch (extension) {
+            case "xlsx":
+                /* fileExtension = '.xlsx';
+               let datos = [];
+                let wb = XLSX.utils.book_new();
+                 Axios.reporte_bajas().then(res => {
+                    res.data.forEach(function (dato) {
+                        let equipos = {
+                            tipo_equipo: dato.tipo_equipo,
+                            codigo: dato.codigo,
+                            marca: dato.marca,
+                            modelo: dato.modelo,
+                            estado_operativo: dato.estado_operativo,
+                            numero_serie: dato.numero_serie,
+                            descripcion: dato.descripcion,
+                        }
+                        datos.push(equipos)
+                    });
+                    let ws1 = XLSX.utils.json_to_sheet(datos);
+                    XLSX.utils.book_append_sheet(wb, ws1, "Datos");
+
+                    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+                    const data = new Blob([excelBuffer], { type: fileType });
+                    saveAs(data, "equipos_de_baja" + fileExtension);
+                }).catch(err => {
+                    message.error('No se pudieron cargar los datos, revise la conexión con el servidor', 4);
+                }); */
+                break;
+            default:
+                message.error('Debe seleccionar un formato de descarga');
+                break;
+        }
         this.setState({
-            confirmLoading: true,
+            visible: false
         });
-        setTimeout(() => {
-            this.setState({
-                visible: false,
-                confirmLoading: false,
-            });
-        }, 2000);
     };
 
     handleCancel = () => {
@@ -178,7 +211,7 @@ class TablaReporte extends React.Component {
     };
 
     tipo_archivo = e => {
-        console.log('radio checked', e.target.value);
+
         this.setState({
             archivo: e.target.value,
         });
@@ -187,7 +220,6 @@ class TablaReporte extends React.Component {
 
 
     render() {
-        const { visible, confirmLoading } = this.state;
         const tipo_link = (record) => {
             switch (record.tipo_equipo.toLowerCase()) {
                 case "impresora":
@@ -333,26 +365,14 @@ class TablaReporte extends React.Component {
                     <Table bordered key={this.state.index} onChange={this.handleChange} size="small"
                         scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
-                <Modal
-                    title="Descargar reporte general de equipos asignados"
-                    visible={visible}
-                    cancelText="Cancelar"
-                    okText="Descargar"
-                    onOk={this.handleOk}
-                    confirmLoading={confirmLoading}
+                <ModalDownload
+                    title="Descargar reporte de equipos dados de baja"
+                    visible={this.state.visible}
+                    onOk={() => this.handleOk(this.state.archivo)}
                     onCancel={this.handleCancel}
-                >
-                    <div style={{ textAlign: "center" }}>
-                        <img className="center" src="/save.png" alt=":)"></img>
-                        <p>Seleccione un formato de descarga</p>
-                        <Radio.Group defaultValue="xlsx" buttonStyle="solid"
-                            onChange={this.tipo_archivo}>
-                            <Radio.Button value="xlsx">.XLSX</Radio.Button>
-                            <Radio.Button value="csv">.CSV</Radio.Button>
-                        </Radio.Group>
-                    </div>
-
-                </Modal>
+                    onChange={this.tipo_archivo}
+                    value={this.state.archivo}
+                ></ModalDownload>
             </div>
         );
     }

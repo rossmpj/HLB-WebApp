@@ -13,12 +13,12 @@ import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosReporte'
 import ModalDownload from '../Componentes/ModalDownload';
-import * as FileSaver from 'file-saver';
+import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 
 const { Title } = Typography;
 const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-const fileExtension = '.xlsx';
+
 
 class TablaBajas extends React.Component {
     constructor(props) {
@@ -164,42 +164,75 @@ class TablaBajas extends React.Component {
     showModal = () => {
         this.setState({
             visible: true,
+            archivo: ""
         });
     };
 
+    resumen_bajas = async () => {
+        try {
+            const res = await Axios.resumen_bajas();
+            return res.data;
+        } catch (error) {
+            throw new Error('No se pudieron cargar los datos del servidor');
+        }
+    }
 
-    handleOk = () => {
-        switch (this.state.archivo) {
+    reporte_bajas = async () => {
+        try {
+            const res = await Axios.reporte_bajas();
+            return res.data;
+        } catch (error) {
+            throw new Error('No se pudieron cargar los datos del servidor');
+        }
+    }
+
+    handleOk = async (extension) => {
+        let fileExtension = "";
+        switch (extension) {
             case "xlsx":
-                Axios.resumen_bajas().then(res => {
-                    let datos = [];
-                    res.data.forEach(function (dato) {
+                fileExtension = '.xlsx';
+                try {
+                    let datos = []
+                    let datos2=[]
+                    const resumen = await this.resumen_bajas();
+                    const reporte = await this.reporte_bajas();
+                    reporte.forEach(function (dato) {
+                        let equipos = {
+                            tipo_equipo: dato.tipo_equipo,
+                            codigo: dato.codigo,
+                            marca: dato.marca,
+                            modelo: dato.modelo,
+                            estado_operativo: dato.estado_operativo,
+                            numero_serie: dato.numero_serie,
+                            descripcion: dato.descripcion,
+                        }
+                        datos.push(equipos);
+                    });
+                    resumen.forEach(function (dato) {
                         let resumen = {
                             tipo_equipo: dato.tipo_equipo,
                             cantidad: dato.cantidad
                         }
-                        datos.push(resumen)
+                        datos2.push(resumen);
                     });
-                    const ws = XLSX.utils.json_to_sheet(datos);
-                    const wb = { Sheets: { 'Resumen': ws }, SheetNames: ['Resumen'] };
-                    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-                    const data = new Blob([excelBuffer], { type: fileType });
-                    FileSaver.saveAs(data, "reporte_equipos_baja" + fileExtension);
-
-                }).catch(err => {
-                    console.log(err)
-                    message.error('No se pudieron cargar los datos, revise la conexión con el servidor', 4);
-                });
-                break;
-            case "csv":
-                message.info('Extraño a mi mamá :"x ');
+                    let wb = XLSX.utils.book_new();
+                    const ws1 = XLSX.utils.json_to_sheet(datos);
+                    const ws2 = XLSX.utils.json_to_sheet(datos2);
+                    XLSX.utils.book_append_sheet(wb, ws1, "Datos");
+                     XLSX.utils.book_append_sheet(wb, ws2, "Resumen"); 
+                     const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+                     const data = new Blob([excelBuffer], { type: fileType });
+                     saveAs(data, "equipos_de_baja" + fileExtension);
+                } catch (error) {
+                    console.log(error);
+                }
                 break;
             default:
                 message.error('Debe seleccionar un formato de descarga');
+                break;
         }
         this.setState({
-            visible: false,
-            archivo: ""
+            visible: false
         });
     };
 
@@ -210,6 +243,7 @@ class TablaBajas extends React.Component {
     };
 
     tipo_archivo = e => {
+
         this.setState({
             archivo: e.target.value,
         });
@@ -322,9 +356,10 @@ class TablaBajas extends React.Component {
                 <ModalDownload
                     title="Descargar reporte de equipos dados de baja"
                     visible={this.state.visible}
-                    onOk={this.handleOk}
+                    onOk={() => this.handleOk(this.state.archivo)}
                     onCancel={this.handleCancel}
                     onChange={this.tipo_archivo}
+                    value={this.state.archivo}
                 ></ModalDownload>
             </div>
         );

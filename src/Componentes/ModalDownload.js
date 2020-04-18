@@ -15,10 +15,10 @@ class ModalDownload extends React.Component {
         <div style={{ textAlign: "center" }}>
           <img className="center" src="/save.png" alt=":)"></img>
           <p>Seleccione un formato de descarga</p>
-          <Radio.Group buttonStyle="solid"
+          <Radio.Group value={this.props.value} buttonStyle="solid"
             onChange={this.props.onChange}>
             <Radio.Button value="xlsx">.XLSX</Radio.Button>
-            <Radio.Button value="csv">.CSV</Radio.Button>
+
           </Radio.Group>
         </div>
       </Modal>
