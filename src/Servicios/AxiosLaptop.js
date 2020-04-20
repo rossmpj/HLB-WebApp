@@ -25,4 +25,11 @@ export default class AxiosLaptop {
     return AxiosLaptop.instanceAxios.put(`/darDeBajaEquipoID/${id_equipo}/${tipo}`);
   }  
 
+  static crear_laptop = (laptop) => {
+    return AxiosLaptop.instanceAxios.post(`/crear_laptop`, laptop);
+  }
+
+  static editar_laptop = (laptop) => {
+    return AxiosLaptop.instanceAxios.post(`/editar_laptop`, laptop);
+  }
 }

@@ -8,7 +8,7 @@ const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };
 
 const FormSistemaOperativo = Form.create({
     name:'SistOp'})( props => {
-    const { getFieldDecorator, validateFields, getFieldsValue } = props.form;
+    const { getFieldDecorator, validateFields } = props.form;
     const [office, setOffice] = useState([]);
     const [so, setSo] = useState([]);
     useEffect(() => {
@@ -28,11 +28,11 @@ const FormSistemaOperativo = Form.create({
             }
         });
     }
-    const storeValues = () => {
-        const values = getFieldsValue();
-        props.submittedValues(values);
-        props.handleBackButton();
-    }
+    // const storeValues = () => {
+    //     const values = getFieldsValue();
+    //     props.submittedValues(values);
+    //     props.handleBackButton();
+    // }
     return (
         <Form {...layout} layout="horizontal" onSubmit={validateInput}>
             <Form.Item label="SO">
@@ -48,13 +48,14 @@ const FormSistemaOperativo = Form.create({
             <Form.Item label="Tipo de SO">
                 {getFieldDecorator('tipo_so', {
                     rules: [{required: true, message: 'Debe completar este campo' }],
-                    initialValue: props.tipo_so.split(" ")[0]
+                    initialValue: props.tipo_so
                 })(
-                <Select style={{ width: 80 }} >
-                    <Option value="x86">32</Option>
-                    <Option value="x64">64</Option>
+                <Select style={{ width: 90 }} >
+                    <Option value="32 Bits">32 Bits</Option>
+                    <Option value="64 Bits">64 Bits</Option>
                 </Select>
-                )} <span className="ant-form-text">bits</span>
+                )}
+                 {/* <span className="ant-form-text">bits</span> */}
             </Form.Item>
             <Form.Item label="Service pack 1">
                 {getFieldDecorator('sp1', {

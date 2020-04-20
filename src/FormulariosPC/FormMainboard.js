@@ -10,7 +10,7 @@ const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };
 
 const FormMainboard = Form.create({
     name:'Perifericos'})( props => {
-    const { getFieldDecorator, getFieldsValue, validateFields } = props.form;
+    const { getFieldDecorator, validateFields } = props.form;
     const validateInput = (e) => {
         e.preventDefault();
         validateFields((err, valor) => {
@@ -20,11 +20,11 @@ const FormMainboard = Form.create({
             }
         });
     }
-    const storeValues = () => {
-        const values = getFieldsValue();
-        props.submittedValues(values);
-        props.handleBackButton();
-    }
+    // const storeValues = () => {
+    //     const values = getFieldsValue();
+    //     props.submittedValues(values);
+    //     props.handleBackButton();
+    // }
 
     return (
         <Form {...layout} layout="horizontal" onSubmit={validateInput}>

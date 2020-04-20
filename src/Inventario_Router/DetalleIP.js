@@ -82,9 +82,9 @@ class DetalleIP extends React.Component {
               <TabPane tab={<span><FaNetworkWired className="anticon" />Dirección IP</span>} key="2" >
                 <Descriptions title="Dirección IP asignada" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
                 <Descriptions.Item label="Dirección IP" span={3}>{this.state.ip}</Descriptions.Item>
-                <Descriptions.Item label="Hostname">{this.state.hostname}</Descriptions.Item>
-                <Descriptions.Item label="Subred" span={3}>{this.state.subred}</Descriptions.Item>
-                <Descriptions.Item label="Fortigate">{this.state.fortigate}</Descriptions.Item>                
+                <Descriptions.Item label="Hostname" span={2}>{this.state.hostname}</Descriptions.Item>
+                <Descriptions.Item label="Subred" span={2}>{this.state.subred}</Descriptions.Item>
+                <Descriptions.Item label="Fortigate"  span={2}>{this.state.fortigate}</Descriptions.Item>                
                 <Descriptions.Item label="Máquinas adicionales">{this.state.maquinas_adic}</Descriptions.Item>
                 </Descriptions>
               </TabPane>

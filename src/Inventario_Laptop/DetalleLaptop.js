@@ -38,7 +38,7 @@ class DetalleLaptop extends React.Component {
         numero_serie: '',
         marca: '',
         frecuencia: '',
-        nnucleos: '',
+        nucleos: '',
     },
       ram_soportada: '',
       slots_ram: '',
@@ -61,9 +61,9 @@ class DetalleLaptop extends React.Component {
       console.log("registro:",registro);
         this.setState({
             codigo: info.codigo,
-            bspi: info.bspi,
-            departamento: info.departamento,
-            empleado: info.empleado,
+            bspi: registro.general.bspi,
+            departamento: registro.general.departamento,
+            empleado: registro.general.asignado,
             marca: info.marca,
             modelo: info.modelo,
             num_serie: info.num_serie,
@@ -108,9 +108,11 @@ class DetalleLaptop extends React.Component {
               <TabPane tab={<span><LaptopOutlined />General</span>} key="1">
                 <Descriptions title="Datos generales del equipo" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
                   <Descriptions.Item label="Código Laptop" span={3}>{this.state.codigo}</Descriptions.Item>                  
+                  {this.state.bspi === undefined ? null :    
+                  <>         
                   <Descriptions.Item label="BSPI-Punto">{this.state.bspi}</Descriptions.Item>
                   <Descriptions.Item label="Departamento">{this.state.departamento}</Descriptions.Item>
-                  <Descriptions.Item label="Empleado a cargo">{this.state.empleado}</Descriptions.Item>
+                  <Descriptions.Item label="Empleado a cargo">{this.state.empleado}</Descriptions.Item></>}
                   <Descriptions.Item label="Marca">{this.state.marca}</Descriptions.Item>
                   <Descriptions.Item label="Modelo">{this.state.modelo}</Descriptions.Item>
                   <Descriptions.Item label="Número de serie">{this.state.num_serie}</Descriptions.Item>
@@ -145,7 +147,7 @@ class DetalleLaptop extends React.Component {
                   <Descriptions.Item label="Modelo">{this.state.procesador.modelo}</Descriptions.Item>
                   <Descriptions.Item label="Número de serie">{this.state.procesador.numero_serie}</Descriptions.Item>
                   <Descriptions.Item label="Frecuencia">{this.state.procesador.frecuencia+" GHz"}</Descriptions.Item>
-                  <Descriptions.Item label="Número de núcleos">{this.state.procesador.nnucleos}</Descriptions.Item>
+                  <Descriptions.Item label="Número de núcleos">{this.state.procesador.nucleos}</Descriptions.Item>
                   <Descriptions.Item label="Descripción">{this.state.procesador.descripcion}</Descriptions.Item>
                 </Descriptions>
                 <br />                     

@@ -82,7 +82,7 @@ componentDidMount = () => {
 
   handleDelete(id) {
     console.log("clave a eliminar",id)
-    AxiosLaptop.darDeBajaEquipoID(id,'laptop').then(res => {
+    AxiosLaptop.darDeBajaEquipoID(id,'desktop').then(res => {
       message.success({ content: 'Registro eliminado satisfactoriamente', key, duration: 3 });
       this.recargar_datos();
     }).catch(err => {

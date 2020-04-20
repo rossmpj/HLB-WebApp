@@ -33,7 +33,7 @@ class TablaLaptop extends React.Component{
         AxiosLaptop.listar_laptops().then(res => {
         res.data.forEach(function (r) {
             let registro = r.original
-            var dip = registro.general.ip === null ? ' ' : registro.general.ip.toString();
+            var dip = registro.general.ip === null ? undefined : registro.general.ip.toString();
             let router = {
                 key: registro.general.id_equipo,
                 codigo: registro.general.codigo,
@@ -217,26 +217,6 @@ class TablaLaptop extends React.Component{
         title: 'Departamento',
         dataIndex: 'departamento',
         key: 'departamento',
-        filters: [
-          {
-              text: 'Financiero',
-              value: 'Financiero',
-          },
-          {
-              text: 'Proveeduría',
-              value: 'Proveeduría',
-          },
-          {
-              text: 'Auditoría',
-              value: 'Auditoría',
-          },
-          {
-              text: 'UCI',
-              value: 'UCI',
-          }
-        ],
-        filteredValue: filteredInfo.departamento || null,
-        onFilter: (value, record) => record.departamento.indexOf(value) === 0,
         sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.departamento, b.departamento),
         sortOrder: sortedInfo.columnKey === 'departamento' && sortedInfo.order,
       },
@@ -252,22 +232,6 @@ class TablaLaptop extends React.Component{
         title: 'Marca',
         dataIndex: 'marca',
         key: 'marca',
-        filters: [
-          {
-              text: 'LG',
-              value: 'LG',
-          },
-          {
-              text: 'Lenovo',
-              value: 'Lenovo',
-          },
-          {
-              text: 'HP',
-              value: 'HP',
-          }
-        ],
-        filteredValue: filteredInfo.marca || null,
-        onFilter: (value, record) => record.marca.indexOf(value) === 0,
         sorter: (a, b) => a.marca.length - b.marca.length,
         sortOrder: sortedInfo.columnKey === 'marca' && sortedInfo.order,
       },
@@ -292,14 +256,26 @@ class TablaLaptop extends React.Component{
         dataIndex: 'estado',
         key: 'estado',
         filters: [
-          {
-              text: 'Operativo',
-              value: 'Operativo',
-          },
-          {
-              text: 'No Operativo',
-              value: 'No Operativo',
-          }
+            {
+                text: 'Disponible',
+                value: 'D',
+            },
+            {
+                text: 'Operativo',
+                value: 'O',
+            },
+            {
+                text: 'En revisión',
+                value: 'ER',
+            },
+            {
+                text: 'Reparado',
+                value: 'R',
+            },
+            {
+                text: 'De baja',
+                value: 'B',
+            }
         ],
         filteredValue: filteredInfo.estado || null,
         onFilter: (value, record) => record.estado.indexOf(value) === 0,
@@ -328,22 +304,6 @@ class TablaLaptop extends React.Component{
         key: 'so',
         elipsis: true,
         width: 150,
-        filters: [
-          {
-              text: 'Windows 10 Home Single Language',
-              value: 'Windows 10 Home Single Language',
-          },
-          {
-              text: 'Windows 8.1 Pro',
-              value: 'Windows 8.1 Pro',
-          },
-          {
-              text: 'Windows 7 Professional',
-              value: 'Windows 7 Professional',
-          }
-        ],
-        filteredValue: filteredInfo.so || null,
-        onFilter: (value, record) => record.so.indexOf(value) === 0,
         sorter: (a, b) => a.so.length - b.so.length,
         sortOrder: sortedInfo.columnKey === 'so' && sortedInfo.order,
       }, 
@@ -353,12 +313,12 @@ class TablaLaptop extends React.Component{
         key: 'so_type',
         filters: [
           {
-              text: '32 bits',
-              value: '32 bits',
+              text: '32 Bits',
+              value: '32 Bits',
           },
           {
-              text: '64 bits',
-              value: '64 bits',
+              text: '64 Bits',
+              value: '64 Bits',
           }
         ],
         filterMultiple: false,
@@ -444,8 +404,6 @@ class TablaLaptop extends React.Component{
         dataIndex: 'ip',
         key: 'ip',
         render: (text, record) =>  <Link to={{ pathname: '/ip/view', state: { info: record } }} >{text}</Link>,
-        sorter: (a, b) => a.ip.length - b.ip.length,
-        sortOrder: sortedInfo.columnKey === 'ip' && sortedInfo.order,
       },
       {
         title: 'Procesador',

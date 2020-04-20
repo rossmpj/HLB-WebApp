@@ -10,7 +10,7 @@ const { Option } = Select;
 
 const FormComponente = Form.create({
     name:'Componente'})( props => {
-    const { getFieldDecorator, getFieldsValue, validateFields } = props.form;
+    const { getFieldDecorator, validateFields } = props.form;
     const validateInput = (e) => {
         e.preventDefault();
         validateFields((err, v) => {
@@ -20,11 +20,11 @@ const FormComponente = Form.create({
             }
         });
     }
-    const storeValues = () => {
-        const values = getFieldsValue();
-        props.submittedValues(values);
-        props.handleBackButton();
-    }
+    // const storeValues = () => {
+    //     const values = getFieldsValue();
+    //     props.submittedValues(values);
+    //     props.handleBackButton();
+    // }
 
     return (
         <Form {...layout} key={props.name} layout="horizontal" onSubmit={validateInput}>

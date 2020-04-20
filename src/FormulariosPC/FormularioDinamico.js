@@ -11,39 +11,17 @@ const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };
 
 const FormularioDinamico = Form.create({
     name:'Dinamico'})( props => {
-        const blankCat = { codigo: '', marca: '', modelo: '', nserie: '', capacidad: {cant: 0, un: "Mb"}, tipo: '', descr: '' };
-        var obj = [];
-        // const [myValidateHelp, setMyValidateHelp] = useState();
-        // const [myValidateStatus, setMyValidateStatus] = useState();   
-        
-           // console.log("rrrrrrrrrr",props.editionMode)
-        // }).catch(err => {
-        //     console.log(err);
-        //   });
-        // console.log("a",props.indx)
-        // console.log("b",props.index)    
-        // if (props.editionMode === false || props.indx === []) { 
-        //     obj.push(blankCat)
-        // }else{
-            // if(props.nombre ==="disco duro")
-            // {
-            //     props.index.map( (elem) =>(
-            //         obj.push(elem)
-            //     )) 
-            // }else if (props.nombre==="memoria RAM")
-            // {
-                props.indx.map( (elem) =>(
+        const ram = { codigo: '', marca: '', modelo: '', nserie: '', capacidad: {cant: 0, un: "Mb"}, tipo: '', descr: '' };
+        var obj = [];   
+        if (props.editionMode === false) {
+            obj.push(ram)
+        }else{
+            props.datos.map( (elem) =>(
                 obj.push(elem)
-            // 
-            )) 
-            //  }
-            
-        // }
-        //obj.push(blankCat)
+            ))
+        }
         const [registro, setRegistro] = useState(obj);  
-    console.log("refdg",registro)
-    //     console.log("f",obj)
-        const { getFieldDecorator, validateFields, getFieldsValue } = props.form;
+        const { getFieldDecorator, validateFields } = props.form;
         getFieldDecorator('keys1', { initialValue: [0] });
      
         const add1 = () => {
@@ -51,7 +29,7 @@ const FormularioDinamico = Form.create({
             const keys1 = form.getFieldValue('keys1');
             const nextKeys1 = keys1.concat(id++);
             const values = [...registro];
-            values.push(blankCat);
+            values.push(ram);
             setRegistro(values);
             form.setFieldsValue({
             keys1: nextKeys1,
@@ -164,9 +142,7 @@ const FormularioDinamico = Form.create({
                                 {getFieldDecorator(`capac${index}`+props.nombre, {
                                     rules: [{ required: true, message: 'Debe completar este campo' }],
                                     initialValue: registro[index].capacidad.cant,
-                                    //onChange: e => handleInputChange(index, 'capac', e)
                                 })(
-                                    //<Input />
                                     <InputNumber onChange={(value, e) => handleInputChange(index, value, 'capac', e)} style={{ width: '70%' }} />
                                 )}
                                 {getFieldDecorator(`un${index}`+props.nombre, {
@@ -206,7 +182,7 @@ const FormularioDinamico = Form.create({
                         className="form2col"            
                         >
                             {getFieldDecorator(`descripcion${index}`+props.nombre, {
-                                rules: [{ required: true, message: 'Debe completar este campo' }],
+                                rules: [{ required: false, message: 'Debe completar este campo' }],
                                 initialValue: registro[index].descr,
                                 onChange: e => handleInputChange(index, null, 'descripcion', e)
                             })(
@@ -226,111 +202,28 @@ const FormularioDinamico = Form.create({
     const validateInput = (e) => {
         e.preventDefault();
         validateFields((err, values) => {
-            //setRegistro(registro)
-            // if(props.editionMode === false){///
-            //     registro.map( function(element, index){
-            //                     props.indx.push(element)
-            //         })
-                
-            // }//
-            console.log("val inp",props.indx)
-            //if (registro !== []){
-            //   if (props.nombre ==="memoria RAM"){
-            //     registro.map( function(element, index) {
-            //         if (props.indx[index].codigo !== undefined && element.codigo !== undefined){
-            //             if (element.codigo !== props.indx[index].codigo) {
-            //                 obj.push(element);
-            //                 //console.log(element.capacidad.split(" ")[0])
-            //             } 
-            //         }    
-                    
-                         
-                    // })  
-            //   }else if (props.nombre==="disco duro"){
-            //     registro.map( function(element, index) {
-            //         if (props.index[index].codigo !== undefined && element.codigo !== undefined){
-            //             if (element.codigo !== props.index[index].codigo) {
-            //                 obj.push(element);
-            //                 //console.log(element.capacidad.split(" ")[0])
-            //             } 
-            //         }    
-                    
-                         
-            //         })  
-            //   }
-           
-       // }
-                //console.log("el.cod",element.codigo)
-             //  );
-             if(!err) {
-            //     if (err.capac || err.un) {
-            //           setMyValidateHelp('Please enter A and B')
-            //           setMyValidateStatus('error')
-            //       }
+            if(props.editionMode === false){
+                registro.forEach(element =>{
+                    props.datos.push(element)
+                })
+            }
+            console.log("val inp",props.datos)
+            if(!err) {
                 if (props.isStepFinal === true){
                     props.handleConfirmButton(registro)
                 } else{
-
-                    props.submittedValues(registro)
+                    props.submittedValues( {"ram_soportada": values.ram_soportada, "num_slots": values.num_slots}, registro)
                     props.handleNextButton()
                 } 
             }
         });
     }
     
-    const storeValues = () => {
-        //const values = getFieldsValue();
-        //console.log("vv",values)
-        //props.indx.push(registro)
-    //     if(props.editionMode === false){
-    //      //   props.indx =[] 
-    // //props.indx = obj
-    //         props.submittedValues(obj)
-    //     }
-    
-// }
-// console.log("valokkres", registro)
-  
-setRegistro(registro)
-
-
-// if(props.editionMode === false){
-//         registro.map( function(element, index){
-//                         props.indx.push(element)
-//             })
-            
-            
-//     }
-//     console.log("valokkres1", registro)
-    
-
-// console.log("valokkresindex", props.indx)
-// setRegistro(props.indx)
-        props.submittedValues(registro)
-        
-            //console.log("val inp",registro)
-            // registro.map( function(element, index){
-            //     if (element.codigo !== obj[index].codigo) {
-            //         obj.push(element);
-            //      } 
-        //     if(props.nombre==="memoria RAM"){
-        //         registro.map( function(element, index){
-        //             props.indx.push(element)
-                    
-        //  }   )
-         
-        // props.submittedValues(props.indx);
-        //     }else if (props.nombre ==="disco duro"){
-        //         registro.map( function(element, index){
-        //             props.index.push(element)
-                    
-        //  }   )
-         
-        // props.submittedValues(registro);
-        // }
-            // })
-        props.handleBackButton();
-    }
+    // const storeValues = () => {
+    //     setRegistro(registro)
+    //     props.submittedValues(registro)
+    //     props.handleBackButton();
+    // }
 
     return (   
         <Form {...layout} name="form" layout="horizontal" onSubmit={validateInput}> 
@@ -338,7 +231,7 @@ setRegistro(registro)
             <div style={{marginLeft: 40, marginRight: 40,}} key={props.nombre+"c"}>
                 <div style={{borderRadius: 10,}}>     
                     <InNumComp label="RAM Soportada" style={{ width: '70%' }} class="form2col" id="ram_soportada" text="GB" initialValue={props.ram_soportada} decorator={getFieldDecorator} />
-                    <InNumComp label="Número slots" style={{ width: '100%' }}  class="form2col" id="num_slots"     text=""   initialValue={props.num_slots} decorator={getFieldDecorator} />
+                    <InNumComp label="Número slots" style={{ width: '100%' }}  class="form2col" id="num_slots"  text=" "  initialValue={props.num_slots} decorator={getFieldDecorator} />
                 </div>
             </div> : null}
             {formuItems}

@@ -22,7 +22,7 @@ export default class AxiosRouter {
   }
 
   static editar_equipo_router = (router) => {
-    return AxiosRouter.instanceAxios.post(`/editar_equipo_router`, router);
+    return AxiosRouter.instanceAxios.post(`/editar_router`, router);
   }
 
   static buscar_router_por_id = (id_router) => {

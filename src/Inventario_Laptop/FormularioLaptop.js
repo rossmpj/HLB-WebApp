@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import FormGral from '../FormulariosPC/FormGeneral';
 import FormSO from '../FormulariosPC/FormSistemaOperativo';
 import FormCPU from '../FormulariosPC/FormProcesador';
@@ -8,15 +8,17 @@ import { LaptopOutlined, WindowsOutlined } from '@ant-design/icons';
 import { FiHardDrive } from "react-icons/fi";
 import { FaMemory } from "react-icons/fa";
 import { GiProcessor } from "react-icons/gi";
-import { Button, Layout, Row, Col, Typography } from 'antd';
+import { Button, Layout, Row, Col, Typography, message } from 'antd';
 import { Link } from 'react-router-dom';
 import { Steps } from 'antd';
 import Axios from '../Servicios/AxiosLaptop'
 import AxiosTipo from '../Servicios/AxiosTipo'
+import MetodosAxios from '../Servicios/AxiosIp'
 
 const { Step } = Steps;
 const { Content } = Layout;
 const { Title } = Typography;
+const key = 'updatable';
 
 class FormularioLaptop extends React.Component {
     constructor(props) {
@@ -25,6 +27,7 @@ class FormularioLaptop extends React.Component {
     step: 0,
     titulo: "",
     disabled: false,
+    key: "",
     general_fields: {
         disabled: false,
         codigo: '',
@@ -36,6 +39,7 @@ class FormularioLaptop extends React.Component {
         usuario_pc: '',
         ip: undefined,
         estado: undefined,
+        ips: [],
         descripcion: ''
     },
     so_fields: {
@@ -54,29 +58,32 @@ class FormularioLaptop extends React.Component {
         nserie_proc: '', 
         frec_proc: 0,
         nucleos_proc: 0,
+        marcas: [],
         descr_proc: ''
     },
-    ram_fields: { 
+    memoria_ram: { 
         disabled: false,
         nombre: 'memoria RAM',
         verDetalleRAM: true,
         isStepFinal: false,        
         ram_soportada: 0,
         num_slots: 0,
-        indx: [],
+        datos: [],
         editionMode: false,
         marcas: []
     },
-    disco_duro_fields: {
+    disco_duro: {
         disabled: false,
         nombre: 'disco duro',
         verDetalleRAM: false,
         isStepFinal: true,
-        index: [],
+        datos: [],
         editionMode: false,
         marcas: []
     }
     }  
+    
+    this.handle_guardar = this.handle_guardar.bind(this);
 }
 
     componentDidMount = () => {
@@ -89,7 +96,7 @@ class FormularioLaptop extends React.Component {
           this.cargar_datos(info);
         //   this.cargar()
         //   this.setState({
-        //       ram_fields: {
+        //       memoria_ram: {
         //         editionMode: true
         //       }          
         //     })
@@ -106,7 +113,7 @@ class FormularioLaptop extends React.Component {
         // }
         //   else{
         //     this.setState({
-        //         ram_fields: {
+        //         memoria_ram: {
         //           editionMode: false
         //         }          
         //       })
@@ -116,6 +123,7 @@ class FormularioLaptop extends React.Component {
         this.setState({disabled: disabled})
       }
     }
+
     cargar() {
         let r = []
         AxiosTipo.mostrar_marcas().then(res => {
@@ -128,30 +136,31 @@ class FormularioLaptop extends React.Component {
             });
         });
         this.setState({marc: r})
-        this.setState({ram_fields: {
+        this.setState({memoria_ram: {
                         nombre: 'memoria RAM',
                         verDetalleRAM: true,
                         isStepFinal: false,
                         ram_soportada: 0,
                         num_slots: 0,
-                        indx: [{ codigo: '', marca: '', modelo: '', nserie: '', capacidad: {cant: 0, un: "Mb"}, tipo: '', descr: '' }], 
+                        datos: [], 
                         marcas: r,
                         editionMode:false
                     }, 
-                     disco_duro_fields: {
+                     disco_duro: {
                         nombre: 'disco duro',
                         verDetalleRAM: false,
                         isStepFinal: true,
-                        index: [], 
+                        datos: [], 
                         marcas: r,
                         editionMode: false
                     }})
     }
 
     cargar_datos(info) {
+
+        this.setState({key: info.key})
         let r = []
         AxiosTipo.mostrar_marcas().then(res => {
-
             res.data.forEach(function (dato) {
                 let users = {
                     id: dato.id_marca,
@@ -160,15 +169,25 @@ class FormularioLaptop extends React.Component {
                 r.push(users);
             });
       });
-        console.log(info.rams);
+      let ipss = [];
+      MetodosAxios.ips_libres().then(res => {
+      res.data.forEach(function (registro) {
+        let ip = {
+          id: registro.id_ip.toString(),
+          dato: registro.direccion_ip
+        }
+        ipss.push(ip);
+      });
+    });
+    
+        console.log(ipss, "ipramv",info.rams);
         Axios.obtenerInfoLaptop(info.key).then(res => {
             let registro = res.data;
-            console.log("registro:",registro);
+            console.log("registro7:",registro);
             let indcx = []
             if(info.rams !== []){
                 for (const element in info.rams) {
-                    console.log("ramfgg",info.rams[element].capacidad.split(" ")[1], info.rams[element].capacidad.split(" ")[0])
-                    indcx.push({ codigo: info.rams[element].codigo, marca: info.rams[element].marca, modelo: info.rams[element].modelo, 
+                    indcx.push({ codigo: info.rams[element].codigo, marca: info.rams[element].id_marca, modelo: info.rams[element].modelo, 
                                  nserie: info.rams[element].numero_serie, capacidad: { cant: info.rams[element].capacidad.split(" ")[0], 
                                  un: info.rams[element].capacidad.split(" ")[1]}, tipo: info.rams[element].tipo, descr: info.rams[element].descripcion})
                 }
@@ -177,8 +196,7 @@ class FormularioLaptop extends React.Component {
         console.log("objram",indcx)
         let inddcx = []
         for (const element in info.discos) {
-            //console.log(info.rams[element])
-            inddcx.push({ codigo: info.discos[element].codigo, marca: info.discos[element].marca, modelo: info.discos[element].modelo,
+            inddcx.push({ codigo: info.discos[element].codigo, marca: info.discos[element].id_marca, modelo: info.discos[element].modelo,
                  nserie: info.discos[element].numero_serie, capacidad: {cant: info.discos[element].capacidad.split(" ")[0], 
                  un: info.discos[element].capacidad.split(" ")[1]}, tipo: info.discos[element].tipo, descr: info.discos[element].descripcion})
         }
@@ -187,14 +205,15 @@ class FormularioLaptop extends React.Component {
             general_fields: {
                 disabled: true,
                 codigo: info.codigo,
-                asignar: info.empleado,
-                marca: info.marca,
+                asignar: registro.general.asignado === null ? undefined : registro.general.asignado,
+                marca: registro.general.marca,
                 modelo: info.modelo,
                 nserie: info.num_serie,
                 nombre_pc: info.name_pc,
                 usuario_pc: info.user_pc,
                 estado: info.estado,
-                ip: info.ip,
+                ip: registro.general.direccion_ip === null ? null : registro.general.direccion_ip,
+                ips: ipss,
                 descripcion: info.descripcion
             },
             so_fields: {
@@ -213,25 +232,26 @@ class FormularioLaptop extends React.Component {
                 nserie_proc: registro.procesador.numero_serie,
                 frec_proc: registro.procesador.frecuencia,
                 nucleos_proc: registro.procesador.nucleos,
+                marcas: r,
                 descr_proc: registro.procesador.descripcion
             },
-            ram_fields:{       
+            memoria_ram:{       
                 disabled: true, 
                 nombre: 'memoria RAM',
                 verDetalleRAM: true,
                 isStepFinal: false,
                 ram_soportada: info.ram_soportada,
                 num_slots: info.slots_ram,
-                indx: indcx, 
+                datos: indcx, 
                 marcas: r,
                 editionMode: true
             },
-            disco_duro_fields: {
+            disco_duro: {
                 disabled: true,
                 nombre: 'disco duro',
                 verDetalleRAM: false,
                 isStepFinal: true,
-                index: inddcx, 
+                datos: inddcx, 
                 marcas: r,
                 editionMode: true
             }
@@ -250,10 +270,71 @@ class FormularioLaptop extends React.Component {
     }
 
     handleConfirmButton = (values) => {
-        const { disco_duro_fields } = this.state;
-        this.setState({ disco_duro_fields: { ...disco_duro_fields, ...values }}, 
-                      () => console.log(this.state) );
+        const { disco_duro } = this.state;
+        this.setState({ disco_duro: { ...disco_duro, ...values }}, 
+                      () => console.log("final",this.state),
+                      
+                      );
+                    //   try{
+                    //     // if(this.state.titulo === "Editar laptop"){
+                    //         // AxiosRouter.editar_equipo_router(router).then(res => {
+                    //         //   message.loading({ content: 'Guardando modificaciones...', key });
+                    //         //   setTimeout(() => {
+                    //         //     message.success({ content: 'Registro modificado satisfactoriamente', key, duration: 3 });
+                    //         //   }, 1000);
+                    //         //   this.props.history.push("/laptop");
+                    //         // })
+                    //     // }else{
+                    //         Axios.crear_laptop(this.state).then(res => {
+                    //         message.loading({ content: 'Guardando datos...', key });
+                    //         setTimeout(() => {
+                    //             message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+                    //         }, 1000);
+                    //         //this./history.push("/laptop");
+                    //         })
+                    //     // }
+                    // }
+                    // catch(error) {
+                    //     console.log(error)
+                    //     message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
+                    // }
+        //this.state
+                     // this.handle_guardar()
+
     }
+
+    handle_guardar = () => {
+        //e.preventDefault();
+        //this.props.form.validateFields((err, values) => {
+          //if (!err) {
+            console.log("valores al guardar:",this.state)
+            try{
+                if(this.state.titulo === "Editar laptop"){
+                    Axios.editar_laptop(this.state).then(res => {
+                      message.loading({ content: 'Guardando modificaciones...', key });
+                      setTimeout(() => {
+                        message.success({ content: 'Registro modificado satisfactoriamente', key, duration: 3 });
+                      }, 1000);
+                      this.props.history.push("/laptop");
+                    })
+                }else{
+                    console.log("intentando")
+                    Axios.crear_laptop(this.state).then(res => {
+                    message.loading({ content: 'Guardando datos...', key });
+                    setTimeout(() => {
+                        message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+                    }, 1000);
+                    this.props.history.push("/laptop");
+                    })
+                }
+            }catch(error) {
+                console.log(error)
+                message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
+            }
+            
+         // }
+        //});
+      }
 
     getFormGralValue = (values) => {
         const { general_fields } = this.state;
@@ -271,17 +352,17 @@ class FormularioLaptop extends React.Component {
     }
 
     getFormDDValue = (values) => {
-        const { disco_duro_fields } = this.state;
-        this.setState({ disco_duro_fields: { ...disco_duro_fields, ...values }});
+        const { disco_duro } = this.state;
+        this.setState({ disco_duro: { ...disco_duro, ...values }});
     }
 
     getFormRAMValue = (values) => {
-        const { ram_fields } = this.state;
-        this.setState({ ram_fields: { ...ram_fields, ...values }});
+        const { memoria_ram } = this.state;
+        this.setState({ memoria_ram: { ...memoria_ram, ...values }});
     }
 
     render() {
-        const { step, general_fields, so_fields, procesador_fields, disco_duro_fields, ram_fields } = this.state;
+        const { step, general_fields, so_fields, procesador_fields, disco_duro, memoria_ram } = this.state;
         const steps = [
             {
                 title: 'General',
@@ -316,7 +397,7 @@ class FormularioLaptop extends React.Component {
                 content: 
                 <div>
                     <Title className="App" level={3}>Memoria RAM</Title>
-                    <FormRAM {...ram_fields} handleNextButton={this.handleNextButton} handleBackButton={this.handleBackButton} submittedValues={this.getFormRAMValue} />    
+                    <FormRAM {...memoria_ram} handleNextButton={this.handleNextButton} handleBackButton={this.handleBackButton} submittedValues={this.getFormRAMValue} />    
                 </div>
             },
             {
@@ -325,7 +406,7 @@ class FormularioLaptop extends React.Component {
                 content: 
                 <div>
                     <Title className="App" level={3}>Disco duro</Title>
-                    <FormFinal {...disco_duro_fields} handleConfirmButton={this.handleConfirmButton} handleBackButton={this.handleBackButton} submittedValues={this.getFormDDValue} />
+                    <FormFinal {...disco_duro} handleConfirmButton={this.handleConfirmButton} handle_guardar={this.handle_guardar} handleBackButton={this.handleBackButton} submittedValues={this.getFormDDValue} />
                 </div>
             },
         ] 

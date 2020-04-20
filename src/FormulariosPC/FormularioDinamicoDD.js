@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from 'react';
 import { Form, Input, Icon, Button, InputNumber, Select } from 'antd';
-import InNumComp from '../Componentes/InputNumberComp';
 
 let id = 0;
 const tailLayout = {  wrapperCol: { offset: 11, span: 5 } };          
@@ -11,36 +10,17 @@ const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };
 
 const FormularioDinamicoDD = Form.create({
     name:'Dinamico'})( props => {
-        const blankCat = { codigo: '', marca: '', modelo: '', nserie: '', capacidad: {cant: 0, un: "Mb"}, tipo: '', descr: '' };
+        const disco = { codigo: '', marca: '', modelo: '', nserie: '', capacidad: {cant: 0, un: "Mb"}, tipo: '', descr: '' };
         var obj = [];
-        
-            //console.log("rrrrrrrrrr",marca)
-        // }).catch(err => {
-        //     console.log(err);
-        //  });
-        // console.log("a",props.indx)
-        // console.log("b",props.index)
         if (props.editionMode ===false) { 
-            obj.push(blankCat)
+            obj.push(disco)
         }else{
-            // if(props.nombre ==="disco duro")
-            // {
-                props.index.map( (elem) =>(
-                    obj.push(elem)
-                )) 
-            // }else if (props.nombre==="memoria RAM")
-            // {
-            //     props.indx.map( (elem) =>(
-            //     obj.push(elem)
-            // )) 
-            // }
-            
+            props.datos.map( (elem) =>(
+                obj.push(elem)
+            ))  
         }
-        //obj.push(blankCat)
         const [registro, setRegistro] = useState(obj);  
-    // console.log(registro)
-    //     console.log("f",obj)
-        const { getFieldDecorator, validateFields, getFieldsValue } = props.form;
+        const { getFieldDecorator, validateFields } = props.form;
         getFieldDecorator('keys1', { initialValue: [0] });
      
         const add1 = () => {
@@ -48,7 +28,7 @@ const FormularioDinamicoDD = Form.create({
             const keys1 = form.getFieldValue('keys1');
             const nextKeys1 = keys1.concat(id++);
             const values = [...registro];
-            values.push(blankCat);
+            values.push(disco);
             setRegistro(values);
             form.setFieldsValue({
             keys1: nextKeys1,
@@ -200,7 +180,7 @@ const FormularioDinamicoDD = Form.create({
                         className="form2col"            
                         >
                             {getFieldDecorator(`descripcion${index}`+props.nombre, {
-                                rules: [{ required: true, message: 'Debe completar este campo' }],
+                                rules: [{ required: false, message: 'Debe completar este campo' }],
                                 initialValue: registro[index].descr,
                                 onChange: e => handleInputChange(index, null, 'descripcion', e)
                             })(
@@ -220,41 +200,15 @@ const FormularioDinamicoDD = Form.create({
     const validateInput = (e) => {
         e.preventDefault();
         validateFields((err, values) => {
-            //setRegistro(registro)
-            //props.indx.push(registro)
-            
-            console.log("val inp",props.indx)
-            //if (registro !== []){
-            //   if (props.nombre ==="memoria RAM"){
-            //     registro.map( function(element, index) {
-            //         if (props.indx[index].codigo !== undefined && element.codigo !== undefined){
-            //             if (element.codigo !== props.indx[index].codigo) {
-            //                 obj.push(element);
-            //                 //console.log(element.capacidad.split(" ")[0])
-            //             } 
-            //         }    
-                    
-                         
-            //         })  
-            //   }else if (props.nombre==="disco duro"){
-            //     registro.map( function(element, index) {
-            //         if (props.index[index].codigo !== undefined && element.codigo !== undefined){
-            //             if (element.codigo !== props.index[index].codigo) {
-            //                 obj.push(element);
-            //                 //console.log(element.capacidad.split(" ")[0])
-            //             } 
-            //         }    
-                    
-                         
-            //         })  
-            //   }
-           
-       // }
-                //console.log("el.cod",element.codigo)
-             //  );
+            if(props.editionMode === false){
+                registro.forEach( element => {
+                    props.datos.push(element)
+                })    
+            }
             if(!err) {
                 if (props.isStepFinal === true){
-                    props.handleConfirmButton(registro)
+                    props.handleConfirmButton(registro);
+                    props.handle_guardar()
                 } else{
                     props.submittedValues(registro)
                     props.handleNextButton()
@@ -263,50 +217,21 @@ const FormularioDinamicoDD = Form.create({
         });
     }
     
-    const storeValues = () => {
-        const values = getFieldsValue();
-        //props.indx.push(registro)
-        console.log("valores", values)
-        if(props.editionMode === false){
-            registro.map( function(element, index){
-                            props.index.push(element)
-                })
-            props.submittedValues(props.index)
-        }
-        //setRegistro(registro)
-            //console.log("val inp",registro)
-            // registro.map( function(element, index){
-            //     if (element.codigo !== obj[index].codigo) {
-            //         obj.push(element);
-            //      } 
-        //     if(props.nombre==="memoria RAM"){
-        //         registro.map( function(element, index){
-        //             props.indx.push(element)
-                    
-        //  }   )
-         
-        // props.submittedValues(props.indx);
-        //     }else if (props.nombre ==="disco duro"){
-        //         registro.map( function(element, index){
-        //             props.index.push(element)
-                    
-        //  }   )
-         
-        props.submittedValues(registro);
-        // }
-            // })
-        props.handleBackButton();
-    }
+    // const storeValues = () => {
+    //     const values = getFieldsValue();
+    //     console.log("valores", values)
+    //     if(props.editionMode === false){
+    //         registro.forEach( element =>{
+    //             props.datos.push(element)
+    //         })
+    //         props.submittedValues(props.datos)
+    //     }         
+    //     props.submittedValues(registro);
+    //     props.handleBackButton();
+    // }
 
     return (   
         <Form {...layout} name="form" layout="horizontal" onSubmit={validateInput}> 
-            {props.verDetalleRAM === true ?
-            <div style={{marginLeft: 40, marginRight: 40,}} key={props.nombre+"c"}>
-                <div style={{borderRadius: 10,}}>     
-                    <InNumComp label="RAM Soportada" style={{ width: '70%' }} class="form2col" id="ram_soportada" text="GB" initialValue={props.ram_soportada} decorator={getFieldDecorator} />
-                    <InNumComp label="Número slots" style={{ width: '100%' }}  class="form2col" id="num_slots"     text=""   initialValue={props.num_slots} decorator={getFieldDecorator} />
-                </div>
-            </div> : null}
             {formuItems}
             {props.editionMode===false ?
             <Form.Item {...buttonItemLayout}>

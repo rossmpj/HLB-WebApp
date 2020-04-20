@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import FormGral from '../FormulariosPC/FormGeneral';
 import FormSO from '../FormulariosPC/FormSistemaOperativo';
 import FormEquipo from '../FormulariosPC/FormComponente';
@@ -46,7 +46,7 @@ class FormularioDesktop extends React.Component {
             nombre: 'memoria RAM',
             verDetalleRAM: true,
             isStepFinal: false, 
-            indx:[],      
+            datos:[],      
             marcas: [],
             editionMode:false 
         },
@@ -55,7 +55,7 @@ class FormularioDesktop extends React.Component {
             nombre: 'disco duro',
             verDetalleRAM: false,
             isStepFinal: true,
-            indx: [],
+            datos: [],
             marcas: [],
             editionMode:false
         }
@@ -91,7 +91,7 @@ class FormularioDesktop extends React.Component {
                         nombre: 'memoria RAM',
                         verDetalleRAM: false,
                         isStepFinal: false,
-                        indx: [{ codigo: '', marca: '', modelo: '', nserie: '', capacidad: {cant: 0, un: "Mb"}, tipo: '', descr: '' }], 
+                        datos: [{ codigo: '', marca: '', modelo: '', nserie: '', capacidad: {cant: 0, un: "Mb"}, tipo: '', descr: '' }], 
                         marcas: r,
                         editionMode:false
                     }, 
@@ -99,7 +99,7 @@ class FormularioDesktop extends React.Component {
                         nombre: 'disco duro',
                         verDetalleRAM: false,
                         isStepFinal: true,
-                        index: [], 
+                        datos: [], 
                         marcas: r,
                         editionMode: false
                     }})
@@ -263,7 +263,7 @@ class FormularioDesktop extends React.Component {
                 nombre: 'memoria RAM',
                 verDetalleRAM: false,
                 isStepFinal: false,
-                indx: indcx, 
+                datos: indcx, 
                 marcas: r,
                 editionMode: true
             },
@@ -272,7 +272,7 @@ class FormularioDesktop extends React.Component {
                 nombre: 'disco duro',
                 verDetalleRAM: false,
                 isStepFinal: true,
-                index: inddcx, 
+                datos: inddcx, 
                 marcas: r,
                 editionMode: true
             }

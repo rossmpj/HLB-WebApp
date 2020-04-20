@@ -10,7 +10,7 @@ const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };
 
 const FormProcesador = Form.create({
     name:'Procesador'})( props => {
-    const { getFieldDecorator, validateFields, getFieldsValue } = props.form;
+    const { getFieldDecorator, validateFields } = props.form;
     const validateInput = (e) => {
         e.preventDefault();
         validateFields((err, values) => {
@@ -20,11 +20,11 @@ const FormProcesador = Form.create({
             }
         });
     }
-    const storeValues = () => {
-        const values = getFieldsValue();
-        props.submittedValues(values);
-        props.handleBackButton();
-    }
+    // const storeValues = () => {
+    //     const values = getFieldsValue();
+    //     props.submittedValues(values);
+    //     props.handleBackButton();
+    // }
     return (
         <Form {...layout} layout="horizontal" onSubmit={validateInput}>
             <InputComp label="Código"          id="codigo_proc"  initialValue={props.codigo_proc}  decorator={getFieldDecorator} disabled={props.disabled} />

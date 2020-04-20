@@ -26,7 +26,6 @@ function SelectComponent(props) {
                         props.datos.map(dato =>
                             <Select.Option key={dato.id} value={ dato.id }>{dato.dato}</Select.Option>
                         )
-                        //props.initialValue === null ? dato.id : props.initialValue
                     }
                 </Select>
             )

@@ -35,7 +35,7 @@ class TablaRouter extends React.Component{
         res.data.forEach(function (registro) {
             var dip = registro.ip === null ? ' ' : registro.ip;
             let router = {
-            key: registro.id_router,
+            key: registro.id_equipo,
             codigo: registro.codigo,
             bspi: registro.bspi_punto === null ? '' : registro.bspi_punto,
             departamento: registro.departamento === null ? '' : registro.departamento,
@@ -208,26 +208,6 @@ class TablaRouter extends React.Component{
           title: 'Departamento',
           dataIndex: 'departamento',
           key: 'departamento',
-          filters: [
-            {
-                text: 'Financiero',
-                value: 'Financiero',
-            },
-            {
-                text: 'Proveeduría',
-                value: 'Proveeduría',
-            },
-            {
-                text: 'Auditoría',
-                value: 'Auditoría',
-            },
-            {
-                text: 'UCI',
-                value: 'UCI',
-            }
-          ],
-          filteredValue: filteredInfo.departamento || null,
-          onFilter: (value, record) => record.departamento.indexOf(value) === 0,
           sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.departamento, b.departamento),
           sortOrder: sortedInfo.columnKey === 'departamento' && sortedInfo.order,
         },
@@ -284,22 +264,6 @@ class TablaRouter extends React.Component{
           title: 'Marca',
           dataIndex: 'marca',
           key: 'marca',
-          filters: [
-            {
-                text: 'LG',
-                value: 'LG',
-            },
-            {
-                text: 'Lenovo',
-                value: 'Lenovo',
-            },
-            {
-                text: 'HP',
-                value: 'HP',
-            }
-          ],
-          filteredValue: filteredInfo.marca || null,
-          onFilter: (value, record) => record.marca.indexOf(value) === 0,
           sorter: (a, b) => a.marca.length - b.marca.length,
           sortOrder: sortedInfo.columnKey === 'marca' && sortedInfo.order,
         },
@@ -325,12 +289,24 @@ class TablaRouter extends React.Component{
           key: 'estado',
           filters: [
             {
-                text: 'Operativo',
-                value: 'Operativo',
+                text: 'Disponible',
+                value: 'D',
             },
             {
-                text: 'No Operativo',
-                value: 'No Operativo',
+                text: 'Operativo',
+                value: 'O',
+            },
+            {
+                text: 'En revisión',
+                value: 'ER',
+            },
+            {
+                text: 'Reparado',
+                value: 'R',
+            },
+            {
+                text: 'De baja',
+                value: 'B',
             }
           ],
           filteredValue: filteredInfo.estado || null,

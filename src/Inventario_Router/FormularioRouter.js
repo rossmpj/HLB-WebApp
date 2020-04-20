@@ -23,7 +23,7 @@ class FormularioRouter extends React.Component {
     super(props);
     this.state = {
         titulo: "",
-        id_router: "",
+        id_equipo_router: "",
         disabled: false
     };
     this.handle_guardar = this.handle_guardar.bind(this);
@@ -49,7 +49,7 @@ class FormularioRouter extends React.Component {
       if (!err) {
         console.log("valores al guardar:",values)
         let router = {
-            id_equipo: this.state.id_router,
+            id_equipo: this.state.id_equipo_router,
             codigo: values.codigo,
             tipo_equipo: "Router",
             id_marca: values.marca,
@@ -98,26 +98,25 @@ class FormularioRouter extends React.Component {
 
   cargar_datos(info) {
     console.log("record:",info);
-    this.setState({id_router: info.key})
-    AxiosRouter.buscar_router_por_id(info.key).then(respuesta => {
-      respuesta.data.forEach(res => {
-      console.log(res)
-        this.props.form.setFieldsValue({
-          codigo: info.codigo,
-          asignar: res.asignado,
-          nombre: res.nombre,
-          pass: res.pass,
-          usuario: res.usuario,
-          clave: res.clave,
-          marca: res.id_marca.toString(),
-          modelo: res.modelo,
-          nserie: res.numero_serie,
-          estado: res.estado_operativo,
-          ip: res.ip === null ? null : res.ip.toString(),
-          penlace: res.puerta_enlace,
-          descripcion: res.descripcion
+    this.setState({id_equipo_router: info.key})
+    AxiosRouter.router_id(info.key).then(respuesta => {
+        let res = respuesta.data
+        console.log(res)
+            this.props.form.setFieldsValue({
+            codigo: res.codigo,
+            asignar: res.asignado,
+            nombre: res.nombre,
+            pass: res.pass,
+            usuario: res.usuario,
+            clave: res.clave,
+            marca: res.id_marca,
+            modelo: res.modelo,
+            nserie: res.numero_serie,
+            estado: res.estado_operativo,
+            ip: res.ip === null ? null : res.ip,
+            penlace: res.puerta_enlace,
+            descripcion: res.descripcion
         })
-      })
     });
   } 
 
