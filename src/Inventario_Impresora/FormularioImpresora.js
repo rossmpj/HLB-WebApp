@@ -1,12 +1,7 @@
 import React from 'react';
 import '../App.css';
 import {
-    Form,
-    Select,
-    Input,
-    Button,
-    Layout,
-    message
+    Form, Select, Input, Button, Layout, message
 } from 'antd';
 import '../custom-antd.css';
 import InputComponent from '../Componentes/InputComponent'
@@ -85,8 +80,8 @@ class FormularioImpresora extends React.Component {
                     }).catch(error => {
                         if (error.response) {
                             message.error(error.response.data.log, 4)
-                            .then(() => message.error('No fue posible registrar los datos', 2.5))
-                        } else{
+                                .then(() => message.error('No fue posible registrar los datos', 2.5))
+                        } else {
                             message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
                         }
                     });
@@ -98,11 +93,11 @@ class FormularioImpresora extends React.Component {
                         setTimeout(() => {
                             message.success({ content: 'Registro actualizado satisfactoriamente', key, duration: 3 });
                         }, 1000);
-                    }).catch(error => {     
+                    }).catch(error => {
                         if (error.response) {
                             message.error(error.response.data.log, 4)
-                            .then(() => message.error('No fue posible actualizar los datos', 3))
-                        } else{
+                                .then(() => message.error('No fue posible actualizar los datos', 3))
+                        } else {
                             message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
                         }
                     });
@@ -200,8 +195,8 @@ class FormularioImpresora extends React.Component {
                 <div className="div-container">
                     <Form {...layout}
                         layout="horizontal"
-                        onSubmit={this.handle_guardar}
-                    >
+                        onSubmit={this.handle_guardar}>
+
                         <InputComponent
                             class=""
                             label="Código"
@@ -228,8 +223,7 @@ class FormularioImpresora extends React.Component {
                                     <Select.Option value="Brazalete">Brazalete</Select.Option>
                                     <Select.Option value="Impresora">Impresora</Select.Option>
                                     <Select.Option value="Escáner">Escáner</Select.Option>
-                                </Select>
-                            )}
+                                </Select>)}
                         </Form.Item>
 
                         <MarcaSelect
@@ -260,10 +254,7 @@ class FormularioImpresora extends React.Component {
                                         {getFieldDecorator('cinta', {
                                             rules: [{ required: true, message: 'Debe completar este campo' }],
                                             initialValue: this.state.cinta
-                                        })(
-                                            <Input
-                                            />
-                                        )}
+                                        })(<Input />)}
                                     </Form.Item>
 
                                     <Form.Item
@@ -271,10 +262,7 @@ class FormularioImpresora extends React.Component {
                                         {getFieldDecorator('cartucho', {
                                             rules: [{ required: true, message: 'Debe completar este campo' }],
                                             initialValue: this.state.cartucho
-                                        })(
-                                            <Input
-                                            />
-                                        )}
+                                        })(<Input />)}
                                     </Form.Item>
                                 </div>
                                 : null
@@ -288,8 +276,7 @@ class FormularioImpresora extends React.Component {
                                         {getFieldDecorator('tinta', {
                                             rules: [{ required: true, message: 'Debe completar este campo' }],
                                             initialValue: this.state.tinta
-                                        })
-                                            (<Input />)}
+                                        })(<Input />)}
                                     </Form.Item>
 
                                     <Form.Item
@@ -297,8 +284,7 @@ class FormularioImpresora extends React.Component {
                                         {getFieldDecorator('cartucho', {
                                             rules: [{ required: true, message: 'Debe completar este campo' }],
                                             initialValue: this.state.cartucho
-                                        })
-                                            (<Input />)}
+                                        })(<Input />)}
                                     </Form.Item>
                                 </div>
                                 : null
@@ -312,8 +298,7 @@ class FormularioImpresora extends React.Component {
                                         {getFieldDecorator('rollo', {
                                             rules: [{ required: true, message: 'Debe completar este campo' }],
                                             initialValue: this.state.rollo
-                                        })
-                                            (<Input />)}
+                                        })(<Input />)}
                                     </Form.Item>
 
                                     <Form.Item
@@ -321,8 +306,7 @@ class FormularioImpresora extends React.Component {
                                         {getFieldDecorator('tinta', {
                                             rules: [{ required: true, message: 'Debe completar este campo' }],
                                             initialValue: this.state.tinta
-                                        })
-                                            (<Input />)}
+                                        })(<Input />)}
                                     </Form.Item>
 
                                     <Form.Item
@@ -330,8 +314,7 @@ class FormularioImpresora extends React.Component {
                                         {getFieldDecorator('cartucho', {
                                             rules: [{ required: true, message: 'Debe completar este campo' }],
                                             initialValue: this.state.cartucho
-                                        })
-                                            (<Input />)}
+                                        })(<Input />)}
                                     </Form.Item>
 
                                     <Form.Item
@@ -339,8 +322,7 @@ class FormularioImpresora extends React.Component {
                                         {getFieldDecorator('toner', {
                                             rules: [{ required: true, message: 'Debe completar este campo' }],
                                             initialValue: this.state.toner
-                                        })
-                                            (<Input />)}
+                                        })(<Input />)}
                                     </Form.Item>
                                 </div>
                                 : null
@@ -354,8 +336,7 @@ class FormularioImpresora extends React.Component {
                                         {getFieldDecorator('rodillo', {
                                             rules: [{ required: true, message: 'Debe completar este campo' }],
                                             initialValue: this.state.rodillo
-                                        })
-                                            (<Input />)}
+                                        })(<Input />)}
                                     </Form.Item>
                                 </div>
                                 : null
@@ -369,8 +350,7 @@ class FormularioImpresora extends React.Component {
                                         {getFieldDecorator('cartucho', {
                                             rules: [{ required: true, message: 'Debe completar este campo' }],
                                             initialValue: this.state.cartucho
-                                        })
-                                            (<Input />)}
+                                        })(<Input />)}
                                     </Form.Item>
 
                                     <Form.Item
@@ -378,8 +358,7 @@ class FormularioImpresora extends React.Component {
                                         {getFieldDecorator('toner', {
                                             rules: [{ required: true, message: 'Debe completar este campo' }],
                                             initialValue: this.state.toner
-                                        })
-                                            (<Input />)}
+                                        })(<Input />)}
                                     </Form.Item>
 
                                     <Form.Item
@@ -387,8 +366,7 @@ class FormularioImpresora extends React.Component {
                                         {getFieldDecorator('rodillo', {
                                             rules: [{ required: true, message: 'Debe completar este campo' }],
                                             initialValue: this.state.rodillo
-                                        })
-                                            (<Input />)}
+                                        })(<Input />)}
                                     </Form.Item>
                                 </div>
                                 : null

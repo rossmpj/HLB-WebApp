@@ -109,6 +109,10 @@ export default class AxiosTipo {
         return AxiosTipo.instanceAxios.get(`/equipo_id/${id_equipo}`);
     }
 
+    static info_extra = (id_equipo) => {
+        return AxiosTipo.instanceAxios.get(`/info_extra/${id_equipo}`);
+    }
+
     static eliminar_equipo = (id_equipo) => {
         return AxiosTipo.instanceAxios.put(`/eliminar_equipo/${id_equipo}`);
     }  

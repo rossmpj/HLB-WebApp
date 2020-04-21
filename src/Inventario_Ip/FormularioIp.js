@@ -119,14 +119,7 @@ class FormularioIp extends React.Component {
             <div className="div-container">
                 <Form {...layout}
                     layout="horizontal"
-                    onSubmit={this.handle_guardar}
-                >
-                    {/* <InputComponent
-                        class=""
-                        label="Ip"
-                        id="ip"
-                        decorator={getFieldDecorator} /> */}
-
+                    onSubmit={this.handle_guardar}>
                     <Form.Item label="Dirección IP">
                         {getFieldDecorator('ip',
                            {
