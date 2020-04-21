@@ -82,9 +82,13 @@ class FormularioImpresora extends React.Component {
                         setTimeout(() => {
                             message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
                         }, 1000);
-                    }).catch(err => {
-                        console.log(err)
-                        message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
+                    }).catch(error => {
+                        if (error.response) {
+                            message.error(error.response.data.log, 4)
+                            .then(() => message.error('No fue posible registrar los datos', 2.5))
+                        } else{
+                            message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
+                        }
                     });
                 } else {
                     values.key = this.state.key;
@@ -94,8 +98,13 @@ class FormularioImpresora extends React.Component {
                         setTimeout(() => {
                             message.success({ content: 'Registro actualizado satisfactoriamente', key, duration: 3 });
                         }, 1000);
-                    }).catch(err => {
-                        message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
+                    }).catch(error => {     
+                        if (error.response) {
+                            message.error(error.response.data.log, 4)
+                            .then(() => message.error('No fue posible actualizar los datos', 3))
+                        } else{
+                            message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
+                        }
                     });
                 }
             }
