@@ -271,6 +271,7 @@ class TablaEquipo extends React.Component {
                             title="¿Desea dar de baja este equipo?"
                             okText="Si" cancelText="No"
                             onConfirm={() => this.handleDelete(record.key)}>
+                                {record.estado_operativo === 'B' ?
                             <Button disabled type="danger" icon="delete" size="small" /> : <Button type="danger" icon="delete" size="small" />}
                         </Popconfirm>
                     </div>
