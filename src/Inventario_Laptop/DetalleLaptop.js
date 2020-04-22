@@ -4,7 +4,6 @@ import { LaptopOutlined, WindowsOutlined } from '@ant-design/icons';
 import { FiHardDrive } from "react-icons/fi";
 import { FaMemory } from "react-icons/fa";
 import { GiProcessor } from "react-icons/gi";
-import MetodosAxios from '../Servicios/AxiosRouter'
 import Axios from '../Servicios/AxiosLaptop'
 
 const { TabPane } = Tabs;
@@ -60,34 +59,29 @@ class DetalleLaptop extends React.Component {
       let registro = res.data;
       console.log("registro:",registro);
         this.setState({
-            codigo: info.codigo,
+            codigo: registro.general.codigo,
             bspi: registro.general.bspi,
             departamento: registro.general.departamento,
-            empleado: registro.general.asignado,
-            marca: info.marca,
-            modelo: info.modelo,
-            num_serie: info.num_serie,
-            name_pc: info.name_pc,
-            user_pc: info.user_pc,
-            estado: info.estado,
-            so: info.so,
-            so_type: info.so_type,
-            servpack: info.servpack,
-            licencia: info.licencia,
-            office: info.office,
+            empleado: registro.general.empleado === undefined ? null: registro.general.empleado+" "+registro.general.apellido,
+            marca: registro.general.marca,
+            modelo: registro.general.modelo,
+            num_serie: registro.general.numero_serie,
+            name_pc: registro.so.nombre_pc,
+            user_pc: registro.so.usuario_pc,
+            estado: registro.general.estado_operativo,
+            so: registro.so.so,
+            so_type: registro.so.tipo_so,
+            servpack: registro.so.services_pack === '0' ? 'No' : 'Si',
+            licencia: registro.so.licencia === '0' ? 'No' : 'Si',
+            office: registro.so.office,
             procesador: registro.procesador,
             ram_soportada: registro.ram_soportada,
             slots_ram: registro.numero_slots,
-            rams: info.rams,
-            discos: info.discos,
-            descripcion: info.descripcion
+            rams: registro.rams,
+            discos: registro.discos,
+            descripcion: registro.general.descripcion,
+            ip: registro.general.ip === null ? "No asignada" : registro.general.direccion_ip
           })
-    })
-    info.ip === " " ? this.setState({ip: "No asignada"}) : 
-    MetodosAxios.buscar_ip_por_codigo(info.ip).then(res => {      
-        res.data.forEach((registro) => {
-            this.setState({ ip: registro.direccion_ip })
-        })
     })
   }
 

@@ -23,7 +23,7 @@ const FormGeneral = Form.create({
         });
     }
     return (
-        <Form {...layout} key={props.name} layout="horizontal" onSubmit={validateInput}>
+        <Form {...layout} key={props.nombre} layout="horizontal" onSubmit={validateInput}>
             <InputComp label="Código" id="codigo" initialValue={props.codigo} decorator={getFieldDecorator} disabled={props.disabled} />
             <AsignComp required={false} id="asignar" initialValue={props.asignar} decorator={getFieldDecorator} />
             {(props.modelo === undefined) || props.modelo=== null || (props.nserie === undefined) ? null : 

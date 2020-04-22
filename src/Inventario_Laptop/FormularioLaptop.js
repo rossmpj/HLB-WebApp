@@ -13,7 +13,6 @@ import { Link } from 'react-router-dom';
 import { Steps } from 'antd';
 import Axios from '../Servicios/AxiosLaptop'
 import AxiosTipo from '../Servicios/AxiosTipo'
-import MetodosAxios from '../Servicios/AxiosIp'
 
 const { Step } = Steps;
 const { Content } = Layout;
@@ -23,102 +22,78 @@ const key = 'updatable';
 class FormularioLaptop extends React.Component {
     constructor(props) {
         super(props);
-  this.state = {
-    step: 0,
-    titulo: "",
-    disabled: false,
-    key: "",
-    general_fields: {
-        disabled: false,
-        codigo: '',
-        asignar: undefined,
-        marca: undefined,
-        modelo: '',
-        nserie: '',
-        nombre_pc: '',
-        usuario_pc: '',
-        ip: undefined,
-        estado: undefined,
-        ips: [],
-        descripcion: ''
-    },
-    so_fields: {
-        disabled: false,
-        so: '',
-        tipo_so: '',
-        sp1: false,
-        licencia: false,
-        office: ''
-    },
-    procesador_fields: {
-        disabled: false,
-        codigo_proc: '', 
-        marca_proc: undefined, 
-        modelo_proc: '', 
-        nserie_proc: '', 
-        frec_proc: 0,
-        nucleos_proc: 0,
-        marcas: [],
-        descr_proc: ''
-    },
-    memoria_ram: { 
-        disabled: false,
-        nombre: 'memoria RAM',
-        verDetalleRAM: true,
-        isStepFinal: false,        
-        ram_soportada: 0,
-        num_slots: 0,
-        datos: [],
-        editionMode: false,
-        marcas: []
-    },
-    disco_duro: {
-        disabled: false,
-        nombre: 'disco duro',
-        verDetalleRAM: false,
-        isStepFinal: true,
-        datos: [],
-        editionMode: false,
-        marcas: []
+        this.state = {
+            step: 0,
+            titulo: "",
+            disabled: false,
+            key: "",
+            general_fields: {
+                disabled: false,
+                codigo: '',
+                asignar: undefined,
+                marca: undefined,
+                modelo: '',
+                nserie: '',
+                nombre_pc: '',
+                usuario_pc: '',
+                ip: undefined,
+                estado: undefined,
+                descripcion: ''
+            },
+            so_fields: {
+                disabled: false,
+                so: '',
+                tipo_so: '',
+                sp1: false,
+                licencia: false,
+                office: ''
+            },
+            procesador_fields: {
+                disabled: false,
+                codigo_proc: '', 
+                marca_proc: undefined, 
+                modelo_proc: '', 
+                nserie_proc: '', 
+                frec_proc: 0,
+                nucleos_proc: 0,
+                marcas: [],
+                descr_proc: ''
+            },
+            memoria_ram: { 
+                disabled: false,
+                nombre: 'memoria RAM',
+                verDetalleRAM: true,
+                isStepFinal: false,        
+                ram_soportada: 0,
+                num_slots: 0,
+                datos: [],
+                editionMode: false,
+                marcas: []
+            },
+            disco_duro: {
+                disabled: false,
+                nombre: 'disco duro',
+                verDetalleRAM: false,
+                isStepFinal: true,
+                datos: [],
+                editionMode: false,
+                marcas: []
+            }
+        }  
+        this.handle_guardar = this.handle_guardar.bind(this);
     }
-    }  
-    
-    this.handle_guardar = this.handle_guardar.bind(this);
-}
 
     componentDidMount = () => {
-        // this.cargar()
         if (typeof this.props.location !== 'undefined') {
         const { info } = this.props.location.state;
         const { titulo } = this.props.location.state;
         const { disabled } = this.props.location.state;
         if (titulo === "Editar laptop" && info !== undefined){
           this.cargar_datos(info);
-        //   this.cargar()
-        //   this.setState({
-        //       memoria_ram: {
-        //         editionMode: true
-        //       }          
-        //     })
         }
-        //       }          
-        // }
-        //      }          
-        //  }
         if(titulo === "Nueva laptop"){
             this.cargar()
         }
-        // else{
-        //     this.cargar()
-        // }
-        //   else{
-        //     this.setState({
-        //         memoria_ram: {
-        //           editionMode: false
-        //         }          
-        //       })
-        // } 
-        // this.cargar()
         this.setState({titulo: titulo});        
         this.setState({disabled: disabled})
       }
@@ -135,29 +110,29 @@ class FormularioLaptop extends React.Component {
                 r.push(users);
             });
         });
-        this.setState({marc: r})
-        this.setState({memoria_ram: {
-                        nombre: 'memoria RAM',
-                        verDetalleRAM: true,
-                        isStepFinal: false,
-                        ram_soportada: 0,
-                        num_slots: 0,
-                        datos: [], 
-                        marcas: r,
-                        editionMode:false
-                    }, 
-                     disco_duro: {
-                        nombre: 'disco duro',
-                        verDetalleRAM: false,
-                        isStepFinal: true,
-                        datos: [], 
-                        marcas: r,
-                        editionMode: false
-                    }})
+        this.setState({
+            memoria_ram: {
+                nombre: 'memoria RAM',
+                verDetalleRAM: true,
+                isStepFinal: false,
+                ram_soportada: 0,
+                num_slots: 0,
+                datos: [], 
+                marcas: r,
+                editionMode:false
+            }, 
+                disco_duro: {
+                nombre: 'disco duro',
+                verDetalleRAM: false,
+                isStepFinal: true,
+                datos: [], 
+                marcas: r,
+                editionMode: false
+            }
+        })
     }
 
     cargar_datos(info) {
-
         this.setState({key: info.key})
         let r = []
         AxiosTipo.mostrar_marcas().then(res => {
@@ -168,19 +143,8 @@ class FormularioLaptop extends React.Component {
                 }
                 r.push(users);
             });
-      });
-      let ipss = [];
-      MetodosAxios.ips_libres().then(res => {
-      res.data.forEach(function (registro) {
-        let ip = {
-          id: registro.id_ip.toString(),
-          dato: registro.direccion_ip
-        }
-        ipss.push(ip);
-      });
-    });
+        });
     
-        console.log(ipss, "ipramv",info.rams);
         Axios.obtenerInfoLaptop(info.key).then(res => {
             let registro = res.data;
             console.log("registro7:",registro);
@@ -193,14 +157,12 @@ class FormularioLaptop extends React.Component {
                 }
              }
         
-        console.log("objram",indcx)
         let inddcx = []
         for (const element in info.discos) {
             inddcx.push({ codigo: info.discos[element].codigo, marca: info.discos[element].id_marca, modelo: info.discos[element].modelo,
                  nserie: info.discos[element].numero_serie, capacidad: {cant: info.discos[element].capacidad.split(" ")[0], 
                  un: info.discos[element].capacidad.split(" ")[1]}, tipo: info.discos[element].tipo, descr: info.discos[element].descripcion})
         }
-        console.log("objdd",inddcx)
         this.setState({
             general_fields: {
                 disabled: true,
@@ -213,7 +175,6 @@ class FormularioLaptop extends React.Component {
                 usuario_pc: info.user_pc,
                 estado: info.estado,
                 ip: registro.general.direccion_ip === null ? null : registro.general.direccion_ip,
-                ips: ipss,
                 descripcion: info.descripcion
             },
             so_fields: {
@@ -272,69 +233,35 @@ class FormularioLaptop extends React.Component {
     handleConfirmButton = (values) => {
         const { disco_duro } = this.state;
         this.setState({ disco_duro: { ...disco_duro, ...values }}, 
-                      () => console.log("final",this.state),
-                      
-                      );
-                    //   try{
-                    //     // if(this.state.titulo === "Editar laptop"){
-                    //         // AxiosRouter.editar_equipo_router(router).then(res => {
-                    //         //   message.loading({ content: 'Guardando modificaciones...', key });
-                    //         //   setTimeout(() => {
-                    //         //     message.success({ content: 'Registro modificado satisfactoriamente', key, duration: 3 });
-                    //         //   }, 1000);
-                    //         //   this.props.history.push("/laptop");
-                    //         // })
-                    //     // }else{
-                    //         Axios.crear_laptop(this.state).then(res => {
-                    //         message.loading({ content: 'Guardando datos...', key });
-                    //         setTimeout(() => {
-                    //             message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
-                    //         }, 1000);
-                    //         //this./history.push("/laptop");
-                    //         })
-                    //     // }
-                    // }
-                    // catch(error) {
-                    //     console.log(error)
-                    //     message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
-                    // }
-        //this.state
-                     // this.handle_guardar()
-
+                      () => console.log("final",this.state) );
     }
 
     handle_guardar = () => {
-        //e.preventDefault();
-        //this.props.form.validateFields((err, values) => {
-          //if (!err) {
-            console.log("valores al guardar:",this.state)
-            try{
-                if(this.state.titulo === "Editar laptop"){
-                    Axios.editar_laptop(this.state).then(res => {
-                      message.loading({ content: 'Guardando modificaciones...', key });
-                      setTimeout(() => {
-                        message.success({ content: 'Registro modificado satisfactoriamente', key, duration: 3 });
-                      }, 1000);
-                      this.props.history.push("/laptop");
-                    })
-                }else{
-                    console.log("intentando")
-                    Axios.crear_laptop(this.state).then(res => {
-                    message.loading({ content: 'Guardando datos...', key });
+        console.log("valores al guardar:",this.state)
+        try{
+            if(this.state.titulo === "Editar laptop"){
+                Axios.editar_laptop(this.state).then(res => {
+                    message.loading({ content: 'Guardando modificaciones...', key });
                     setTimeout(() => {
-                        message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+                    message.success({ content: 'Registro modificado satisfactoriamente', key, duration: 3 });
                     }, 1000);
                     this.props.history.push("/laptop");
-                    })
-                }
-            }catch(error) {
-                console.log(error)
-                message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
+                })
+            }else{
+                console.log("intentando")
+                Axios.crear_laptop(this.state).then(res => {
+                message.loading({ content: 'Guardando datos...', key });
+                setTimeout(() => {
+                    message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+                }, 1000);
+                this.props.history.push("/laptop");
+                })
             }
-            
-         // }
-        //});
-      }
+        }catch(error) {
+            console.log(error)
+            message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
+        }
+    }
 
     getFormGralValue = (values) => {
         const { general_fields } = this.state;

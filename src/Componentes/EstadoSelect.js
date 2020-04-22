@@ -14,8 +14,7 @@ class EstadoSelect extends React.Component {
         var estado = [{id:"D", dato:"Disponible"}, 
                       {id:"O", dato:"Operativo"}, 
                       {id:"R", dato:"Reparado"}, 
-                      {id:"ER", dato:"En revisión"}, 
-                      {id:"B", dato:"De baja"}];
+                      {id:"ER", dato:"En revisión"}];
         this.setState({ estados: estado});
     }
 

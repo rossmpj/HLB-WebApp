@@ -115,7 +115,7 @@ const FormularioDinamico = Form.create({
                             })(
                                 <Select onSelect={(value, e) => handleInputChange(index, value, 'marca', e)}>
                                     { props.marcas.map(m=>
-                                        <Option key={m.id} value={m.id}>{m.dato}</Option>
+                                        <Select.Option key={m.id} value={m.id}>{m.dato}</Select.Option>
                                     )}
                                  </Select>                                      
                             )}
@@ -143,7 +143,10 @@ const FormularioDinamico = Form.create({
                                     rules: [{ required: true, message: 'Debe completar este campo' }],
                                     initialValue: registro[index].capacidad.cant,
                                 })(
-                                    <InputNumber onChange={(value, e) => handleInputChange(index, value, 'capac', e)} style={{ width: '70%' }} />
+                                    <InputNumber 
+                                    min={0}
+                                    onChange={(value, e) => handleInputChange(index, value, 'capac', e)} 
+                                    style={{ width: '70%' }} />
                                 )}
                                 {getFieldDecorator(`un${index}`+props.nombre, {
                                     rules: [{ required: true, message: 'Debe completar este campo' }],

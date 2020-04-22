@@ -16,7 +16,7 @@ function InputNumberComp(props) {
                 rules: [{ required: true, message: 'Debe completar este campo' }],
                 initialValue: props.initialValue === undefined ? null : `${props.initialValue}`
             })(
-                <InputNumber /> 
+                <InputNumber min={0}/> 
             )}
             <span className="ant-form-text"> {props.text}</span>
         </Form.Item>

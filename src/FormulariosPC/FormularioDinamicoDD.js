@@ -141,7 +141,10 @@ const FormularioDinamicoDD = Form.create({
                                     rules: [{ required: true, message: 'Debe completar este campo' }],
                                     initialValue: registro[index].capacidad.cant,
                                 })(
-                                    <InputNumber onChange={(value, e) => handleInputChange(index, value, 'capac', e)} style={{ width: '70%' }} />
+                                    <InputNumber 
+                                    min={0}
+                                    onChange={(value, e) => handleInputChange(index, value, 'capac', e)} 
+                                    style={{ width: '70%' }} />
                                 )}
                                 {getFieldDecorator(`un${index}`+props.nombre, {
                                     rules: [{ required: true, message: 'Debe completar este campo' }],
@@ -166,11 +169,8 @@ const FormularioDinamicoDD = Form.create({
                                 initialValue: registro[index].tipo,
                             })(
                                 <Select onSelect={(value, e) => handleInputChange(index, value, 'tipo', e)} style={{ width: '100%' }}>
-                                    <Option value="DDR">DDR</Option>
-                                    <Option value="DDR2">DDR2</Option>
-                                    <Option value="DDR3">DDR3</Option>
-                                    <Option value="DDR3/DDR4">DDR3/DDR4</Option>
-                                    <Option value="DDR4">DDR4</Option>
+                                    <Option value="HDD">HDD</Option>
+                                    <Option value="SSD">SSD</Option>
                                 </Select>
                             )}
                         </Form.Item>

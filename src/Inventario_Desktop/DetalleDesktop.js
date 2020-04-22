@@ -2,7 +2,6 @@ import React from 'react';
 import { Tabs, Row, Col, Typography, Button, Descriptions, Badge } from 'antd';
 import { DesktopOutlined, WindowsOutlined } from '@ant-design/icons';
 import { FiCpu, FiSpeaker } from "react-icons/fi";
-import MetodosAxios from '../Servicios/AxiosRouter'
 import Axios from '../Servicios/AxiosDesktop'
 
 const { TabPane } = Tabs;
@@ -119,39 +118,34 @@ class DetalleDesktop extends React.Component {
         let registro = res.data;
         console.log("registro:",registro.general.bspi);
           this.setState({
-            codigo: info.codigo,
+            codigo: registro.general.codigo,
             bspi: registro.general.bspi,
             departamento: registro.general.departamento,
-            empleado: registro.general.empleado,
-            name_pc: info.name_pc,
-            user_pc: info.user_pc,
-            estado: info.estado,
-            so: info.so,
-            so_type: info.so_type,
-            servpack: info.servpack,
-            licencia: info.licencia,
-            office: info.office,
-            procesador: info.procesador,
-            rams: info.rams,
-            discos: info.discos,
+            empleado: registro.general.empleado === undefined ? null: registro.general.empleado+" "+registro.general.apellido,
+            name_pc: registro.so.nombre_pc,
+            user_pc: registro.so.usuario_pc,
+            estado: registro.general.estado_operativo,
+            so: registro.so.so,
+            so_type: registro.so.tipo_so,
+            servpack: registro.so.services_pack === '0' ? 'No' : 'Si',
+            licencia: registro.so.licencia === '0' ? 'No' : 'Si',
+            office: registro.so.office,
+            procesador: registro.procesador,
+            rams: registro.rams,
+            discos: registro.discos,
             monitor: registro.monitor,
             teclado: registro.teclado,
             mouse: registro.mouse,
             parlantes: registro.parlantes,
-            mainboard: info.mainboard,
-            tarj_red: info.tarj_red,
-            case: info.case,
+            mainboard: registro.tarjeta_madre,
+            tarj_red: registro.tarjeta_red,
+            case: registro.case,
             f_alim: registro.f_alim,
-            f_poder: info.f_poder,
-            descripcion: info.descripcion,
+            f_poder: registro.fuente_poder,
+            descripcion: registro.general.descripcion,
+            ip: registro.general.ip === null ? "No asignada" : registro.general.direccion_ip
             })
       })
-    info.ip === " " ? this.setState({ip: "No asignada"}) : 
-    MetodosAxios.buscar_ip_por_codigo(info.ip).then(res => {      
-        res.data.forEach((registro) => {
-            this.setState({ ip: registro.direccion_ip })
-        })
-    })
   }
 
   render() {
@@ -175,16 +169,16 @@ class DetalleDesktop extends React.Component {
                   <>         
                   <Descriptions.Item label="BSPI-Punto">{this.state.bspi}</Descriptions.Item>
                   <Descriptions.Item label="Departamento">{this.state.departamento}</Descriptions.Item>
-                  <Descriptions.Item label="Empleado a cargo">{this.state.empleado}</Descriptions.Item></>}
+                  <Descriptions.Item label="Empleado a cargo">{this.state.empleado}</Descriptions.Item>
+                  </>
+                  }
                   <Descriptions.Item label="Nombre PC">{this.state.name_pc}</Descriptions.Item>
                   <Descriptions.Item label="Usuario PC">{this.state.user_pc}</Descriptions.Item>
                   <Descriptions.Item label="Estado">
                     <Badge status="processing" text={this.state.estado} />
                   </Descriptions.Item>
                   <Descriptions.Item label="Dirección IP" span={3}>{this.state.ip}</Descriptions.Item>
-                  <Descriptions.Item label="Descripción">
-                    {this.state.descripcion}
-                  </Descriptions.Item>
+                  <Descriptions.Item label="Descripción">{this.state.descripcion} </Descriptions.Item>
                 </Descriptions>
               </TabPane>
 
@@ -250,7 +244,7 @@ class DetalleDesktop extends React.Component {
                   <Descriptions.Item label="Modelo">{this.state.mainboard.modelo} </Descriptions.Item>
                   <Descriptions.Item label="Número de serie">{this.state.mainboard.numero_serie} </Descriptions.Item>
                   <Descriptions.Item label="RAM soportada">{this.state.mainboard.ram_soportada} </Descriptions.Item>
-                  <Descriptions.Item label="Número de slots">{this.state.mainboard.slots_ram} </Descriptions.Item>
+                  <Descriptions.Item label="Número de slots">{this.state.mainboard.numero_slots} </Descriptions.Item>
                   <Descriptions.Item label="Conexiones para disco duro">{this.state.mainboard.conexiones_dd} </Descriptions.Item>
                   <Descriptions.Item label="Descripción">{this.state.mainboard.descripcion} </Descriptions.Item>
                 </Descriptions>
