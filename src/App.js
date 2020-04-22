@@ -52,7 +52,12 @@ class App extends React.Component {
             {this.state.collapsed ? <img className="App-logo" src={"./Boton.png"} alt="icon" /> : <img className="App-logo" src={"./logo.png"} alt="logo" />}
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
               <Menu.Item key="11">
-                <Icon type="home" />Inicio
+                <span>
+                <Icon type="home" />
+                <span>Inicio
+                
+                </span>
+                </span>
                 <Link to="/" />
               </Menu.Item>
               <SubMenu
