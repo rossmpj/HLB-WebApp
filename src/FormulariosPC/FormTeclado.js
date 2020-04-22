@@ -1,8 +1,9 @@
-import React, { Fragment } from 'react'
-import { Form, Button, Select } from 'antd';
+import React, { Fragment, useState, useEffect } from 'react'
+import { Form, Button, Select, message } from 'antd';
 import InputComp from '../Componentes/InputComponent';
 import DescrComp from '../Componentes/DescripcionComponent';
 import MarcaComp from '../Componentes/MarcaSelect';
+import Axios from '../Servicios/AxiosDesktop'
 
 const tailLayout = { wrapperCol: { offset: 11, span: 5 } };
 const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };        
@@ -11,13 +12,28 @@ const { Option } = Select;
 const FormTeclado = Form.create({
     name:'FormTeclado'})( props => {
     const { getFieldDecorator, validateFields } = props.form;
+    const [codigos, setCodigos] = useState([]);
+    useEffect(() => {
+        Axios.listado_codigos().then(res => {
+          setCodigos(res.data); });    
+    }, []);
     const validateInput = (e) => {
         e.preventDefault();
         validateFields((err, v) => {
-            console.log("vals", v)
-            if(!err) {
-                props.submittedValues(v)
-                props.handleNextButton();
+            if (props.disabled === false){
+                if (codigos.includes(v.codigo)){
+                    message.error("El código ingresado ya existe en la base de datos, ingrese uno válido para continuar", 4)
+                }else{
+                    if(!err) {
+                        props.submittedValues(v);
+                        props.handleNextButton();
+                    }
+                }
+            }else{
+                if(!err) {
+                    props.submittedValues(v);
+                    props.handleNextButton();
+                }
             }
         });
     }

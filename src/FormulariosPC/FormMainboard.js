@@ -1,9 +1,10 @@
-import React from 'react'
-import { Form, Button } from 'antd';
+import React, { useState, useEffect } from 'react'
+import { Form, Button, message } from 'antd';
 import InputComp from '../Componentes/InputComponent';
 import InNumComp from '../Componentes/InputNumberComp';
 import DescrComp from '../Componentes/DescripcionComponent';
 import MarcaComp from '../Componentes/MarcaSelect';
+import Axios from '../Servicios/AxiosDesktop'
 
 const tailLayout = { wrapperCol: { offset: 11, span: 5 } };
 const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };
@@ -11,12 +12,28 @@ const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };
 const FormMainboard = Form.create({
     name:'Perifericos'})( props => {
     const { getFieldDecorator, validateFields } = props.form;
+    const [codigos, setCodigos] = useState([]);
+    useEffect(() => {
+        Axios.listado_codigos().then(res => {
+          setCodigos(res.data); });    
+    }, []);
     const validateInput = (e) => {
         e.preventDefault();
         validateFields((err, valor) => {
-            if(!err) {
-                props.submittedValues(valor);
-                props.handleNextButton();
+            if (props.disabled === false){
+                if (codigos.includes(valor.codigo)){
+                    message.error("El código ingresado ya existe en la base de datos, ingrese uno válido para continuar", 4)
+                }else{
+                    if(!err) {
+                        props.submittedValues(valor);
+                        props.handleNextButton();
+                    }
+                }
+            }else{
+                if(!err) {
+                    props.submittedValues(valor);
+                    props.handleNextButton();
+                }
             }
         });
     }

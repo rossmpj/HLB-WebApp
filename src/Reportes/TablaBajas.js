@@ -42,14 +42,15 @@ class TablaBajas extends React.Component {
         let datos = [];
         Axios.reporte_bajas().then(res => {
             res.data.forEach(function (dato) {
+                console.log("dq",dato)
                 let equipos = {
                     key: dato.id_equipo,
                     tipo_equipo: dato.tipo_equipo,
                     codigo: dato.codigo,
-                    marca: dato.marca,
-                    modelo: dato.modelo,
+                    marca: dato.marca === null ? '' : dato.marca,
+                    modelo: dato.modelo === null ? '' : dato.modelo,
                     estado_operativo: dato.estado_operativo,
-                    numero_serie: dato.numero_serie,
+                    numero_serie: dato.numero_serie === null ? '' : dato.numero_serie,
                     descripcion: dato.descripcion,
                 }
                 datos.push(equipos)

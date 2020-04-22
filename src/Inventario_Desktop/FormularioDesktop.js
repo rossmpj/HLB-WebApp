@@ -336,8 +336,15 @@ class FormularioDesktop extends React.Component {
                     setTimeout(() => {
                     message.success({ content: 'Registro modificado satisfactoriamente', key, duration: 3 });
                     }, 1000);
-                    this.props.history.push("/desktop");
+                }).catch(err =>{
+                    if (err.response) {
+                        message.error(err.response.data.log, 4)
+                        .then(() => message.error('No fue posible actualizar los datos', 3))
+                    } else{
+                        message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
+                    }
                 })
+                this.props.history.push("/desktop");
             }else{
                 console.log("intentando")
                 Axios.crear_desktop(this.state).then(res => {
@@ -345,8 +352,15 @@ class FormularioDesktop extends React.Component {
                 setTimeout(() => {
                     message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
                 }, 1000);
-                this.props.history.push("/desktop");
+                }).catch(err =>{
+                    if (err.response) {
+                        message.error(err.response.data.log, 4)
+                        .then(() => message.error('No fue posible registrar los datos', 3))
+                    } else{
+                        message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
+                    }
                 })
+                this.props.history.push("/desktop");
             }
         }catch(error) {
             console.log(error)

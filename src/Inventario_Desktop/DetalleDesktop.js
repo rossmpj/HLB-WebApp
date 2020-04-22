@@ -193,8 +193,10 @@ class DetalleDesktop extends React.Component {
                   <Descriptions.Item label="Office">{this.state.office}</Descriptions.Item>
                 </Descriptions>
               </TabPane>
-
+              {this.state.monitor === undefined  && this.state.teclado === undefined  && this.state.teclado === undefined &&
+               this.state.parlantes === undefined && this.state.f_alim === undefined ? null :
               <TabPane tab={<span><FiSpeaker className="anticon" />Periféricos</span>} key="3" >
+              {this.state.monitor === undefined ? null :
                 <Descriptions title="Monitor" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
                   <Descriptions.Item label="Código">{this.state.monitor.codigo}</Descriptions.Item>
                   <Descriptions.Item label="Marca">{this.state.monitor.marca} </Descriptions.Item>
@@ -202,7 +204,9 @@ class DetalleDesktop extends React.Component {
                   <Descriptions.Item label="Número de serie">{this.state.monitor.numero_serie} </Descriptions.Item>
                   <Descriptions.Item label="Descripción">{this.state.monitor.descripcion} </Descriptions.Item>
                 </Descriptions>
+                }
                 <br />
+                {this.state.teclado === undefined ? null :
                 <Descriptions title="Teclado" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
                   <Descriptions.Item label="Código">{this.state.teclado.codigo}</Descriptions.Item>
                   <Descriptions.Item label="Marca">{this.state.teclado.marca} </Descriptions.Item>
@@ -210,15 +214,19 @@ class DetalleDesktop extends React.Component {
                   <Descriptions.Item label="Número de serie">{this.state.teclado.numero_serie} </Descriptions.Item>
                   <Descriptions.Item label="Descripción">{this.state.teclado.descripcion} </Descriptions.Item>
                 </Descriptions>
+                }
                 <br />
+                {this.state.mouse === undefined ? null :
                 <Descriptions title="Mouse" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
                   <Descriptions.Item label="Código">{this.state.mouse.codigo}</Descriptions.Item>
                   <Descriptions.Item label="Marca">{this.state.mouse.marca} </Descriptions.Item>
                   <Descriptions.Item label="Modelo">{this.state.mouse.modelo} </Descriptions.Item>
                   <Descriptions.Item label="Número de serie">{this.state.mouse.numero_serie} </Descriptions.Item>
                   <Descriptions.Item label="Descripción">{this.state.mouse.descripcion} </Descriptions.Item>
-                </Descriptions>    
+                </Descriptions>  
+                }  
                 <br />
+                {this.state.parlantes === undefined ? null :
                 <Descriptions title="Parlantes" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
                   <Descriptions.Item label="Código">{this.state.parlantes.codigo}</Descriptions.Item>
                   <Descriptions.Item label="Marca">{this.state.parlantes.marca} </Descriptions.Item>
@@ -226,6 +234,7 @@ class DetalleDesktop extends React.Component {
                   <Descriptions.Item label="Número de serie">{this.state.parlantes.numero_serie} </Descriptions.Item>
                   <Descriptions.Item label="Descripción">{this.state.parlantes.descripcion} </Descriptions.Item>
                 </Descriptions> 
+                }
                 <br />           
                 {this.state.f_alim === undefined ? null : <>
                 <Descriptions title={this.state.f_alim.tipo_equipo === 'ups' ? 'UPS' : 'Regulador'} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
@@ -236,8 +245,12 @@ class DetalleDesktop extends React.Component {
                   <Descriptions.Item label="Descripción">{this.state.f_alim.descripcion} </Descriptions.Item>
                 </Descriptions></>}
               </TabPane>
-
+              }
+              {this.state.mainboard === undefined  && this.state.rams === undefined  && this.state.discos === undefined &&
+               this.state.procesador === undefined && this.state.tarj_red === undefined && this.state.case === undefined && 
+               this.state.f_poder === undefined ? null :
               <TabPane tab={<span><FiCpu className="anticon" />CPU</span>} key="4" >
+              {this.state.mainboard === undefined ? null :
                 <Descriptions title="Tarjeta madre" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
                   <Descriptions.Item label="Código">{this.state.mainboard.codigo}</Descriptions.Item>
                   <Descriptions.Item label="Marca">{this.state.mainboard.marca} </Descriptions.Item>
@@ -248,9 +261,11 @@ class DetalleDesktop extends React.Component {
                   <Descriptions.Item label="Conexiones para disco duro">{this.state.mainboard.conexiones_dd} </Descriptions.Item>
                   <Descriptions.Item label="Descripción">{this.state.mainboard.descripcion} </Descriptions.Item>
                 </Descriptions>
+                }
                 <br />
                 <div>
-                  {this.state.rams.map((ram, i) => {
+                {this.state.rams === undefined ? null :
+                  this.state.rams.map((ram, i) => {
                     return (
                       <div key={ram.id_equipo}>
                         <Descriptions title={"Memoria RAM "+(i+1)} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
@@ -265,11 +280,13 @@ class DetalleDesktop extends React.Component {
                         <br /> 
                       </div>     
                     );
-                  })}
+                  })
+                }
                 </div>
                 <br />
                 <div>
-                {this.state.discos.map((dd, i) => {
+                {this.state.discos === undefined ? null :
+                  this.state.discos.map((dd, i) => {
                     return (
                       <div key={dd.id_equipo}>
                         <Descriptions title={"Disco duro "+(i+1)} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
@@ -284,9 +301,11 @@ class DetalleDesktop extends React.Component {
                         <br /> 
                       </div>     
                     );
-                  })}
+                  })
+                }
                 </div>   
                 <br />
+                {this.state.procesador === undefined ? null :
                 <Descriptions title="Procesador" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
                   <Descriptions.Item label="Código">{this.state.procesador.codigo}</Descriptions.Item>
                   <Descriptions.Item label="Marca">{this.state.procesador.marca} </Descriptions.Item>
@@ -296,7 +315,9 @@ class DetalleDesktop extends React.Component {
                   <Descriptions.Item label="Número de núcleos">{this.state.procesador.nucleos} </Descriptions.Item>
                   <Descriptions.Item label="Descripción">{this.state.procesador.descripcion} </Descriptions.Item>
                 </Descriptions>
+                }
                 <br />
+                {this.state.tarj_red === undefined ? null :
                 <Descriptions title="Tarjeta de red" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
                   <Descriptions.Item label="Código">{this.state.tarj_red.codigo} </Descriptions.Item>
                   <Descriptions.Item label="Marca">{this.state.tarj_red.marca} </Descriptions.Item>
@@ -304,7 +325,9 @@ class DetalleDesktop extends React.Component {
                   <Descriptions.Item label="Número de serie">{this.state.tarj_red.numero_serie} </Descriptions.Item>
                   <Descriptions.Item label="Descripción">{this.state.tarj_red.descripcion} </Descriptions.Item>
                 </Descriptions>
+                }
                 <br />
+                {this.state.case === undefined ? null :
                 <Descriptions title="Case" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
                   <Descriptions.Item label="Código">{this.state.case.codigo} </Descriptions.Item>
                   <Descriptions.Item label="Marca">{this.state.case.marca} </Descriptions.Item>
@@ -312,7 +335,9 @@ class DetalleDesktop extends React.Component {
                   <Descriptions.Item label="Número de serie">{this.state.case.numero_serie} </Descriptions.Item>
                   <Descriptions.Item label="Descripción">{this.state.case.descripcion} </Descriptions.Item>
                 </Descriptions>
+                }
                 <br />
+                {this.state.f_poder === undefined ? null :
                 <Descriptions title="Fuente de poder" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
                   <Descriptions.Item label="Código">{this.state.f_poder.codigo} </Descriptions.Item>
                   <Descriptions.Item label="Marca">{this.state.f_poder.marca} </Descriptions.Item>
@@ -320,7 +345,9 @@ class DetalleDesktop extends React.Component {
                   <Descriptions.Item label="Número de serie">{this.state.f_poder.numero_serie}</Descriptions.Item>
                   <Descriptions.Item label="Descripción">{this.state.f_poder.descripcion}</Descriptions.Item>
                 </Descriptions>
-              </TabPane>
+                }
+              </TabPane> 
+              } 
             </Tabs>
           </div>
         </div>

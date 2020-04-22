@@ -9,6 +9,7 @@ import AsignComp from '../Componentes/AsignarSelect';
 import EstadComp from '../Componentes/EstadoSelect';
 import AxiosRouter from '../Servicios/AxiosRouter';
 import { Link } from 'react-router-dom';
+import Axios from '../Servicios/AxiosDesktop'
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -24,7 +25,8 @@ class FormularioRouter extends React.Component {
     this.state = {
         titulo: "",
         id_equipo_router: "",
-        disabled: false
+        disabled: false,
+        codigos: []
     };
     this.handle_guardar = this.handle_guardar.bind(this);
   }
@@ -34,65 +36,73 @@ class FormularioRouter extends React.Component {
       const { info } = this.props.location.state;
       const { titulo } = this.props.location.state;
       const { disabled } = this.props.location.state;
-      console.log("desac:",disabled)
       if (titulo === "Editar router" && info !== undefined){
         this.cargar_datos(info);
       }   
       this.setState({titulo: titulo})
       this.setState({disabled: disabled})
+      Axios.listado_codigos().then(res => {
+        this.setState({codigos: res.data}); 
+    })
     }
   }
 
   handle_guardar = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log("valores al guardar:",values)
-        let router = {
-            id_equipo: this.state.id_equipo_router,
-            codigo: values.codigo,
-            tipo_equipo: "Router",
-            id_marca: values.marca,
-            modelo: values.modelo,
-            numero_serie: values.nserie,
-            asignado: values.asignar,
-            encargado_registro: 'admin',
-            componente_principal: null,
-            ip: values.ip,
-            nombre: values.nombre,
-            pass: values.pass,
-            usuario: values.usuario,
-            clave: values.clave,
-            estado_operativo: values.estado,
-            puerta_enlace: values.penlace,
-            descripcion: values.descripcion,
-            fecha_registro: '2020-03-26'
-        }
-        console.log("El router", router)
-        try{
-            if(this.state.titulo === "Editar router"){
-                AxiosRouter.editar_equipo_router(router).then(res => {
-                  message.loading({ content: 'Guardando modificaciones...', key });
-                  setTimeout(() => {
-                    message.success({ content: 'Registro modificado satisfactoriamente', key, duration: 3 });
-                  }, 1000);
-                  this.props.history.push("/router");
-                })
-            }else{
-                AxiosRouter.crear_equipo_router(router).then(res => {
-                message.loading({ content: 'Guardando datos...', key });
-                setTimeout(() => {
-                    message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
-                }, 1000);
-                this.props.history.push("/router");
-                })
+        if (this.state.titulo === 'Nuevo router'){
+            if (this.state.codigos.includes(values.codigo)){
+                message.error("El código ingresado ya existe en la base de datos, ingrese uno válido para continuar", 4)
             }
         }
-        catch(error) {
-            console.log(error)
-            message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
-        }
-      }
+            if (!err) {
+                console.log("valores al guardar:",values)
+                let router = {
+                    id_equipo: this.state.id_equipo_router,
+                    codigo: values.codigo,
+                    tipo_equipo: "Router",
+                    id_marca: values.marca,
+                    modelo: values.modelo,
+                    numero_serie: values.nserie,
+                    asignado: values.asignar,
+                    encargado_registro: 'admin',
+                    componente_principal: null,
+                    ip: values.ip,
+                    nombre: values.nombre,
+                    pass: values.pass,
+                    usuario: values.usuario,
+                    clave: values.clave,
+                    estado_operativo: values.estado,
+                    puerta_enlace: values.penlace,
+                    descripcion: values.descripcion,
+                    fecha_registro: '2020-03-26'
+                }
+                console.log("El router", router)
+                try{
+                    if(this.state.titulo === "Editar router"){
+                        AxiosRouter.editar_equipo_router(router).then(res => {
+                        message.loading({ content: 'Guardando modificaciones...', key });
+                        setTimeout(() => {
+                            message.success({ content: 'Registro modificado satisfactoriamente', key, duration: 3 });
+                        }, 1000);
+                        this.props.history.push("/router");
+                        })
+                    }else{
+                        AxiosRouter.crear_equipo_router(router).then(res => {
+                        message.loading({ content: 'Guardando datos...', key });
+                        setTimeout(() => {
+                            message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+                        }, 1000);
+                        this.props.history.push("/router");
+                        })
+                    }
+                }
+                catch(error) {
+                    console.log(error)
+                    message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
+                }
+            }
+        
     });
   }
 

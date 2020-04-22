@@ -42,9 +42,9 @@ class TablaReporte extends React.Component {
                     empleado: dato.empleado.concat(" ", dato.apellido),
                     tipo_equipo: dato.tipo_equipo,
                     codigo: dato.codigo,
-                    marca: dato.marca,
-                    modelo: dato.modelo,
-                    numero_serie: dato.numero_serie,
+                    marca: dato.marca === null ? '' : dato.marca,
+                    modelo: dato.modelo === null ? '' : dato.modelo,
+                    numero_serie: dato.numero_serie === null ? '' :  dato.numero_serie,
                     ip: dato.direccion_ip,
                     estado_operativo: dato.estado_operativo
                 }

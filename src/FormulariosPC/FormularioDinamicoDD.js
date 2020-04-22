@@ -189,7 +189,7 @@ const FormularioDinamicoDD = Form.create({
                         </Form.Item>
                     {(registro.length > 1) && (props.editionMode===false) ? ( 
                         <div style={{background: "#39CCCC" , borderRadius: 10, padding: 10}}  className="App">
-                            <Button  onClick={() => remove1(k)}  ><Icon type="minus-circle-o" /> Quitar</Button>
+                            <Button disabled onClick={() => remove1(k)}  ><Icon type="minus-circle-o" /> Quitar</Button>
                         </div> 
                         ) : null}
                 </div>

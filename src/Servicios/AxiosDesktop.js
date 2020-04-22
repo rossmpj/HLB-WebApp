@@ -21,4 +21,8 @@ export default class AxiosDesktop {
     return AxiosDesktop.instanceAxios.post(`/editar_desktop`, desktop);
   }
 
+  static listado_codigos = () => {
+    return AxiosDesktop.instanceAxios.get(`/listado_codigos`);
+  }
+
 }

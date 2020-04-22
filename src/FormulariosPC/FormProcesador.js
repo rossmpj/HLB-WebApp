@@ -1,9 +1,10 @@
-import React from 'react';
-import { Form, Button } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Form, Button, message } from 'antd';
 import InputComp from '../Componentes/InputComponent';
 import DescrComp from '../Componentes/DescripcionComponent';
 import MarcaComp from '../Componentes/MarcaSelect';
 import InNumComp from '../Componentes/InputNumberComp';
+import Axios from '../Servicios/AxiosDesktop'
 
 const tailLayout = { wrapperCol: { offset: 11, span: 5 } };              
 const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };
@@ -11,15 +12,44 @@ const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };
 const FormProcesador = Form.create({
     name:'Procesador'})( props => {
     const { getFieldDecorator, validateFields } = props.form;
+    const [codigos, setCodigos] = useState([]);
+    useEffect(() => {
+        Axios.listado_codigos().then(res => {
+          setCodigos(res.data); });    
+    }, []);
+
     const validateInput = (e) => {
         e.preventDefault();
         validateFields((err, values) => {
-            if(!err) {
-                props.submittedValues(values);
-                props.handleNextButton();
+            if (props.disabled === false){
+                if (codigos.includes(values.codigo_proc)){
+                    message.error("El código ingresado ya existe en la base de datos, ingrese uno válido para continuar", 4)
+                }else{
+                    if(!err) {
+                        props.submittedValues(values);
+                        props.handleNextButton();
+                    }
+                }
+            }else{
+                if(!err) {
+                    props.submittedValues(values);
+                    props.handleNextButton();
+                }
             }
+            // console.log("codec", props.codigo_equipo)
+            // if (codigos.includes(values.codigo_proc)){
+            //     message.error("El código ingresado ya existe en la base de datos, ingrese uno válido para continuar", 4)
+            // }else if (props.codigo_equipo===values.codigo_proc){
+            //     message.error("El código ya fue asignado al equipo ", 4)
+            // } else {
+            //     if(!err) {
+            //         props.submittedValues(values);
+            //         props.handleNextButton();
+            //     }
+            // }
         });
     }
+
     // const storeValues = () => {
     //     const values = getFieldsValue();
     //     props.submittedValues(values);

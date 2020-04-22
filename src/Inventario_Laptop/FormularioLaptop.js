@@ -49,6 +49,7 @@ class FormularioLaptop extends React.Component {
                 office: ''
             },
             procesador_fields: {
+                codigo_equipo: '',
                 disabled: false,
                 codigo_proc: '', 
                 marca_proc: undefined, 
@@ -110,7 +111,20 @@ class FormularioLaptop extends React.Component {
                 r.push(users);
             });
         });
+        let codigo_e = this.state.general_fields.codigo
         this.setState({
+            procesador_fields: {
+                codigo_equipo: codigo_e,
+                disabled: false,
+                codigo_proc: '', 
+                marca_proc: undefined, 
+                modelo_proc: '', 
+                nserie_proc: '', 
+                frec_proc: 0,
+                nucleos_proc: 0,
+                marcas: [],
+                descr_proc: ''
+            },
             memoria_ram: {
                 nombre: 'memoria RAM',
                 verDetalleRAM: true,
@@ -121,7 +135,7 @@ class FormularioLaptop extends React.Component {
                 marcas: r,
                 editionMode:false
             }, 
-                disco_duro: {
+            disco_duro: {
                 nombre: 'disco duro',
                 verDetalleRAM: false,
                 isStepFinal: true,
@@ -186,6 +200,7 @@ class FormularioLaptop extends React.Component {
                 office: info.office
             },
             procesador_fields: {
+                codigo_equipo: '',
                 disabled: true,
                 codigo_proc: registro.procesador.codigo,
                 marca_proc: registro.procesador.marca,
@@ -223,6 +238,11 @@ class FormularioLaptop extends React.Component {
     handleNextButton = () => {
         const { step } = this.state;
         this.setState({ step: step+1 });
+        // if(step>=1){
+        // if(this.state.general_fields.codigo === this.state.procesador_fields.codigo_proc){
+        //     message.error("El código ingresado ya fue asignado al equipo Laptop", 4)
+        // }}
+        console.log("step",this.state)
     }
     
     handleBackButton = () => {
@@ -245,8 +265,15 @@ class FormularioLaptop extends React.Component {
                     setTimeout(() => {
                     message.success({ content: 'Registro modificado satisfactoriamente', key, duration: 3 });
                     }, 1000);
-                    this.props.history.push("/laptop");
+                }).catch(err =>{
+                    if (err.response) {
+                        message.error(err.response.data.log, 4)
+                        .then(() => message.error('No fue posible actualizar los datos', 3))
+                    } else{
+                        message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
+                    }
                 })
+                this.props.history.push("/laptop");
             }else{
                 console.log("intentando")
                 Axios.crear_laptop(this.state).then(res => {
@@ -254,8 +281,15 @@ class FormularioLaptop extends React.Component {
                 setTimeout(() => {
                     message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
                 }, 1000);
-                this.props.history.push("/laptop");
+                }).catch(err =>{
+                    if (err.response) {
+                        message.error(err.response.data.log, 4)
+                        .then(() => message.error('No fue posible registrar los datos', 3))
+                    } else{
+                        message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
+                    }
                 })
+                this.props.history.push("/laptop");
             }
         }catch(error) {
             console.log(error)

@@ -172,7 +172,7 @@ class DetalleLaptop extends React.Component {
                   })}
                 </div>               
               </TabPane>
-
+              {/* {this.state.discos !== [] ? <> */}
               <TabPane tab={<span><FiHardDrive className="anticon" />Disco Duro</span>} key="5" >
               <div>
                   {this.state.discos.map((dd, i) => {
@@ -193,6 +193,7 @@ class DetalleLaptop extends React.Component {
                   })}
                 </div>
               </TabPane>  
+              {/* </> : null} */}
             </Tabs>
           </div>
         </div>
