@@ -27,6 +27,7 @@ import DetalleImpresora from './Inventario_Impresora/DetalleImpresora';
 import DetalleEquipo from './Inventario_Equipo/DetalleEquipo';
 import TablaReporte from './Reportes/TablaReporte';
 import TablaBajas from './Reportes/TablaBajas';
+import Home from './Home/Home'
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -51,8 +52,8 @@ class App extends React.Component {
             {this.state.collapsed ? <img className="App-logo" src={"./Boton.png"} alt="icon" /> : <img className="App-logo" src={"./logo.png"} alt="logo" />}
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
               <Menu.Item key="11">
-                <Icon type="home" />
-                <span>Inicio</span>
+                <Icon type="home" />Inicio
+                <Link to="/" />
               </Menu.Item>
               <SubMenu
                 key="dash"
@@ -144,6 +145,7 @@ class App extends React.Component {
               <Route exact path='/equipo/view' component={DetalleEquipo} />
               <Route exact path='/reportes/general' component={TablaReporte} />
               <Route exact path='/reportes/de-baja' component={TablaBajas} />
+              <Route exact path='/' component={Home} />
             </Content>
             <Footer className="style-footer">Inventario Hospital León Becerra ©2020 Creado por EasySoft [ESPOL]</Footer>
           </Layout>

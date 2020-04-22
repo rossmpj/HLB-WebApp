@@ -224,7 +224,8 @@ class TablaBajas extends React.Component {
                      const data = new Blob([excelBuffer], { type: fileType });
                      saveAs(data, "equipos_de_baja" + fileExtension);
                 } catch (error) {
-                    console.log(error);
+                    message.error(error.message)
+                    .then(() => message.error('No fue posible generar el archivo', 2.5))
                 }
                 break;
             default:

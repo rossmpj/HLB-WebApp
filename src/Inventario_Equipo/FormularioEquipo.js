@@ -1,6 +1,6 @@
 import React from 'react';
 import '../App.css';
-import { Form, Input, Button, Layout, message, Select } from 'antd';
+import { Form, Input, Button, Layout, message, Select, InputNumber } from 'antd';
 import '../custom-antd.css';
 import InputComponent from '../Componentes/InputComponent'
 import AsignarSelect from '../Componentes/AsignarSelect'
@@ -12,6 +12,7 @@ import Axios from '../Servicios/AxiosTipo'
 
 const { Content } = Layout;
 const { TextArea } = Input;
+const InputGroup = Input.Group;
 
 const tailLayout = {
     wrapperCol: { offset: 9, span: 5 }
@@ -42,7 +43,12 @@ class FormularioEquipo extends React.Component {
             componente_principal: undefined,
             asignado: undefined,
             descripcion: "",
-            key: ""
+            key: "",
+            capacidad: 0,
+            unidad: "Mb",
+            frecuencia: 0,
+            nucleo: 0,
+            tipo_mem: ""
         };
         this.handle_guardar = this.handle_guardar.bind(this);
     }
@@ -86,8 +92,12 @@ class FormularioEquipo extends React.Component {
                             message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
                         }, 1000);
                     }).catch(err => {
-                        console.log(err)
-                        message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
+                        if (err.response) {
+                            message.error(err.response.data.log, 4)
+                                .then(() => message.error('No fue posible registrar los datos', 3))
+                        } else {
+                            message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
+                        }
                     });
                 } else {
                     values.key = this.state.key;
@@ -97,7 +107,12 @@ class FormularioEquipo extends React.Component {
                             message.success({ content: "Edición realizada satisfactoriamente", key, duration: 3 });
                         }, 1000);
                     }).catch(err => {
-                        console.log(err);
+                        if (err.response) {
+                            message.error(err.response.data.log, 4)
+                                .then(() => message.error('No fue posible actualizar los datos', 3))
+                        } else {
+                            message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
+                        }
                     });
                 }
             }
@@ -105,11 +120,11 @@ class FormularioEquipo extends React.Component {
     }
 
     cargar_datos(info) {
-        console.log(info)
+        this.setState({ tipo_equipo: info.tipo_equipo, });
         this.props.form.setFieldsValue({
             codigo: info.codigo,
-            tipo_equipo: info.tipo_equipo,
             modelo: info.modelo,
+            tipo_equipo: info.tipo_equipo,
             descripcion: info.descripcion,
             numero_serie: info.numero_serie
         });
@@ -125,6 +140,44 @@ class FormularioEquipo extends React.Component {
         }
         if (info.ip !== null) {
             this.setState({ ip: info.ip });
+        }
+
+        if (info.tipo_equipo === 'memoria_ram' || info.tipo_equipo === 'disco_duro' || info.tipo_equipo === 'ram'
+            || info.tipo_equipo === 'procesador') {
+            Axios.info_extra(info.key).then(res => {
+                let registro = {};
+                res.data.forEach(function (dato) {
+                    if (dato.campo === "capacidad") {
+                        registro.campo1 = "Capacidad"
+                        registro.dato1 = dato.dato
+                    }
+                    if (dato.campo === "tipo") {
+                        registro.campo2 = "Tipo"
+                        registro.dato2 = dato.dato
+
+                    }
+                    if (dato.campo === "nucleos") {
+                        registro.campo1 = "Núcleos"
+                        registro.dato1 = dato.dato
+                    }
+                    if (dato.campo === "frecuencia") {
+                        registro.campo2 = "Frecuencia"
+                        registro.dato2 = dato.dato
+                    }
+                });
+
+                if (registro.campo1 === "Capacidad") {
+                    this.setState({ capacidad: registro.dato1 })
+                } else {
+                    this.setState({ nucleo: registro.dato1 })
+                }
+                if (registro.campo2 === "Tipo") {
+                    this.setState({ tipo_mem: registro.dato2 })
+                }
+                if (registro.campo2 === "Frecuencia") {
+                    this.setState({ frecuencia: registro.dato2 })
+                }
+            })
         }
 
     }
@@ -153,8 +206,7 @@ class FormularioEquipo extends React.Component {
                                         option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                     onChange={(value) => {
                                         this.setState({ tipo_equipo: value });
-                                    }}
-                                >
+                                    }}>
                                     {
                                         this.state.equipos.map((dato, index) =>
                                             <Select.Option key={index} value={dato}>{dato}</Select.Option>
@@ -215,6 +267,68 @@ class FormularioEquipo extends React.Component {
                             required={true}
                             decorator={getFieldDecorator}
                             initialValue={this.state.estado_operativo} />
+
+                        {this.state.tipo_equipo.toLocaleLowerCase() === "memoria_ram" || this.state.tipo_equipo.toLocaleLowerCase() === "disco_duro" ||
+                            this.state.tipo_equipo.toLocaleLowerCase() === "ram" || this.state.tipo_equipo.toLocaleLowerCase() === "discoduro" ?
+                            <div>
+                                <Form.Item label="Capacidad">
+                                    <InputGroup compact>
+                                        {getFieldDecorator('capacidad', {
+                                            rules: [{ required: true, message: 'Debe completar este campo' }],
+                                            initialValue: this.state.capacidad,
+                                        })(<InputNumber min={0} ></InputNumber>)}
+                                        {getFieldDecorator('un', {
+                                            rules: [{ required: true, message: 'Debe completar este campo' }],
+                                            initialValue: this.state.unidad,
+                                        })(<Select >
+                                            <Select.Option value="Mb">Mb</Select.Option>
+                                            <Select.Option value="GB">GB</Select.Option>
+                                            <Select.Option value="TB">TB</Select.Option>
+                                        </Select>)}
+                                    </InputGroup>
+                                </Form.Item>
+                                <Form.Item label="Tipo">
+                                    {getFieldDecorator('tipo_mem', {
+                                        rules: [{ required: true, message: 'Debe completar este campo' }],
+                                        initialValue: this.state.tipo_mem,
+                                    })(<Select>
+                                        <Select.Option value="DDR">DDR</Select.Option>
+                                        <Select.Option value="DDR2">DDR2</Select.Option>
+                                        <Select.Option value="DDR3">DDR3</Select.Option>
+                                        <Select.Option value="DDR3/DDR4">DDR3/DDR4</Select.Option>
+                                        <Select.Option value="DDR4">DDR4</Select.Option>
+                                    </Select>)}
+                                </Form.Item>
+                            </div>
+                            : null
+                        }
+                        {this.state.tipo_equipo.toLocaleLowerCase() === "procesador" ?
+                            <div>
+                                <Form.Item label="Frecuencia">
+                                    {getFieldDecorator('frecuencia',
+                                        {
+                                            rules: [{ required: true, message: 'Debe completar este campo' }],
+                                            initialValue: this.state.frecuencia
+                                        })(
+                                            <InputNumber
+                                                min={0}
+                                            />
+                                        )}
+                                </Form.Item>
+                                <Form.Item label="Núcleos">
+                                    {getFieldDecorator('nucleo',
+                                        {
+                                            rules: [{ required: true, message: 'Debe completar este campo' }],
+                                            initialValue: this.state.nucleo
+                                        })(
+                                            <InputNumber
+                                                min={0}
+                                            />
+                                        )}
+                                </Form.Item>
+                            </div>
+                            : null
+                        }
 
                         <IpSelect
                             class=""

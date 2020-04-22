@@ -193,7 +193,25 @@ class TablaReporte extends React.Component {
                     saveAs(data, "equipos_de_baja" + fileExtension);
                 }).catch(err => {
                     message.error('No se pudieron cargar los datos, revise la conexión con el servidor', 4);
-                }); */
+                }); 
+                let registro={
+                    empleado: "empleado",
+                    departamento: "departamento",
+                    tipo_equipo: "tipo_equipo",
+                    marca: "marca",
+                    modelo: "modelo",
+                    numero_serie: "numero_serie",
+                    direccion_ip: "direccion_ip",
+                    so: "so",
+                    services_pack: "services_pack",
+                    licencia: "licencia",
+                    tipo_so: "tipo_so",
+                    nombre_pc: "nombre_pc",
+                    usuario_pc: "usuario_pc",
+                    office: "office",
+                    estado_operativo: "estado_operativo",
+                    descripcion: "descripcion" 
+                }*/
                 break;
             default:
                 message.error('Debe seleccionar un formato de descarga');

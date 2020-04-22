@@ -1,15 +1,5 @@
 import React from 'react';
-import {
-    Button,
-    Row,
-    Col,
-    Table,
-    Input,
-    Icon,
-    Popconfirm,
-    message,
-    Typography
-} from 'antd';
+import { Button, Row, Col, Table, Input, Icon, Popconfirm, message, Typography } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosTipo'
@@ -68,7 +58,6 @@ class TablaEquipo extends React.Component {
     };
 
     handleChange = (pagination, filters, sorter) => {
-        console.log('Various parameters', pagination, filters, sorter);
         this.setState({
             filteredInfo: filters,
             sortedInfo: sorter,
@@ -280,11 +269,9 @@ class TablaEquipo extends React.Component {
                         </Link>
                         <Popconfirm
                             title="¿Desea dar de baja este equipo?"
-                            okText="Si"
-                            cancelText="No"
-                            onConfirm={() => this.handleDelete(record.key)}
-                        >
-                            <Button size="small" type="danger" icon="delete" />
+                            okText="Si" cancelText="No"
+                            onConfirm={() => this.handleDelete(record.key)}>
+                            <Button disabled type="danger" icon="delete" size="small" /> : <Button type="danger" icon="delete" size="small" />}
                         </Popconfirm>
                     </div>
                 ),

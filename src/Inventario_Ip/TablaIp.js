@@ -1,15 +1,5 @@
 import React from 'react';
-import {
-    Button,
-    Row,
-    Col,
-    Table,
-    Input,
-    Icon,
-    Popconfirm,
-    message,
-    Typography
-} from 'antd';
+import {Button,Row,Col,Table,Input,Icon,Popconfirm,message,Typography} from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosTipo';
@@ -29,7 +19,6 @@ class TablaIp extends React.Component {
             filteredInfo: null,
             sortedInfo: null,
             index: 0
-
         };
         this.handleClick = this.handleClick.bind(this);
     }
@@ -144,8 +133,7 @@ class TablaIp extends React.Component {
                     onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
                     icon="search"
                     size="small"
-                    style={{ width: 90, marginRight: 8 }}
-                >
+                    style={{ width: 90, marginRight: 8 }}>
                     Buscar
             </Button>
                 <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>

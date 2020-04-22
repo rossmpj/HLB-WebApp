@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-    Typography,
-    Button,
-    Row,
-    Col
-} from 'antd';
+import {Typography,Button, Row, Col} from 'antd';
 import FormularioEquipo from './FormularioEquipo';
 import { Link } from 'react-router-dom';
 const { Title } = Typography;

@@ -24,7 +24,11 @@ class DetalleEquipo extends React.Component {
             componente: "",
             ip: "",
             registro: "",
-            nodata: false
+            nodata: false,
+            campo1: undefined,
+            campo2: undefined,
+            label1: "",
+            label2: ""
         }
     }
 
@@ -59,10 +63,13 @@ class DetalleEquipo extends React.Component {
                 registro.descripcion = dato.descripcion;
                 registro.componente = dato.componente_principal;
             });
+            registro.key= info.key;
             this.cargar_datos(registro);
         }).catch(err => {
             message.error('Problemas de conexión con el servidor, inténtelo más tarde', 4);
         });
+
+
     }
 
     cargar_datos(info) {
@@ -81,6 +88,40 @@ class DetalleEquipo extends React.Component {
         })
         info.ip === " " || info.ip == null ? this.setState({ ip: "No asignada" }) :
             this.setState({ ip: info.ip })
+
+        if (info.tipo === 'memoria_ram' || info.tipo === 'disco_duro' || info.tipo === 'ram'
+            || info.tipo === 'procesador') {
+              
+             Axios.info_extra(info.key).then(res => {
+                 let registro={}
+                res.data.forEach(function (dato) {
+                    if (dato.campo === "capacidad") {
+                        registro.campo1= "Capacidad"
+                        registro.dato1= dato.dato
+                    }
+                    if (dato.campo === "tipo") {
+                        registro.campo2= "Tipo"
+                        registro.dato2= dato.dato
+                       
+                    }
+                    if (dato.campo === "nucleos") {
+                        registro.campo1= "Núcleos"
+                        registro.dato1= dato.dato
+                    }
+                    if (dato.campo === "frecuencia") {
+                        registro.campo2= "Frecuencia"
+                        registro.dato2= dato.dato
+                    }
+                });
+
+                this.setState({ 
+                    label1: registro.campo1,
+                    campo1: registro.dato1,
+                    label2: registro.campo2,
+                    campo2: registro.dato2
+                 })
+            }) 
+        }
     }
 
     render() {
@@ -113,7 +154,14 @@ class DetalleEquipo extends React.Component {
                                         <Badge status="processing" text={this.state.estado} /> </Descriptions.Item>
                                     <Descriptions.Item label="Componente principal">{this.state.componente}</Descriptions.Item>
                                     <Descriptions.Item label="Dirección Ip">{this.state.ip}</Descriptions.Item>
-                                    <Descriptions.Item label="Descripción">{this.state.descripcion}</Descriptions.Item>
+                                    <Descriptions.Item label="Descripción" span={3}>{this.state.descripcion}</Descriptions.Item>
+                                    {(this.state.tipo === 'memoria_ram') || (this.state.tipo === 'disco_duro') || (this.state.tipo === 'ram') || (this.state.tipo === 'procesador') ?
+                                        <>
+                                            <Descriptions.Item label={this.state.label1}>{this.state.campo1} </Descriptions.Item>
+                                            <Descriptions.Item label={this.state.label2} >{this.state.campo2} </Descriptions.Item>
+                                        </>
+                                        : null
+                                    }
                                 </Descriptions>
                             </TabPane>
 
