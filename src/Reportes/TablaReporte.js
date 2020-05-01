@@ -241,15 +241,15 @@ class TablaReporte extends React.Component {
         const tipo_link = (record) => {
             switch (record.tipo_equipo.toLowerCase()) {
                 case "impresora":
-                    return '/impresora/view'
+                    return '/impresora/view/'+record.key;
                 case "desktop":
-                    return '/desktop/view'
+                    return '/desktop/view/'+record.key;
                 case "laptop":
-                    return '/laptop/view'
+                    return '/laptop/view/'+record.key
                 case "router":
-                    return '/router/view'
+                    return '/router/view/'+record.key;
                 default:
-                    return '/equipo/view'
+                    return '/equipo/view/'+record.key;
             }
         }
         const columns = [
@@ -301,7 +301,7 @@ class TablaReporte extends React.Component {
                 title: 'Código',
                 dataIndex: 'codigo',
                 key: 'codigo',
-                render: (text, record) => <Link to={{ pathname: `${tipo_link(record)}`, state: { info: record } }}>{text}</Link>,
+                render: (text, record) => <Link to={{ pathname: `${tipo_link(record)}`}}>{text}</Link>,
                 ...this.getColumnSearchProps('codigo')
             },
             {

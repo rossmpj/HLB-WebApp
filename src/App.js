@@ -127,16 +127,16 @@ class App extends React.Component {
             <Header className="site-layout-background"></Header>
             <Content style={{ margin: '16px' }}>
               <Route exact path='/router' component={TablaRouter} />
-              <Route exact path='/router/view' component={DetalleRouter} />
+              <Route exact path='/router/view/:id' component={DetalleRouter} />
               <Route exact path='/router/form' component={FormularioRouter} />
               <Route exact path='/desktop' component={TablaDesktop} />
-              <Route exact path='/desktop/view' component={DetalleDesktop} />
+              <Route exact path='/desktop/view/:id' component={DetalleDesktop} />
               <Route exact path='/desktop/form' component={FormularioDesktop} />
               <Route exact path='/laptop' component={TablaLaptop} />
-              <Route exact path='/laptop/view' component={DetalleLaptop} />
+              <Route exact path='/laptop/view/:id' component={DetalleLaptop} />
               <Route exact path='/laptop/form' component={FormularioLaptop} />
               <Route exact path='/otros/view' component={DetalleOtrosEquipos} />
-              <Route exact path='/ip/view' component={DetalleIP} />
+              <Route exact path='/ip/view/:ip' component={DetalleIP} />
               <Route exact path='/impresora' component={Impresora} />
               <Route exact path='/ip' component={TablaIp} />
               <Route exact path='/otrosequipos' component={HomeEquipo} />
@@ -144,10 +144,10 @@ class App extends React.Component {
               <Route exact path='/marca' component={TablaMarca} />
               <Route exact path='/marca/form' component={VistaMarca} />
               <Route exact path='/ip/form' component={VistaIp} />
-              <Route exact path='/ip/detail' component={DetalleIIp} />
+              <Route exact path='/ip/detail/:id' component={DetalleIIp} />
               <Route exact path='/impresora/form' component={VistaImpresora} />
-              <Route exact path='/impresora/view' component={DetalleImpresora} />
-              <Route exact path='/equipo/view' component={DetalleEquipo} />
+              <Route exact path='/impresora/view/:id' component={DetalleImpresora} />
+              <Route exact path='/equipo/view/:id' component={DetalleEquipo} />
               <Route exact path='/reportes/general' component={TablaReporte} />
               <Route exact path='/reportes/de-baja' component={TablaBajas} />
               <Route exact path='/' component={Home} />

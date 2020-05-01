@@ -187,7 +187,7 @@ componentDidMount = () => {
         dataIndex: 'codigo',
         key: 'codigo',
         fixed: 'left',
-        render: (text, record) =>  <Link to={{ pathname: '/desktop/view', state: { info: record } }} >{text}</Link>,
+        render: (text, record) =>  <Link to={{ pathname: '/desktop/view/'+record.key }} >{text}</Link>,
         ...this.getColumnSearchProps('codigo')
       },
       {
@@ -398,7 +398,7 @@ componentDidMount = () => {
         title: 'IP',
         dataIndex: 'ip',
         key: 'ip',
-        render: (text, record) =>  <Link to={{ pathname: '/ip/view', state: { info: record } }} >{text}</Link>,
+        render: (text, record) =>  <Link to={{ pathname: '/ip/view/'+record.ip}} >{text}</Link>,
       },
       {
         title: 'Monitor',

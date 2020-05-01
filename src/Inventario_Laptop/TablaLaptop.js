@@ -178,7 +178,7 @@ class TablaLaptop extends React.Component{
         dataIndex: 'codigo',
         key: 'codigo',
         fixed: 'left',
-        render: (text, record) =>  <Link to={{ pathname: '/laptop/view', state: { info: record } }} >{text}</Link>,
+        render: (text, record) =>  <Link to={{ pathname: '/laptop/view/'+record.key }} >{text}</Link>,
         ...this.getColumnSearchProps('codigo'),
         sorter: (a, b) => a.codigo.length - b.codigo.length,
         sortOrder: sortedInfo.columnKey === 'codigo' && sortedInfo.order,
@@ -403,7 +403,7 @@ class TablaLaptop extends React.Component{
         title: 'IP',
         dataIndex: 'ip',
         key: 'ip',
-        render: (text, record) =>  <Link to={{ pathname: '/ip/view', state: { info: record } }} >{text}</Link>,
+        render: (text, record) =>  <Link to={{ pathname: '/ip/view/'+record.ip}} >{text}</Link>,
       },
       {
         title: 'Procesador',

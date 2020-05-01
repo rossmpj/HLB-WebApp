@@ -190,7 +190,7 @@ class TablaImpresora extends React.Component {
                 dataIndex: 'codigo',
                 key: 'codigo',
                 fixed: 'left',
-                render: (text, record) => <Link to={{ pathname: '/impresora/view', state: { info: record } }}>{text}</Link>,
+                render: (text, record) => <Link to={{ pathname: '/impresora/view/'+record.id_equipo}}>{text}</Link>,
                 ...this.getColumnSearchProps('codigo')
             },
             {

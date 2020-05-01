@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 const { TabPane } = Tabs;
 const { Title } = Typography;
 
+
+
 class DetalleEquipo extends React.Component {
     constructor(props) {
         super(props);
@@ -24,7 +26,7 @@ class DetalleEquipo extends React.Component {
             componente: "",
             ip: "",
             registro: "",
-            nodata: false,
+            data: false,
             campo1: undefined,
             campo2: undefined,
             label1: "",
@@ -33,99 +35,106 @@ class DetalleEquipo extends React.Component {
     }
 
     componentDidMount = () => {
-        if (typeof this.props.location !== 'undefined' &&
-            typeof this.props.location.state !== 'undefined') {
-            const { info } = this.props.location.state;
-            this.inicializar_datos(info);
-        } else {
-            this.setState({ nodata: true });
+        const { id } = this.props.match.params;
+        this.inicializar_datos(id);
+    }
+
+    inicializar_datos = async (id) => {
+        try {
+            const respuesta = await this.cargar_datos(id);
+            if (respuesta.length === 0) {
+                this.setState({ data: true });
+            } else {
+                const registro = {};
+                respuesta.forEach(function (dato) {
+                    registro.ip = dato.direccion_ip === null ? "No asignada" : dato.direccion_ip;
+                    registro.codigo = dato.codigo;
+                    registro.nserie = dato.numero_serie;
+                    registro.bspi = dato.bspi_punto === null ? "No asignado" : dato.bspi_punto;
+                    registro.asignado = dato.empleado === null ? "No asignado" : dato.empleado.concat(" ", dato.apellido);
+                    registro.departamento = dato.departamento === null ? "No asignado" : dato.departamento;
+                    registro.tipo = dato.tipo_equipo;
+                    registro.marca = dato.marca;
+                    registro.estado = dato.estado_operativo;
+                    registro.modelo = dato.modelo;
+                    registro.descripcion = dato.descripcion;
+                    registro.componente = dato.componente_principal === null ? "Sin componente principal" : dato.componente_principal;
+                    registro.key= id;
+                });
+                this.inicializar_estados(registro);
+            }
+        } catch (error) {
+            message.error(error.message, 4);
         }
     }
 
-    inicializar_datos(info) {
-        let empleado = "";
-        let registro = {};
-        Axios.equipo_id(info.key).then(res => {
-            res.data.forEach(function (dato) {
-                if (dato.empleado !== null) {
-                    empleado = dato.empleado.concat(" ", dato.apellido);
-                }
-                registro.ip = dato.direccion_ip;
-                registro.codigo = dato.codigo;
-                registro.nserie = dato.numero_serie;
-                registro.bspi = dato.bspi_punto
-                registro.asignado = empleado;
-                registro.departamento = dato.departamento;
-                registro.tipo = dato.tipo_equipo;
-                registro.marca = dato.marca;
-                registro.estado = dato.estado_operativo;
-                registro.modelo = dato.modelo;
-                registro.descripcion = dato.descripcion;
-                registro.componente = dato.componente_principal;
-            });
-            registro.key= info.key;
-            this.cargar_datos(registro);
-        }).catch(err => {
-            message.error('Problemas de conexión con el servidor, inténtelo más tarde', 4);
-        });
-
-
+    cargar_datos = async (key) => {
+        try {
+            const res = await Axios.equipo_id(key);
+            return res.data;
+        } catch (error) {
+            throw new Error('No se pudieron cargar los datos del servidor, inténtelo más tarde');
+        }
     }
 
-    cargar_datos(info) {
+    cargar_extra = async (key) => {
+        try {
+            const res = await Axios.info_extra(key);
+            let registro = {}
+            res.data.forEach(function (dato) {
+                if (dato.campo === "capacidad") {
+                    registro.campo1 = "Capacidad"
+                    registro.dato1 = dato.dato
+                }
+                if (dato.campo === "tipo") {
+                    registro.campo2 = "Tipo"
+                    registro.dato2 = dato.dato
+
+                }
+                if (dato.campo === "nucleos") {
+                    registro.campo1 = "Núcleos"
+                    registro.dato1 = dato.dato
+                }
+                if (dato.campo === "frecuencia") {
+                    registro.campo2 = "Frecuencia"
+                    registro.dato2 = dato.dato
+                }
+            });
+            return registro;
+        } catch (error) {
+            throw new Error('No se pudieron cargar los datos del servidor, inténtelo más tarde');
+        }
+    }
+
+    inicializar_estados = async (info) => {
         this.setState({
             codigo: info.codigo,
             nserie: info.nserie,
             bspi: info.bspi,
             asignado: info.asignado,
-            dpto: info.dpto,
+            dpto: info.departamento,
             tipo: info.tipo,
             marca: info.marca,
             estado: info.estado,
             modelo: info.modelo,
             descripcion: info.descripcion,
             componente: info.componente,
+            ip: info.ip
         })
-        info.ip === " " || info.ip == null ? this.setState({ ip: "No asignada" }) :
-            this.setState({ ip: info.ip })
-
         if (info.tipo === 'memoria_ram' || info.tipo === 'disco_duro' || info.tipo === 'ram'
             || info.tipo === 'procesador') {
-              
-             Axios.info_extra(info.key).then(res => {
-                 let registro={}
-                res.data.forEach(function (dato) {
-                    if (dato.campo === "capacidad") {
-                        registro.campo1= "Capacidad"
-                        registro.dato1= dato.dato
-                    }
-                    if (dato.campo === "tipo") {
-                        registro.campo2= "Tipo"
-                        registro.dato2= dato.dato
-                       
-                    }
-                    if (dato.campo === "nucleos") {
-                        registro.campo1= "Núcleos"
-                        registro.dato1= dato.dato
-                    }
-                    if (dato.campo === "frecuencia") {
-                        registro.campo2= "Frecuencia"
-                        registro.dato2= dato.dato
-                    }
-                });
-
-                this.setState({ 
-                    label1: registro.campo1,
-                    campo1: registro.dato1,
-                    label2: registro.campo2,
-                    campo2: registro.dato2
-                 })
-            }) 
+            const registro = await this.cargar_extra(info.key);
+            this.setState({
+                label1: registro.campo1,
+                campo1: registro.dato1,
+                label2: registro.campo2,
+                campo2: registro.dato2
+            })
         }
     }
 
     render() {
-        if (this.state.nodata) {
+        if (this.state.data) {
             return (<SinResultados></SinResultados>)
         } else {
             return (
