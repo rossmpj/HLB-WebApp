@@ -28,55 +28,61 @@ class DetalleImpresora extends React.Component {
             rollo: "",
             componente: "",
             ip: "",
-            nodata: false
+            data: false
         }
     }
 
     componentDidMount = () => {
-        if (typeof this.props.location !== 'undefined' &&
-            typeof this.props.location.state !== 'undefined') {
-            const { info } = this.props.location.state;
-            this.inicializar_datos(info);
-        } else {
-            this.setState({ nodata: true });
+        /*Captura el parámetro ID que es pasado en la URL */
+        const { id } = this.props.match.params;
+        this.inicializar_datos(id);
+    }
+
+    inicializar_datos = async (id) => {
+        try {
+            const respuesta = await this.cargar_datos(id);
+            if (respuesta.length === 0) {
+                this.setState({ data: true });
+            } else {
+                const registro = {};
+                respuesta.forEach(function (dato) {
+                    registro.numero_serie = dato.numero_serie;
+                    registro.tipo = dato.tipo;
+                    registro.marca = dato.id_marca;
+                    registro.codigo = dato.codigo;
+                    registro.estado_operativo = dato.estado_operativo;
+                    registro.modelo = dato.modelo;
+                    registro.descripcion = dato.descripcion;
+                    registro.tinta = dato.tinta === null ? "---" : dato.tinta;
+                    registro.cartucho = dato.cartucho === null ? "---" : dato.cartucho;
+                    registro.toner = dato.toner === null ? "---" : dato.toner;
+                    registro.rodillo = dato.rodillo === null ? "---" : dato.rodillo;
+                    registro.cinta = dato.cinta === null ? "---" : dato.cinta;
+                    registro.rollo = dato.rollo === null ? "---" : dato.rollo;
+                    registro.ip = dato.ip === null ? "No asignada" : dato.ip;
+                    registro.componente_principal = dato.componente_principal === null ? "Sin componente principal" : dato.componente_principal;
+                    registro.asignado = dato.empleado === null ? "Sin asignar" : dato.empleado.concat(" ", dato.apellido);
+                    registro.bspi = dato.bspi_punto === null ? "Sin asignar" : dato.bspi_punto;
+                    registro.dpto = dato.departamento === null ? "Sin asignar" : dato.departamento;
+                });
+                this.inicializar_estados(registro);
+            }
+        } catch (error) {
+            message.error(error.message, 4);
+            this.setState({ data: true });
         }
     }
 
-    inicializar_datos(info) {
-        let empleado = "";
-        let registro = {};
-        Axios.impresora_id(info.key).then(res => {
-            res.data.forEach(function (dato) {
-                if (dato.empleado !== null) {
-                    empleado = dato.empleado.concat(" ", dato.apellido);
-                }
-                registro.numero_serie = dato.numero_serie;
-                registro.asignado = empleado;
-                registro.tipo = dato.tipo;
-                registro.marca = dato.id_marca;
-                registro.codigo = dato.codigo;
-                registro.estado_operativo = dato.estado_operativo;
-                registro.modelo = dato.modelo;
-                registro.tinta = dato.tinta;
-                registro.cartucho = dato.cartucho;
-                registro.descripcion = dato.descripcion;
-                registro.toner = dato.toner;
-                registro.rodillo = dato.rodillo;
-                registro.cinta = dato.cinta;
-                registro.rollo = dato.rollo;
-                registro.ip = dato.ip;
-                registro.componente_principal = dato.componente_principal;
-                registro.bspi = dato.bspi_punto;
-                registro.dpto = dato.departamento;
-
-            });
-            this.cargar_datos(registro);
-        }).catch(err => {
-            message.error('Problemas de conexión con el servidor, inténtelo más tarde', 4);
-        });
+    cargar_datos = async (key) => {
+        try {
+            const res = await Axios.impresora_id(key);
+            return res.data;
+        } catch (error) {
+            throw new Error('No se pudieron cargar los datos del servidor, inténtelo más tarde');
+        }
     }
 
-    cargar_datos(info) {
+    inicializar_estados(info) {
         this.setState({
             codigo: info.codigo,
             nserie: info.numero_serie,
@@ -94,14 +100,13 @@ class DetalleImpresora extends React.Component {
             toner: info.toner,
             rodillo: info.rodillo,
             cinta: info.cinta,
-            rollo: info.rollo
+            rollo: info.rollo,
+            ip: info.ip
         });
-        info.ip === " " || info.ip == null ? this.setState({ ip: "No asignada" }) :
-            this.setState({ ip: info.ip })
     }
 
     render() {
-        if (this.state.nodata) {
+        if (this.state.data) {
             return (<SinResultados></SinResultados>)
         } else {
             return (

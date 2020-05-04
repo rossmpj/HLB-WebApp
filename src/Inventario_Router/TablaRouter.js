@@ -171,7 +171,7 @@ class TablaRouter extends React.Component{
           dataIndex: 'codigo',
           key: 'codigo',
           fixed: 'left',
-          render: (text, record) => <Link to={{ pathname: '/router/view', state: { info: record } }} >{text}</Link>,
+          render: (text, record) => <Link to={{ pathname: '/router/view/'+record.key}} >{text}</Link>,
           ...this.getColumnSearchProps('codigo'),
           sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.codigo, b.codigo),
           sortOrder: sortedInfo.columnKey === 'codigo' && sortedInfo.order,
@@ -249,7 +249,7 @@ class TablaRouter extends React.Component{
           title: 'IP',
           dataIndex: 'ip',
           key: 'ip',
-          render: (text, record) => <Link to={{ pathname: '/ip/view', state: { info: record } }} >{text}</Link>,
+          render: (text, record) => <Link to={{ pathname: '/ip/view/'+record.ip}} >{text}</Link>,
         },
         {
           title: 'Puerta enlace',

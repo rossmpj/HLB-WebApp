@@ -171,7 +171,7 @@ class TablaEquipo extends React.Component {
                 dataIndex: 'codigo',
                 key: 'codigo',
                 fixed: 'left',
-                render: (text, record) => <Link to={{ pathname: '/equipo/view', state: { info: record } }}>{text}</Link>,
+                render: (text, record) => <Link to={{ pathname: '/equipo/view/'+record.key}}>{text}</Link>,
                 ...this.getColumnSearchProps('codigo')
             },
             {

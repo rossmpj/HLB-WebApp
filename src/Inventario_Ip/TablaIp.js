@@ -173,7 +173,7 @@ class TablaIp extends React.Component {
                 dataIndex: 'ip',
                 key: 'ip',
                 fixed: 'left',
-                render: (text, record) => <Link to={{ pathname: '/ip/detail', state: { info: record } }}>{text}</Link>,
+                render: (text, record) => <Link to={{ pathname: '/ip/detail/'+record.key}}>{text}</Link>,
                 ...this.getColumnSearchProps('ip')
             },
             {
