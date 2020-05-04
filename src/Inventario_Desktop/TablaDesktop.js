@@ -222,22 +222,6 @@ componentDidMount = () => {
         title: 'Departamento',
         dataIndex: 'departamento',
         key: 'departamento',
-        filters: [
-          {
-              text: 'Financiero',
-              value: 'Financiero',
-          },
-          {
-              text: 'Proveeduría',
-              value: 'Proveeduría',
-          },
-          {
-              text: 'Auditoría',
-              value: 'Auditoría',
-          }
-        ],
-        filteredValue: filteredInfo.departamento || null,
-        onFilter: (value, record) => record.departamento.indexOf(value) === 0,
         sorter: (a, b) => a.departamento.length - b.departamento.length,
         sortOrder: sortedInfo.columnKey === 'departamento' && sortedInfo.order,
       },
@@ -264,14 +248,26 @@ componentDidMount = () => {
         dataIndex: 'estado',
         key: 'estado',
         filters: [
-          {
-              text: 'Operativo',
-              value: 'Operativo',
-          },
-          {
-              text: 'No Operativo',
-              value: 'No Operativo',
-          }
+            {
+                text: 'Disponible',
+                value: 'D',
+            },
+            {
+                text: 'Operativo',
+                value: 'O',
+            },
+            {
+                text: 'En revisión',
+                value: 'ER',
+            },
+            {
+                text: 'Reparado',
+                value: 'R',
+            },
+            {
+                text: 'De baja',
+                value: 'B',
+            }
         ],
         filteredValue: filteredInfo.estado || null,
         onFilter: (value, record) => record.estado.indexOf(value) === 0,
@@ -283,22 +279,6 @@ componentDidMount = () => {
         dataIndex: 'so',
         key: 'so',
         width: 150,
-        filters: [
-          {
-              text: 'Windows 10 Home Single Language',
-              value: 'Windows 10 Home Single Language',
-          },
-          {
-              text: 'Windows 8.1 Pro',
-              value: 'Windows 8.1 Pro',
-          },
-          {
-              text: 'Windows 7 Professional',
-              value: 'Windows 7 Professional',
-          }
-        ],
-        filteredValue: filteredInfo.so || null,
-        onFilter: (value, record) => record.so.indexOf(value) === 0,
         sorter: (a, b) => a.so.length - b.so.length,
         sortOrder: sortedInfo.columnKey === 'so' && sortedInfo.order,
       }, 
@@ -307,15 +287,15 @@ componentDidMount = () => {
         dataIndex: 'so_type',
         key: 'so_type',
         filters: [
-          {
-              text: '32 bits',
-              value: '32 bits',
-          },
-          {
-              text: '64 bits',
-              value: '64 bits',
-          }
-        ],
+            {
+                text: '32 Bits',
+                value: '32 Bits',
+            },
+            {
+                text: '64 Bits',
+                value: '64 Bits',
+            }
+          ],
         filterMultiple: false,
         filteredValue: filteredInfo.so_type || null,
         onFilter: (value, record) => record.so_type.indexOf(value) === 0,

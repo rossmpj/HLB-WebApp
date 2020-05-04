@@ -56,14 +56,9 @@ class DetalleRouter extends React.Component {
                 nserie: dato.numero_serie,
                 estado: dato.estado_operativo,
                 penlace: dato.puerta_enlace,
-                descripcion: dato.descripcion
+                descripcion: dato.descripcion,
+                ip: dato.direccion_ip
             })
-            dato.ip === " " || dato.ip == null ? this.setState({ ip: "No asignada" }) :
-                MetodosAxios.buscar_ip_por_codigo(dato.ip).then(res => {
-                    res.data.forEach(registro => {
-                        this.setState({ ip: registro.direccion_ip })
-                    });
-                })
         }).catch(err => {
             message.error('Problemas de conexión con el servidor, inténtelo más tarde', 4);
         });

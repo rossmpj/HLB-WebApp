@@ -123,7 +123,7 @@ class FormularioRouter extends React.Component {
             modelo: res.modelo,
             nserie: res.numero_serie,
             estado: res.estado_operativo,
-            ip: res.ip === null ? null : res.ip,
+            ip: res.ip === null ? null : res.direccion_ip,
             penlace: res.puerta_enlace,
             descripcion: res.descripcion
         })
