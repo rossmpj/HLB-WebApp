@@ -1,12 +1,10 @@
 import React from 'react';
-import { Button, Row, Col, Table, Input, Icon, Popconfirm, Typography, message } from 'antd';
+import { Button, Row, Col, Table, Input, Icon, Popconfirm, Typography, message, Tag } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import AxiosRouter from '../Servicios/AxiosRouter'
 import FuncionesAuxiliares from '../FuncionesAuxiliares'
-
 const { Title } = Typography;
-const key = 'updatable';
 
 class TablaRouter extends React.Component{
   constructor(props) {
@@ -141,7 +139,7 @@ class TablaRouter extends React.Component{
   handleDelete(id) {
     console.log("clave a eliminar",id)
     AxiosRouter.eliminar_router(id).then(res => {
-      message.success({ content: 'Registro eliminado satisfactoriamente', key, duration: 3 });
+      message.success({ content: 'Registro eliminado satisfactoriamente', duration: 3 });
       this.recargar_datos();
     }).catch(err => {
       message.error("Ha ocurrido un error al procesar la petición, inténtelo más tarde", 4);
@@ -180,7 +178,7 @@ class TablaRouter extends React.Component{
           title: 'BSPI Punto',
           dataIndex: 'bspi',
           key: 'bspi',
-          width: 150,
+          width: 130,
           filters: [
             {
                 text: 'Hospital León Becerra',
@@ -313,6 +311,15 @@ class TablaRouter extends React.Component{
           onFilter: (value, record) => record.estado.indexOf(value) === 0,
           sorter: (a, b) => a.estado.length - b.estado.length,
           sortOrder: sortedInfo.columnKey === 'estado' && sortedInfo.order,
+          render: (text, value) => (
+            <div >
+                {text==="D" ? <Tag style={{margin: 2}} color="green" key={value}>Disponible</Tag> : 
+                text==="O" ?  <Tag style={{margin: 2}} color="blue" key={value}>Operativo</Tag> :
+                text==="ER" ?  <Tag style={{margin: 2}} color="orange" key={value}>En revisión</Tag> :
+                text==="R" ?  <Tag style={{margin: 2}} color="magenta" key={value}>Reparado</Tag> :
+                                <Tag style={{margin: 2}} color="red" key={value}>De baja</Tag> }
+            </div>
+          ),
         },
         {
           title: 'Descripción',
@@ -326,7 +333,8 @@ class TablaRouter extends React.Component{
           render: (text, record) => (
             <span> 
                 <Link to={{ pathname: '/router/form', state: { info: record, titulo: "Editar router", disabled: true } }} >
-                    <Button style= {{marginRight: '2px'}} type="primary" size="small" icon="edit" />
+                    {record.estado === 'B' ? <Button disabled style= {{marginRight: '2px'}} type="primary" size="small" icon="edit" /> :
+                    <Button style= {{marginRight: '2px'}} type="primary" size="small" icon="edit" /> }
                 </Link>
 
                 <Popconfirm placement="topRight" 

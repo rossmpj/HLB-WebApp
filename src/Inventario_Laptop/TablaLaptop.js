@@ -40,24 +40,24 @@ class TablaLaptop extends React.Component{
                 bspi: registro.general.bspi === undefined ? '' : registro.general.bspi,
                 departamento: registro.general.departamento === undefined ? '' : registro.general.departamento,
                 empleado: registro.general.empleado === undefined ? '' : registro.general.empleado+' '+registro.general.apellido,
-                marca: registro.general.marca,
-                modelo: registro.general.modelo,
-                num_serie: registro.general.numero_serie, 
-                estado: registro.general.estado_operativo,
-                ip: dip,
-                so: registro.so.so,
+                marca: registro.general.marca === undefined ? '' : registro.general.marca,
+                modelo: registro.general.modelo === undefined ? '' : registro.general.modelo,
+                num_serie: registro.general.numero_serie === undefined ? '' : registro.general.numero_serie, 
+                estado: registro.general.estado_operativo === undefined ? '' : registro.general.estado_operativo,
+                ip: dip === undefined ? '' : dip,
+                so: registro.so.so === undefined ? '' : registro.so.so,
                 servpack: registro.so.service_pack === '0' ? 'No' : 'Si',
-                so_type: registro.so.tipo_so,
-                name_pc: registro.so.nombre_pc,
-                user_pc: registro.so.usuario_pc,
+                so_type: registro.so.tipo_so === undefined ? '' : registro.so.tipo_so,
+                name_pc: registro.so.nombre_pc === undefined ? '' : registro.so.nombre_pc,
+                user_pc: registro.so.usuario_pc === undefined ? '' : registro.so.usuario_pc,
                 licencia: registro.so.licencia === '0' ? 'No' : 'Si',
-                office: registro.so.office,
-                ram_soportada: registro.ram_soportada,
-                slots_ram: registro.numero_slots,
-                descripcion: registro.general.descripcion,
-                id_procesador: registro.procesador,
-                rams: registro.rams,
-                discos: registro.discos,
+                office: registro.programas === undefined ? '' : registro.programas,
+                ram_soportada: registro.ram_soportada === undefined ? '' : registro.ram_soportada,
+                slots_ram: registro.numero_slots === undefined ? '' : registro.numero_slots,
+                descripcion: registro.general.descripcion === undefined ? '' : registro.general.descripcion,
+                id_procesador: registro.procesador === undefined ? '' : registro.procesador,
+                rams: registro.rams === undefined ? '' : registro.rams,
+                discos: registro.discos === undefined ? '' : registro.discos,
              }
              datos.push(router);
         });
@@ -188,7 +188,7 @@ class TablaLaptop extends React.Component{
         dataIndex: 'bspi',
         key: 'bspi',
         elipsis: true,
-        width: 150,
+        width: 130,
         filters: [
           {
               text: 'Hospital León Becerra',
@@ -281,6 +281,15 @@ class TablaLaptop extends React.Component{
         onFilter: (value, record) => record.estado.indexOf(value) === 0,
         sorter: (a, b) => a.estado.length - b.estado.length,
         sortOrder: sortedInfo.columnKey === 'estado' && sortedInfo.order,
+        render: (text, value) => (
+            <div >
+                {text==="D" ? <Tag style={{margin: 2}} color="green" key={value}>Disponible</Tag> : 
+                text==="O" ?  <Tag style={{margin: 2}} color="blue" key={value}>Operativo</Tag> :
+                text==="ER" ?  <Tag style={{margin: 2}} color="orange" key={value}>En revisión</Tag> :
+                text==="R" ?  <Tag style={{margin: 2}} color="magenta" key={value}>Reparado</Tag> :
+                                <Tag style={{margin: 2}} color="red" key={value}>De baja</Tag> }
+            </div>
+          ),
       },
       {
         title: 'Nombre PC',
@@ -368,36 +377,49 @@ class TablaLaptop extends React.Component{
         sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.licencia,b.licencia),
         sortOrder: sortedInfo.columnKey === 'licencia' && sortedInfo.order,
       }, 
-      {
-        title: 'Office',
-        dataIndex: 'office',
-        key: 'office',
-        filters: [
-          {
-              text: '2007',
-              value: '2007',
-          },
-          {
-              text: '2010',
-              value: '2010',
-          },
-          {
-              text: '2013',
-              value: '2013',
-          },
-          {
-              text: '2016',
-              value: '2016',
-          },
-          {
-              text: '2019',
-              value: '2019',
-          }
-        ],
-        filteredValue: filteredInfo.office || null,
-        onFilter: (value, record) => record.office.indexOf(value) === 0,
-        sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.office,b.office),
-        sortOrder: sortedInfo.columnKey === 'office' && sortedInfo.order,
+        {
+            title: 'Programas',
+            dataIndex: 'office',
+            key: 'office',
+            width: 100,
+
+            render: (office) => (
+              <div>
+                 {office.map((disco, index) => {
+                        return (
+                            // <Link key={disco.codigo} to={{ pathname: '/otros/view', state: { info: disco, tipo_equipo: 'disco duro' } }} >
+                            <Tag style={{margin: 2}} color="purple" key={index}>{disco.nombre}</Tag>
+                            // </Link>              
+                        );
+                    })}
+              </div>
+            ),
+        // filters: [
+        //   {
+        //       text: '2007',
+        //       value: '2007',
+        //   },
+        //   {
+        //       text: '2010',
+        //       value: '2010',
+        //   },
+        //   {
+        //       text: '2013',
+        //       value: '2013',
+        //   },
+        //   {
+        //       text: '2016',
+        //       value: '2016',
+        //   },
+        //   {
+        //       text: '2019',
+        //       value: '2019',
+        //   }
+        // ],
+        // filteredValue: filteredInfo.office || null,
+        // onFilter: (value, record) => record.office.indexOf(value) === 0,
+        // sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.office,b.office),
+        // sortOrder: sortedInfo.columnKey === 'office' && sortedInfo.order,
       },
       {
         title: 'IP',
@@ -486,7 +508,8 @@ class TablaLaptop extends React.Component{
         render: (text, record) => (
           <span>
             <Link to={{ pathname: '/laptop/form', state: { info: record, titulo: "Editar laptop", disabled: true } }} >
-              <Button style= {{marginRight: '2px'}} size="small" type="primary" icon="edit" />
+              {record.estado === 'B'? <Button disabled style= {{marginRight: '2px'}} size="small" type="primary" icon="edit" /> : 
+              <Button style= {{marginRight: '2px'}} size="small" type="primary" icon="edit" />}
             </Link>
             <Popconfirm placement="topRight" 
             title="¿Desea eliminar este registro?" 

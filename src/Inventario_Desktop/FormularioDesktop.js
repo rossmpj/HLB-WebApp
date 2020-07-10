@@ -39,7 +39,7 @@ class FormularioDesktop extends React.Component {
             disabled: false,
             key: "",
             general: { disabled: false, codigo: '', asignar: undefined, nombre_pc: '', usuario_pc: '', ip: undefined, estado: undefined, descripcion: '' },
-            so: { disabled: false, so: '', tipo_so: '', sp1: false, licencia: false, office: '' },
+            so: { disabled: false, so: '', tipo_so: '', sp1: false, licencia: false, office: [] },
             monitor: { disabled: false, nombre: 'monitor', codigo: '', marca: undefined, modelo: '', nserie: '', descr: '' }, 
             teclado: { disabled: false, nombre: 'teclado', codigo: '', marca: undefined, modelo: '', nserie: '', descr: '' },
             mouse: { disabled: false, nombre: 'mouse', codigo: '', marca: undefined, modelo: '', nserie: '', descr: '' },
@@ -157,7 +157,11 @@ class FormularioDesktop extends React.Component {
                     nserie: info.discos[element].numero_serie, capacidad: {cant: info.discos[element].capacidad.split(" ")[0], 
                     un: info.discos[element].capacidad.split(" ")[1]}, tipo: info.discos[element].tipo, descr: info.discos[element].descripcion})
             }
-        
+            let id_programas = []
+            for (const programa in registro.programas){
+                id_programas.push(registro.programas[programa].id_programa)
+            }
+            console.log("rtg", registro.programas)
             registro.f_alim === undefined ? 
             this.setState({
                 fuente_alimentacion: {
@@ -202,7 +206,7 @@ class FormularioDesktop extends React.Component {
                     tipo_so: registro.so.tipo_so,
                     sp1: info.servpack === 'Si' ? true : false,
                     licencia: info.licencia === 'Si' ? true : false,
-                    office: info.office
+                    office: id_programas
                 },
                 monitor: {
                     disabled: true,
