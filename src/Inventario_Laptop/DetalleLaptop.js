@@ -29,7 +29,7 @@ class DetalleLaptop extends React.Component {
       so_type: '',
       servpack: '',
       licencia: '',
-      office: '',
+      office: [],
       id_procesador: '',
       procesador: {
         codigo: '',
@@ -74,7 +74,7 @@ class DetalleLaptop extends React.Component {
         so_type: registro.so.tipo_so,
         servpack: registro.so.services_pack === '0' ? 'No' : 'Si',
         licencia: registro.so.licencia === '0' ? 'No' : 'Si',
-        office: registro.so.office,
+        office: registro.programas,
         procesador: registro.procesador,
         ram_soportada: registro.ram_soportada,
         slots_ram: registro.numero_slots,
@@ -119,7 +119,11 @@ class DetalleLaptop extends React.Component {
                     <Descriptions.Item label="Nombre PC">{this.state.name_pc}</Descriptions.Item>
                     <Descriptions.Item label="Usuario PC">{this.state.user_pc}</Descriptions.Item>
                     <Descriptions.Item label="Estado">
-                      <Badge status="processing" text={this.state.estado} />
+                    {this.state.estado==="D" ? <Badge status="processing"  color="green" text="Disponible"/> : 
+                                            this.state.estado==="O" ?  <Badge status="processing"  color="blue"   text="Operativo"/> :
+                                            this.state.estado==="ER" ?  <Badge status="processing"  color="orange"  text="En revision"/> :
+                                            this.state.estado==="R" ?  <Badge status="processing"  color="magenta" text="Reparado"/> :
+                                                            <Badge status="processing"  color="red"  text="De baja"/> }
                     </Descriptions.Item>
                     <Descriptions.Item label="Dirección IP" span={3}>{this.state.ip}</Descriptions.Item>
                     <Descriptions.Item label="Descripción">
@@ -136,8 +140,26 @@ class DetalleLaptop extends React.Component {
                     <Descriptions.Item label="Licencia" span={3}>
                       <Badge status="warning" text={this.state.licencia} />
                     </Descriptions.Item>
-                    <Descriptions.Item label="Office">{this.state.office}</Descriptions.Item>
+                    {/* <Descriptions.Item label="Office">{this.state.office}</Descriptions.Item> */}
                   </Descriptions>
+                  <br />
+                  <div>
+                    {this.state.office.map((ram, i) => {
+                      return (
+                        <div key={ram.id_programa}>
+                          <Descriptions title={"Programa " + (i + 1)} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
+                            <Descriptions.Item span={1} label="Código">{ram.codigo} </Descriptions.Item>
+                            <Descriptions.Item span={1} label="Nombre">{ram.nombre} </Descriptions.Item>
+                            <Descriptions.Item span={1} label="Versión">{ram.version} </Descriptions.Item>
+                            <Descriptions.Item span={1} label="Editor">{ram.editor} </Descriptions.Item>
+                            <Descriptions.Item span={1} label="Fecha de instalación">{ram.fecha_instalacion.slice(0,10)} </Descriptions.Item>
+                            <Descriptions.Item span={1} label="Observación">{ram.observacion} </Descriptions.Item>
+                          </Descriptions>
+                          <br />
+                        </div>
+                      );
+                    })}
+                  </div>
                 </TabPane>
 
                 <TabPane tab={<span><GiProcessor className="anticon" />Procesador</span>} key="3" >

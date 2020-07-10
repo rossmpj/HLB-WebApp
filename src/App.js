@@ -2,7 +2,7 @@ import React from 'react';
 import { Menu, Icon, Layout } from 'antd';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './custom-antd.css'; //lessc --js mytheme.less ../../../src/custom-antd.css @import "./antd.less"; @primary-color: #0081C3;  
-
+import { RiRouterLine, RiTerminalWindowLine } from "react-icons/ri";
 import TablaRouter from './Inventario_Router/TablaRouter';
 import FormularioRouter from './Inventario_Router/FormularioRouter';
 import DetalleRouter from './Inventario_Router/DetalleRouter';
@@ -23,7 +23,9 @@ import DetalleIIp from './Inventario_Ip/DetalleIIp'
 import HomeEquipo from './Inventario_Equipo/TablaEquipo'
 import VistaEquipo from './Inventario_Equipo/VistaEquipo'
 import TablaMarca from './Extras/Marcas/TablaMarca'
+import TablaPrograma from './Extras/Programas/TablaPrograma'
 import VistaMarca from './Extras/Marcas/VistaMarca';
+import FormularioPrograma from './Extras/Programas/FormularioPrograma';
 import DetalleImpresora from './Inventario_Impresora/DetalleImpresora';
 import DetalleEquipo from './Inventario_Equipo/DetalleEquipo';
 import TablaReporte from './Reportes/TablaReporte';
@@ -85,7 +87,7 @@ class App extends React.Component {
                 <Menu.Item key="laptop"><Icon type="laptop" />Laptop
                   <Link to="/laptop" />
                 </Menu.Item>
-                <Menu.Item key="router"><Icon type="wifi" />Router
+                <Menu.Item key="router"><RiRouterLine className="anticon"/>Router
                   <Link to="/router" />
                 </Menu.Item>
                 <Menu.Item key="impresora"><Icon type="printer" />Impresora
@@ -97,8 +99,7 @@ class App extends React.Component {
                 <Menu.Item key="ip"><Icon type="cluster" />IP
                 <Link to="/ip" />
                 </Menu.Item>
-              </SubMenu>
-              <SubMenu
+                <SubMenu
                 key="sub2"
                 title={
                   <span>
@@ -110,7 +111,12 @@ class App extends React.Component {
                 <Menu.Item key="marcas"><Icon type="global" />Marcas
                   <Link to="/marca" />
                 </Menu.Item>
+                <Menu.Item key="programas"><RiTerminalWindowLine className="anticon" />Programas
+                  <Link to="/programa" />
+                </Menu.Item>
               </SubMenu>
+              </SubMenu>
+              
 
               <SubMenu
                 key="rep"
@@ -153,7 +159,9 @@ class App extends React.Component {
               <Route exact path='/otrosequipos' component={HomeEquipo} />
               <Route exact path='/otrosequipos/form' component={VistaEquipo} />
               <Route exact path='/marca' component={TablaMarca} />
+              <Route exact path='/programa' component={TablaPrograma} />
               <Route exact path='/marca/form' component={VistaMarca} />
+              <Route exact path='/programa/form' component={FormularioPrograma} />
               <Route exact path='/ip/form' component={VistaIp} />
               <Route exact path='/ip/detail/:id' component={DetalleIIp} />
               <Route exact path='/impresora/form' component={VistaImpresora} />
