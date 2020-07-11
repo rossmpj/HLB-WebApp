@@ -4,7 +4,8 @@ import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import FuncionesAuxiliares from '../FuncionesAuxiliares'
 import Axios from '../Servicios/AxiosDesktop' 
-import AxiosLaptop from '../Servicios/AxiosLaptop'
+import AxiosLaptop from '../Servicios/AxiosLaptop';
+import ExcelExportDesktop from './ExcelExportDesktop';
 
 const { Title } = Typography;
 const key = 'updatable';
@@ -17,10 +18,12 @@ class TablaDesktop extends React.Component{
       showTable:true,
       filteredInfo: null,
       sortedInfo: null,
+      disabelExport:true,
       searchText: '',
       searchedColumn: '',
       index: 0,
       dataSource: [],
+      currentDataSource:[]
     };
     this.handleClick = this.handleClick.bind(this);
   }
@@ -34,11 +37,14 @@ class TablaDesktop extends React.Component{
     Axios.listar_desktops().then(res => {
     res.data.forEach(function (r) {
         let registro = r.original
-        console.log("fuente",registro.f_alim)
+        //console.log("fuente",registro.f_alim)
         var dip = registro.general.ip === null ? ' ' : registro.general.ip.toString();
         let router = {
             key: registro.general.id_equipo,
             codigo: registro.general.codigo,
+            fecha_registro: registro.general.fecha_registro,
+            tipo_equipo: registro.general.tipo_equipo,
+            dirIP: dip === undefined ? '' : registro.general.direccion_ip,
             bspi: registro.general.bspi === undefined ? '' : registro.general.bspi,
             departamento: registro.general.departamento === undefined ? '' : registro.general.departamento,
             empleado: registro.general.empleado === undefined ? '' : registro.general.empleado+' '+registro.general.apellido,
@@ -70,7 +76,8 @@ class TablaDesktop extends React.Component{
          }
          datos.push(router);
     });
-    this.setState({ dataSource: datos });
+   //console.log(datos,'datos deskto')
+    this.setState({ dataSource: datos, currentDataSource:datos, disabelExport:false });
     }).catch(err => {
         message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
     });
@@ -97,11 +104,12 @@ componentDidMount = () => {
     });     
   }
 
-  handleChange = (pagination, filters, sorter) => {
-    console.log('Various parameters', pagination, filters, sorter);
+  handleChange = (pagination, filters, sorter, currentDataSource) => {
+    console.log('Various parameters', pagination, filters, sorter, currentDataSource);
     this.setState({
       filteredInfo: filters,
       sortedInfo: sorter,
+      currentDataSource:currentDataSource.currentDataSource
     });
   };
   
@@ -581,10 +589,11 @@ componentDidMount = () => {
       <div >
         <Row>
           <Col className='flexbox'>
-            <ButtonGroup size="medium">
+            {/* <ButtonGroup size="medium"> */}
               <Button type="primary" icon="import">Importar</Button>
-              <Button type="primary" icon="cloud-download">Exportar</Button>
-            </ButtonGroup>
+              <ExcelExportDesktop data={this.state.currentDataSource} dis = {this.state.disabelExport}></ExcelExportDesktop>
+              {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
+            {/* </ButtonGroup> */}
           </Col>
         </Row>
       </div>

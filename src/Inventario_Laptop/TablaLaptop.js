@@ -4,7 +4,7 @@ import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import AxiosLaptop from '../Servicios/AxiosLaptop'
 import FuncionesAuxiliares from '../FuncionesAuxiliares'
-
+import ExcelExport from './ExcelExportLaptop';
 const { Title } = Typography;
 const key = 'updatable';
 
@@ -18,8 +18,10 @@ class TablaLaptop extends React.Component{
       sortedInfo: null,
       searchText: '',
       searchedColumn: '',
+      disabelExport:true,
       index: 0,
-      dataSource : []
+      dataSource : [],
+      currentDataSource:[]
     };
     this.handleClick = this.handleClick.bind(this);
   }
@@ -34,8 +36,11 @@ class TablaLaptop extends React.Component{
         res.data.forEach(function (r) {
             let registro = r.original
             var dip = registro.general.ip === null ? undefined : registro.general.ip.toString();
+            
             let router = {
                 key: registro.general.id_equipo,
+                fecha_registro: registro.general.fecha_registro,
+                tipo_equipo: registro.general.tipo_equipo,
                 codigo: registro.general.codigo,
                 bspi: registro.general.bspi === undefined ? '' : registro.general.bspi,
                 departamento: registro.general.departamento === undefined ? '' : registro.general.departamento,
@@ -45,6 +50,7 @@ class TablaLaptop extends React.Component{
                 num_serie: registro.general.numero_serie === undefined ? '' : registro.general.numero_serie, 
                 estado: registro.general.estado_operativo === undefined ? '' : registro.general.estado_operativo,
                 ip: dip === undefined ? '' : dip,
+                dirIP: dip === undefined ? '' : registro.general.direccion_ip,
                 so: registro.so.so === undefined ? '' : registro.so.so,
                 servpack: registro.so.service_pack === '0' ? 'No' : 'Si',
                 so_type: registro.so.tipo_so === undefined ? '' : registro.so.tipo_so,
@@ -61,7 +67,7 @@ class TablaLaptop extends React.Component{
              }
              datos.push(router);
         });
-        this.setState({ dataSource: datos });
+        this.setState({ dataSource: datos, currentDataSource:datos, disabelExport:false });
         }).catch(err => {
             message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
         });
@@ -78,11 +84,12 @@ class TablaLaptop extends React.Component{
     });     
   }
   
-  handleChange = (pagination, filters, sorter) => {
-    console.log('Various parameters', pagination, filters, sorter);
+  handleChange = (pagination, filters, sorter, currentDataSource) => {
+    console.log('Various parameters', pagination, filters, sorter, currentDataSource);
     this.setState({
       filteredInfo: filters,
       sortedInfo: sorter,
+      currentDataSource:currentDataSource.currentDataSource
     });
   };
   
@@ -537,10 +544,12 @@ class TablaLaptop extends React.Component{
             <div >
               <Row>
                 <Col className='flexbox'>
-                  <ButtonGroup>
+                  {/* <ButtonGroup> */}
                     <Button type="primary" icon="import">Importar</Button>
-                    <Button type="primary" icon="cloud-download">Exportar</Button>
-                  </ButtonGroup>
+                    <ExcelExport data={this.state.currentDataSource} dis = {this.state.disabelExport}></ExcelExport>
+                    {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
+
+                  {/* </ButtonGroup> */}
                 </Col>
               </Row>
             </div>

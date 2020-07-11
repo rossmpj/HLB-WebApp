@@ -17,6 +17,7 @@
     "less": "^3.11.1",
     "minimist": "^1.2.5",
     "react": "^16.12.0",
+    "react-data-export": "^0.6.0",
     "react-dom": "^16.12.0",
     "react-fieldset": "^3.1.6",
     "react-icons": "^3.9.0",
