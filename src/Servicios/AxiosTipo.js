@@ -3,6 +3,7 @@ import axios from 'axios';
 export default class AxiosTipo {
     static instanceAxios = axios.create({
         baseURL: 'http://localhost:8000/api',
+       /*  https://backend-hlb.herokuapp.com/api http://localhost:8000/api*/
     });
 
 
@@ -14,6 +15,10 @@ export default class AxiosTipo {
 
     static editar_marca = (marca) => {
         return AxiosTipo.instanceAxios.put(`/editar_marca`, marca);
+    }
+
+    static eliminar_marca=(id_marca)=>{
+        return AxiosTipo.instanceAxios.delete(`/eliminar_marca/${id_marca}`);
     }
 
 
@@ -116,4 +121,22 @@ export default class AxiosTipo {
     static eliminar_equipo = (id_equipo) => {
         return AxiosTipo.instanceAxios.put(`/eliminar_equipo/${id_equipo}`);
     }  
+
+
+    /* Inventario de correos */
+    static crear_correo = (correo) => {
+        return AxiosTipo.instanceAxios.post(`/correos`, correo);
+    }
+
+    static mostrar_correos = () => {
+        return AxiosTipo.instanceAxios.get(`/mostrar_correos`);
+    }
+
+    static editar_correo = (correo) => {
+        return AxiosTipo.instanceAxios.put(`/editar_correo`,correo);
+    } 
+
+    static eliminar_correo = (id_correo) => {
+        return AxiosTipo.instanceAxios.put(`/eliminar_correo/${id_correo}`);
+    } 
 }

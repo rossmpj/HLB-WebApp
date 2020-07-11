@@ -7,7 +7,8 @@ import {
     Input,
     Icon,
     message,
-    Typography
+    Typography,
+    Popconfirm
 } from 'antd';
 import { Link } from 'react-router-dom';
 import AxiosTipo from '../../Servicios/AxiosTipo';
@@ -107,6 +108,16 @@ class TablaMarca extends React.Component {
         this.setState({ searchText: '' });
     };
 
+    handleDelete(key) {
+        AxiosTipo.eliminar_marca(key).then(res => {
+            message.success({ content: 'Equipo dado de baja satisfactoriamente', key, duration: 3 });
+            this.llenar_tabla();
+        }).catch(err => {
+            console.log(err.response.data.log)
+            message.error('Error al eliminar el registro, inténtelo más tarde', 4);
+        });
+    }
+
 
     render() {
         const columns = [
@@ -130,6 +141,12 @@ class TablaMarca extends React.Component {
                         }} >
                             <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
                         </Link>
+                        <Popconfirm
+                            title="¿Desea eliminar esta marca?"
+                            okText="Si" cancelText="No"
+                            onConfirm={() => this.handleDelete(record.key)}>
+                        </Popconfirm>
+
                     </div>
                 ),
             },
@@ -147,7 +164,7 @@ class TablaMarca extends React.Component {
                     </Row>
                     <div className="div-container">
                         <Table bordered key={this.state.index} onChange={this.handleChange} size="small"
-                        scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
+                            scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                     </div>
                 </div>
             </div>
