@@ -102,6 +102,9 @@ class App extends React.Component {
                 <Menu.Item key="ip"><Icon type="cluster" />IP
                 <Link to="/ip" />
                 </Menu.Item>
+                <Menu.Item key="correo"><Icon type="mail" />IP
+                <Link to="/correo" />
+                </Menu.Item>
                 <SubMenu
                 key="sub2"
                 title={

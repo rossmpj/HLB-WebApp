@@ -37,35 +37,27 @@ class FormularioCorreo extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 if (!this.state.editionMode) {
-                    Axios.crear_correo(values).then(res => {
-                        message.loading({ content: 'Guardando datos...', key });
-                        setTimeout(() => {
-                            message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
-                        }, 1000);
-                    }).catch(err => {
-                        if (err.response) {
-                            message.error(err.response.data.log, 2)
-                                .then(() => message.error('No fue posible registrar los datos', 2.5))
-                        } else {
-                            message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
-                        } 
-                    });
+                    this.crear_correo(values);
                 } else {
                     values.id = this.state.id_correo;
-                    Axios.editar_correo(values).then(res => {
-                        message.loading({ content: 'Actualizando datos...', key });
-                        setTimeout(() => {
-                            message.success({ content: "Edición realizada satisfactoriamente", key, duration: 3 });
-                        }, 1000);
-                    }).catch(err => {
-                        if (err.response) {
-                            message.error(err.response.data.log, 4)
-                                .then(() => message.error('No fue posible actualizar los datos', 3))
-                        } else {
-                            message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
-                        }
-                    });
+                    this.editar_correo(values);
                 }
+            }
+        });
+    }
+
+    crear_correo(values) {
+        Axios.crear_correo(values).then(res => {
+            message.loading({ content: 'Guardando datos...', key });
+            setTimeout(() => {
+                message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+            }, 1000);
+        }).catch(err => {
+            if (err.response) {
+                message.error(err.response.data.log, 2)
+                    .then(() => message.error('No fue posible registrar los datos', 2.5))
+            } else {
+                message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
             }
         });
     }
@@ -77,6 +69,22 @@ class FormularioCorreo extends React.Component {
             cedula: info.cedula
         })
         this.setState({ id_correo: info.key, estado: info.estado });
+    }
+
+    editar_correo(values) {
+        Axios.editar_correo(values).then(res => {
+            message.loading({ content: 'Actualizando datos...', key });
+            setTimeout(() => {
+                message.success({ content: "Edición realizada satisfactoriamente", key, duration: 3 });
+            }, 1000);
+        }).catch(err => {
+            if (err.response) {
+                message.error(err.response.data.log, 4)
+                    .then(() => message.error('No fue posible actualizar los datos', 3))
+            } else {
+                message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
+            }
+        });
     }
 
     componentDidMount() {
