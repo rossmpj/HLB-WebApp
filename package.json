@@ -17,7 +17,6 @@
     "less": "^3.11.1",
     "minimist": "^1.2.5",
     "react": "^16.12.0",
-    "react-app-rewired": "^2.1.5",
     "react-dom": "^16.12.0",
     "react-fieldset": "^3.1.6",
     "react-icons": "^3.9.0",
@@ -47,6 +46,7 @@
     ]
   },
   "devDependencies": {
-    "less-loader": "^5.0.0"
+    "less-loader": "^5.0.0",
+    "react-app-rewired": "^2.1.6"
   }
 }

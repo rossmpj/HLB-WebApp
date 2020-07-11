@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Select, Switch } from 'antd';
 import Axios from '../Servicios/AxiosLaptop'
+import AxiosPrograma from '../Servicios/AxiosPrograma'
 
 const { Option } = Select;
 const tailLayout = { wrapperCol: { offset: 11, span: 5 } };             
@@ -16,7 +17,7 @@ const FormSistemaOperativo = Form.create({
           setSo(res.data); });    
       }, []);
     useEffect(() => {
-    Axios.listar_office().then(res => {
+    AxiosPrograma.listado_programas().then(res => {
         setOffice(res.data); });    
     }, []);
     const validateInput = (e) => {
@@ -71,13 +72,13 @@ const FormSistemaOperativo = Form.create({
                     rules: [{required: true, message: 'Debe completar este campo' }]
                 })( <Switch checkedChildren="Si" unCheckedChildren="No" /> )}
             </Form.Item>
-            <Form.Item label="Office">
+            <Form.Item label="Programas">
                 {getFieldDecorator('office', {
                     rules: [{required: true, message: 'Debe completar este campo' }],
                     initialValue: props.office
                 })(
-                <Select>                    
-                    { office.map(m=> <Option key={m} value={m}>{m}</Option>)}
+                <Select mode="multiple">                    
+                    { office.map(m=> <Option key={m.id_programa} value={m.id_programa}>{m.nombre}</Option>)}
                 </Select>
                 )}
             </Form.Item>

@@ -95,7 +95,12 @@ class DetalleRouter extends React.Component {
                                         <Descriptions.Item label="Modelo">{this.state.modelo}</Descriptions.Item>
                                         <Descriptions.Item label="Número de serie">{this.state.nserie}</Descriptions.Item>
                                         <Descriptions.Item label="Estado">
-                                            <Badge status="processing" text={this.state.estado} />
+                                            {/* <status="processing"  status="processing" text={this.state.estado} /> */}
+                                            {this.state.estado==="D" ? <Badge status="processing"  color="green" text="Disponible"/> : 
+                                            this.state.estado==="O" ?  <Badge status="processing"  color="blue"   text="Operativo"/> :
+                                            this.state.estado==="ER" ?  <Badge status="processing"  color="orange"  text="En revision"/> :
+                                            this.state.estado==="R" ?  <Badge status="processing"  color="magenta" text="Reparado"/> :
+                                                            <Badge status="processing"  color="red"  text="De baja"/> }
                                         </Descriptions.Item>
                                         <Descriptions.Item label="Descripción">{this.state.descripcion} </Descriptions.Item>
                                     </Descriptions>

@@ -46,7 +46,7 @@ class FormularioLaptop extends React.Component {
                 tipo_so: '',
                 sp1: false,
                 licencia: false,
-                office: ''
+                office: []
             },
             procesador_fields: {
                 codigo_equipo: '',
@@ -177,6 +177,11 @@ class FormularioLaptop extends React.Component {
                  nserie: info.discos[element].numero_serie, capacidad: {cant: info.discos[element].capacidad.split(" ")[0], 
                  un: info.discos[element].capacidad.split(" ")[1]}, tipo: info.discos[element].tipo, descr: info.discos[element].descripcion})
         }
+        let id_programas = []
+        for (const programa in registro.programas){
+            id_programas.push(registro.programas[programa].id_programa)
+        }
+        console.log("rtg", registro.programas)
         this.setState({
             general_fields: {
                 disabled: true,
@@ -197,7 +202,7 @@ class FormularioLaptop extends React.Component {
                 tipo_so: info.so_type,
                 sp1: info.servpack === 'Si' ? true : false,
                 licencia: info.licencia === 'Si' ? true : false,
-                office: info.office
+                office: id_programas
             },
             procesador_fields: {
                 codigo_equipo: '',
@@ -242,6 +247,7 @@ class FormularioLaptop extends React.Component {
         // if(this.state.general_fields.codigo === this.state.procesador_fields.codigo_proc){
         //     message.error("El código ingresado ya fue asignado al equipo Laptop", 4)
         // }}
+        // console.log("codigo ",this.state.general_fields.codigo)
         console.log("step",this.state)
     }
     
@@ -265,6 +271,7 @@ class FormularioLaptop extends React.Component {
                     setTimeout(() => {
                     message.success({ content: 'Registro modificado satisfactoriamente', key, duration: 3 });
                     }, 1000);
+                    this.props.history.push("/laptop");
                 }).catch(err =>{
                     if (err.response) {
                         message.error(err.response.data.log, 4)
@@ -281,6 +288,7 @@ class FormularioLaptop extends React.Component {
                 setTimeout(() => {
                     message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
                 }, 1000);
+                this.props.history.push("/laptop");
                 }).catch(err =>{
                     if (err.response) {
                         message.error(err.response.data.log, 4)
