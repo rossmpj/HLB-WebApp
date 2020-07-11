@@ -11,7 +11,7 @@ import '../custom-antd.css';
 import { Link } from 'react-router-dom';
 import AxiosSolicitud from '../Servicios/AxiosSolicitud';
 const tailLayout = {
-    wrapperCol: { offset: 9, span: 5 }
+    wrapperCol: { offset: 9, span: 8 }
 };
 
 const layout = {
@@ -119,11 +119,11 @@ class FormularioSolicitud extends React.Component {
                     >
                         {getFieldDecorator('tipo', {
                             rules: [{ required: true, message: 'Debe seleccionar la prioridad de la Solicitud' }],
-                            initialValue: 'ASIGNACION'
+                            initialValue: 'AE'
                         })(
                             <Select>
-                                <Select.Option value="ASIGNACION">Asignacion de Equipos</Select.Option>
-                                <Select.Option value="SERVICIO_TECNICO">Servicio Tecnico</Select.Option>
+                                <Select.Option value="AE">Asignacion de Equipos</Select.Option>
+                                <Select.Option value="ST">Servicio Tecnico</Select.Option>
                             </Select>
                         )}
 
@@ -144,8 +144,8 @@ class FormularioSolicitud extends React.Component {
                     </Form.Item>
 
                     <Form.Item {...tailLayout}>
-                        <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Enviar</Button>
-                        <Link to='/'>
+                        <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Enviar Solicitud</Button>
+                        <Link to='/solicitud'>
                             <Button type="primary">Cancelar</Button>
                         </Link>
                     </Form.Item>

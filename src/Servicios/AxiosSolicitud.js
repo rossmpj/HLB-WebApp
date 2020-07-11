@@ -10,4 +10,8 @@ export default class AxiosDesktop {
     return AxiosDesktop.instanceAxios.post(`/crear_solicitud`, solicitud);
   }
 
+  static mostrar_solicitudes = ()=>{
+    return AxiosDesktop.instanceAxios.get(`/mostrar_solicitudes`);
+  }
+
 }

@@ -7,6 +7,7 @@ import TablaRouter from './Inventario_Router/TablaRouter';
 import FormularioRouter from './Inventario_Router/FormularioRouter';
 import DetalleRouter from './Inventario_Router/DetalleRouter';
 import VistaSolicitud from './Solicitudes/VistaSolicitud';
+import TablaSolicitud from './Solicitudes/TablaSolicitud';
 import TablaLaptop from './Inventario_Laptop/TablaLaptop';
 import FormularioLaptop from './Inventario_Laptop/FormularioLaptop';
 import DetalleLaptop from './Inventario_Laptop/DetalleLaptop';
@@ -70,7 +71,7 @@ class App extends React.Component {
                 
                 </span>
                 </span>
-                <Link to="/solicitud/form" />
+                <Link to="/solicitud" />
               </Menu.Item>
               <SubMenu
                 key="dash"
@@ -149,6 +150,7 @@ class App extends React.Component {
               <Route exact path='/desktop/view/:id' component={DetalleDesktop} />
               <Route exact path='/desktop/form' component={FormularioDesktop} />
               <Route exact path='/solicitud/form' component={VistaSolicitud} />
+              <Route exact path='/solicitud' component={TablaSolicitud} />
               <Route exact path='/laptop' component={TablaLaptop} />
               <Route exact path='/laptop/view/:id' component={DetalleLaptop} />
               <Route exact path='/laptop/form' component={FormularioLaptop} />
