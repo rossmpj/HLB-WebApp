@@ -10,58 +10,58 @@ const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 
 export default class ExcelExportDesktop extends Component {
 
-    generateDataMainBoard(element){
+    generateDataMainBoard(element) {
         return [
             { 'value': '' },
             { 'value': '' },
             { 'value': '' },
-            { 'value': element.codigo },
-            { 'value': FuncionesAuxiliares.UpperCase(element.tipo_equipo)},
-            
-            { 'value': element.marca===null || element.marca===undefined || element.marca==='' ?'-':element.marca },
-            { 'value': element.modelo===null || element.modelo===undefined || element.modelo===''?'-':element.modelo },
-            { 'value': element.numero_serie===null || element.numero_serie===undefined || element.numero_serie===''?'-':element.numero_serie  },
+            { 'value': FuncionesAuxiliares.validarCampo(element.codigo, '-') },
+            { 'value': FuncionesAuxiliares.UpperCase(element.tipo_equipo) },
+
+            { 'value': FuncionesAuxiliares.validarCampo(element.marca, '-') },
+            { 'value': FuncionesAuxiliares.validarCampo(element.modelo, '-') },
+            { 'value': FuncionesAuxiliares.validarCampo(element.numero_serie, '-') },
             { 'value': FuncionesAuxiliares.transform_estado(element.estado_operativo) },
-            { 'value': '-'},
-            { 'value': '-'},
-            { 'value': '-' },
-            { 'value': '-' },
-            { 'value': '-'},
             { 'value': '-' },
             { 'value': '-' },
             { 'value': '-' },
             { 'value': '-' },
-            { 'value': element.ram_soportada===null || element.ram_soportada===undefined || element.ram_soportada===''?'-':element.ram_soportada},
-            { 'value': element.numero_slots===null || element.numero_slots===undefined?'-':element.numero_slots},
-            { 'value': element.conexiones_dd===null || element.conexiones_dd===undefined?'-':element.conexiones_dd},
             { 'value': '-' },
             { 'value': '-' },
             { 'value': '-' },
-            { 'value': element.fecha_registro },
-            { 'value': element.descripcion },
+            { 'value': '-' },
+            { 'value': '-' },
+            { 'value': FuncionesAuxiliares.validarCampo(element.ram_soportada, '-') },
+            { 'value': FuncionesAuxiliares.validarCampo(element.numero_slots, '-') },
+            { 'value': FuncionesAuxiliares.validarCampo(element.conexiones_dd, '-') },
+            { 'value': '-' },
+            { 'value': '-' },
+            { 'value': '-' },
+            { 'value': FuncionesAuxiliares.validarCampo(element.fecha_registro, '-') },
+            { 'value': FuncionesAuxiliares.validarCampo(element.descripcion, '-') },
         ]
     }
 
-    generateDataComponents(data){
+    generateDataComponents(data) {
         let letArrayData = [];
-        let arrayCommponets = ['monitor','case','f_alim','f_poder','teclado', 'mouse', 'parlantes','tarj_red']
+        let arrayCommponets = ['monitor', 'case', 'f_alim', 'f_poder', 'teclado', 'mouse', 'parlantes', 'tarj_red']
         arrayCommponets.forEach(element => {
 
-            if(data[element] === undefined || data[element] === null|| data[element].length === 0){
-              //  console.log('entro')
+            if (data[element] === undefined || data[element] === null || data[element].length === 0) {
+                //  console.log('entro')
                 return;
             }
 
-            let row =  [
+            let row = [
                 { 'value': '' },
                 { 'value': '' },
                 { 'value': '' },
-                { 'value': data[element].codigo },
+                { 'value': FuncionesAuxiliares.validarCampo(data[element].codigo, '-') },
                 { 'value': FuncionesAuxiliares.UpperCase(data[element].tipo_equipo) },
-                
-                { 'value': data[element].marca },
-                { 'value': data[element].modelo },
-                { 'value': data[element].numero_serie },
+
+                { 'value': FuncionesAuxiliares.validarCampo(data[element].marca, '-') },
+                { 'value': FuncionesAuxiliares.validarCampo(data[element].modelo, '-') },
+                { 'value': FuncionesAuxiliares.validarCampo(data[element].numero_serie, '-') },
                 { 'value': FuncionesAuxiliares.transform_estado(data[element].estado_operativo) },
                 { 'value': '-' },
                 { 'value': '-' },
@@ -78,10 +78,10 @@ export default class ExcelExportDesktop extends Component {
                 { 'value': '-' },
                 { 'value': '-' },
                 { 'value': '-' },
-                { 'value': data[element].fecha_registro },
-                { 'value': data[element].descripcion },
+                { 'value': FuncionesAuxiliares.validarCampo(data[element].fecha_registro, '-') },
+                { 'value': FuncionesAuxiliares.validarCampo(data[element].descripcion, '-') },
 
-            ] 
+            ]
             letArrayData.push(row);
         });
 
@@ -91,7 +91,7 @@ export default class ExcelExportDesktop extends Component {
 
 
     generateData() {
-       
+
         let ArrayData = []
         this.props.data.forEach(element => {
             let rowGeneral = FuncionesAuxiliares.generateGeneralData(element);
@@ -103,7 +103,7 @@ export default class ExcelExportDesktop extends Component {
             ArrayData.push(rowGeneral);
             ArrayData.push(rowProcesador);
             ArrayData.push(rowsMainBoard);
-            rowsComponents.forEach(comp =>{
+            rowsComponents.forEach(comp => {
                 ArrayData.push(comp)
             });
             rowsRAM.forEach(ram => {
@@ -117,7 +117,7 @@ export default class ExcelExportDesktop extends Component {
         //console.log(ArrayData, 'arrays data')
 
         return [{
-            columns: FuncionesAuxiliares.generateTitlesExcel(),
+            columns: FuncionesAuxiliares.generateTitlesDL(),
             data: ArrayData
         }];
 
@@ -126,7 +126,7 @@ export default class ExcelExportDesktop extends Component {
     render() {
         return (
             <div>
-                <ExcelFile name='Inventario Computadores Escritorio' element={<Button disabled={this.props.dis} type="primary" icon="cloud-download">Exportar</Button>}>
+                <ExcelFile filename='Inventario Computadores Escritorio' element={<Button disabled={this.props.dis} type="primary" icon="cloud-download">Exportar</Button>}>
                     <ExcelSheet dataSet={this.generateData()} name='Inventario Computadores Escritorio' />
                 </ExcelFile>
             </div>

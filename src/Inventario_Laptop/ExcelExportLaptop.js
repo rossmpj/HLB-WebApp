@@ -33,7 +33,7 @@ export default class ExcelExportLaptop extends Component {
         
 
         return [{
-            columns: FuncionesAuxiliares.generateTitlesExcel(),
+            columns: FuncionesAuxiliares.generateTitlesDL(),
             data: ArrayData
         }];
 
@@ -42,7 +42,7 @@ export default class ExcelExportLaptop extends Component {
     render() {
         return (
             <div>
-                <ExcelFile name={'Inventario Laptops'} element={<Button disabled={this.props.dis} type="primary" icon="cloud-download">Exportar</Button>}>
+                <ExcelFile filename={'Inventario Laptops'} element={<Button disabled={this.props.dis} type="primary" icon="cloud-download">Exportar</Button>}>
                     <ExcelSheet dataSet={this.generateData()} name="Inventario Laptops" />
                 </ExcelFile>
             </div>

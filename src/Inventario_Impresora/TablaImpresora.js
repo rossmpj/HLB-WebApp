@@ -13,9 +13,11 @@ class TablaImpresora extends React.Component {
             showTable: true,
             searchText: '',
             dataSource: [],
+            disabelExport:true,
             filteredInfo: null,
             sortedInfo: null,
-            index: 0
+            index: 0,
+            currentDataSource:[]
         };
     }
 
@@ -66,7 +68,7 @@ class TablaImpresora extends React.Component {
                 }
                 datos.push(impresoras)
             });
-            this.setState({ dataSource: datos });
+            this.setState({ dataSource: datos, currentDataSource:datos, disabelExport:false }); 
         }).catch(err => {
             console.log(err)
             message.error('No se pueden cargar los datos, inténtelo más tarde', 4);

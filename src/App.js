@@ -69,7 +69,7 @@ class App extends React.Component {
               </Menu.Item>
               <Menu.Item key="12">
                 <span>
-                <Icon type="home" />
+                <Icon type="message" />
                 <span>Solicitudes
                 
                 </span>
@@ -103,7 +103,7 @@ class App extends React.Component {
                 <Menu.Item key="ip"><Icon type="cluster" />IP
                 <Link to="/ip" />
                 </Menu.Item>
-                <Menu.Item key="correo"><Icon type="mail" />IP
+                <Menu.Item key="correo"><Icon type="mail" />Correo
                 <Link to="/correo" />
                 </Menu.Item>
                 <SubMenu
