@@ -47,8 +47,7 @@ class TablaMarca extends React.Component {
         this.llenar_tabla();
     }
 
-    handleChange = (pagination, filters, sorter) => {
-        console.log('Various parameters', pagination, filters, sorter);
+    handleChange = (filters, sorter) => {
         this.setState({
             filteredInfo: filters,
             sortedInfo: sorter,
@@ -130,7 +129,7 @@ class TablaMarca extends React.Component {
             {
                 title: 'Acción',
                 key: 'accion',
-                render: (text, record) => (
+                render: (record) => (
                     <div>
                         <Link to={{
                             pathname: '/marca/form',

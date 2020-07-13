@@ -4,7 +4,7 @@ import {
     Form, Button, Input, message, Select
 } from 'antd';
 import '../custom-antd.css';
-import AsignarSelect from '../Componentes/AsignarSelect'
+/* import AsignarSelect from '../Componentes/AsignarSelect' */
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosTipo';
 
@@ -26,7 +26,8 @@ class FormularioCorreo extends React.Component {
             key: "",
             editionMode: false,
             estado: "",
-            id_correo: ""
+            id_correo: "",
+            empleados: []
         }
         this.handle_guardar = this.handle_guardar.bind(this);
     }
@@ -43,6 +44,22 @@ class FormularioCorreo extends React.Component {
                     this.editar_correo(values);
                 }
             }
+        });
+    }
+
+    cargar_empleados() {
+        let registro = [];
+        Axios.mostrar_empleados().then(res => {
+            res.data.forEach(function (dato) {
+                let users = {
+                    dato: dato.nombre.concat(" ", dato.apellido),
+                    id: dato.id
+                }
+                registro.push(users);
+            });
+            this.setState({ empleados: registro });
+        }).catch(err => {
+            console.log(err);
         });
     }
 
@@ -88,6 +105,7 @@ class FormularioCorreo extends React.Component {
     }
 
     componentDidMount() {
+        this.cargar_empleados();
         if (typeof this.props.data !== 'undefined') {
             if (typeof this.props.data.state !== 'undefined'
                 && typeof this.props.data.state.info !== 'undefined'
@@ -108,12 +126,31 @@ class FormularioCorreo extends React.Component {
                     onSubmit={this.handle_guardar}
                 >
 
-                    <AsignarSelect class=""
-                        required={true}
-                        id="cedula"
-                        initialValue={this.state.cedula}
-                        decorator={getFieldDecorator} />
+                    <Form.Item
+                        label="Seleccione Empleado"
 
+                    >
+                        {getFieldDecorator('cedula', {
+                            rules: [{ required: true, message: 'Debe completar este campo' }],
+                            initialValue: this.state.cedula
+                        })(
+                            <Select
+                                disabled={this.state.editionMode? true: false}
+                                showSearch
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                            >
+                                <Select.Option key="0" value={null}>----</Select.Option>
+                                {
+                                    this.state.empleados.map(dato =>
+                                        <Select.Option key={dato.id} value={dato.id}>{dato.dato}</Select.Option>
+                                    )
+                                }
+                            </Select>
+                        )
+                        }
+                    </Form.Item >
 
                     <Form.Item
                         label="Correo">

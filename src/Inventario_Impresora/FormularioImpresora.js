@@ -48,6 +48,7 @@ class FormularioImpresora extends React.Component {
             ip: undefined,
             componente_principal: undefined,
             asignado: undefined,
+            suministro: ""
         };
         this.handle_guardar = this.handle_guardar.bind(this);
     }
@@ -153,6 +154,7 @@ class FormularioImpresora extends React.Component {
 
         this.setState({ id_marca: info.marca });
         this.setState({ estado_operativo: info.estado_operativo });
+
         if (info.ip !== null) {
             this.setState({ ip: info.ip });
         }
@@ -183,8 +185,18 @@ class FormularioImpresora extends React.Component {
         }
 
         if (info.tipo.toLocaleLowerCase() === "multifuncional") {
-            this.setState({ rodillo: info.rodillo, toner: info.toner });
+            this.setState({ tinta: info.tinta, toner: info.toner });
             this.setState({ cartucho: info.cartucho });
+            
+            if (info.tinta !== null) {
+                this.setState({ suministro: "tinta" });
+            }
+            if (info.toner !== null) {
+                this.setState({ suministro: "toner" });
+            }
+            if (info.cartucho !== null) {
+                this.setState({ suministro: "cartucho" });
+            }
         }
     }
 
@@ -345,29 +357,45 @@ class FormularioImpresora extends React.Component {
                         {
                             this.state.tipo.toLocaleLowerCase() === "multifuncional" ?
                                 <div>
-                                    <Form.Item
-                                        label="Cartucho">
-                                        {getFieldDecorator('cartucho', {
-                                            rules: [{ required: true, message: 'Debe completar este campo' }],
-                                            initialValue: this.state.cartucho
-                                        })(<Input />)}
+                                    <Form.Item label="Suministro">
+                                        {getFieldDecorator('suministro', {
+                                            rules: [{ required: true, message: 'Debe seleccionar un suministro' }],
+                                            initialValue: this.state.suministro
+                                        })(
+                                            <Select
+                                                onChange={(value) => {
+                                                    this.setState({ suministro: value });
+                                                }}>
+                                                <Select.Option value="tinta">Tinta</Select.Option>
+                                                <Select.Option value="toner">Toner</Select.Option>
+                                                <Select.Option value="cartucho">Cartucho</Select.Option>
+                                            </Select>
+                                        )}
                                     </Form.Item>
-
-                                    <Form.Item
-                                        label="Toner">
-                                        {getFieldDecorator('toner', {
-                                            rules: [{ required: true, message: 'Debe completar este campo' }],
-                                            initialValue: this.state.toner
-                                        })(<Input />)}
-                                    </Form.Item>
-
-                                    <Form.Item
-                                        label="Rodillo">
-                                        {getFieldDecorator('rodillo', {
-                                            rules: [{ required: true, message: 'Debe completar este campo' }],
-                                            initialValue: this.state.rodillo
-                                        })(<Input />)}
-                                    </Form.Item>
+                                    {this.state.suministro === "cartucho" ?
+                                        <Form.Item
+                                            label="Cartucho">
+                                            {getFieldDecorator('cartucho', {
+                                                rules: [{ required: true, message: 'Debe completar este campo' }],
+                                                initialValue: this.state.cartucho
+                                            })(<Input />)}
+                                        </Form.Item> : null}
+                                    {this.state.suministro === "tinta" ?
+                                        <Form.Item
+                                            label="Tinta">
+                                            {getFieldDecorator('tinta', {
+                                                rules: [{ required: true, message: 'Debe completar este campo' }],
+                                                initialValue: this.state.tinta
+                                            })(<Input />)}
+                                        </Form.Item> : null}
+                                    {this.state.suministro === "toner" ?
+                                        <Form.Item
+                                            label="Toner">
+                                            {getFieldDecorator('toner', {
+                                                rules: [{ required: true, message: 'Debe completar este campo' }],
+                                                initialValue: this.state.toner
+                                            })(<Input />)}
+                                        </Form.Item> : null}
                                 </div>
                                 : null
                         }

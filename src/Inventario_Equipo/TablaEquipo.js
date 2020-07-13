@@ -2,7 +2,8 @@ import React from 'react';
 import { Button, Row, Col, Table, Input, Icon, Popconfirm, message, Typography } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
-import Axios from '../Servicios/AxiosTipo'
+import Axios from '../Servicios/AxiosTipo';
+import FuncionesAuxiliares from '../FuncionesAuxiliares';
 const { Title } = Typography;
 
 class TablaEquipo extends React.Component {
@@ -57,7 +58,7 @@ class TablaEquipo extends React.Component {
         this.setState({ filteredInfo: null });
     };
 
-    handleChange = (pagination, filters, sorter) => {
+    handleChange = (filters, sorter) => {
         this.setState({
             filteredInfo: filters,
             sortedInfo: sorter,
@@ -90,12 +91,6 @@ class TablaEquipo extends React.Component {
             console.log(err)
             message.error('Error al eliminar el registro, inténtelo más tarde', 4);
         });
-    }
-
-    stringSorter(a, b) {
-        let y = a || '';
-        let u = b || '';
-        return y.localeCompare(u);
     }
 
     filtrar_array(arr, value) {
@@ -207,7 +202,7 @@ class TablaEquipo extends React.Component {
                     }
                 ],
                 onFilter: (value, record) => this.filtrar_array(record.estado_operativo, value),
-                sorter: (a, b) => this.stringSorter(a.estado_operativo, b.estado_operativo)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado_operativo, b.estado_operativo)
             },
 
             {
@@ -233,7 +228,7 @@ class TablaEquipo extends React.Component {
                 title: 'Fecha registro',
                 dataIndex: 'fecha_registro',
                 key: 'fecha_registro',
-                sorter: (a, b) => this.stringSorter(a.fecha_registro, b.fecha_registro)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.fecha_registro, b.fecha_registro)
             },
             {
                 title: 'Asignado',

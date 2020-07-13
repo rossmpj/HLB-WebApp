@@ -3,6 +3,7 @@ import {Button,Row,Col,Table,Input,Icon,Popconfirm,message,Typography} from 'ant
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosTipo';
+import FuncionesAuxiliares from '../FuncionesAuxiliares';
 const { Title } = Typography;
 
 class TablaIp extends React.Component {
@@ -58,7 +59,7 @@ class TablaIp extends React.Component {
         this.setState({ filteredInfo: null });
     };
 
-    handleChange = (pagination, filters, sorter) => {
+    handleChange = (filters, sorter) => {
         this.setState({
             filteredInfo: filters,
             sortedInfo: sorter,
@@ -93,12 +94,6 @@ class TablaIp extends React.Component {
         });
         const dataSource = [...this.state.dataSource];
         this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
-    }
-
-    stringSorter(a, b) {
-        let y = a || '';
-        let u = b || '';
-        return y.localeCompare(u);
     }
 
     filtrar_array(arr, value) {
@@ -191,46 +186,46 @@ class TablaIp extends React.Component {
                     }
                 ],
                 onFilter: (value, record) => this.filtrar_array(record.estado, value),
-                sorter: (a, b) => this.stringSorter(a.estado, b.estado)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado, b.estado)
             },
             {
                 title: 'Hostname',
                 dataIndex: 'hostname',
                 key: 'hostname',
-                sorter: (a, b) => this.stringSorter(a.hostname, b.hostname)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.hostname, b.hostname)
 
             },
             {
                 title: 'Subred',
                 dataIndex: 'subred',
                 key: 'subred',
-                sorter: (a, b) => this.stringSorter(a.subred, b.subred)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.subred, b.subred)
             },
             {
                 title: 'Fortigate',
                 dataIndex: 'fortigate',
                 key: 'fortigate',
-                sorter: (a, b) => this.stringSorter(a.fortigate, b.fortigate)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.fortigate, b.fortigate)
             },
             {
                 title: 'Máquinas adicionales',
                 dataIndex: 'maquinas',
                 key: 'maquinas',
-                sorter: (a, b) => this.stringSorter(a.maquinas, b.maquinas)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.maquinas, b.maquinas)
 
             },
             {
                 title: 'Asignado',
                 dataIndex: 'asignado',
                 key: 'asignado',
-                sorter: (a, b) => this.stringSorter(a.asignado, b.asignado)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.asignado, b.asignado)
 
             },
             {
                 title: 'Encargado',
                 dataIndex: 'encargado',
                 key: 'encargado',
-                sorter: (a, b) => this.stringSorter(a.encargado, b.encargado)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.encargado, b.encargado)
             },
             {
                 title: 'Observación',

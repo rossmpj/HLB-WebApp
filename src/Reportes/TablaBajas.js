@@ -42,7 +42,7 @@ class TablaBajas extends React.Component {
         let datos = [];
         Axios.reporte_bajas().then(res => {
             res.data.forEach(function (dato) {
-                console.log("dq",dato)
+                console.log("dq", dato)
                 let equipos = {
                     key: dato.id_equipo,
                     tipo_equipo: dato.tipo_equipo,
@@ -189,49 +189,47 @@ class TablaBajas extends React.Component {
 
     handleOk = async (extension) => {
         let fileExtension = "";
-        switch (extension) {
-            case "xlsx":
-                fileExtension = '.xlsx';
-                try {
-                    let datos = []
-                    let datos2=[]
-                    const resumen = await this.resumen_bajas();
-                    const reporte = await this.reporte_bajas();
-                    reporte.forEach(function (dato) {
-                        let equipos = {
-                            tipo_equipo: dato.tipo_equipo,
-                            codigo: dato.codigo,
-                            marca: dato.marca,
-                            modelo: dato.modelo,
-                            estado_operativo: dato.estado_operativo,
-                            numero_serie: dato.numero_serie,
-                            descripcion: dato.descripcion,
-                        }
-                        datos.push(equipos);
-                    });
-                    resumen.forEach(function (dato) {
-                        let resumen = {
-                            tipo_equipo: dato.tipo_equipo,
-                            cantidad: dato.cantidad
-                        }
-                        datos2.push(resumen);
-                    });
-                    let wb = XLSX.utils.book_new();
-                    const ws1 = XLSX.utils.json_to_sheet(datos);
-                    const ws2 = XLSX.utils.json_to_sheet(datos2);
-                    XLSX.utils.book_append_sheet(wb, ws1, "Datos");
-                     XLSX.utils.book_append_sheet(wb, ws2, "Resumen"); 
-                     const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-                     const data = new Blob([excelBuffer], { type: fileType });
-                     saveAs(data, "equipos_de_baja" + fileExtension);
-                } catch (error) {
-                    message.error(error.message)
+        if (extension === "xlsx") {
+            fileExtension = '.xlsx';
+            try {
+                let datos = []
+                let datos2 = []
+                const resumen = await this.resumen_bajas();
+                const reporte = await this.reporte_bajas();
+                reporte.forEach(function (dato) {
+                    let equipos = {
+                        tipo_equipo: dato.tipo_equipo,
+                        codigo: dato.codigo,
+                        marca: dato.marca,
+                        modelo: dato.modelo,
+                        estado_operativo: dato.estado_operativo,
+                        numero_serie: dato.numero_serie,
+                        descripcion: dato.descripcion,
+                    }
+                    datos.push(equipos);
+                });
+                resumen.forEach(function (dato) {
+                    let informacion = {
+                        tipo_equipo: dato.tipo_equipo,
+                        cantidad: dato.cantidad
+                    }
+                    datos2.push(informacion);
+                });
+                let wb = XLSX.utils.book_new();
+                const ws1 = XLSX.utils.json_to_sheet(datos);
+                const ws2 = XLSX.utils.json_to_sheet(datos2);
+                XLSX.utils.book_append_sheet(wb, ws1, "Datos");
+                XLSX.utils.book_append_sheet(wb, ws2, "Resumen");
+                const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+                const data = new Blob([excelBuffer], { type: fileType });
+                saveAs(data, "equipos_de_baja" + fileExtension);
+            } catch (error) {
+                message.error(error.message)
                     .then(() => message.error('No fue posible generar el archivo', 2.5))
-                }
-                break;
-            default:
-                message.error('Debe seleccionar un formato de descarga');
-                break;
+            }
+
+        } else {
+            message.error('Debe seleccionar un formato de descarga');
         }
         this.setState({
             visible: false
@@ -257,15 +255,15 @@ class TablaBajas extends React.Component {
         const tipo_link = (record) => {
             switch (record.tipo_equipo.toLowerCase()) {
                 case "impresora":
-                    return '/impresora/view/'+record.key;
+                    return '/impresora/view/' + record.key;
                 case "desktop":
-                    return '/desktop/view/'+record.key;
+                    return '/desktop/view/' + record.key;
                 case "laptop":
-                    return '/laptop/view/'+record.key;
+                    return '/laptop/view/' + record.key;
                 case "router":
-                    return '/router/view/'+record.key;
+                    return '/router/view/' + record.key;
                 default:
-                    return '/equipo/view/'+record.key;
+                    return '/equipo/view/' + record.key;
             }
         }
         const columns = [
@@ -279,7 +277,7 @@ class TablaBajas extends React.Component {
                 title: 'Código',
                 dataIndex: 'codigo',
                 key: 'codigo',
-                render: (text, record) => <Link to={{ pathname: `${tipo_link(record)}`}}>{text}</Link>,
+                render: (text, record) => <Link to={{ pathname: `${tipo_link(record)}` }}>{text}</Link>,
                 ...this.getColumnSearchProps('codigo')
             },
             {

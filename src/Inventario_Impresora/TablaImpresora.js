@@ -2,7 +2,8 @@ import React from 'react';
 import { Button, Row, Col, Table, Input, Icon, Popconfirm, message, Typography } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
-import Axios from '../Servicios/AxiosTipo'
+import Axios from '../Servicios/AxiosTipo';
+import FuncionesAuxiliares from '../FuncionesAuxiliares';
 const { Title } = Typography;
 
 class TablaImpresora extends React.Component {
@@ -102,12 +103,6 @@ class TablaImpresora extends React.Component {
 
     componentDidMount() {
         this.llenar_tabla();
-    }
-
-    stringSorter(a, b) {
-        let y = a || '';
-        let u = b || '';
-        return y.localeCompare(u);
     }
 
     filtrar_array(arr, value) {
@@ -228,7 +223,7 @@ class TablaImpresora extends React.Component {
                     },
                 ],
                 onFilter: (value, record) => this.filtrar_array(record.tipo, value),
-                sorter: (a, b) => this.stringSorter(a.tipo, b.tipo)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.tipo, b.tipo)
 
             },
             {
@@ -264,7 +259,7 @@ class TablaImpresora extends React.Component {
                     }
                 ],
                 onFilter: (value, record) => this.filtrar_array(record.estado_operativo, value),
-                sorter: (a, b) => this.stringSorter(a.estado_operativo, b.estado_operativo)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado_operativo, b.estado_operativo)
             },
             {
                 title: 'Modelo',
@@ -301,7 +296,7 @@ class TablaImpresora extends React.Component {
                     }
                 ],
                 onFilter: (value, record) => this.filtrar_array(record.bspi, value),
-                sorter: (a, b) => this.stringSorter(a.bspi, b.bspi)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.bspi, b.bspi)
             },
             {
                 title: 'Departamento',
@@ -309,7 +304,7 @@ class TablaImpresora extends React.Component {
                 key: 'dpto',
                 filters: this.departamentos(),
                 onFilter: (value, record) => this.filtrar_array(record.dpto, value),
-                sorter: (a, b) => this.stringSorter(a.dpto, b.dpto)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.dpto, b.dpto)
             },
             {
                 title: 'Asignado',

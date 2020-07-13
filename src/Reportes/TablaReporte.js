@@ -166,60 +166,7 @@ class TablaReporte extends React.Component {
 
 
     handleOk = (extension) => {
-       /*  let fileExtension = ""; */
-        switch (extension) {
-            case "xlsx":
-                /* fileExtension = '.xlsx';
-               let datos = [];
-                let wb = XLSX.utils.book_new();
-                 Axios.reporte_bajas().then(res => {
-                    res.data.forEach(function (dato) {
-                        let equipos = {
-                            tipo_equipo: dato.tipo_equipo,
-                            codigo: dato.codigo,
-                            marca: dato.marca,
-                            modelo: dato.modelo,
-                            estado_operativo: dato.estado_operativo,
-                            numero_serie: dato.numero_serie,
-                            descripcion: dato.descripcion,
-                        }
-                        datos.push(equipos)
-                    });
-                    let ws1 = XLSX.utils.json_to_sheet(datos);
-                    XLSX.utils.book_append_sheet(wb, ws1, "Datos");
-
-                    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-                    const data = new Blob([excelBuffer], { type: fileType });
-                    saveAs(data, "equipos_de_baja" + fileExtension);
-                }).catch(err => {
-                    message.error('No se pudieron cargar los datos, revise la conexión con el servidor', 4);
-                }); 
-                let registro={
-                    empleado: "empleado",
-                    departamento: "departamento",
-                    tipo_equipo: "tipo_equipo",
-                    marca: "marca",
-                    modelo: "modelo",
-                    numero_serie: "numero_serie",
-                    direccion_ip: "direccion_ip",
-                    so: "so",
-                    services_pack: "services_pack",
-                    licencia: "licencia",
-                    tipo_so: "tipo_so",
-                    nombre_pc: "nombre_pc",
-                    usuario_pc: "usuario_pc",
-                    office: "office",
-                    estado_operativo: "estado_operativo",
-                    descripcion: "descripcion" 
-                }*/
-                break;
-            default:
-                message.error('Debe seleccionar un formato de descarga');
-                break;
-        }
-        this.setState({
-            visible: false
-        });
+        console.log("Función por completar");
     };
 
     handleCancel = () => {
@@ -369,12 +316,6 @@ class TablaReporte extends React.Component {
                     </Col>
                 </Row>
                 <div className="div-container">
-                    {/* <div >
-                        <Row>
-                           
-                        </Row>
-                    </div> 
-                    <br />*/}
                     <div className="table-operations">
                         <Button onClick={this.limpiarFiltros}>Limpiar filtros</Button>
                         <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>

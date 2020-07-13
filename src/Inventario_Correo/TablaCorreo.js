@@ -5,6 +5,7 @@ import {
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import AxiosTipo from '../Servicios/AxiosTipo';
+import FuncionesAuxiliares from '../FuncionesAuxiliares';
 const { Title } = Typography;
 
 
@@ -67,11 +68,10 @@ class TablaCorreo extends React.Component {
         });
     };
 
-    handleChange = (pagination, filters, sorter) => {
-        console.log('Various parameters', pagination, filters, sorter);
+    handleChange = (filters, sorter) => {
         this.setState({
             filteredInfo: filters,
-            sortedInfo: sorter,
+            sortedInfo: sorter
         });
     };
 
@@ -144,12 +144,6 @@ class TablaCorreo extends React.Component {
         }
     }
 
-    stringSorter(a, b) {
-        let y = a || '';
-        let u = b || '';
-        return y.localeCompare(u);
-    }
-
 
     render() {
         const columns = [
@@ -188,7 +182,7 @@ class TablaCorreo extends React.Component {
                     }
                 ],
                 onFilter: (value, record) => this.filtrar_array(record.bspi_punto, value),
-                sorter: (a, b) => this.stringSorter(a.bspi_punto, b.bspi_punto)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.bspi_punto, b.bspi_punto)
             },
             {
                 title: 'Departamento',
@@ -211,7 +205,7 @@ class TablaCorreo extends React.Component {
                     }
                 ],
                 onFilter: (value, record) => this.filtrar_array(record.estado, value),
-                sorter: (a, b) => this.stringSorter(a.estado, b.estado)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado, b.estado)
             },
             {
                 title: 'Fecha de asignación',
