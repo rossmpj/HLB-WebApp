@@ -1,11 +1,11 @@
 import React from 'react';
-import { Button, Row, Col, Table, Input, Icon, Popconfirm, message, Tag, Typography } from 'antd';
-import ButtonGroup from 'antd/lib/button/button-group';
+import { Button, Row, Col, Table, Input, Icon,  message, Tag, Typography } from 'antd';
+// import ButtonGroup from 'antd/lib/button/button-group';Popconfirm,
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosSolicitud'
 const { Title } = Typography;
 
-class TablaEquipo extends React.Component {
+class TablaSolicitud extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -328,4 +328,4 @@ class TablaEquipo extends React.Component {
     }
 }
 
-export default TablaEquipo;
+export default TablaSolicitud;

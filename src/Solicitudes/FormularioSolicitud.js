@@ -47,8 +47,8 @@ class FormularioSolicitud extends React.Component {
                         setTimeout(() => {
                             message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
                         }, 1000);
-                    }).catch(err => {
-                        console.log(err.response)
+                    }).catch(error => {
+                        console.log(error.response)
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
                     });
                 } else {

@@ -42,9 +42,9 @@ class FormularioMarca extends React.Component {
                         setTimeout(() => {
                             message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
                         }, 1000);
-                    }).catch(err => {
-                        if (err.response) {
-                            message.error(err.response.data.log, 4)
+                    }).catch(error_creacion => {
+                        if (error_creacion.response) {
+                            message.error(error_creacion.response.data.log, 4)
                                 .then(() => message.error('No fue posible actualizar los datos', 3))
                         } else {
                             message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
@@ -57,9 +57,9 @@ class FormularioMarca extends React.Component {
                         setTimeout(() => {
                             message.success({ content: "Edición realizada satisfactoriamente", key, duration: 3 });
                         }, 1000);
-                    }).catch(err => {
-                        if (err.response) {
-                            message.error(err.response.data.log, 4)
+                    }).catch(error_edicion => {
+                        if (error_edicion.response) {
+                            message.error(error_edicion.response.data.log, 4)
                                 .then(() => message.error('No fue posible actualizar los datos', 3))
                         } else {
                             message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)

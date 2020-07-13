@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Row, Col, Table, Input, Icon, Popconfirm, Tag, Typography, message } from 'antd';
-import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import AxiosLaptop from '../Servicios/AxiosLaptop'
 import FuncionesAuxiliares from '../FuncionesAuxiliares'
@@ -401,32 +400,6 @@ class TablaLaptop extends React.Component{
                     })}
               </div>
             ),
-        // filters: [
-        //   {
-        //       text: '2007',
-        //       value: '2007',
-        //   },
-        //   {
-        //       text: '2010',
-        //       value: '2010',
-        //   },
-        //   {
-        //       text: '2013',
-        //       value: '2013',
-        //   },
-        //   {
-        //       text: '2016',
-        //       value: '2016',
-        //   },
-        //   {
-        //       text: '2019',
-        //       value: '2019',
-        //   }
-        // ],
-        // filteredValue: filteredInfo.office || null,
-        // onFilter: (value, record) => record.office.indexOf(value) === 0,
-        // sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.office,b.office),
-        // sortOrder: sortedInfo.columnKey === 'office' && sortedInfo.order,
       },
       {
         title: 'IP',

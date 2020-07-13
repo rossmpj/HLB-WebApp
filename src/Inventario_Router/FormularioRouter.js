@@ -1,6 +1,6 @@
 import React from 'react';
 import '../App.css';
-import { Form, Input, Button, Layout, Row, Col, Typography, message } from 'antd';
+import { Form, Input, Button, Layout, message } from 'antd';
 import '../custom-antd.css';
 import InputComp from '../Componentes/InputComponent';
 import MarcaSelect from '../Componentes/MarcaSelect';
@@ -10,9 +10,9 @@ import EstadComp from '../Componentes/EstadoSelect';
 import AxiosRouter from '../Servicios/AxiosRouter';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosDesktop'
+import VistaFormulario from '../Componentes/VistaFormulario'
 
 const { Content } = Layout;
-const { Title } = Typography;
 const { TextArea } = Input;
 
 const tailLayout = { wrapperCol: { offset: 9, span: 5 } };
@@ -30,6 +30,28 @@ class FormularioRouter extends React.Component {
     };
     this.handle_guardar = this.handle_guardar.bind(this);
   }
+  
+  strongValidator = (rule, value, callback) => {
+    try {
+        if(!value.match('(([a-z A-Z 1-9])(?=.*[A-Z][a-z])).{7,15}' )) {
+            throw new Error("Su contaseña debe tener entre 7 y 15 caracteres, incluya al menos una mayúscula, minúscula y un número");
+            }
+        } catch (err) {
+            callback(err);
+        }
+  }
+
+  ipValidator = (rule, value, callback) => {
+    try {
+        // eslint-disable-next-line 
+        if(!value.match('^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$' )) {
+            throw new Error("Escriba una dirección IP válida");
+            }
+        } catch (err) {
+            callback(err);
+        }
+  }
+  
 
   componentDidMount = () => {
     if (typeof this.props.location !== 'undefined') {
@@ -135,12 +157,7 @@ class FormularioRouter extends React.Component {
     return (
       <Content> 
         <div className="div-container-title">      
-          <Row>
-            <Col span={12}><Title level={2}>{this.state.titulo}</Title></Col>
-            <Col className='flexbox'>
-              <Link to={{ pathname: '/router' }} ><Button type="primary" icon="left">Volver</Button></Link>
-            </Col>
-          </Row>  
+          <VistaFormulario enlace='/router' titulo={this.state.titulo}></VistaFormulario> 
           <div className="div-border-top" >
             <div className="div-container"> 
               <Form {...layout} 
@@ -153,12 +170,12 @@ class FormularioRouter extends React.Component {
                 <AsignComp required={false} id="asignar" decorator={getFieldDecorator} />
                 <InputComp label="Nombre" id="nombre" decorator={getFieldDecorator} />  
                 <Form.Item label="Pass">
-                  {getFieldDecorator('pass', { rules: [{ required: true, message: 'Por favor, ingrese una contraseña' }],
+                  {getFieldDecorator('pass', { rules: [{ required: true, message: 'Por favor, ingrese una contraseña' }, {validator: this.strongValidator}],
                   })( <Input.Password /> )}
                 </Form.Item>
                 <InputComp label="Usuario" id="usuario" decorator={getFieldDecorator} />  
                 <Form.Item label="Clave">
-                  {getFieldDecorator('clave', { rules: [{ required: true, message: 'Por favor, ingrese una contraseña' }],
+                  {getFieldDecorator('clave', { rules: [{ required: true, message: 'Por favor, ingrese una contraseña' }, {validator: this.strongValidator}],
                   })( <Input.Password /> )}
                 </Form.Item>
                 <MarcaSelect required={true} id="marca" decorator={getFieldDecorator} />
@@ -168,7 +185,7 @@ class FormularioRouter extends React.Component {
                 <IpSelect required={false} id="ip" decorator={getFieldDecorator} />
                 <Form.Item label="Puerta de enlace">
                   {getFieldDecorator('penlace', {
-                    rules: [{ required: false, message: 'Debe completar este campo' }],
+                    rules: [{ required: false, message: 'Debe completar este campo' }, {validator: this.ipValidator}],
                   })( <Input /> )}
                 </Form.Item>
                 <Form.Item label="Descripción">

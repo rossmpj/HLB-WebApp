@@ -1,11 +1,13 @@
 import React from 'react';
 import { Tabs, Row, Col, Typography, Button, Descriptions, Badge} from 'antd';
-import { LaptopOutlined, WindowsOutlined } from '@ant-design/icons';
+import { LaptopOutlined } from '@ant-design/icons';
 import { FiHardDrive } from "react-icons/fi";
 import { FaMemory } from "react-icons/fa";
 import { GiProcessor } from "react-icons/gi";
 import Axios from '../Servicios/AxiosLaptop'
 import SinResultados from '../Componentes/SinResultados'
+import DescripcionEquipo from '../Componentes/DetalleEquipo'
+import DetalleSistemaOperativo from '../Componentes/DetalleSistemaOperativo'
 
 const { TabPane } = Tabs;
 const { Title } = Typography;
@@ -132,35 +134,10 @@ class DetalleLaptop extends React.Component {
                   </Descriptions>
                 </TabPane>
 
-                <TabPane tab={<span><WindowsOutlined />SO</span>} key="2" >
-                  <Descriptions title="Datos del sistema operativo" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                    <Descriptions.Item label="Sistema operativo" span={2}>{this.state.so}</Descriptions.Item>
-                    <Descriptions.Item label="Tipo de sistema operativo">{this.state.so_type}</Descriptions.Item>
-                    <Descriptions.Item label="Service Pack 1" span={3}><Badge status="success" text={this.state.servpack} /></Descriptions.Item>
-                    <Descriptions.Item label="Licencia" span={3}>
-                      <Badge status="warning" text={this.state.licencia} />
-                    </Descriptions.Item>
-                    {/* <Descriptions.Item label="Office">{this.state.office}</Descriptions.Item> */}
-                  </Descriptions>
-                  <br />
-                  <div>
-                    {this.state.office.map((ram, i) => {
-                      return (
-                        <div key={ram.id_programa}>
-                          <Descriptions title={"Programa " + (i + 1)} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                            <Descriptions.Item span={1} label="Código">{ram.codigo} </Descriptions.Item>
-                            <Descriptions.Item span={1} label="Nombre">{ram.nombre} </Descriptions.Item>
-                            <Descriptions.Item span={1} label="Versión">{ram.version} </Descriptions.Item>
-                            <Descriptions.Item span={1} label="Editor">{ram.editor} </Descriptions.Item>
-                            <Descriptions.Item span={1} label="Fecha de instalación">{ram.fecha_instalacion.slice(0,10)} </Descriptions.Item>
-                            <Descriptions.Item span={1} label="Observación">{ram.observacion} </Descriptions.Item>
-                          </Descriptions>
-                          <br />
-                        </div>
-                      );
-                    })}
-                  </div>
-                </TabPane>
+                <DetalleSistemaOperativo 
+                    titulo={"Datos del sistema operativo"} programas={this.state.office} so={this.state.so} so_type={this.state.so_type} 
+                    servpack={this.state.servpack} licencia={this.state.licencia} >
+                </DetalleSistemaOperativo> 
 
                 <TabPane tab={<span><GiProcessor className="anticon" />Procesador</span>} key="3" >
                   <Descriptions title="Procesador" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
@@ -185,40 +162,30 @@ class DetalleLaptop extends React.Component {
                     {this.state.rams.map((ram, i) => {
                       return (
                         <div key={ram.id_equipo}>
-                          <Descriptions title={"Memoria RAM " + (i + 1)} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                            <Descriptions.Item label="Código">{ram.codigo} </Descriptions.Item>
-                            <Descriptions.Item label="Marca">{ram.marca} </Descriptions.Item>
-                            <Descriptions.Item label="Modelo">{ram.modelo} </Descriptions.Item>
-                            <Descriptions.Item label="Número de serie">{ram.numero_serie} </Descriptions.Item>
-                            <Descriptions.Item label="Capacidad">{ram.capacidad} </Descriptions.Item>
-                            <Descriptions.Item label="Tipo">{ram.tipo} </Descriptions.Item>
-                            <Descriptions.Item label="Descripción">{ram.descripcion} </Descriptions.Item>
-                          </Descriptions>
-                          <br />
+                        <DescripcionEquipo 
+                            titulo={'Memoria RAM '} index={i} codigo={ram.codigo} marca={ram.marca} modelo={ram.modelo} 
+                            numero_serie={ram.numero_serie} capacidad={ram.capacidad} tipo={ram.tipo} descripcion={ram.descripcion}>
+                        </DescripcionEquipo> 
                         </div>
-                      );
+                    );
                     })}
                   </div>
                 </TabPane>
                 {/* {this.state.discos !== [] ? <> */}
                 <TabPane tab={<span><FiHardDrive className="anticon" />Disco Duro</span>} key="5" >
                   <div>
-                    {this.state.discos.map((dd, i) => {
-                      return (
-                        <div key={dd.id_equipo}>
-                          <Descriptions title={"Disco duro " + (i + 1)} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                            <Descriptions.Item label="Código">{dd.codigo} </Descriptions.Item>
-                            <Descriptions.Item label="Marca">{dd.marca} </Descriptions.Item>
-                            <Descriptions.Item label="Modelo">{dd.modelo} </Descriptions.Item>
-                            <Descriptions.Item label="Número de serie">{dd.numero_serie} </Descriptions.Item>
-                            <Descriptions.Item label="Capacidad">{dd.capacidad} </Descriptions.Item>
-                            <Descriptions.Item label="Tipo">{dd.tipo} </Descriptions.Item>
-                            <Descriptions.Item label="Descripción">{dd.descripcion} </Descriptions.Item>
-                          </Descriptions>
-                          <br />
-                        </div>
-                      );
-                    })}
+                    {this.state.discos === undefined ? null :
+                        this.state.discos.map((dd, i) => {
+                        return (
+                            <div key={dd.id_equipo}>
+                                <DescripcionEquipo 
+                                    titulo={'Disco duro '} index={i} codigo={dd.codigo} marca={dd.marca} modelo={dd.modelo} 
+                                    numero_serie={dd.numero_serie} capacidad={dd.capacidad} tipo={dd.tipo} descripcion={dd.descripcion}>
+                                </DescripcionEquipo> 
+                            </div>
+                        );
+                        })
+                    }
                   </div>
                 </TabPane>
                 {/* </> : null} */}

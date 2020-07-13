@@ -1,12 +1,12 @@
 import React from 'react';
 import '../../App.css';
-import { Form, Input, Typography, Layout, Row, Col, Button, message } from 'antd';
+import { Form, Input, Layout, Button, message } from 'antd';
 import '../../custom-antd.css';
 import InputComponent from '../../Componentes/InputComponent';
 import DescripcionComponent from '../../Componentes/DescripcionComponent';
 import { Link } from 'react-router-dom';
 import Axios from '../../Servicios/AxiosPrograma';
-const { Title } = Typography;
+import VistaFormulario from '../../Componentes/VistaFormulario'
 const { Content } = Layout;
 
 const tailLayout = {
@@ -102,44 +102,39 @@ class FormularioPrograma extends React.Component {
         const { getFieldDecorator } = this.props.form;
         return (
             <Content> 
-        <div className="div-container-title">      
-          <Row>
-            <Col span={12}><Title level={2}>{this.state.titulo}</Title></Col>
-            <Col className='flexbox'>
-              <Link to={{ pathname: '/programa' }} ><Button type="primary" icon="left">Volver</Button></Link>
-            </Col>
-          </Row>  
-          <div className="div-border-top" >
-            <div className="div-container"> 
-                <Form {...layout}
-                    layout="horizontal"
-                    onSubmit={this.handle_guardar}
-                >
-                    <InputComponent label="Código" id="codigo" decorator={getFieldDecorator} disabled={this.state.editionMode} />
-                    <InputComponent label="Nombre del programa" id="nombre" decorator={getFieldDecorator} />
-                    <Form.Item label="Versión" >
-                        {getFieldDecorator(`version`, {
-                            rules: [{ required: false, message: 'Debe completar este campo' }]         
-                        })( <Input /> )}
-                    </Form.Item>
-                    <Form.Item label="Editor" >
-                        {getFieldDecorator(`editor`, {
-                            rules: [{ required: false, message: 'Debe completar este campo' }]         
-                        })( <Input /> )}
-                    </Form.Item>
-                    <DescripcionComponent label="Observación" id="observacion" decorator={getFieldDecorator} />
-            
-                    <Form.Item {...tailLayout}>
-                        <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
-                        <Link to='/programa'>
-                            <Button type="primary">Cancelar</Button>
-                        </Link>
-                    </Form.Item>
-                </Form>
-                </div>  
-          </div>
-        </div>
-      </Content>
+                <div className="div-container-title">      
+                    <VistaFormulario enlace='/programa' titulo={this.state.titulo}></VistaFormulario>
+                    <div className="div-border-top" >
+                        <div className="div-container"> 
+                            <Form {...layout}
+                                layout="horizontal"
+                                onSubmit={this.handle_guardar}
+                            >
+                                <InputComponent label="Código" id="codigo" decorator={getFieldDecorator} disabled={this.state.editionMode} />
+                                <InputComponent label="Nombre del programa" id="nombre" decorator={getFieldDecorator} />
+                                <Form.Item label="Versión" >
+                                    {getFieldDecorator(`version`, {
+                                        rules: [{ required: false, message: 'Debe completar este campo' }]         
+                                    })( <Input /> )}
+                                </Form.Item>
+                                <Form.Item label="Editor" >
+                                    {getFieldDecorator(`editor`, {
+                                        rules: [{ required: false, message: 'Debe completar este campo' }]         
+                                    })( <Input /> )}
+                                </Form.Item>
+                                <DescripcionComponent label="Observación" id="observacion" decorator={getFieldDecorator} />
+                        
+                                <Form.Item {...tailLayout}>
+                                    <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
+                                    <Link to='/programa'>
+                                        <Button type="primary">Cancelar</Button>
+                                    </Link>
+                                </Form.Item>
+                            </Form>
+                        </div>  
+                    </div>
+                </div>
+            </Content>
         );
     }
 }

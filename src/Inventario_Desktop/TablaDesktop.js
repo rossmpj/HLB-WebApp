@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Row, Col, Table, Input, Icon, Popconfirm, Tag, Typography, message } from 'antd';
-import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import FuncionesAuxiliares from '../FuncionesAuxiliares'
 import Axios from '../Servicios/AxiosDesktop' 
@@ -11,125 +10,124 @@ const { Title } = Typography;
 const key = 'updatable';
 
 class TablaDesktop extends React.Component{
-  constructor(props) {
-    super(props);
-    this.state = {
-      showComponent: false,
-      showTable:true,
-      filteredInfo: null,
-      sortedInfo: null,
-      disabelExport:true,
-      searchText: '',
-      searchedColumn: '',
-      index: 0,
-      dataSource: [],
-      currentDataSource:[]
+    constructor(props) {
+        super(props);
+        this.state = {
+            showComponent: false,
+            showTable:true,
+            filteredInfo: null,
+            sortedInfo: null,
+            disabelExport:true,
+            searchText: '',
+            searchedColumn: '',
+            index: 0,
+            dataSource: [],
+            currentDataSource:[]
+        };
+        this.handleClick = this.handleClick.bind(this);
+    }
+  
+    recargar_datos(){
+        this.obtener_datos();
+    }
+
+    obtener_datos = () => {
+        let datos = [];
+        Axios.listar_desktops().then(res => {
+        res.data.forEach(function (r) {
+            let registro = r.original
+            var dip = registro.general.ip === null ? ' ' : registro.general.ip.toString();
+            let router = {
+                key: registro.general.id_equipo,
+                codigo: registro.general.codigo,
+                fecha_registro: registro.general.fecha_registro,
+                tipo_equipo: registro.general.tipo_equipo,
+                dirIP: dip === undefined ? '' : registro.general.direccion_ip,
+                bspi: registro.general.bspi === undefined ? '' : registro.general.bspi,
+                departamento: registro.general.departamento === undefined ? '' : registro.general.departamento,
+                empleado: registro.general.empleado === undefined ? '' : registro.general.empleado+' '+registro.general.apellido,
+                marca: registro.general.marca === undefined ? '' : registro.general.marca,
+                modelo: registro.general.modelo === undefined ? '' : registro.general.modelo,
+                num_serie: registro.general.numero_serie === undefined ? '' : registro.general.numero_serie,        
+                estado: registro.general.estado_operativo === undefined ? '' : registro.general.estado_operativo,
+                ip: dip === undefined ? '' : dip,
+                so: registro.so.so === undefined ? '' : registro.so.so,
+                servpack: registro.so.service_pack === '0' ? 'No' : 'Si',
+                so_type: registro.so.tipo_so === undefined ? '' : registro.so.tipo_so,
+                name_pc: registro.so.nombre_pc === undefined ? '' : registro.so.nombre_pc,
+                user_pc: registro.so.usuario_pc === undefined ? '' : registro.so.usuario_pc,
+                licencia: registro.so.licencia === '0' ? 'No' : 'Si',
+                office: registro.programas === undefined ? [] : registro.programas,
+                tarj_red: registro.tarjeta_red  === undefined ? '' : registro.tarjeta_red,
+                monitor: registro.monitor === undefined ? '' : registro.monitor,
+                teclado: registro.teclado === undefined ? '' : registro.teclado,
+                parlantes: registro.parlantes === undefined ? '' : registro.parlantes,
+                mouse: registro.mouse === undefined ? '' : registro.mouse,
+                mainboard: registro.tarjeta_madre === undefined ? '' : registro.tarjeta_madre,
+                case: registro.case === undefined ? '' : registro.case,
+                f_poder: registro.fuente_poder === undefined ? '' : registro.fuente_poder,
+                f_alim: registro.f_alim === undefined ? [] : registro.f_alim,
+                descripcion: registro.general.descripcion,
+                procesador: registro.procesador === undefined ? '' : registro.procesador,
+                rams: registro.rams === undefined ? [] : registro.rams,
+                discos: registro.discos === undefined ? [] : registro.discos,
+            }
+            datos.push(router);
+        });
+        //console.log(datos,'datos deskto')
+        this.setState({ dataSource: datos, currentDataSource:datos, disabelExport:false });
+        }).catch(err => {
+            message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
+        });
+    }
+
+    componentDidMount = () => {
+        this.obtener_datos();
+    }
+
+    handleDelete(id) {
+        console.log("clave a eliminar",id)
+        AxiosLaptop.darDeBajaEquipoID(id,'desktop').then(res => {
+            message.success({ content: 'Registro eliminado satisfactoriamente', key, duration: 3 });
+            this.recargar_datos();
+        }).catch(err => {
+            message.error("Ha ocurrido un error al procesar la petición, inténtelo más tarde", 4);
+        });
+    }
+
+    handleClick() {
+        this.setState({
+            showComponent: true,
+            showTable: false,
+        });     
+    }
+
+    handleChange = (pagination, filters, sorter, currentDataSource) => {
+        console.log('Various parameters', pagination, filters, sorter, currentDataSource);
+        this.setState({
+            filteredInfo: filters,
+            sortedInfo: sorter,
+            currentDataSource:currentDataSource.currentDataSource
+        });
     };
-    this.handleClick = this.handleClick.bind(this);
-  }
   
-  recargar_datos(){
-    this.obtener_datos();
-  }
-
-  obtener_datos = () => {
-    let datos = [];
-    Axios.listar_desktops().then(res => {
-    res.data.forEach(function (r) {
-        let registro = r.original
-        //console.log("fuente",registro.f_alim)
-        var dip = registro.general.ip === null ? ' ' : registro.general.ip.toString();
-        let router = {
-            key: registro.general.id_equipo,
-            codigo: registro.general.codigo,
-            fecha_registro: registro.general.fecha_registro,
-            tipo_equipo: registro.general.tipo_equipo,
-            dirIP: dip === undefined ? '' : registro.general.direccion_ip,
-            bspi: registro.general.bspi === undefined ? '' : registro.general.bspi,
-            departamento: registro.general.departamento === undefined ? '' : registro.general.departamento,
-            empleado: registro.general.empleado === undefined ? '' : registro.general.empleado+' '+registro.general.apellido,
-            marca: registro.general.marca === undefined ? '' : registro.general.marca,
-            modelo: registro.general.modelo === undefined ? '' : registro.general.modelo,
-            num_serie: registro.general.numero_serie === undefined ? '' : registro.general.numero_serie,        
-            estado: registro.general.estado_operativo === undefined ? '' : registro.general.estado_operativo,
-            ip: dip === undefined ? '' : dip,
-            so: registro.so.so === undefined ? '' : registro.so.so,
-            servpack: registro.so.service_pack === '0' ? 'No' : 'Si',
-            so_type: registro.so.tipo_so === undefined ? '' : registro.so.tipo_so,
-            name_pc: registro.so.nombre_pc === undefined ? '' : registro.so.nombre_pc,
-            user_pc: registro.so.usuario_pc === undefined ? '' : registro.so.usuario_pc,
-            licencia: registro.so.licencia === '0' ? 'No' : 'Si',
-            office: registro.programas === undefined ? [] : registro.programas,
-            tarj_red: registro.tarjeta_red  === undefined ? '' : registro.tarjeta_red,
-            monitor: registro.monitor === undefined ? '' : registro.monitor,
-            teclado: registro.teclado === undefined ? '' : registro.teclado,
-            parlantes: registro.parlantes === undefined ? '' : registro.parlantes,
-            mouse: registro.mouse === undefined ? '' : registro.mouse,
-            mainboard: registro.tarjeta_madre === undefined ? '' : registro.tarjeta_madre,
-            case: registro.case === undefined ? '' : registro.case,
-            f_poder: registro.fuente_poder === undefined ? '' : registro.fuente_poder,
-            f_alim: registro.f_alim === undefined ? [] : registro.f_alim,
-            descripcion: registro.general.descripcion,
-            procesador: registro.procesador === undefined ? '' : registro.procesador,
-            rams: registro.rams === undefined ? [] : registro.rams,
-            discos: registro.discos === undefined ? [] : registro.discos,
-         }
-         datos.push(router);
-    });
-   //console.log(datos,'datos deskto')
-    this.setState({ dataSource: datos, currentDataSource:datos, disabelExport:false });
-    }).catch(err => {
-        message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
-    });
-}
-
-componentDidMount = () => {
-    this.obtener_datos();
-  }
-
-  handleDelete(id) {
-    console.log("clave a eliminar",id)
-    AxiosLaptop.darDeBajaEquipoID(id,'desktop').then(res => {
-      message.success({ content: 'Registro eliminado satisfactoriamente', key, duration: 3 });
-      this.recargar_datos();
-    }).catch(err => {
-      message.error("Ha ocurrido un error al procesar la petición, inténtelo más tarde", 4);
-    });
-  }
-
-  handleClick() {
-    this.setState({
-      showComponent: true,
-      showTable: false,
-    });     
-  }
-
-  handleChange = (pagination, filters, sorter, currentDataSource) => {
-    console.log('Various parameters', pagination, filters, sorter, currentDataSource);
-    this.setState({
-      filteredInfo: filters,
-      sortedInfo: sorter,
-      currentDataSource:currentDataSource.currentDataSource
-    });
-  };
+    limpiarFiltros = () => {
+        this.setState({ filteredInfo: null });
+    };
   
-  limpiarFiltros = () => {
-    this.setState({ filteredInfo: null });
-  };
-  
-  clearAll = () => {
-    this.setState({
-      filteredInfo: null,
-      sortedInfo: null,
-      index: this.state.index + 1
-    });
-  };
+    clearAll = () => {
+        this.setState({
+            filteredInfo: null,
+            sortedInfo: null,
+            index: this.state.index + 1
+        });
+    };
 
-  limpiarBusquedas = () => {
-    this.setState({
-      index: this.state.index +1
-    })
-  }
+    limpiarBusquedas = () => {
+        this.setState({
+            index: this.state.index +1
+        })
+    }
 
   getColumnSearchProps = dataIndex => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
@@ -369,39 +367,11 @@ componentDidMount = () => {
           <div>
              {office.map((disco, index) => {
                     return (
-                        // <Link key={disco.codigo} to={{ pathname: '/otros/view', state: { info: disco, tipo_equipo: 'disco duro' } }} >
-                        <Tag style={{margin: 2}} color="purple" key={index}>{disco.nombre}</Tag>
-                        // </Link>              
+                        <Tag style={{margin: 2}} color="purple" key={index}>{disco.nombre}</Tag>              
                     );
                 })}
           </div>
         ),
-        // filters: [
-        //   {
-        //       text: '2007',
-        //       value: '2007',
-        //   },
-        //   {
-        //       text: '2010',
-        //       value: '2010',
-        //   },
-        //   {
-        //       text: '2013',
-        //       value: '2013',
-        //   },
-        //   {
-        //       text: '2016',
-        //       value: '2016',
-        //   },
-        //   {
-        //       text: '2019',
-        //       value: '2019',
-        //   }
-        // ],
-        // filteredValue: filteredInfo.office || null,
-        // onFilter: (value, record) => record.office.indexOf(value) === 0,
-        // sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.office, b.office),
-        // sortOrder: sortedInfo.columnKey === 'office' && sortedInfo.order,
       },
       {
         title: 'IP',
@@ -413,19 +383,19 @@ componentDidMount = () => {
         title: 'Monitor',
         dataIndex: 'monitor',
         key: 'monitor',
-        render: monitor => <Link key={monitor.codigo} to={{ pathname: '/otros/view', state: { info: monitor, tipo_equipo: 'monitor' } }} >
-        {monitor.codigo}
-     </Link>,
-        // text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'monitor'} }} >{text}</Link>,
+        render: monitor => 
+            <Link key={monitor.codigo} to={{ pathname: '/otros/view', state: { info: monitor, tipo_equipo: 'monitor' } }} >
+                {monitor.codigo}
+            </Link>,
       },
       {
         title: 'Teclado',
         dataIndex: 'teclado',
         key: 'teclado',
-        render: teclado => <Link key={teclado.codigo} to={{ pathname: '/otros/view', state: { info: teclado, tipo_equipo: 'teclado' } }} >
-        {teclado.codigo}
-     </Link>,
-        //text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'teclado'} }} >{text}</Link>,
+        render: teclado => 
+            <Link key={teclado.codigo} to={{ pathname: '/otros/view', state: { info: teclado, tipo_equipo: 'teclado' } }} >
+                {teclado.codigo}
+            </Link>
       }, 
       {
         title: 'Parlantes',
