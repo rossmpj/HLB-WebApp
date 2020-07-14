@@ -138,13 +138,6 @@ class TablaCorreo extends React.Component {
         });
     }
 
-    filtrar_array(arr, value) {
-        if (arr !== null) {
-            return arr.indexOf(value) === 0;
-        }
-    }
-
-
     render() {
         const columns = [
             {
@@ -181,7 +174,7 @@ class TablaCorreo extends React.Component {
                         value: 'Unidad Educativa San José del Buen Pastor',
                     }
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.bspi_punto, value),
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.bspi_punto, value),
                 sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.bspi_punto, b.bspi_punto)
             },
             {
@@ -204,7 +197,7 @@ class TablaCorreo extends React.Component {
                         value: 'I',
                     }
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.estado, value),
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.estado, value),
                 sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado, b.estado)
             },
             {

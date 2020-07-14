@@ -6,6 +6,7 @@ import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosReporte'
 import ModalDownload from '../Componentes/ModalDownload';
+import FuncionesAuxiliares from '../FuncionesAuxiliares';
 /* import {saveAs} from 'file-saver';
 import * as XLSX from 'xlsx'; */
 
@@ -84,18 +85,6 @@ class TablaReporte extends React.Component {
 
     componentDidMount() {
         this.llenar_tabla();
-    }
-
-    stringSorter(a, b) {
-        let y = a || '';
-        let u = b || '';
-        return y.localeCompare(u);
-    }
-
-    filtrar_array(arr, value) {
-        if (arr !== null) {
-            return arr.indexOf(value) === 0;
-        }
     }
 
     busqueda_array(arr, dataIndex, value) {
@@ -229,8 +218,8 @@ class TablaReporte extends React.Component {
                         value: 'Unidad Educativa San José del Buen Pastor',
                     }
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.bspi, value),
-                sorter: (a, b) => this.stringSorter(a.bspi, b.bspi)
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.bspi, value),
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.bspi, b.bspi)
             },
             {
                 title: 'Empleado',
@@ -301,8 +290,8 @@ class TablaReporte extends React.Component {
                         value: 'B',
                     }
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.estado_operativo, value),
-                sorter: (a, b) => this.stringSorter(a.estado_operativo, b.estado_operativo)
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.estado_operativo, value),
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado_operativo, b.estado_operativo)
             }
         ];
         return (

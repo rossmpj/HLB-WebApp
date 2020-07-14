@@ -96,12 +96,6 @@ class TablaIp extends React.Component {
         this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
     }
 
-    filtrar_array(arr, value) {
-        if (arr !== null) {
-            return arr.indexOf(value) === 0;
-        }
-    }
-
     busqueda_array(arr, dataIndex, value) {
         if (arr[dataIndex] !== null) {
             return arr[dataIndex]
@@ -185,7 +179,7 @@ class TablaIp extends React.Component {
                         value: 'Libre',
                     }
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.estado, value),
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.estado, value),
                 sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado, b.estado)
             },
             {

@@ -6,6 +6,12 @@ export default class FuncionesAuxiliares {
         return y.localeCompare(u);
     }
 
+    static filtrar_array(arr, value) {
+        if (arr !== null) {
+            return arr.indexOf(value) === 0;
+        }
+    }
+
 
 
 

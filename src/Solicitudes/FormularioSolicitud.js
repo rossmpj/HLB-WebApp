@@ -29,6 +29,7 @@ class FormularioSolicitud extends React.Component {
         this.state = {
             key: "",
             editionMode: false,
+            id_usuario: "administracion"
         }
         this.handle_guardar = this.handle_guardar.bind(this);
     }
@@ -41,11 +42,12 @@ class FormularioSolicitud extends React.Component {
             if (!err) {
                 if (!this.state.editionMode) {
                     console.log(values)
+                    values.id_usuario = this.state.id_usuario;
                     AxiosSolicitud.crear_solicitud(values).then(res => {
                         console.log(res);
-                        message.loading({ content: 'Guardando datos...', key });
+                        message.loading({ content: 'Procesando solicitud...', key });
                         setTimeout(() => {
-                            message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+                            message.success({ content: 'Solicitud enviada satisfactoriamente', key, duration: 3 });
                         }, 1000);
                     }).catch(error => {
                         console.log(error.response)
@@ -101,13 +103,13 @@ class FormularioSolicitud extends React.Component {
                     >
                         {getFieldDecorator('prioridad', {
                             rules: [{ required: true, message: 'Debe seleccionar la prioridad de la Solicitud' }],
-                            initialValue: 'ALTA'
+                            initialValue: 'A'
                         })(
                             <Select>
-                                <Select.Option value="ALTA">Alta</Select.Option>
-                                <Select.Option value="MEDIA">Media</Select.Option>
-                                <Select.Option value="BAJA">Baja</Select.Option>
-                                <Select.Option value="CRITICA">Critica</Select.Option>
+                                <Select.Option value="A">Alta</Select.Option>
+                                <Select.Option value="M">Media</Select.Option>
+                                <Select.Option value="B">Baja</Select.Option>
+                                <Select.Option value="CT">Critica</Select.Option>
                             </Select>
                         )}
 

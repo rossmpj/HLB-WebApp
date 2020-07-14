@@ -15,6 +15,7 @@ import Axios from '../Servicios/AxiosReporte'
 import ModalDownload from '../Componentes/ModalDownload';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
+import FuncionesAuxiliares from '../FuncionesAuxiliares';
 
 const { Title } = Typography;
 const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
@@ -91,17 +92,6 @@ class TablaBajas extends React.Component {
         this.llenar_tabla();
     }
 
-    stringSorter(a, b) {
-        let y = a || '';
-        let u = b || '';
-        return y.localeCompare(u);
-    }
-
-    filtrar_array(arr, value) {
-        if (arr !== null) {
-            return arr.indexOf(value) === 0;
-        }
-    }
 
     busqueda_array(arr, dataIndex, value) {
         if (arr[dataIndex] !== null) {
@@ -324,8 +314,8 @@ class TablaBajas extends React.Component {
                         value: 'B',
                     }
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.estado_operativo, value),
-                sorter: (a, b) => this.stringSorter(a.estado_operativo, b.estado_operativo)
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.estado_operativo, value),
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado_operativo, b.estado_operativo)
             },
             {
                 title: 'Descripción',

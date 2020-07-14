@@ -93,11 +93,6 @@ class TablaEquipo extends React.Component {
         });
     }
 
-    filtrar_array(arr, value) {
-        if (arr !== null) {
-            return arr.indexOf(value) === 0;
-        }
-    }
 
     busqueda_array(arr, dataIndex, value) {
         if (arr[dataIndex] !== null) {
@@ -201,7 +196,7 @@ class TablaEquipo extends React.Component {
                         value: 'B',
                     }
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.estado_operativo, value),
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.estado_operativo, value),
                 sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado_operativo, b.estado_operativo)
             },
 

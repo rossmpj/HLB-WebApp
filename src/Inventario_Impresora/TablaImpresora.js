@@ -105,12 +105,6 @@ class TablaImpresora extends React.Component {
         this.llenar_tabla();
     }
 
-    filtrar_array(arr, value) {
-        if (arr !== null) {
-            return arr.indexOf(value) === 0;
-        }
-    }
-
     busqueda_array(arr, dataIndex, value) {
         if (arr[dataIndex] !== null) {
             return arr[dataIndex]
@@ -222,7 +216,7 @@ class TablaImpresora extends React.Component {
                         value: 'Multifuncional',
                     },
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.tipo, value),
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.tipo, value),
                 sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.tipo, b.tipo)
 
             },
@@ -258,7 +252,7 @@ class TablaImpresora extends React.Component {
                         value: 'B',
                     }
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.estado_operativo, value),
+                onFilter: (value, record) =>FuncionesAuxiliares.filtrar_array(record.estado_operativo, value),
                 sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado_operativo, b.estado_operativo)
             },
             {
@@ -295,7 +289,7 @@ class TablaImpresora extends React.Component {
                         value: 'Unidad Educativa San José del Buen Pastor',
                     }
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.bspi, value),
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.bspi, value),
                 sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.bspi, b.bspi)
             },
             {
@@ -303,7 +297,7 @@ class TablaImpresora extends React.Component {
                 dataIndex: 'dpto',
                 key: 'dpto',
                 filters: this.departamentos(),
-                onFilter: (value, record) => this.filtrar_array(record.dpto, value),
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.dpto, value),
                 sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.dpto, b.dpto)
             },
             {

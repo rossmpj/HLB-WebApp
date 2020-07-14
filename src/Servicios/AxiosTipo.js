@@ -59,7 +59,7 @@ export default class AxiosTipo {
     }
 
     static ver_ips = () => {
-        return AxiosTipo.instanceAxios.get(`/listar_ips`);
+        return AxiosTipo.instanceAxios.get(`/mostrar_ips`);
     }
 
     static editar_ip = (ip) => {
