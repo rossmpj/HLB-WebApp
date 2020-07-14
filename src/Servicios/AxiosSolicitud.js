@@ -2,7 +2,8 @@ import axios from 'axios';
 
 export default class AxiosSolicitud {
   static instanceAxios = axios.create({
-    baseURL: 'http://localhost:8000/api',
+    // baseURL: 'http://localhost:8000/api',    
+    baseURL: 'https://backend-hlb.herokuapp.com/api',
   });
 
 
