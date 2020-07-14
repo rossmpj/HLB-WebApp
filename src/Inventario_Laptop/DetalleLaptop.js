@@ -1,13 +1,12 @@
 import React from 'react';
 import { Tabs, Row, Col, Typography, Button, Descriptions, Badge} from 'antd';
-import { LaptopOutlined } from '@ant-design/icons';
+import { LaptopOutlined, WindowsOutlined } from '@ant-design/icons';
 import { FiHardDrive } from "react-icons/fi";
 import { FaMemory } from "react-icons/fa";
 import { GiProcessor } from "react-icons/gi";
 import Axios from '../Servicios/AxiosLaptop'
 import SinResultados from '../Componentes/SinResultados'
-import DescripcionEquipo from '../Componentes/DetalleEquipo'
-import DetalleSistemaOperativo from '../Componentes/DetalleSistemaOperativo'
+import DetalleEquipo from '../Componentes/DetalleEquipo'
 
 const { TabPane } = Tabs;
 const { Title } = Typography;
@@ -134,10 +133,28 @@ class DetalleLaptop extends React.Component {
                   </Descriptions>
                 </TabPane>
 
-                <DetalleSistemaOperativo 
-                    titulo={"Datos del sistema operativo"} programas={this.state.office} so={this.state.so} so_type={this.state.so_type} 
-                    servpack={this.state.servpack} licencia={this.state.licencia} >
-                </DetalleSistemaOperativo> 
+                <TabPane tab={<span><WindowsOutlined />SO</span>} key="2" >
+                    <DetalleEquipo 
+                        titulo={'Datos del sistema operativo'} so={this.state.so} so_type={this.state.so_type} servpack={this.state.servpack} 
+                        licencia={this.state.licencia} >
+                    </DetalleEquipo> 
+                    <br />
+                    <div>
+                        {this.state.office === undefined ? null : 
+                            this.state.office.map((programa, i) => {
+                                return (
+                                    <div key={programa.id_programa}>
+                                        <DetalleEquipo 
+                                            titulo={'Programa '} index={i} codigo={programa.codigo} nombre={programa.nombre} version={programa.version} 
+                                            editor={programa.editor} fecha_instalacion={programa.fecha_instalacion} observacion={programa.observacion} >
+                                        </DetalleEquipo> 
+                                        <br />
+                                    </div>
+                                );
+                            })
+                        }
+                    </div>
+                </TabPane>
 
                 <TabPane tab={<span><GiProcessor className="anticon" />Procesador</span>} key="3" >
                   <Descriptions title="Procesador" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
@@ -162,10 +179,10 @@ class DetalleLaptop extends React.Component {
                     {this.state.rams.map((ram, i) => {
                       return (
                         <div key={ram.id_equipo}>
-                        <DescripcionEquipo 
+                        <DetalleEquipo 
                             titulo={'Memoria RAM '} index={i} codigo={ram.codigo} marca={ram.marca} modelo={ram.modelo} 
                             numero_serie={ram.numero_serie} capacidad={ram.capacidad} tipo={ram.tipo} descripcion={ram.descripcion}>
-                        </DescripcionEquipo> 
+                        </DetalleEquipo> 
                         </div>
                     );
                     })}
@@ -178,10 +195,10 @@ class DetalleLaptop extends React.Component {
                         this.state.discos.map((dd, i) => {
                         return (
                             <div key={dd.id_equipo}>
-                                <DescripcionEquipo 
+                                <DetalleEquipo 
                                     titulo={'Disco duro '} index={i} codigo={dd.codigo} marca={dd.marca} modelo={dd.modelo} 
                                     numero_serie={dd.numero_serie} capacidad={dd.capacidad} tipo={dd.tipo} descripcion={dd.descripcion}>
-                                </DescripcionEquipo> 
+                                </DetalleEquipo> 
                             </div>
                         );
                         })

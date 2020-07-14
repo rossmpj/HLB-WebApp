@@ -1,11 +1,22 @@
 import React from 'react';
-import { Descriptions } from 'antd';
+import { Descriptions, Badge } from 'antd';
 
 
 function DetalleEquipo(props) {
     return (
         <div key={props.id_equipo}>
             <Descriptions title={props.titulo + (props.index>=0 ? (props.index + 1):"")} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}> 
+                { props.titulo==="Datos del sistema operativo" ?
+                    <>
+                        <Descriptions.Item label="Sistema operativo" span={2}>{props.so}</Descriptions.Item>
+                        <Descriptions.Item label="Tipo de sistema operativo">{props.so_type}</Descriptions.Item>
+                        <Descriptions.Item label="Service Pack 1" span={3}><Badge status="success" text={props.servpack} /></Descriptions.Item>
+                        <Descriptions.Item label="Licencia" span={3}>
+                            <Badge status="error" text={props.licencia} />
+                        </Descriptions.Item>
+                    </> : null
+                }
+                {/* <br /> */}
                 {props.titulo==="Programa " ?
                     <>
                         <Descriptions.Item span={1} label="Código">{props.codigo} </Descriptions.Item>
