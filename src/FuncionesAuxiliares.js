@@ -100,6 +100,8 @@ export default class FuncionesAuxiliares {
         ]
     }
 
+    
+
     static generateDataRAM_DISK(array) {
         let rows = []
         array.forEach(element => {

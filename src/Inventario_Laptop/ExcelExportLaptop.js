@@ -13,7 +13,6 @@ export default class ExcelExportLaptop extends Component {
 
 
     generateData() {
-        console.log(this.props.data, "data excel")
         let ArrayData = []
         this.props.data.forEach(element => {
             let rowGeneral = FuncionesAuxiliares.generateGeneralData(element);

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosSolicitud'
 const { Title } = Typography;
 
-class TablaSolicitud extends React.Component {
+class TablaSolicitudUser extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -23,19 +23,14 @@ class TablaSolicitud extends React.Component {
 
     llenar_tabla() {
         let datos = [];
-        Axios.mostrar_solicitudes().then(res => {
+        //usuario quemado, en teoria deberia salir del login :v
+        Axios.mostrar_solicitudes_user('administracion').then(res => {
             res.data.forEach(function (dato) {
-                let empleado = "";
-                if (dato.id_usuario !== null) {
-                    empleado = dato.nombre.concat(" ", dato.apellido);
-                }
                 let equipos = {
                     key: dato.id_solicitud,
                     estado: dato.estado,
                     tipo: dato.tipo,
                     observacion: dato.observacion,
-                    user: dato.id_usuario,
-                    empleado: empleado,
                     fecha: dato.fecha_realizacion + " " + dato.hora_realizacion,
                     prioridad: dato.prioridad
                 }
@@ -160,14 +155,7 @@ class TablaSolicitud extends React.Component {
 
     render() {
         const columns = [
-            {
-                title: 'Realizada por:',
-                dataIndex: 'empleado',
-                key: 'empleado',
-                fixed: 'left',
-                //render: (text, record) => <Link to={{ pathname: '/equipo/view/'+record.key}}>{text}</Link>,
-                ...this.getColumnSearchProps('empleado')
-            },
+            
 
             {
                 title: 'Estado Solicitud',
@@ -238,12 +226,7 @@ class TablaSolicitud extends React.Component {
                 )
 
             },
-            {
-                title: 'Usuario',
-                dataIndex: 'user',
-                key: 'user',
-                ...this.getColumnSearchProps('user')
-            },
+
             {
                 title: 'Tipo de Asistencia',
                 dataIndex: 'tipo',
@@ -328,4 +311,4 @@ class TablaSolicitud extends React.Component {
     }
 }
 
-export default TablaSolicitud;
+export default TablaSolicitudUser;

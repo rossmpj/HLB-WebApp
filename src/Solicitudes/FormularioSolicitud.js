@@ -49,6 +49,7 @@ class FormularioSolicitud extends React.Component {
                         setTimeout(() => {
                             message.success({ content: 'Solicitud enviada satisfactoriamente', key, duration: 3 });
                         }, 1000);
+                        this.props.history.push("/solicitud_empleado");
                     }).catch(error => {
                         console.log(error.response)
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);

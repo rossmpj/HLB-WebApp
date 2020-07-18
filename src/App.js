@@ -7,7 +7,8 @@ import TablaRouter from './Inventario_Router/TablaRouter';
 import FormularioRouter from './Inventario_Router/FormularioRouter';
 import DetalleRouter from './Inventario_Router/DetalleRouter';
 import VistaSolicitud from './Solicitudes/VistaSolicitud';
-import TablaSolicitud from './Solicitudes/TablaSolicitud';
+import TablaSolicitudSistemas from './Solicitudes/TablaSolicitudSistemas';
+import TablaSolicitudUser from './Solicitudes/TablaSolicitudUser';
 import TablaLaptop from './Inventario_Laptop/TablaLaptop';
 import FormularioLaptop from './Inventario_Laptop/FormularioLaptop';
 import DetalleLaptop from './Inventario_Laptop/DetalleLaptop';
@@ -70,11 +71,19 @@ class App extends React.Component {
               <Menu.Item key="12">
                 <span>
                 <Icon type="message" />
-                <span>Solicitudes
-                
+                <span>Solicitudes (Sist)
+                {/* lo que esta entre parentesis es solo referencia despues se deberia quitar */}
                 </span>
                 </span>
-                <Link to="/solicitud" />
+                <Link to="/solicitud_sistemas" />
+              </Menu.Item>
+              <Menu.Item key="13">
+                <span>
+                <Icon type="message" />
+                <span>Solicitudes (Emp)
+                </span>
+                </span>
+                <Link to="/solicitud_empleado" />
               </Menu.Item>
               <SubMenu
                 key="dash"
@@ -156,8 +165,9 @@ class App extends React.Component {
               <Route exact path='/desktop/view/:id' component={DetalleDesktop} />
               <Route exact path='/desktop/form' component={FormularioDesktop} />
               <Route exact path='/solicitud/form' component={VistaSolicitud} />
-              <Route exact path='/solicitud' component={TablaSolicitud} />
+              <Route exact path='/solicitud_sistemas' component={TablaSolicitudSistemas} />
               <Route exact path='/laptop' component={TablaLaptop} />
+              <Route exact path='/solicitud_empleado' component={TablaSolicitudUser} />
               <Route exact path='/laptop/view/:id' component={DetalleLaptop} />
               <Route exact path='/laptop/form' component={FormularioLaptop} />
               <Route exact path='/otros/view' component={DetalleOtrosEquipos} />

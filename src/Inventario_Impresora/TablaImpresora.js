@@ -4,6 +4,7 @@ import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosTipo';
 import FuncionesAuxiliares from '../FuncionesAuxiliares';
+import ExcelExportImpresora from './ExcelExportImpresora'
 const { Title } = Typography;
 
 class TablaImpresora extends React.Component {
@@ -80,10 +81,11 @@ class TablaImpresora extends React.Component {
         this.setState({ filteredInfo: null });
     };
 
-    handleChange = (pagination, filters, sorter) => {
+    handleChange = (pagination, filters, sorter, currentDataSource) => {
         this.setState({
             filteredInfo: filters,
             sortedInfo: sorter,
+            currentDataSource: currentDataSource.currentDataSource
         });
     };
 
@@ -389,10 +391,11 @@ class TablaImpresora extends React.Component {
                     <div >
                         <Row>
                             <Col className='flexbox'>
-                                <ButtonGroup style={{ align: 'right' }}>
+                                {/* <ButtonGroup style={{ align: 'right' }}> */}
                                     <Button type="primary" icon="import">Importar</Button>
-                                    <Button type="primary" icon="cloud-download">Exportar</Button>
-                                </ButtonGroup>
+                                    <ExcelExportImpresora data={this.state.currentDataSource} dis = {this.state.disabelExport}></ExcelExportImpresora>
+                                    {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
+                                {/* </ButtonGroup> */}
                             </Col>
                         </Row>
                     </div>
