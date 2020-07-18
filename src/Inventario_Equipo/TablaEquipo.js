@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, Row, Col, Table, Input, Icon, Popconfirm, message, Typography } from 'antd';
-import ButtonGroup from 'antd/lib/button/button-group';
+import { Button, Row, Col, Table, Input, Icon, Popconfirm, message, Typography, Tag} from 'antd';
+import ExcelExportEquipo from './ExcelExportEquipo';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosTipo';
 import FuncionesAuxiliares from '../FuncionesAuxiliares';
@@ -17,7 +17,9 @@ class TablaEquipo extends React.Component {
             info: [],
             filteredInfo: null,
             sortedInfo: null,
-            index: 0
+            index: 0,
+            currentDataSource:[],
+            disabelExport:true,
         };
 
     }
@@ -25,6 +27,7 @@ class TablaEquipo extends React.Component {
     llenar_tabla() {
         let datos = [];
         Axios.mostrar_equipos().then(res => {
+            console.log(res.data)
             res.data.forEach(function (dato) {
                 let empleado = "";
                 if (dato.empleado !== null) {
@@ -34,7 +37,7 @@ class TablaEquipo extends React.Component {
                     key: dato.id_equipo,
                     estado_operativo: dato.estado_operativo,
                     codigo: dato.codigo,
-                    tipo_equipo: dato.tipo_equipo,
+                    tipo_equipo: FuncionesAuxiliares.UpperCase(dato.tipo_equipo,''),
                     marca: dato.marca,
                     modelo: dato.modelo,
                     descripcion: dato.descripcion,
@@ -43,11 +46,13 @@ class TablaEquipo extends React.Component {
                     componente_principal: dato.principal,
                     asignado: empleado,
                     fecha_registro: dato.fecha_registro,
-                    ip: dato.direccion_ip
+                    ip: dato.direccion_ip,
+                    bspi: dato.bspi_punto,
+                    departamento: dato.departamento
                 }
                 datos.push(equipos)
             });
-            this.setState({ dataSource: datos });
+            this.setState({ dataSource: datos, currentDataSource:datos, disabelExport:false }); 
         }).catch(err => {
             console.log(err)
             message.error('No se pueden cargar los datos, revise la conexión con el servidor', 4);
@@ -58,12 +63,14 @@ class TablaEquipo extends React.Component {
         this.setState({ filteredInfo: null });
     };
 
-    handleChange = (filters, sorter) => {
+    handleChange = (pagination, filters, sorter, currentDataSource) => {
+        console.log('Various parameters', pagination, filters, sorter, currentDataSource);
         this.setState({
-            filteredInfo: filters,
-            sortedInfo: sorter,
+          filteredInfo: filters,
+          sortedInfo: sorter,
+          currentDataSource: currentDataSource.currentDataSource
         });
-    };
+      };
 
     clearAll = () => {
         this.setState({
@@ -155,6 +162,9 @@ class TablaEquipo extends React.Component {
 
 
     render() {
+        let { sortedInfo, filteredInfo } = this.state;
+        sortedInfo = sortedInfo || {};
+        filteredInfo = filteredInfo || {};
         const columns = [
             {
                 title: 'Código',
@@ -164,6 +174,41 @@ class TablaEquipo extends React.Component {
                 render: (text, record) => <Link to={{ pathname: '/equipo/view/'+record.key}}>{text}</Link>,
                 ...this.getColumnSearchProps('codigo')
             },
+            {
+                title: 'BSPI Punto',
+                dataIndex: 'bspi',
+                key: 'bspi',
+                width: 130,
+                filters: [
+                  {
+                      text: 'Hospital León Becerra',
+                      value: 'Hospital León Becerra',
+                  },
+                  {
+                      text: 'Hogar Inés Chambers',
+                      value: 'Hogar Inés Chambers',
+                  },
+                  {
+                    text: 'Unidad Educativa San José Buen Pastor',
+                    value: 'Unidad Educativa San José Buen Pastor',
+                  },
+                  {
+                    text: 'Residencia Mercedes Begué',
+                    value: 'Residencia Mercedes Begué',
+                  }
+                ],
+                filteredValue: filteredInfo.bspi || null,
+                onFilter: (value, record) => record.bspi.indexOf(value) === 0,
+                sorter: (a, b) => a.bspi.length - b.bspi.length,
+                sortOrder: sortedInfo.columnKey === 'bspi' && sortedInfo.order,
+              },  
+              {
+                title: 'Departamento',
+                dataIndex: 'departamento',
+                key: 'departamento',
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.departamento, b.departamento),
+                sortOrder: sortedInfo.columnKey === 'departamento' && sortedInfo.order,
+              },
             {
                 title: 'Número de serie',
                 dataIndex: 'numero_serie',
@@ -197,7 +242,16 @@ class TablaEquipo extends React.Component {
                     }
                 ],
                 onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.estado_operativo, value),
-                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado_operativo, b.estado_operativo)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado_operativo, b.estado_operativo),
+                render: (text, value) => (
+                    <div >
+                        {text==="D" ? <Tag style={{margin: 2}} color="green" key={value}>Disponible</Tag> : 
+                        text==="O" ?  <Tag style={{margin: 2}} color="blue" key={value}>Operativo</Tag> :
+                        text==="ER" ?  <Tag style={{margin: 2}} color="orange" key={value}>En revisión</Tag> :
+                        text==="R" ?  <Tag style={{margin: 2}} color="magenta" key={value}>Reparado</Tag> :
+                                        <Tag style={{margin: 2}} color="red" key={value}>De baja</Tag> }
+                    </div>
+                  ),
             },
 
             {
@@ -282,10 +336,12 @@ class TablaEquipo extends React.Component {
                     <div >
                         <Row>
                             <Col className='flexbox'>
-                                <ButtonGroup>
+                                {/* <ButtonGroup> */}
                                     <Button type="primary" icon="import">Importar</Button>
-                                    <Button type="primary" icon="cloud-download">Exportar</Button>
-                                </ButtonGroup>
+                                    <ExcelExportEquipo data={this.state.currentDataSource} dis = {this.state.disabelExport}></ExcelExportEquipo>
+
+                                    {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
+                                {/* </ButtonGroup> */}
                             </Col>
                         </Row>
                     </div>

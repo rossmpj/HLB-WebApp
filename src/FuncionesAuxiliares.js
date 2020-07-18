@@ -17,17 +17,17 @@ export default class FuncionesAuxiliares {
 
     // FUNCIONES PARA EXPORTACION DE EXCEL
 
-    static transform_estado(estado) {
-        if (estado === 'D') return 'Disponible'
-        if (estado === 'O') return 'Operativo'
-        if (estado === 'ER') return 'En revisión'
-        if (estado === 'R') return 'Reparado'
-        if (estado === 'B') return 'De baja'
-        return '-'
+    static transform_estado(estado, replace='-') {
+        if (estado === 'D') return 'Disponible';
+        if (estado === 'O') return 'Operativo';
+        if (estado === 'ER') return 'En revisión';
+        if (estado === 'R') return 'Reparado';
+        if (estado === 'B') return 'De baja';
+        return replace;
     }
 
-    static UpperCase(str) {
-        return FuncionesAuxiliares.validarCampo(str, '-').replace('_', ' ').toUpperCase();
+    static UpperCase(str, replace='-') {
+        return FuncionesAuxiliares.validarCampo(str, replace).replace('_', ' ').toUpperCase();
     }
 
     static validarCampo(campo, replace) {

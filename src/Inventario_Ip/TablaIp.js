@@ -1,6 +1,6 @@
 import React from 'react';
-import {Button,Row,Col,Table,Input,Icon,Popconfirm,message,Typography} from 'antd';
-import ButtonGroup from 'antd/lib/button/button-group';
+import { Button, Row, Col, Table, Input, Icon, Popconfirm, message, Typography, Tag} from 'antd';
+import ExcelExportIP from './ExcelExportIP';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosTipo';
 import FuncionesAuxiliares from '../FuncionesAuxiliares';
@@ -19,7 +19,9 @@ class TablaIp extends React.Component {
             dataSource: [],
             filteredInfo: null,
             sortedInfo: null,
-            index: 0
+            index: 0,
+            currentDataSource: [],
+            disabelExport: true,
         };
         this.handleClick = this.handleClick.bind(this);
     }
@@ -35,6 +37,10 @@ class TablaIp extends React.Component {
         let datos = [];
         Axios.ver_ips().then(res => {
             res.data.forEach(function (dato) {
+                let empleado = ""
+                if (dato.nombre !== null) {
+                    empleado = dato.nombre.concat(" ", dato.apellido);
+                }
                 let registro = {
                     key: dato.id_ip,
                     ip: dato.direccion_ip,
@@ -45,12 +51,18 @@ class TablaIp extends React.Component {
                     maquinas: dato.maquinas_adicionales,
                     asignado: dato.nombre_usuario,
                     encargado: dato.encargado_registro,
-                    observacion: dato.observacion
+                    observacion: dato.observacion,
+                    empleado: empleado,
+                    bspi: dato.bspi_punto,
+                    departamento: dato.departamento,
+                    codigo_equipo: dato.codigo,
+                    tipo_equipo: FuncionesAuxiliares.UpperCase(dato.tipo_equipo,'')
                 }
                 datos.push(registro)
             });
-            this.setState({ dataSource: datos });
+            this.setState({ dataSource: datos, currentDataSource: datos, disabelExport: false });
         }).catch(err => {
+            console.log(err)
             message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
         });
     }
@@ -59,10 +71,12 @@ class TablaIp extends React.Component {
         this.setState({ filteredInfo: null });
     };
 
-    handleChange = (filters, sorter) => {
+    handleChange = (pagination,filters, sorter, currentDataSource) => {
+        console.log('Various parameters', pagination, filters, sorter, currentDataSource);
         this.setState({
             filteredInfo: filters,
             sortedInfo: sorter,
+            currentDataSource: currentDataSource.currentDataSource 
         });
     };
 
@@ -156,14 +170,74 @@ class TablaIp extends React.Component {
 
 
     render() {
+        let { sortedInfo, filteredInfo } = this.state;
+        sortedInfo = sortedInfo || {};
+        filteredInfo = filteredInfo || {};
         const columns = [
             {
                 title: 'Ip',
                 dataIndex: 'ip',
                 key: 'ip',
                 fixed: 'left',
-                render: (text, record) => <Link to={{ pathname: '/ip/detail/'+record.key}}>{text}</Link>,
+                render: (text, record) => <Link to={{ pathname: '/ip/detail/' + record.key }}>{text}</Link>,
                 ...this.getColumnSearchProps('ip')
+            },
+            {
+                title: 'BSPI Punto',
+                dataIndex: 'bspi',
+                key: 'bspi',
+                width: 130,
+                filters: [
+                    {
+                        text: 'Hospital León Becerra',
+                        value: 'Hospital León Becerra',
+                    },
+                    {
+                        text: 'Hogar Inés Chambers',
+                        value: 'Hogar Inés Chambers',
+                    },
+                    {
+                        text: 'Unidad Educativa San José Buen Pastor',
+                        value: 'Unidad Educativa San José Buen Pastor',
+                    },
+                    {
+                        text: 'Residencia Mercedes Begué',
+                        value: 'Residencia Mercedes Begué',
+                    }
+                ],
+                filteredValue: filteredInfo.bspi || null,
+                onFilter: (value, record) => record.bspi.indexOf(value) === 0,
+                sorter: (a, b) => a.bspi.length - b.bspi.length,
+                sortOrder: sortedInfo.columnKey === 'bspi' && sortedInfo.order,
+            },
+            {
+                title: 'Departamento',
+                dataIndex: 'departamento',
+                key: 'departamento',
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.departamento, b.departamento),
+                sortOrder: sortedInfo.columnKey === 'departamento' && sortedInfo.order,
+            },
+            {
+                title: 'Empleado',
+                dataIndex: 'empleado',
+                key: 'empleado',
+                ...this.getColumnSearchProps('empleado'),
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.empleado, b.empleado),
+                sortOrder: sortedInfo.columnKey === 'empleado' && sortedInfo.order,
+            },
+            {
+                title: 'Código Equipo Asignado',
+                dataIndex: 'codigo_equipo',
+                key: 'codigo_equipo',
+                ...this.getColumnSearchProps('codigo_equipo'),
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.codigo, b.codigo),
+                sortOrder: sortedInfo.columnKey === 'codigo_equipo' && sortedInfo.order,
+            },
+            {
+                title: 'Tipo Equipo Asignado',
+                dataIndex: 'tipo_equipo',
+                key: 'tipo_equipo',
+                ...this.getColumnSearchProps('tipo_equipo')
             },
             {
                 title: 'Estado',
@@ -172,15 +246,22 @@ class TablaIp extends React.Component {
                 filters: [
                     {
                         text: 'En uso',
-                        value: 'En uso',
+                        value: 'EU',
                     },
                     {
                         text: 'Libre',
-                        value: 'Libre',
+                        value: 'L',
                     }
                 ],
                 onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.estado, value),
-                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado, b.estado)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado, b.estado),
+                render: (text, value) => (
+                    <div >
+                        {text==="L" ? <Tag style={{margin: 2}} color="green" key={value}>Libre</Tag> : 
+                        
+                                        <Tag style={{margin: 2}} color="red" key={value}>En Uso</Tag> }
+                    </div>
+                  ),
             },
             {
                 title: 'Hostname',
@@ -267,10 +348,11 @@ class TablaIp extends React.Component {
                     <div >
                         <Row>
                             <Col className='flexbox'>
-                                <ButtonGroup style={{ align: 'right' }}>
+                                {/* <ButtonGroup style={{ align: 'right' }}> */}
                                     <Button type="primary" icon="import">Importar</Button>
-                                    <Button type="primary" icon="cloud-download">Exportar</Button>
-                                </ButtonGroup>
+                                    <ExcelExportIP data={this.state.currentDataSource} dis = {this.state.disabelExport}></ExcelExportIP>
+                                    {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
+                                {/* </ButtonGroup> */}
                             </Col>
                         </Row>
                     </div>
@@ -281,7 +363,7 @@ class TablaIp extends React.Component {
                         <Button onClick={this.clearAll}>Limpiar todo</Button>
                     </div>
                     <Table bordered key={this.state.index} onChange={this.handleChange} size="small"
-                     scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
+                        scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
             </div>
         );

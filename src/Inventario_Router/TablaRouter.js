@@ -2,8 +2,9 @@ import React from 'react';
 import { Button, Row, Col, Table, Input, Icon, Popconfirm, Typography, message, Tag } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
-import AxiosRouter from '../Servicios/AxiosRouter'
-import FuncionesAuxiliares from '../FuncionesAuxiliares'
+import AxiosRouter from '../Servicios/AxiosRouter';
+import ExcelExportRouter from './ExcelExportRouter';
+import FuncionesAuxiliares from '../FuncionesAuxiliares';
 const { Title } = Typography;
 
 class TablaRouter extends React.Component{
@@ -18,7 +19,9 @@ class TablaRouter extends React.Component{
       searchedColumn: '',
       index: 0,
       id_router: 0,
-      dataSource: []
+      dataSource: [],
+      currentDataSource:[],
+      disabelExport:true,
     };
     this.handleClick = this.handleClick.bind(this);
   }
@@ -48,11 +51,12 @@ class TablaRouter extends React.Component{
             estado: registro.estado_operativo,
             ip: dip,
             empleado: registro.nempleado === null ? '' : registro.nempleado+' '+registro.apellido,
-            descripcion: registro.descripcion
+            descripcion: registro.descripcion,
+            fecha: registro.fecha_registro
             }
             datos.push(router);
         });
-        this.setState({ dataSource: datos });
+        this.setState({ dataSource: datos, currentDataSource:datos, disabelExport:false }); 
         }).catch(err => {
             message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
         });
@@ -69,11 +73,12 @@ class TablaRouter extends React.Component{
     });     
   }
 
-  handleChange = (pagination, filters, sorter) => {
+  handleChange = (pagination, filters, sorter, currentDataSource) => {
     console.log('Various parameters', pagination, filters, sorter);
     this.setState({
       filteredInfo: filters,
       sortedInfo: sorter,
+      currentDataSource: currentDataSource.currentDataSource
     });
   };
   
@@ -362,10 +367,11 @@ class TablaRouter extends React.Component{
             <div>
               <Row>
                 <Col className='flexbox'>
-                  <ButtonGroup>
+                  {/* <ButtonGroup> */}
                     <Button type="primary" icon="import">Importar</Button>
-                    <Button type="primary" icon="cloud-download">Exportar</Button>
-                  </ButtonGroup>
+                    {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
+                    <ExcelExportRouter data={this.state.currentDataSource} dis = {this.state.disabelExport}></ExcelExportRouter>
+                  {/* </ButtonGroup> */}
                 </Col>
               </Row>
             </div>

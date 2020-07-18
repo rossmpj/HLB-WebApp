@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Button, Row, Col, Table, Input, Icon, message, Typography
+    Button, Row, Col, Table, Input, Icon, message, Typography, Tag
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
@@ -27,7 +27,9 @@ class TablaReporte extends React.Component {
             index: 0,
             visible: false,
             confirmLoading: false,
-            archivo: ""
+            archivo: "",
+            currentDataSource:[],
+            disabelExport:true,
         };
 
     }
@@ -62,12 +64,14 @@ class TablaReporte extends React.Component {
         this.setState({ filteredInfo: null });
     };
 
-    handleChange = (pagination, filters, sorter) => {
+    handleChange = (pagination, filters, sorter, currentDataSource) => {
+        console.log('Various parameters', pagination, filters, sorter, currentDataSource);
         this.setState({
-            filteredInfo: filters,
-            sortedInfo: sorter,
+          filteredInfo: filters,
+          sortedInfo: sorter,
+          currentDataSource: currentDataSource.currentDataSource
         });
-    };
+      };
 
     clearAll = () => {
         this.setState({
@@ -291,7 +295,16 @@ class TablaReporte extends React.Component {
                     }
                 ],
                 onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.estado_operativo, value),
-                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado_operativo, b.estado_operativo)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado_operativo, b.estado_operativo),
+                render: (text, value) => (
+                    <div >
+                        {text==="D" ? <Tag style={{margin: 2}} color="green" key={value}>Disponible</Tag> : 
+                        text==="O" ?  <Tag style={{margin: 2}} color="blue" key={value}>Operativo</Tag> :
+                        text==="ER" ?  <Tag style={{margin: 2}} color="orange" key={value}>En revisión</Tag> :
+                        text==="R" ?  <Tag style={{margin: 2}} color="magenta" key={value}>Reparado</Tag> :
+                                        <Tag style={{margin: 2}} color="red" key={value}>De baja</Tag> }
+                    </div>
+                  ),
             }
         ];
         return (

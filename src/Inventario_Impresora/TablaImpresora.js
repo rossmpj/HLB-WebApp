@@ -41,6 +41,7 @@ class TablaImpresora extends React.Component {
     llenar_tabla() {
         let datos = [];
         Axios.mostrar_impresoras().then(res => {
+            console.log(res.data)
             res.data.forEach(function (dato) {
                 let empleado = ""
                 if (dato.empleado !== null) {
@@ -66,7 +67,8 @@ class TablaImpresora extends React.Component {
                     rollo: dato.rollo,
                     ip: dato.direccion_ip,
                     componente_principal: dato.componente_principal,
-                    id_equipo: dato.id_equipo
+                    id_equipo: dato.id_equipo,
+                    fecha: dato.fecha_registro
                 }
                 datos.push(impresoras)
             });
