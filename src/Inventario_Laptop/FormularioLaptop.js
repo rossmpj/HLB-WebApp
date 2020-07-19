@@ -243,11 +243,6 @@ class FormularioLaptop extends React.Component {
     handleNextButton = () => {
         const { step } = this.state;
         this.setState({ step: step+1 });
-        // if(step>=1){
-        // if(this.state.general_fields.codigo === this.state.procesador_fields.codigo_proc){
-        //     message.error("El código ingresado ya fue asignado al equipo Laptop", 4)
-        // }}
-        // console.log("codigo ",this.state.general_fields.codigo)
         console.log("step",this.state)
     }
     
