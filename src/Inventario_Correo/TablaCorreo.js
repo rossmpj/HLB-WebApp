@@ -259,7 +259,7 @@ class TablaCorreo extends React.Component {
                             <Col className='flexbox'>
                                 {/* <ButtonGroup> */}
                                     <Button type="primary" icon="import">Importar</Button>
-                                    <ExcelExportCorreo data={this.state.currentDataSource} dis = {this.state.disabelExport}></ExcelExportCorreo>
+                                    <ExcelExportCorreo data={this.state.currentDataSource} dis = {this.state.disabelExport} ></ExcelExportCorreo>
 
                                     {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
                                 {/* </ButtonGroup> */}

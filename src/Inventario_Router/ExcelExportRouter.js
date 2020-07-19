@@ -10,15 +10,15 @@ const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 
 export default class ExcelExportRouter extends Component {
 
-    generateTitlesRouter(){
+    static generateTitlesRouter(){
         let titulos = ['BSPI Punto', 'Departamento', 'Empleado', 'Codigo', 'Marca', 'Modelo', 'Numero de Serie',
          'Estado','Nombre', 'Pass', 'Usuario', 'clave', 'IP', 'Puerta Enlace', 'Fecha de Registro', 'Descripcion'] 
         return FuncionesAuxiliares.generateTitlesExcel(titulos,'FFC000');
     }
 
-    generateColumnsRouter(){
+    static generateColumnsRouter(data){
         let rows = []
-        this.props.data.forEach(element => {
+        data.forEach(element => {
             let row = [
                 { 'value': FuncionesAuxiliares.validarCampo(element.bspi, 'No Asignado') },
                 { 'value': FuncionesAuxiliares.validarCampo(element.departamento, 'No Asignado')  },
@@ -42,10 +42,10 @@ export default class ExcelExportRouter extends Component {
         return rows;
     }
 
-    generateData(){
+    static generateData(data){
         return [{
-            columns: this.generateTitlesRouter(),
-            data: this.generateColumnsRouter()
+            columns: ExcelExportRouter.generateTitlesRouter(),
+            data: ExcelExportRouter.generateColumnsRouter(data)
         }];
     }
      
@@ -53,7 +53,7 @@ export default class ExcelExportRouter extends Component {
         return (
             <div>
                 <ExcelFile filename={'Inventario Router'} element={<Button disabled={this.props.dis} type="primary" icon="cloud-download">Exportar</Button>}>
-                    <ExcelSheet dataSet={this.generateData()} name="Inventario Router" />
+                    <ExcelSheet dataSet={ExcelExportRouter.generateData(this.props.data)} name="Inventario Router" />
                 </ExcelFile>
             </div>
         );

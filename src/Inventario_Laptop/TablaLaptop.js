@@ -32,40 +32,7 @@ class TablaLaptop extends React.Component{
     obtener_datos = () => {
         let datos = [];
         AxiosLaptop.listar_laptops().then(res => {
-        res.data.forEach(function (r) {
-            let registro = r.original
-            var dip = registro.general.ip === null ? undefined : registro.general.ip.toString();
-            
-            let router = {
-                key: registro.general.id_equipo,
-                fecha_registro: registro.general.fecha_registro,
-                tipo_equipo: registro.general.tipo_equipo,
-                codigo: registro.general.codigo,
-                bspi: registro.general.bspi === undefined ? '' : registro.general.bspi,
-                departamento: registro.general.departamento === undefined ? '' : registro.general.departamento,
-                empleado: registro.general.empleado === undefined ? '' : registro.general.empleado+' '+registro.general.apellido,
-                marca: registro.general.marca === undefined ? '' : registro.general.marca,
-                modelo: registro.general.modelo === undefined ? '' : registro.general.modelo,
-                num_serie: registro.general.numero_serie === undefined ? '' : registro.general.numero_serie, 
-                estado: registro.general.estado_operativo === undefined ? '' : registro.general.estado_operativo,
-                ip: dip === undefined ? '' : dip,
-                dirIP: dip === undefined ? '' : registro.general.direccion_ip,
-                so: registro.so.so === undefined ? '' : registro.so.so,
-                servpack: registro.so.service_pack === '0' ? 'No' : 'Si',
-                so_type: registro.so.tipo_so === undefined ? '' : registro.so.tipo_so,
-                name_pc: registro.so.nombre_pc === undefined ? '' : registro.so.nombre_pc,
-                user_pc: registro.so.usuario_pc === undefined ? '' : registro.so.usuario_pc,
-                licencia: registro.so.licencia === '0' ? 'No' : 'Si',
-                office: registro.programas === undefined ? '' : registro.programas,
-                ram_soportada: registro.ram_soportada === undefined ? '' : registro.ram_soportada,
-                slots_ram: registro.numero_slots === undefined ? '' : registro.numero_slots,
-                descripcion: registro.general.descripcion === undefined ? '' : registro.general.descripcion,
-                id_procesador: registro.procesador === undefined ? '' : registro.procesador,
-                rams: registro.rams === undefined ? '' : registro.rams,
-                discos: registro.discos === undefined ? '' : registro.discos,
-             }
-             datos.push(router);
-        });
+        datos = FuncionesAuxiliares.transform_data_laptop(res.data);
         this.setState({ dataSource: datos, currentDataSource:datos, disabelExport:false });
         }).catch(err => {
             message.error('No se pueden cargar los datos, inténtelo más tarde', 4);

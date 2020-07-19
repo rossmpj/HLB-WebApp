@@ -2,7 +2,7 @@ import React from 'react';
 import {
     Button, Row, Col, Table, Input, Icon, message, Typography, Tag
 } from 'antd';
-import ButtonGroup from 'antd/lib/button/button-group';
+import ExcelExportMasivo from './ExcelExportMasivo';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosReporte'
 import ModalDownload from '../Componentes/ModalDownload';
@@ -30,16 +30,35 @@ class TablaReporte extends React.Component {
             archivo: "",
             currentDataSource:[],
             disabelExport:true,
+            data_detallada:{}
         };
 
+    }
+
+    transform_data_detallada(detalles){
+        let desktop = FuncionesAuxiliares.transform_data_desktop(detalles.desktop);
+        let laptop = FuncionesAuxiliares.transform_data_laptop(detalles.laptop);
+        let impresora = FuncionesAuxiliares.transform_data_impresora(detalles.impresora);
+        let router = FuncionesAuxiliares.transform_data_router(detalles.router);
+        let otros = FuncionesAuxiliares.transform_data_otros(detalles.otros);
+        this.setState({
+            data_detallada:{
+                'desktop': desktop,
+                'laptop': laptop,
+                'impresora': impresora,
+                'router':router,
+                'otros': otros
+            }
+        })
     }
 
     llenar_tabla() {
         let datos = [];
         Axios.reporte_general().then(res => {
-            res.data.forEach(function (dato) {
+            res.data.equipos.forEach(function (dato) {
                 let registro = {
                     key: dato.id_equipo,
+                    id_equipo:dato.id_equipo,
                     departamento: dato.departamento,
                     bspi: dato.bspi_punto,
                     empleado: dato.empleado.concat(" ", dato.apellido),
@@ -53,7 +72,8 @@ class TablaReporte extends React.Component {
                 }
                 datos.push(registro)
             });
-            this.setState({ dataSource: datos });
+            this.transform_data_detallada(res.data.detalles);
+            this.setState({ dataSource: datos, currentDataSource:datos, disabelExport:false});
         }).catch(err => {
             console.log(err)
             message.error('No se pueden cargar los datos, revise la conexión con el servidor', 4);
@@ -312,9 +332,11 @@ class TablaReporte extends React.Component {
                 <Row>
                     <Col span={12}><Title level={3}>Reporte de equipos informáticos asignados</Title></Col>
                     <Col className='flexbox'>
-                        <ButtonGroup>
+                        {/* <ButtonGroup>
                             <Button type="primary" icon="cloud-download" onClick={this.showModal}>Exportar</Button>
-                        </ButtonGroup>
+                        </ButtonGroup> */}
+                        <ExcelExportMasivo data={this.state.currentDataSource} data_detallada = {this.state.data_detallada} dis = {this.state.disabelExport}></ExcelExportMasivo>
+
                     </Col>
                 </Row>
                 <div className="div-container">

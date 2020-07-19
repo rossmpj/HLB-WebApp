@@ -10,15 +10,15 @@ const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 
 export default class ExcelExportImpresora extends Component {
 
-    generateTitlesImp(){
+    static generateTitlesImp(){
         let titulos = ['BSPI Punto', 'Departamento', 'Asignado', 'Codigo', 'Marca', 'Modelo', 'Numero de Serie',
          'Estado','Tipo', 'IP', 'Tinta', 'Cartucho', 'Toner', 'Rodillo', 'Cinta', 'Rollo/Brazalete','Fecha de Registro' , 'Descripcion'] 
         return FuncionesAuxiliares.generateTitlesExcel(titulos,'FFC000');
     }
 
-    generateColumnsImp(){
+    static generateColumnsImp(data){
         let rows = []
-        this.props.data.forEach(element => {
+        data.forEach(element => {
             let row = [
                 { 'value': FuncionesAuxiliares.validarCampo(element.bspi, 'No Asignado') },
                 { 'value': FuncionesAuxiliares.validarCampo(element.dpto, 'No Asignado')  },
@@ -44,18 +44,19 @@ export default class ExcelExportImpresora extends Component {
         return rows;
     }
 
-    generateData(){
+    static generateData(data){
         return [{
-            columns: this.generateTitlesImp(),
-            data: this.generateColumnsImp()
+            columns: ExcelExportImpresora.generateTitlesImp(),
+            data: ExcelExportImpresora.generateColumnsImp(data)
         }];
     }
      
     render() {
         return (
+
             <div>
                 <ExcelFile filename={'Inventario Inpresoras'} element={<Button disabled={this.props.dis} type="primary" icon="cloud-download">Exportar</Button>}>
-                    <ExcelSheet dataSet={this.generateData()} name="Inventario Impresoras" />
+                    <ExcelSheet dataSet={ExcelExportImpresora.generateData(this.props.data)} name="Inventario Impresoras" />
                 </ExcelFile>
             </div>
         );

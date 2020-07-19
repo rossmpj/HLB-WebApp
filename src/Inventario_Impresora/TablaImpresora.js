@@ -42,36 +42,7 @@ class TablaImpresora extends React.Component {
         let datos = [];
         Axios.mostrar_impresoras().then(res => {
             console.log(res.data)
-            res.data.forEach(function (dato) {
-                let empleado = ""
-                if (dato.empleado !== null) {
-                    empleado = dato.empleado.concat(" ", dato.apellido);
-                }
-                let impresoras = {
-                    key: dato.id_impresora,
-                    numero_serie: dato.numero_serie,
-                    bspi: dato.bspi_punto,
-                    asignado: empleado,
-                    dpto: dato.nombre,
-                    tipo: dato.tipo,
-                    marca: dato.marca,
-                    codigo: dato.codigo,
-                    estado_operativo: dato.estado_operativo,
-                    modelo: dato.modelo,
-                    tinta: dato.tinta,
-                    cartucho: dato.cartucho,
-                    descripcion: dato.descripcion,
-                    toner: dato.toner,
-                    rodillo: dato.rodillo,
-                    cinta: dato.cinta,
-                    rollo: dato.rollo,
-                    ip: dato.direccion_ip,
-                    componente_principal: dato.componente_principal,
-                    id_equipo: dato.id_equipo,
-                    fecha: dato.fecha_registro
-                }
-                datos.push(impresoras)
-            });
+            datos = FuncionesAuxiliares.transform_data_impresora(res.data);
             this.setState({ dataSource: datos, currentDataSource:datos, disabelExport:false }); 
         }).catch(err => {
             console.log(err)

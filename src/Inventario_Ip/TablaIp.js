@@ -350,7 +350,7 @@ class TablaIp extends React.Component {
                             <Col className='flexbox'>
                                 {/* <ButtonGroup style={{ align: 'right' }}> */}
                                     <Button type="primary" icon="import">Importar</Button>
-                                    <ExcelExportIP data={this.state.currentDataSource} dis = {this.state.disabelExport}></ExcelExportIP>
+                                    <ExcelExportIP data={this.state.currentDataSource} dis = {this.state.disabelExport} ></ExcelExportIP>
                                     {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
                                 {/* </ButtonGroup> */}
                             </Col>

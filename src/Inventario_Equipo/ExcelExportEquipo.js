@@ -10,15 +10,15 @@ const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 
 export default class ExcelExportEquipo extends Component {
 
-    generateTitlesImp(){
+    static generateTitlesImp(){
         let titulos = ['BSPI Punto', 'Departamento', 'Asignado', 'Codigo', 'Marca', 'Modelo', 'Numero de Serie',
-         'Estado','Tipo', 'IP', 'Componente Principal', 'Encargado de Registro', 'Fecha de Registro', 'Descripcion'] 
+         'Estado','Tipo', 'IP', 'Capacidad Almacenamiento', 'Tipo Almacenamiento', 'Numero de Slots RAM', 'RAM Soportada', 'Conexiones para Discos','Componente Principal', 'Encargado de Registro', 'Fecha de Registro', 'Descripcion'] 
         return FuncionesAuxiliares.generateTitlesExcel(titulos,'9BBB59');
     }
 
-    generateColumnsImp(){
+    static generateColumnsImp(data){
         let rows = []
-        this.props.data.forEach(element => {
+        data.forEach(element => {
             let row = [
                 { 'value': FuncionesAuxiliares.validarCampo(element.bspi, 'No Asignado') },
                 { 'value': FuncionesAuxiliares.validarCampo(element.departamento, 'No Asignado')  },
@@ -30,6 +30,11 @@ export default class ExcelExportEquipo extends Component {
                 { 'value': FuncionesAuxiliares.transform_estado(element.estado_operativo) },
                 { 'value': FuncionesAuxiliares.validarCampo(element.tipo_equipo, '-') },
                 { 'value': FuncionesAuxiliares.validarCampo(element.ip, '-') },
+                { 'value': FuncionesAuxiliares.validarCampo(element.capacidad, '-') },
+                { 'value': FuncionesAuxiliares.validarCampo(element.tipo, '-') },
+                { 'value': FuncionesAuxiliares.validarCampo(element.numero_slots, '-') },
+                { 'value': FuncionesAuxiliares.validarCampo(element.ram_soportada, '-') },
+                { 'value': FuncionesAuxiliares.validarCampo(element.conexiones_dd, '-') },
                 { 'value': FuncionesAuxiliares.validarCampo(element.componente_principal, '-')},
                 { 'value': FuncionesAuxiliares.validarCampo(element.encargado_registro, '-') },
                 { 'value': FuncionesAuxiliares.validarCampo(element.fecha_registro, '-') },
@@ -40,10 +45,10 @@ export default class ExcelExportEquipo extends Component {
         return rows;
     }
 
-    generateData(){
+    static generateData(data){
         return [{
-            columns: this.generateTitlesImp(),
-            data: this.generateColumnsImp()
+            columns: ExcelExportEquipo.generateTitlesImp(),
+            data: ExcelExportEquipo.generateColumnsImp(data)
         }];
     }
      
@@ -51,7 +56,7 @@ export default class ExcelExportEquipo extends Component {
         return (
             <div>
                 <ExcelFile filename={'Inventario Otros Equipos'} element={<Button disabled={this.props.dis} type="primary" icon="cloud-download">Exportar</Button>}>
-                    <ExcelSheet dataSet={this.generateData()} name="Inventario Otros Equipos" />
+                    <ExcelSheet dataSet={ExcelExportEquipo.generateData(this.props.data)} name="Inventario Otros Equipos" />
                 </ExcelFile>
             </div>
         );

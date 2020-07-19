@@ -33,29 +33,7 @@ class TablaRouter extends React.Component{
     obtener_datos = () => {
         let datos = [];
         AxiosRouter.listar_routers().then(res => {
-        res.data.forEach(function (registro) {
-            var dip = registro.ip === null ? ' ' : registro.ip;
-            let router = {
-            key: registro.id_equipo,
-            codigo: registro.codigo,
-            bspi: registro.bspi_punto === null ? '' : registro.bspi_punto,
-            departamento: registro.departamento === null ? '' : registro.departamento,
-            nombre: registro.nombre,
-            pass: registro.pass,
-            penlace: registro.puerta_enlace,
-            usuario: registro.usuario,
-            clave: registro.clave,
-            marca: registro.marca,
-            modelo: registro.modelo,
-            num_serie: registro.numero_serie, 
-            estado: registro.estado_operativo,
-            ip: dip,
-            empleado: registro.nempleado === null ? '' : registro.nempleado+' '+registro.apellido,
-            descripcion: registro.descripcion,
-            fecha: registro.fecha_registro
-            }
-            datos.push(router);
-        });
+        datos = FuncionesAuxiliares.transform_data_router(res.data);
         this.setState({ dataSource: datos, currentDataSource:datos, disabelExport:false }); 
         }).catch(err => {
             message.error('No se pueden cargar los datos, inténtelo más tarde', 4);

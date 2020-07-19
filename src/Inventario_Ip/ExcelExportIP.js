@@ -57,7 +57,7 @@ export default class ExcelExportIP extends Component {
         return (
             <div>
                 <ExcelFile filename={'Inventario IPs'} element={<Button disabled={this.props.dis} type="primary" icon="cloud-download">Exportar</Button>}>
-                    <ExcelSheet dataSet={this.generateData()} name="Inventario IPs" />
+                <ExcelSheet dataSet={this.generateData()} name="Inventario IPs" />
                 </ExcelFile>
             </div>
         );

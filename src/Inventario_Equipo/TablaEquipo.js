@@ -28,30 +28,7 @@ class TablaEquipo extends React.Component {
         let datos = [];
         Axios.mostrar_equipos().then(res => {
             console.log(res.data)
-            res.data.forEach(function (dato) {
-                let empleado = "";
-                if (dato.empleado !== null) {
-                    empleado = dato.empleado.concat(" ", dato.apellido);
-                }
-                let equipos = {
-                    key: dato.id_equipo,
-                    estado_operativo: dato.estado_operativo,
-                    codigo: dato.codigo,
-                    tipo_equipo: FuncionesAuxiliares.UpperCase(dato.tipo_equipo,''),
-                    marca: dato.marca,
-                    modelo: dato.modelo,
-                    descripcion: dato.descripcion,
-                    numero_serie: dato.numero_serie,
-                    encargado_registro: dato.encargado,
-                    componente_principal: dato.principal,
-                    asignado: empleado,
-                    fecha_registro: dato.fecha_registro,
-                    ip: dato.direccion_ip,
-                    bspi: dato.bspi_punto,
-                    departamento: dato.departamento
-                }
-                datos.push(equipos)
-            });
+            datos = FuncionesAuxiliares.transform_data_otros(res.data);
             this.setState({ dataSource: datos, currentDataSource:datos, disabelExport:false }); 
         }).catch(err => {
             console.log(err)
@@ -338,7 +315,7 @@ class TablaEquipo extends React.Component {
                             <Col className='flexbox'>
                                 {/* <ButtonGroup> */}
                                     <Button type="primary" icon="import">Importar</Button>
-                                    <ExcelExportEquipo data={this.state.currentDataSource} dis = {this.state.disabelExport}></ExcelExportEquipo>
+                                    <ExcelExportEquipo data={this.state.currentDataSource} dis = {this.state.disabelExport} masiva = {false}></ExcelExportEquipo>
 
                                     {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
                                 {/* </ButtonGroup> */}

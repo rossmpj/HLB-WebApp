@@ -10,7 +10,7 @@ const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 
 export default class ExcelExportDesktop extends Component {
 
-    generateDataMainBoard(element) {
+    static generateDataMainBoard(element) {
         return [
             { 'value': '' },
             { 'value': '' },
@@ -42,23 +42,19 @@ export default class ExcelExportDesktop extends Component {
         ]
     }
 
-    generateDataComponents(data) {
+    static generateDataComponents(data) {
         let letArrayData = [];
         let arrayCommponets = ['monitor', 'case', 'f_alim', 'f_poder', 'teclado', 'mouse', 'parlantes', 'tarj_red']
         arrayCommponets.forEach(element => {
-
             if (data[element] === undefined || data[element] === null || data[element].length === 0) {
-                //  console.log('entro')
                 return;
             }
-
             let row = [
                 { 'value': '' },
                 { 'value': '' },
                 { 'value': '' },
                 { 'value': FuncionesAuxiliares.validarCampo(data[element].codigo, '-') },
                 { 'value': FuncionesAuxiliares.UpperCase(data[element].tipo_equipo) },
-
                 { 'value': FuncionesAuxiliares.validarCampo(data[element].marca, '-') },
                 { 'value': FuncionesAuxiliares.validarCampo(data[element].modelo, '-') },
                 { 'value': FuncionesAuxiliares.validarCampo(data[element].numero_serie, '-') },
@@ -80,7 +76,6 @@ export default class ExcelExportDesktop extends Component {
                 { 'value': '-' },
                 { 'value': FuncionesAuxiliares.validarCampo(data[element].fecha_registro, '-') },
                 { 'value': FuncionesAuxiliares.validarCampo(data[element].descripcion, '-') },
-
             ]
             letArrayData.push(row);
         });
@@ -90,16 +85,17 @@ export default class ExcelExportDesktop extends Component {
 
 
 
-    generateData() {
+    static generateData(data) {
 
         let ArrayData = []
-        this.props.data.forEach(element => {
+        console.log(data, 'desktop')
+        data.forEach(element => {
             let rowGeneral = FuncionesAuxiliares.generateGeneralData(element);
             let rowsRAM = FuncionesAuxiliares.generateDataRAM_DISK(element.rams);
             let rowsDISK = FuncionesAuxiliares.generateDataRAM_DISK(element.discos);
             let rowProcesador = FuncionesAuxiliares.generateDataProcesador(element.procesador)
-            let rowsComponents = this.generateDataComponents(element);
-            let rowsMainBoard = this.generateDataMainBoard(element.mainboard)
+            let rowsComponents = ExcelExportDesktop.generateDataComponents(element);
+            let rowsMainBoard = ExcelExportDesktop.generateDataMainBoard(element.mainboard)
             ArrayData.push(rowGeneral);
             ArrayData.push(rowProcesador);
             ArrayData.push(rowsMainBoard);
@@ -114,22 +110,21 @@ export default class ExcelExportDesktop extends Component {
             });
         });
 
-        //console.log(ArrayData, 'arrays data')
-
         return [{
             columns: FuncionesAuxiliares.generateTitlesDL(),
             data: ArrayData
         }];
-
     }
+
+
 
     render() {
         return (
-            <div>
-                <ExcelFile filename='Inventario Computadores Escritorio' element={<Button disabled={this.props.dis} type="primary" icon="cloud-download">Exportar</Button>}>
-                    <ExcelSheet dataSet={this.generateData()} name='Inventario Computadores Escritorio' />
-                </ExcelFile>
-            </div>
+                <div>
+                    <ExcelFile filename='Inventario Computadores Escritorio' element={<Button disabled={this.props.dis} type="primary" icon="cloud-download">Exportar</Button>}>
+                        <ExcelSheet dataSet={ExcelExportDesktop.generateData(this.props.data)} name='Inventario Computadores Escritorio' />
+                    </ExcelFile>
+                </div>
         );
     }
 
