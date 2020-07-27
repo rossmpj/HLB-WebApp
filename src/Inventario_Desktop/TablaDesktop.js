@@ -34,7 +34,7 @@ class TablaDesktop extends React.Component{
     obtener_datos = () => {
         let datos = [];
         Axios.listar_desktops().then(res => {
-        FuncionesAuxiliares.transform_data_desktop(res.data);  
+        datos = FuncionesAuxiliares.transform_data_desktop(res.data);  
         this.setState({ dataSource: datos, currentDataSource:datos, disabelExport:false });
         }).catch(err => {
             message.error('No se pueden cargar los datos, inténtelo más tarde', 4);

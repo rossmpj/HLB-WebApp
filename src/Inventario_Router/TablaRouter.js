@@ -33,8 +33,9 @@ class TablaRouter extends React.Component{
     obtener_datos = () => {
         let datos = [];
         AxiosRouter.listar_routers().then(res => {
-        datos = FuncionesAuxiliares.transform_data_router(res.data);
-        this.setState({ dataSource: datos, currentDataSource:datos, disabelExport:false }); 
+          console.log(res.data);
+          datos = FuncionesAuxiliares.transform_data_router(res.data);
+          this.setState({ dataSource: datos, currentDataSource:datos, disabelExport:false }); 
         }).catch(err => {
             message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
         });
@@ -230,7 +231,7 @@ class TablaRouter extends React.Component{
           title: 'IP',
           dataIndex: 'ip',
           key: 'ip',
-          render: (text, record) => <Link to={{ pathname: '/ip/view/'+record.ip}} >{text}</Link>,
+          render: (text, record) => <Link to={{ pathname: '/ip/view/'+record.ip}} >{record.dirip}</Link>,
         },
         {
           title: 'Puerta enlace',

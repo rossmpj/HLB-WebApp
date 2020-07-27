@@ -10,6 +10,7 @@ import {
 import '../custom-antd.css';
 import { Link } from 'react-router-dom';
 import AxiosSolicitud from '../Servicios/AxiosSolicitud';
+import Auth from '../Login/Auth'
 const tailLayout = {
     wrapperCol: { offset: 9, span: 8 }
 };
@@ -29,7 +30,7 @@ class FormularioSolicitud extends React.Component {
         this.state = {
             key: "",
             editionMode: false,
-            id_usuario: "administracion"
+            id_usuario: Auth.getDataLog().user.username
         }
         this.handle_guardar = this.handle_guardar.bind(this);
     }

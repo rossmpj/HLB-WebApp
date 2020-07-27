@@ -2,8 +2,8 @@ import axios from 'axios';
 
 export default class AxiosTipo {
     static instanceAxios = axios.create({
-        //baseURL: 'http://localhost:8000/api',
-        baseURL: 'https://backend-hlb.herokuapp.com/api',
+        baseURL: 'http://localhost:8000/api',
+        //baseURL: 'https://backend-hlb.herokuapp.com/api',
     });
 
 
@@ -51,6 +51,15 @@ export default class AxiosTipo {
         return AxiosTipo.instanceAxios.get(`/organizaciones`);
     }
 
+    /*Mostrar roles*/
+    static mostrar_roles = () => {
+        return AxiosTipo.instanceAxios.get(`/mostrar_roles`);
+    }
+
+    /* Mostrar Departamentos*/
+    static mostrar_dep_org = () => {
+        return AxiosTipo.instanceAxios.get(`/mostrar_dep_org`);
+    }
     /******************************************************************************/
 
     /*---------- Inventario IP ----------*/

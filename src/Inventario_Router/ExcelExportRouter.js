@@ -32,7 +32,7 @@ export default class ExcelExportRouter extends Component {
                 { 'value': FuncionesAuxiliares.validarCampo(element.pass, '-') },
                 { 'value': FuncionesAuxiliares.validarCampo(element.usuario, '-')},
                 { 'value': FuncionesAuxiliares.validarCampo(element.clave, '-') },
-                { 'value': FuncionesAuxiliares.validarCampo(element.ip, '-') },
+                { 'value': FuncionesAuxiliares.validarCampo(element.dirip, '-') },
                 { 'value': FuncionesAuxiliares.validarCampo(element.penlace, '-') },
                 { 'value': FuncionesAuxiliares.validarCampo(element.fecha, '-') },
                 { 'value': FuncionesAuxiliares.validarCampo(element.descripcion, '-')},

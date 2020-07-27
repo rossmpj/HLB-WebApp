@@ -1,3 +1,4 @@
+import Auth from './Login/Auth'
 export default class FuncionesAuxiliares {
 
     static stringSorter = (a, b) => {
@@ -287,6 +288,7 @@ export default class FuncionesAuxiliares {
         let datos = [];
         arrayrouter.forEach(function (registro) {
             var dip = registro.ip === null ? ' ' : registro.ip;
+            var dirip = registro.direccion_ip === null ? ' ' : registro.direccion_ip;
             let router = {
             key: registro.id_equipo,
             id_equipo:registro.id_equipo,
@@ -303,6 +305,7 @@ export default class FuncionesAuxiliares {
             num_serie: registro.numero_serie, 
             estado: registro.estado_operativo,
             ip: dip,
+            dirip: dirip,
             empleado: registro.nempleado === null ? '' : registro.nempleado+' '+registro.apellido,
             descripcion: registro.descripcion,
             fecha: registro.fecha_registro
