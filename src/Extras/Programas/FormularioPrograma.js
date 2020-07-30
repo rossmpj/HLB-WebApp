@@ -7,6 +7,7 @@ import DescripcionComponent from '../../Componentes/DescripcionComponent';
 import { Link } from 'react-router-dom';
 import Axios from '../../Servicios/AxiosPrograma';
 import VistaFormulario from '../../Componentes/VistaFormulario'
+import Auth from '../../Login/Auth';
 const { Content } = Layout;
 
 const tailLayout = {
@@ -44,7 +45,7 @@ class FormularioPrograma extends React.Component {
                     version: values.version,
                     editor: values.editor,
                     observacion: values.observacion,
-                    encargado_registro: "admin",
+                    encargado_registro: Auth.getDataLog().user.username,
                 }
                 console.log("re",programa)
                 try{

@@ -11,6 +11,8 @@ import AxiosRouter from '../Servicios/AxiosRouter';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosDesktop'
 import VistaFormulario from '../Componentes/VistaFormulario'
+import Auth from '../Login/Auth';
+import FuncionesAuxiliares from '../FuncionesAuxiliares';
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -30,27 +32,16 @@ class FormularioRouter extends React.Component {
     };
     this.handle_guardar = this.handle_guardar.bind(this);
   }
-  
+
   strongValidator = (rule, value, callback) => {
     try {
-        if(!value.match('(([a-z A-Z 1-9])(?=.*[A-Z][a-z])).{7,15}' )) {
+        if (!value.match('(([a-z A-Z 1-9])(?=.*[A-Z][a-z])).{7,15}')) {
             throw new Error("Su contaseña debe tener entre 7 y 15 caracteres, incluya al menos una mayúscula, minúscula y un número");
-            }
-        } catch (err) {
-            callback(err);
         }
-  }
-
-  ipValidator = (rule, value, callback) => {
-    try {
-        // eslint-disable-next-line 
-        if(!value.match('^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$' )) {
-            throw new Error("Escriba una dirección IP válida");
-            }
-        } catch (err) {
-            callback(err);
-        }
-  }
+    } catch (err) {
+        callback(err);
+    }
+}
   
 
   componentDidMount = () => {
@@ -87,7 +78,7 @@ class FormularioRouter extends React.Component {
                     modelo: values.modelo,
                     numero_serie: values.nserie,
                     asignado: values.asignar,
-                    encargado_registro: 'admin',
+                    encargado_registro: Auth.getDataLog().user.username,
                     componente_principal: null,
                     ip: values.ip,
                     nombre: values.nombre,
@@ -185,7 +176,7 @@ class FormularioRouter extends React.Component {
                 <IpSelect required={false} id="ip" decorator={getFieldDecorator} />
                 <Form.Item label="Puerta de enlace">
                   {getFieldDecorator('penlace', {
-                    rules: [{ required: false, message: 'Debe completar este campo' }, {validator: this.ipValidator}],
+                    rules: [{ required: false, message: 'Debe completar este campo' }, {validator: FuncionesAuxiliares.ipValidator}],
                   })( <Input /> )}
                 </Form.Item>
                 <Form.Item label="Descripción">

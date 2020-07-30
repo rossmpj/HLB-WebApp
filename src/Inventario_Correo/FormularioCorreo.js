@@ -4,7 +4,6 @@ import {
     Form, Button, Input, message, Select
 } from 'antd';
 import '../custom-antd.css';
-/* import AsignarSelect from '../Componentes/AsignarSelect' */
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosTipo';
 

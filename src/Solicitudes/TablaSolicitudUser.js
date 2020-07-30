@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Row, Col, Table, Input, Icon,  message, Tag, Typography } from 'antd';
 // import ButtonGroup from 'antd/lib/button/button-group';Popconfirm,
 import { Link } from 'react-router-dom';
+import Auth from '../Login/Auth'
 import Axios from '../Servicios/AxiosSolicitud'
 const { Title } = Typography;
 
@@ -16,15 +17,15 @@ class TablaSolicitudUser extends React.Component {
             info: [],
             filteredInfo: null,
             sortedInfo: null,
-            index: 0
+            index: 0,
+            id_usuario: Auth.getDataLog().user.username
         };
 
     }
 
     llenar_tabla() {
         let datos = [];
-        //usuario quemado, en teoria deberia salir del login :v
-        Axios.mostrar_solicitudes_user('administracion').then(res => {
+        Axios.mostrar_solicitudes_user(this.state.id_usuario).then(res => {
             res.data.forEach(function (dato) {
                 let equipos = {
                     key: dato.id_solicitud,
@@ -47,7 +48,7 @@ class TablaSolicitudUser extends React.Component {
         this.setState({ filteredInfo: null });
     };
 
-    handleChange = (pagination, filters, sorter) => {
+    handleChange = (filters, sorter) => {
         this.setState({
             filteredInfo: filters,
             sortedInfo: sorter,

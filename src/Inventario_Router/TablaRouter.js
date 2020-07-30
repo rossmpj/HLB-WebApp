@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Row, Col, Table, Input, Icon, Popconfirm, Typography, message, Tag } from 'antd';
-import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import AxiosRouter from '../Servicios/AxiosRouter';
 import ExcelExportRouter from './ExcelExportRouter';

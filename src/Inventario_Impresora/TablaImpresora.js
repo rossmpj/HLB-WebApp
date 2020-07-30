@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Row, Col, Table, Input, Icon, Popconfirm, message, Typography } from 'antd';
-import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosTipo';
 import FuncionesAuxiliares from '../FuncionesAuxiliares';

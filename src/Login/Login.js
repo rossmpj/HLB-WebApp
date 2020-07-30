@@ -7,12 +7,10 @@ import {
     Row,
     Col,
     Input,
-    message,
-    Checkbox
+    message
 } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import '../custom-antd.css';
-import { Link } from 'react-router-dom';
 import './login.css'
 import Auth from './Auth';
 import AxiosAuth from '../Servicios/AxiosAuth';
@@ -59,6 +57,7 @@ class LoginHLB extends React.Component {
             }
         });
     }
+ 
 
 
 
@@ -72,10 +71,10 @@ class LoginHLB extends React.Component {
                 <div className="div-miniborder-top" >
 
                     <div className="div-container" >
-                        <div style={{paddingLeft:'41%',paddingRight:'41%'}} className  = 'center'>
+                        <div style={{ paddingLeft: '41%', paddingRight: '41%' }} className='center'>
                             <img className="App-logo" src={"./logo.png"} alt="logo" />
                         </div>
-                        <br/>
+                        <br />
                         <Form {...layout}
                             layout="horizontal"
                             onSubmit={(e) => { this.login(e) }}
@@ -111,15 +110,14 @@ class LoginHLB extends React.Component {
                             </Form.Item>
 
                             <Form.Item {...tailLayout}>
-                                <Button style={{ marginRight: 7 }} type="primary" className="login-form-button" htmlType="submit">Iniciar Sesión</Button>
+                                <Button style={{ marginRight: 7 }} type="primary" className="login-form-button" htmlType="submit">Iniciar Sesión</Button>   
                             </Form.Item>
-                        </Form>
+                        </Form>                     
                     </div>
                 </div>
             </div>
         );
     }
-
 }
 
 LoginHLB = Form.create({})(LoginHLB);

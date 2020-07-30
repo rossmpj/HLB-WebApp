@@ -41,7 +41,6 @@ import PrivateRouteEmpleado from './Routes/PrivateRouteEmpleado'
 import PrivateRouteGeneral from './Routes/PrivateRouteGeneral';
 import PublicRoute from './Routes/PublicRoute';
 import PublicLayout from './Routes/Layouts/PublicLayout'
-import FormularioUser from './Modulos_Usuario/FormularioUser'
 import PerfilUser from './Modulos_Usuario/PerfilUser'
 
 class App extends React.Component {

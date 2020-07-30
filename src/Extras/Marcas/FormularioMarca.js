@@ -1,10 +1,6 @@
 import React from 'react';
 import '../../App.css';
-import {
-    Form,
-    Button,
-    message
-} from 'antd';
+import {Form, Button, message} from 'antd';
 import '../../custom-antd.css';
 import InputComponent from '../../Componentes/InputComponent';
 import { Link } from 'react-router-dom';
