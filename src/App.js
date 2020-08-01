@@ -41,7 +41,10 @@ import PrivateRouteEmpleado from './Routes/PrivateRouteEmpleado'
 import PrivateRouteGeneral from './Routes/PrivateRouteGeneral';
 import PublicRoute from './Routes/PublicRoute';
 import PublicLayout from './Routes/Layouts/PublicLayout'
+<<<<<<< HEAD
 import VistaUser from './Modulos_Usuario/VistaUser'
+=======
+>>>>>>> 1b553824940f43fb9a039b08f7167cbe2dd2fa15
 import PerfilUser from './Modulos_Usuario/PerfilUser'
 import TablaUser from './Modulos_Usuario/TablaUser'
 import PrivateRouteFinanzas from './Routes/PrivateRouteFinanzas';

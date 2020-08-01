@@ -8,7 +8,8 @@ import MarcaSelect from '../Componentes/MarcaSelect'
 import IpSelect from '../Componentes/IpSelect'
 import EstadoSelect from '../Componentes/EstadoSelect'
 import ComponentePrincipal from '../Componentes/ComponentePrincipal'
-import Axios from '../Servicios/AxiosTipo'
+import Axios from '../Servicios/AxiosTipo';
+import Auth from '../Login/Auth';
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -30,7 +31,7 @@ class FormularioEquipo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            encargado_registro: "admin",
+            encargado_registro: Auth.getDataLog().user.username,
             tipo_equipo: "",
             equipos: [],
             editionMode: false,

@@ -1,20 +1,20 @@
 import React from 'react';
 import '../App.css';
-import { Form, Input, Button, Layout, message, Typography, Row, Col, Select } from 'antd';
+import { Form, Input, Button, Layout, Typography, Row, Col, Select } from 'antd';
 import '../custom-antd.css';
 import InputComp from '../Componentes/InputComponent';
 import AxiosTipo from '../Servicios/AxiosTipo';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import AxiosAuth from '../Servicios/AxiosAuth'
-import VistaFormulario from '../Componentes/VistaFormulario'
+//import VistaFormulario from '../Componentes/VistaFormulario'
 import Auth from '../Login/Auth'
 
 const { Content } = Layout;
-const { TextArea } = Input;
+//const { TextArea } = Input;
 const { Title } = Typography;
 const tailLayout = { wrapperCol: { offset: 9, span: 5 } };
 const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 }, };
-const key = 'updatable';
+//const key = 'updatable';
 
 class FormularioUser extends React.Component {
     constructor(props) {

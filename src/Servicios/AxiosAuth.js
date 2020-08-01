@@ -1,17 +1,17 @@
 import axios from 'axios';
-
-export default class AxiosAuth{
+import VariableGlobal from './VariableGlobal'
+export default class AxiosAuth {
 
     static instanceAxios = axios.create({
-        baseURL: 'http://localhost:8000/api',
-        //baseURL: 'https://backend-hlb.herokuapp.com/api',
-      });
-    
-    static login(user){
+        baseURL: VariableGlobal.baseURL,
+
+    });
+
+    static login(user) {
         return AxiosAuth.instanceAxios.post('/login', user);
     }
 
-    static registrar_user(newUser){
+    static registrar_user(newUser) {
         return AxiosAuth.instanceAxios.post('/register', newUser);
     }
 
@@ -26,11 +26,11 @@ export default class AxiosAuth{
         return AxiosAuth.instanceAxios.get(`/mostrar_usuario_det/${username}`);
     }
 
-    static getProfile = () =>{
-        return AxiosAuth.instanceAxios.get('/user', 
-        {
-            headers: {Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.usertoken}` }
-        })
+    static getProfile = () => {
+        return AxiosAuth.instanceAxios.get('/user',
+            {
+                headers: { Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.usertoken}` }
+            })
     }
 
     static get_users(){

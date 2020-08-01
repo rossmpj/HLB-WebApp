@@ -1,16 +1,12 @@
 import React from 'react';
 import '../App.css';
-import {
-    Form,
-    Select,
-    Input,
-    Button,
-    InputNumber,
-    message
+import { Form, Select, Input, Button, InputNumber, message
 } from 'antd';
 import '../custom-antd.css';
 import InputComponent from '../Componentes/InputComponent'
 import Axios from '../Servicios/AxiosTipo';
+import Auth from '../Login/Auth';
+import FuncionesAuxiliares from '../FuncionesAuxiliares';
 const { TextArea } = Input;
 
 const tailLayout = {
@@ -29,7 +25,7 @@ class FormularioIp extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            encargado_registro: "admin",
+            encargado_registro: Auth.getDataLog().user.username,
             editionMode: false,
             key: ""
         }
@@ -123,7 +119,8 @@ class FormularioIp extends React.Component {
                     <Form.Item label="Dirección IP">
                         {getFieldDecorator('ip',
                            {
-                                rules: [{ required: true, message: 'Debe colocar una dirección IP' }]
+                                rules: [{ required: true, message: 'Debe colocar una dirección IP' },
+                                {validator: FuncionesAuxiliares.ipValidator}]
                            })(
                                 <Input
                                     placeholder="[0-255].[0-255].[0-255].[0-255]"

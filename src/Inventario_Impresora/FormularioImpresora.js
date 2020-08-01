@@ -1,8 +1,6 @@
 import React from 'react';
 import '../App.css';
-import {
-    Form, Select, Input, Button, Layout, message
-} from 'antd';
+import {Form, Select, Input, Button, Layout, message} from 'antd';
 import '../custom-antd.css';
 import InputComponent from '../Componentes/InputComponent'
 import AsignarSelect from '../Componentes/AsignarSelect'
@@ -11,6 +9,7 @@ import IpSelect from '../Componentes/IpSelect'
 import ComponentePrincipal from '../Componentes/ComponentePrincipal'
 import EstadoSelect from '../Componentes/EstadoSelect'
 import Axios from '../Servicios/AxiosTipo'
+import Auth from '../Login/Auth';
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -39,7 +38,7 @@ class FormularioImpresora extends React.Component {
             rodillo: "",
             tinta: "",
             rollo: "",
-            encargado_registro: "admin",
+            encargado_registro: Auth.getDataLog().user.username,
             editionMode: false,
             key: "",
             codigo: "",

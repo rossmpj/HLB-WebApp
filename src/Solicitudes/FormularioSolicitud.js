@@ -1,12 +1,6 @@
 import React from 'react';
 import '../App.css';
-import {
-    Form,
-    Button,
-    Select,
-    Input,
-    message
-} from 'antd';
+import {Form, Button, Select, Input, message } from 'antd';
 import '../custom-antd.css';
 import { Link } from 'react-router-dom';
 import AxiosSolicitud from '../Servicios/AxiosSolicitud';
@@ -50,21 +44,12 @@ class FormularioSolicitud extends React.Component {
                         setTimeout(() => {
                             message.success({ content: 'Solicitud enviada satisfactoriamente', key, duration: 3 });
                         }, 1000);
-                        this.props.history.push("/solicitud_empleado");
+                       // this.props.history.push("/solicitud_empleado");
                     }).catch(error => {
-                        console.log(error.response)
+                        console.log(error)
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
                     });
                 } else {
-                    // values.key = this.state.key;
-                    // AxiosSolicitud.editar_marca(values).then(res => {
-                    //     message.loading({ content: 'Actualizando datos...', key });
-                    //     setTimeout(() => {
-                    //         message.success({ content: "Edición realizada satisfactoriamente", key, duration: 3 });
-                    //     }, 1000);
-                    // }).catch(err => {
-                    //     console.log(err);
-                    // });
                 }
             }
         });
@@ -126,8 +111,8 @@ class FormularioSolicitud extends React.Component {
                             initialValue: 'AE'
                         })(
                             <Select>
-                                <Select.Option value="AE">Asignacion de Equipos</Select.Option>
-                                <Select.Option value="ST">Servicio Tecnico</Select.Option>
+                                <Select.Option value="AE">Asignación de Equipos</Select.Option>
+                                <Select.Option value="ST">Servicio Técnico</Select.Option>
                             </Select>
                         )}
 

@@ -1,8 +1,7 @@
 import React from 'react';
 import { Button, Row, Col, Table, Input, Icon,  message, Tag, Typography } from 'antd';
-// import ButtonGroup from 'antd/lib/button/button-group';Popconfirm,
-import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosSolicitud'
+import FuncionesAuxiliares from '../FuncionesAuxiliares';
 const { Title } = Typography;
 
 class TablaSolicitudSistemas extends React.Component {
@@ -85,18 +84,6 @@ class TablaSolicitudSistemas extends React.Component {
         //     console.log(err)
         //     message.error('Error al eliminar el registro, inténtelo más tarde', 4);
         // });
-    }
-
-    stringSorter(a, b) {
-        let y = a || '';
-        let u = b || '';
-        return y.localeCompare(u);
-    }
-
-    filtrar_array(arr, value) {
-        if (arr !== null) {
-            return arr.indexOf(value) === 0;
-        }
     }
 
     busqueda_array(arr, dataIndex, value) {
@@ -191,8 +178,8 @@ class TablaSolicitudSistemas extends React.Component {
                         value: 'R',
                     }
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.estado, value),
-                sorter: (a, b) => this.stringSorter(a.estado, b.estado),
+                onFilter: (value, record) =>  FuncionesAuxiliares.filtrar_array(record.estado, value),
+                sorter: (a, b) =>  FuncionesAuxiliares.stringSorter(a.estado, b.estado),
                 render: (text, value) => (
                     <div >
                         {text === "C" ? <Tag style={{ margin: 2 }} color="green" key={value}>Completada</Tag> :
@@ -225,8 +212,8 @@ class TablaSolicitudSistemas extends React.Component {
                         value: 'C',
                     }
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.tipo, value),
-                sorter: (a, b) => this.stringSorter(a.tipo, b.tipo),
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.tipo, value),
+                sorter: (a, b) =>  FuncionesAuxiliares.stringSorter(a.tipo, b.tipo),
                 render: (text, value) => (
                     <div >
                         {
@@ -258,8 +245,8 @@ class TablaSolicitudSistemas extends React.Component {
                         value: 'ST',
                     }
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.tipo, value),
-                sorter: (a, b) => this.stringSorter(a.tipo, b.tipo),
+                onFilter: (value, record) =>  FuncionesAuxiliares.filtrar_array(record.tipo, value),
+                sorter: (a, b) =>  FuncionesAuxiliares.tringSorter(a.tipo, b.tipo),
                 render: (text, value) => (
                     <div >
                         {
@@ -274,7 +261,7 @@ class TablaSolicitudSistemas extends React.Component {
                 title: 'Fecha Realizacion',
                 dataIndex: 'fecha',
                 key: 'fecha',
-                sorter: (a, b) => this.stringSorter(a.fecha, b.fecha)
+                sorter: (a, b) =>  FuncionesAuxiliares.tringSorter(a.fecha, b.fecha)
             },
 
             {
@@ -285,32 +272,13 @@ class TablaSolicitudSistemas extends React.Component {
             {
                 title: 'Acción',
                 key: 'accion',
-                fixed: 'right',
-                render: (text, record) => (
-                    <div>
-                        {/* <Link to={{ pathname: '/otrosequipos/form', state: { info: record, titulo: "Editar equipo" } }}>
-                            <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
-                        </Link>
-                        <Popconfirm
-                            title="¿Desea dar de baja este equipo?"
-                            okText="Si" cancelText="No"
-                            onConfirm={() => this.handleDelete(record.key)}>
-                                {record.estado_operativo === 'B' ?
-                            <Button disabled type="danger" icon="delete" size="small" /> : <Button type="danger" icon="delete" size="small" />}
-                        </Popconfirm> */}
-                    </div>
-                ),
+                fixed: 'right'
             },
         ];
         return (
             <div className="div-container-title">
                 <Row>
                     <Col span={12}><Title level={2}>Solicitudes </Title></Col>
-                    {/* <Col className='flexbox'>
-                        <Link to={{ pathname: '/solicitud/form', state: { titulo: "Nueva Solicitud" } }} >
-                            <Button type="primary" icon="plus">Crear una Nueva Solicitud</Button>
-                        </Link>
-                    </Col> */}
                 </Row>
                 <div className="div-container">
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Icon, Layout } from 'antd';
+import { Menu, Layout} from 'antd';
 import '../../custom-antd.css';
 import { Link } from 'react-router-dom';
 const { Header } = Layout;

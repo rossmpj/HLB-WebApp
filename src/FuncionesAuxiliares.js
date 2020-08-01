@@ -1,4 +1,3 @@
-import Auth from './Login/Auth'
 export default class FuncionesAuxiliares {
 
     static stringSorter = (a, b) => {
@@ -13,12 +12,21 @@ export default class FuncionesAuxiliares {
         }
     }
 
-
+    static ipValidator = (rule, value, callback) => {
+        try {
+            // eslint-disable-next-line 
+            if (!value.match('^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')) {
+                throw new Error("Escriba una dirección IP válida");
+            }
+        } catch (err) {
+            callback(err);
+        }
+    }
 
 
     // FUNCIONES PARA EXPORTACION DE EXCEL
 
-    static transform_estado(estado, replace='-') {
+    static transform_estado(estado, replace = '-') {
         if (estado === 'D') return 'Disponible';
         if (estado === 'O') return 'Operativo';
         if (estado === 'ER') return 'En revisión';
@@ -27,7 +35,7 @@ export default class FuncionesAuxiliares {
         return replace;
     }
 
-    static UpperCase(str, replace='-') {
+    static UpperCase(str, replace = '-') {
         return FuncionesAuxiliares.validarCampo(str, replace).replace('_', ' ').toUpperCase();
     }
 
@@ -99,7 +107,7 @@ export default class FuncionesAuxiliares {
         ]
     }
 
-    
+
 
     static generateDataRAM_DISK(array) {
         let rows = []
@@ -163,7 +171,7 @@ export default class FuncionesAuxiliares {
 
 
     // FUNCIONES PARA TRANSFORMAR DATA DEL BACK
-    static transform_data_desktop(arraydesktop){
+    static transform_data_desktop(arraydesktop) {
         let datos = [];
         arraydesktop.forEach(function (r) {
             let registro = r.original
@@ -177,10 +185,10 @@ export default class FuncionesAuxiliares {
                 dirIP: dip === undefined ? '' : registro.general.direccion_ip,
                 bspi: registro.general.bspi === undefined ? '' : registro.general.bspi,
                 departamento: registro.general.departamento === undefined ? '' : registro.general.departamento,
-                empleado: registro.general.empleado === undefined ? '' : registro.general.empleado+' '+registro.general.apellido,
+                empleado: registro.general.empleado === undefined ? '' : registro.general.empleado + ' ' + registro.general.apellido,
                 marca: registro.general.marca === undefined ? '' : registro.general.marca,
                 modelo: registro.general.modelo === undefined ? '' : registro.general.modelo,
-                num_serie: registro.general.numero_serie === undefined ? '' : registro.general.numero_serie,        
+                num_serie: registro.general.numero_serie === undefined ? '' : registro.general.numero_serie,
                 estado: registro.general.estado_operativo === undefined ? '' : registro.general.estado_operativo,
                 ip: dip === undefined ? '' : dip,
                 so: registro.so.so === undefined ? '' : registro.so.so,
@@ -190,7 +198,7 @@ export default class FuncionesAuxiliares {
                 user_pc: registro.so.usuario_pc === undefined ? '' : registro.so.usuario_pc,
                 licencia: registro.so.licencia === '0' ? 'No' : 'Si',
                 office: registro.programas === undefined ? [] : registro.programas,
-                tarj_red: registro.tarjeta_red  === undefined ? '' : registro.tarjeta_red,
+                tarj_red: registro.tarjeta_red === undefined ? '' : registro.tarjeta_red,
                 monitor: registro.monitor === undefined ? '' : registro.monitor,
                 teclado: registro.teclado === undefined ? '' : registro.teclado,
                 parlantes: registro.parlantes === undefined ? '' : registro.parlantes,
@@ -209,12 +217,12 @@ export default class FuncionesAuxiliares {
         return datos;
     }
 
-    static transform_data_laptop(arraylaptop){
+    static transform_data_laptop(arraylaptop) {
         let datos = [];
         arraylaptop.forEach(function (r) {
             let registro = r.original
             var dip = registro.general.ip === null ? undefined : registro.general.ip.toString();
-            
+
             let router = {
                 key: registro.general.id_equipo,
                 id_equipo: registro.general.id_equipo,
@@ -223,10 +231,10 @@ export default class FuncionesAuxiliares {
                 codigo: registro.general.codigo,
                 bspi: registro.general.bspi === undefined ? '' : registro.general.bspi,
                 departamento: registro.general.departamento === undefined ? '' : registro.general.departamento,
-                empleado: registro.general.empleado === undefined ? '' : registro.general.empleado+' '+registro.general.apellido,
+                empleado: registro.general.empleado === undefined ? '' : registro.general.empleado + ' ' + registro.general.apellido,
                 marca: registro.general.marca === undefined ? '' : registro.general.marca,
                 modelo: registro.general.modelo === undefined ? '' : registro.general.modelo,
-                num_serie: registro.general.numero_serie === undefined ? '' : registro.general.numero_serie, 
+                num_serie: registro.general.numero_serie === undefined ? '' : registro.general.numero_serie,
                 estado: registro.general.estado_operativo === undefined ? '' : registro.general.estado_operativo,
                 ip: dip === undefined ? '' : dip,
                 dirIP: dip === undefined ? '' : registro.general.direccion_ip,
@@ -243,13 +251,13 @@ export default class FuncionesAuxiliares {
                 id_procesador: registro.procesador === undefined ? '' : registro.procesador,
                 rams: registro.rams === undefined ? '' : registro.rams,
                 discos: registro.discos === undefined ? '' : registro.discos,
-             }
-             datos.push(router);
+            }
+            datos.push(router);
         });
         return datos;
     }
 
-    static transform_data_impresora(arrayimpresora){
+    static transform_data_impresora(arrayimpresora) {
         let datos = [];
         arrayimpresora.forEach(function (dato) {
             let empleado = ""
@@ -284,38 +292,38 @@ export default class FuncionesAuxiliares {
         return datos;
     }
 
-    static transform_data_router(arrayrouter){
+    static transform_data_router(arrayrouter) {
         let datos = [];
         arrayrouter.forEach(function (registro) {
             var dip = registro.ip === null ? ' ' : registro.ip;
             var dirip = registro.direccion_ip === null ? ' ' : registro.direccion_ip;
             let router = {
-            key: registro.id_equipo,
-            id_equipo:registro.id_equipo,
-            codigo: registro.codigo,
-            bspi: registro.bspi_punto === null ? '' : registro.bspi_punto,
-            departamento: registro.departamento === null ? '' : registro.departamento,
-            nombre: registro.nombre,
-            pass: registro.pass,
-            penlace: registro.puerta_enlace,
-            usuario: registro.usuario,
-            clave: registro.clave,
-            marca: registro.marca,
-            modelo: registro.modelo,
-            num_serie: registro.numero_serie, 
-            estado: registro.estado_operativo,
-            ip: dip,
-            dirip: dirip,
-            empleado: registro.nempleado === null ? '' : registro.nempleado+' '+registro.apellido,
-            descripcion: registro.descripcion,
-            fecha: registro.fecha_registro
+                key: registro.id_equipo,
+                id_equipo: registro.id_equipo,
+                codigo: registro.codigo,
+                bspi: registro.bspi_punto === null ? '' : registro.bspi_punto,
+                departamento: registro.departamento === null ? '' : registro.departamento,
+                nombre: registro.nombre,
+                pass: registro.pass,
+                penlace: registro.puerta_enlace,
+                usuario: registro.usuario,
+                clave: registro.clave,
+                marca: registro.marca,
+                modelo: registro.modelo,
+                num_serie: registro.numero_serie,
+                estado: registro.estado_operativo,
+                ip: dip,
+                dirip: dirip,
+                empleado: registro.nempleado === null ? '' : registro.nempleado + ' ' + registro.apellido,
+                descripcion: registro.descripcion,
+                fecha: registro.fecha_registro
             }
             datos.push(router);
         });
         return datos;
     }
 
-    static transform_data_otros(arraysotros){
+    static transform_data_otros(arraysotros) {
         let datos = [];
         arraysotros.forEach(function (dato) {
             let empleado = "";
@@ -327,7 +335,7 @@ export default class FuncionesAuxiliares {
                 id_equipo: dato.id_equipo,
                 estado_operativo: dato.estado_operativo,
                 codigo: dato.codigo,
-                tipo_equipo: FuncionesAuxiliares.UpperCase(dato.tipo_equipo,''),
+                tipo_equipo: FuncionesAuxiliares.UpperCase(dato.tipo_equipo, ''),
                 marca: dato.marca,
                 modelo: dato.modelo,
                 descripcion: dato.descripcion,
