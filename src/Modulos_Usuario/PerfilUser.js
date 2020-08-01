@@ -178,7 +178,7 @@ class FormularioUser extends React.Component {
                                     })(<Input.Password disabled={true} />)}
                                 </Form.Item>
                                 <Form.Item
-                                    label="Seleccione Departamento"
+                                    label="Departamento"
 
                                 >
                                     {getFieldDecorator('id_departamento', {
@@ -202,7 +202,7 @@ class FormularioUser extends React.Component {
                                     }
                                 </Form.Item >
                                 <Form.Item
-                                    label="Seleccione Rol"
+                                    label="Rol"
 
                                 >
                                     {getFieldDecorator('id_rol', {

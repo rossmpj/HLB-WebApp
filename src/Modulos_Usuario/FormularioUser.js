@@ -23,8 +23,8 @@ class FormularioUser extends React.Component {
             titulo: "",
             username: '',
             editionMode: false,
-            roles:[],
-            dptos:[]
+            roles: [],
+            dptos: []
 
         };
         this.handle_guardar = this.handle_guardar.bind(this);
@@ -50,7 +50,7 @@ class FormularioUser extends React.Component {
         }
     }
 
-    cargar_dptos(){
+    cargar_dptos() {
         AxiosTipo.mostrar_dep_org().then(res => {
             console.log(res.data)
             this.setState({ dptos: res.data });
@@ -58,8 +58,8 @@ class FormularioUser extends React.Component {
             console.log(err);
         });
     }
-    cargar_roles(){
-        AxiosTipo.mostrar_dep_org().then(res => {
+    cargar_roles() {
+        AxiosTipo.mostrar_roles().then(res => {
             console.log(res.data)
             this.setState({ roles: res.data });
         }).catch(err => {
@@ -71,18 +71,20 @@ class FormularioUser extends React.Component {
 
 
     componentDidMount = () => {
-        if (typeof this.props.location !== 'undefined') {
-            this.cargar_dptos();
-            this.cargar_roles();
-            const { info } = this.props.location.state;
-            const { titulo } = this.props.location.state;
-            const { editionMode } = this.props.location.state;
-            if (editionMode && info !== undefined) {
-                this.cargar_datos(info);
+        this.cargar_dptos();
+        this.cargar_roles();
+        if (typeof this.props.data !== 'undefined') {
+            if (typeof this.props.data.state !== 'undefined'
+                && typeof this.props.data.state.info !== 'undefined'
+            ) {
+                const { info } = this.props.data.state;
+                const { titulo } = this.props.data.state;
+                if (info !== undefined) {
+                    this.cargar_datos(info);
+                    this.setState({ editionMode: true })
+                    this.setState({ titulo: titulo })
+                }
             }
-            this.setState({ titulo: titulo })
-            this.setState({ editionMode: editionMode })
-
         }
     }
 
@@ -147,17 +149,30 @@ class FormularioUser extends React.Component {
 
     cargar_datos(info) {
         console.log("record:", info);
-        this.setState({ id_equipo_router: info.key })
-        AxiosAuth.mostrar_usuario_det(info.username).then(respuesta => {
-            let res = respuesta.data
-            console.log(res)
-            this.props.form.setFieldsValue({
-                cedula: res.cedula,
-                nombre: res.nombre,
-                apellido: res.apellido,
-                id_departamento: res.id_departamento,
-                id_rol: res.id_rol,
-            })
+        this.props.form.setFieldsValue({
+            cedula: info.cedula,
+            nombre: info.nombre,
+            username: info.username,
+            apellido: info.apellido,
+            id_departamento: info.id_departamento,
+            id_rol: info.id_rol,
+        })
+
+    }
+
+    crear_user(values) {
+        AxiosAuth.registrar_user_web(values).then(res => {
+            message.loading({ content: 'Guardando datos...', key });
+            setTimeout(() => {
+                message.success({ content: 'Usuario creado satisfactoriamente', key, duration: 3 });
+            }, 1000);
+        }).catch(err => {
+            if (err.response) {
+                message.error(err.response.data.log, 2)
+                    .then(() => message.error('No fue posible registrar los datos', 2.5))
+            } else {
+                message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
+            }
         });
     }
 
@@ -165,91 +180,84 @@ class FormularioUser extends React.Component {
         const { getFieldDecorator } = this.props.form;
         return (
             <Content>
-                <div className="div-container-title">
-                    <VistaFormulario enlace='/' titulo={this.state.titulo}></VistaFormulario>
-                    <div className="div-border-top" >
-                        <div className="div-container">
-                            <Form {...layout}
-                                layout="horizontal"
-                                onSubmit={this.handle_guardar}
-                                action={this.state.titulo}
-                                id={this.state.titulo}
-                            >
+
+                <div className="div-container">
+                    <Form {...layout}
+                        layout="horizontal"
+                        onSubmit={this.handle_guardar}
+                        action={this.state.titulo}
+                        id={this.state.titulo}
+                    >
 
 
-                                <InputComp label="Nombres" id="nombre" decorator={getFieldDecorator} />
-                                <InputComp label="Apellidos" id="apellido" decorator={getFieldDecorator} />
-                                <Form.Item label="Cedula">
-                                    {getFieldDecorator('cedula', {
-                                        rules: [{ required: true, message: 'Por favor, ingrese una contraseña' }, { validator: this.IDValidator }],
-                                    })(< InputNumber />)}
-                                </Form.Item>
-                                <InputComp label="Usuario" id="username" decorator={getFieldDecorator} />
-                                <Form.Item disabled = {this.state.editionMode} label="Contraseña">
-                                    {getFieldDecorator('password', {
-                                        rules: [{ required: true, message: 'Por favor, ingrese una contraseña' }, { validator: this.strongValidator }],
-                                    })(<Input.Password />)}
-                                </Form.Item>
-                                <Form.Item
-                                    label="Seleccione Departamento"
+                        <InputComp label="Nombres" id="nombre" decorator={getFieldDecorator} />
+                        <InputComp label="Apellidos" id="apellido" decorator={getFieldDecorator} />
+                        <InputComp label="Cedula" id="cedula" decorator={getFieldDecorator} />
+                        <InputComp label="Usuario" id="username" decorator={getFieldDecorator} />
+                        <Form.Item disabled={this.state.editionMode} label="Contraseña">
+                            {getFieldDecorator('password', {
+                                rules: [{ required: true, message: 'Por favor, ingrese una contraseña' }, { validator: this.strongValidator }],
+                            })(<Input.Password />)}
+                        </Form.Item>
+                        <Form.Item
+                            label="Seleccione Departamento"
 
+                        >
+                            {getFieldDecorator('id_departamento', {
+                                rules: [{ required: true, message: 'Debe completar este campo' }],
+                                initialValue: this.state.id_departamento
+                            })(
+                                <Select
+                                    //disabled={this.state.editionMode ? true : false}
+                                    showSearch
+                                    optionFilterProp="children"
+                                    filterOption={(input, option) =>
+                                        option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                 >
-                                    {getFieldDecorator('id_departamento', {
-                                        rules: [{ required: true, message: 'Debe completar este campo' }],
-                                        initialValue: this.state.id_departamento
-                                    })(
-                                        <Select
-                                            //disabled={this.state.editionMode ? true : false}
-                                            showSearch
-                                            optionFilterProp="children"
-                                            filterOption={(input, option) =>
-                                                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                        >
-                                            <Select.Option key="0" value={null}>----</Select.Option>
-                                            {
-                                                this.state.dptos.map(dato =>
-                                                    <Select.Option key={dato.id_departamento} value={dato.id_departamento}>{dato.nombre + " (" + dato.bspi_punto + ")"}</Select.Option>
-                                                )
-                                            }
-                                        </Select>
-                                    )
+                                    <Select.Option key="0" value={null}>----</Select.Option>
+                                    {
+                                        this.state.dptos.map(dato =>
+                                            <Select.Option key={dato.id_departamento} value={dato.id_departamento}>{dato.nombre + " (" + dato.bspi_punto + ")"}</Select.Option>
+                                        )
                                     }
-                                </Form.Item >
-                                <Form.Item
-                                    label="Seleccione Rol"
+                                </Select>
+                            )
+                            }
+                        </Form.Item >
+                        <Form.Item
+                            label="Seleccione Rol"
 
+                        >
+                            {getFieldDecorator('id_rol', {
+                                rules: [{ required: true, message: 'Debe completar este campo' }],
+                                initialValue: this.state.id_rol
+                            })(
+                                <Select
+                                    //disabled={this.state.editionMode ? true : false}
+                                    showSearch
+                                    optionFilterProp="children"
+                                    filterOption={(input, option) =>
+                                        option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                 >
-                                    {getFieldDecorator('id_rol', {
-                                        rules: [{ required: true, message: 'Debe completar este campo' }],
-                                        initialValue: this.state.id_rol
-                                    })(
-                                        <Select
-                                            //disabled={this.state.editionMode ? true : false}
-                                            showSearch
-                                            optionFilterProp="children"
-                                            filterOption={(input, option) =>
-                                                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                        >
-                                            <Select.Option key="0" value={null}>----</Select.Option>
-                                            {
-                                                this.state.roles.map(dato =>
-                                                    <Select.Option key={dato.id_rol} value={dato.id_rol}>{dato.nombre}</Select.Option>
-                                                )
-                                            }
-                                        </Select>
-                                    )
+                                    <Select.Option key="0" value={null}>----</Select.Option>
+                                    {
+                                        this.state.roles.map(dato =>
+                                            <Select.Option key={dato.id_rol} value={dato.id_rol}>{dato.nombre}</Select.Option>
+                                        )
                                     }
-                                </Form.Item >
+                                </Select>
+                            )
+                            }
+                        </Form.Item >
 
 
-                                <Form.Item {...tailLayout}>
-                                    <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
-                                    <Link to={{ pathname: '/router' }} ><Button type="primary">Cancelar</Button></Link>
-                                </Form.Item>
-                            </Form>
-                        </div>
-                    </div>
+                        <Form.Item {...tailLayout}>
+                            <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
+                            <Link to={{ pathname: '/router' }} ><Button type="primary">Cancelar</Button></Link>
+                        </Form.Item>
+                    </Form>
                 </div>
+
             </Content>
         );
     }

@@ -149,7 +149,7 @@ class FormularioSolicitud extends React.Component {
 
                     <Form.Item {...tailLayout}>
                         <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Enviar Solicitud</Button>
-                        <Link to='/solicitud'>
+                        <Link to='/solicitud_empleado'>
                             <Button type="primary">Cancelar</Button>
                         </Link>
                     </Form.Item>

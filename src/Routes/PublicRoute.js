@@ -4,7 +4,7 @@ import Auth from '../Login/Auth';
 
 const PublicRoute = ({ component: Component, layout: Layout, ...rest }) => (
     <Route {...rest}
-        render={props => !Auth.getAuth() ? (<Layout><Component {...props}/></Layout>) : (Auth.getDataLog().user.rol.toLowerCase() === 'empleado institucional' ? (<Redirect to='/empleado' />) : (<Redirect to='/sistemas' />))
+        render={props => !Auth.getAuth() ? (<Layout><Component {...props}/></Layout>) : (Auth.isEmpelado() ? (<Redirect to='/empleado' />) : (Auth.isFinanzas() ? (<Redirect to='/finanzas' />):(<Redirect to='/sistemas' />)))
         } />
 );
 export default PublicRoute;

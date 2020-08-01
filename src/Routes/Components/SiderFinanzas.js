@@ -31,22 +31,6 @@ export default class SiderGeneral extends React.Component{
                 </span>
                 <Link to="/" />
               </Menu.Item>
-              <Menu.Item key="12">
-                <span>
-                <Icon type="message" />
-                <span>Solicitudes
-                </span>
-                </span>
-                <Link to="/solicitud_sistemas" />
-              </Menu.Item>
-              <Menu.Item key="111">
-                <span>
-                <Icon type="user" />
-                <span>Usuarios
-                </span>
-                </span>
-                <Link to="/users" />
-              </Menu.Item>
               <SubMenu
                 key="dash"
                 title={
@@ -57,42 +41,23 @@ export default class SiderGeneral extends React.Component{
                 }
               >
                 <Menu.Item key="desktop"><Icon type="desktop" />Desktop
-                  <Link to="/desktop" />
+                  <Link to="/finanzas/desktop" />
                 </Menu.Item>
                 <Menu.Item key="laptop"><Icon type="laptop" />Laptop
-                  <Link to="/laptop" />
+                  <Link to="/finanzas/laptop" />
                 </Menu.Item>
                 <Menu.Item key="router"><RiRouterLine className="anticon"/>Router
-                  <Link to="/router" />
+                  <Link to="/finanzas/router" />
                 </Menu.Item>
                 <Menu.Item key="impresora"><Icon type="printer" />Impresora
-                  <Link to="/impresora" />
+                  <Link to="/finanzas/impresora" />
                 </Menu.Item>
                 <Menu.Item key="varios"><Icon type="appstore" />Otros equipos
-                <Link to="/otrosEquipos" />
+                <Link to="/finanzas/otrosEquipos" />
                 </Menu.Item>
-                <Menu.Item key="ip"><Icon type="cluster" />IP
-                <Link to="/ip" />
-                </Menu.Item>
-                <Menu.Item key="correo"><Icon type="mail" />Correo
-                <Link to="/correo" />
-                </Menu.Item>
-                <SubMenu
-                key="sub2"
-                title={
-                  <span>
-                    <Icon type="rocket" />
-                    <span>Extra</span>
-                  </span>
-                }
-              >
-                <Menu.Item key="marcas"><Icon type="global" />Marcas
-                  <Link to="/marca" />
-                </Menu.Item>
-                <Menu.Item key="programas"><RiTerminalWindowLine className="anticon" />Programas
-                  <Link to="/programa" />
-                </Menu.Item>
-              </SubMenu>
+                {/* <Menu.Item key="ip"><Icon type="cluster" />IP
+                <Link to="/finanzas/ip" />
+                </Menu.Item> */}
               </SubMenu>
               
 
@@ -106,11 +71,11 @@ export default class SiderGeneral extends React.Component{
                 }
               >
                 <Menu.Item key="general"><Icon type="control"/>General
-                  <Link to="/reportes/general" />
+                  <Link to="/finanzas/reportes/general" />
                 </Menu.Item>
 
                 <Menu.Item key="baja"><Icon type="fall"/>Equipos de baja
-                  <Link to="/reportes/de-baja" />
+                  <Link to="/finanzas/reportes/de-baja" />
                 </Menu.Item>
               </SubMenu>
 

@@ -3,19 +3,17 @@ import {
     Typography,
     Button,
     Row,
-    Col
+    Col,
 } from 'antd';
-import FormularioSolicitud from './FormularioSolicitud';
-import { Link } from 'react-router-dom';
+import FormularioUser from './FormularioUser';
+
 const { Title } = Typography;
 
-export default class VistaSolicitud extends React.Component {
-
-    
+class VistaCorreo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            titulo: "Solicitudes",
+            titulo: "Crear Usuario",
             data: this.props.location
         };
     }
@@ -27,21 +25,22 @@ export default class VistaSolicitud extends React.Component {
         }
     }
 
-
     render() {
         return (
             <div className="div-container-title">
                 <Row>
                     <Col span={12}><Title level={2}>{this.state.titulo}</Title></Col>
                     <Col className='flexbox'>
-                        <Link to={{ pathname: '/solicitud_empleado' }} ><Button type="primary" icon="left">Volver</Button></Link>
+                        <Button type="primary" icon="left" onClick={this.props.history.goBack} >Volver</Button>
                     </Col>
                 </Row>
-                <div className="div-border-top" >
-                     <FormularioSolicitud data={this.state.data}></FormularioSolicitud>
+                <div className="div-miniborder-top" >
+                    <FormularioUser data={this.state.data}></FormularioUser>
                 </div>
             </div>
 
-        )
+        );
     }
-} 
+}
+
+export default VistaCorreo;

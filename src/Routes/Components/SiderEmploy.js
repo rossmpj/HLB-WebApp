@@ -26,7 +26,7 @@ export default class SiderEmploy extends React.Component{
                 
                 </span>
                 </span>
-                <Link to="/empelado" />
+                <Link to="/" />
               </Menu.Item>
               
               <Menu.Item key="13">

@@ -49,11 +49,15 @@ class LoginHLB extends React.Component {
                     }, 1000);
                     this.props.history.push("/");
                 }).catch(error => {
-                    if (error.response.status === 400) {
-                        message.error('Las credenciales ingresadas son incorrectas...', 4);
-                    }
-                    if (error.response.status === 500) {
-                        message.error('Ocurrió un error al procesar los datos, inténtelo más tarde', 4);
+                    if(error.response){
+                        if (error.response.status === 400) {
+                            message.error('Las credenciales ingresadas son incorrectas...', 4);
+                        }
+                        if (error.response.status === 500) {
+                            message.error('Ocurrió un error al procesar los datos, inténtelo más tarde', 4);
+                        }
+                    }else{
+                        message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
                     }
                 });
             }

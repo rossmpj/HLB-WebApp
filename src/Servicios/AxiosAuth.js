@@ -15,6 +15,9 @@ export default class AxiosAuth{
         return AxiosAuth.instanceAxios.post('/register', newUser);
     }
 
+    static registrar_user_web(newUser){
+        return AxiosAuth.instanceAxios.post('/registrar_user_web', newUser);
+    }
     static obtener_datos_usuario = (username) => {
         return AxiosAuth.instanceAxios.get(`/obtener_datos_usurios/${username}`);
     }
@@ -28,5 +31,9 @@ export default class AxiosAuth{
         {
             headers: {Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.usertoken}` }
         })
+    }
+
+    static get_users(){
+        return  AxiosAuth.instanceAxios.get('/get_users');
     }
 }
