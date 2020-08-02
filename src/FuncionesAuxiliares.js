@@ -1,3 +1,6 @@
+import { message } from 'antd';
+import AxiosAuth from './Servicios/AxiosAuth';
+
 export default class FuncionesAuxiliares {
 
     static stringSorter = (a, b) => {
@@ -357,4 +360,29 @@ export default class FuncionesAuxiliares {
         });
         return datos;
     }
+
+    static updateUser(values, key){
+            AxiosAuth.editar_user_web(values).then(res => {
+            message.loading({ content: 'Guardando datos...', key });
+            setTimeout(() => {
+                message.success({ content: 'Usuario actualizado satisfactoriamente', key, duration: 3 });
+            }, 1000);
+        }).catch(error => {
+            if (error.response) {
+                if (error.response.status === 400) {
+                    message.error(error.response.data.log, 4)
+                    .then(() => message.error('No fue posible registrar los datos', 3))
+                }
+                if (error.response.status === 500) {
+                    message.error('Ocurrió un error al procesar los datos, inténtelo más tarde', 4);
+                }
+                console.log(error.response)
+                
+            } else {
+                message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
+            }
+        });
+    }
+
+
 }

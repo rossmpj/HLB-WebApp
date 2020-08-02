@@ -101,7 +101,7 @@ class FormularioMarca extends React.Component {
 
                     <Form.Item {...tailLayout}>
                         <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
-                        <Link to='/marca'>
+                        <Link to='/sistemas/marca'>
                             <Button type="primary">Cancelar</Button>
                         </Link>
                     </Form.Item>

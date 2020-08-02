@@ -26,7 +26,6 @@ export default class SiderGeneral extends React.Component{
                 <span>
                 <Icon type="home" />
                 <span>Inicio
-                
                 </span>
                 </span>
                 <Link to="/" />
@@ -37,7 +36,7 @@ export default class SiderGeneral extends React.Component{
                 <span>Solicitudes
                 </span>
                 </span>
-                <Link to="/solicitud_sistemas" />
+                <Link to="/sistemas/solicitudes" />
               </Menu.Item>
               <Menu.Item key="111">
                 <span>
@@ -45,7 +44,7 @@ export default class SiderGeneral extends React.Component{
                 <span>Usuarios
                 </span>
                 </span>
-                <Link to="/users" />
+                <Link to="/sistemas/users" />
               </Menu.Item>
               <SubMenu
                 key="dash"
@@ -57,25 +56,25 @@ export default class SiderGeneral extends React.Component{
                 }
               >
                 <Menu.Item key="desktop"><Icon type="desktop" />Desktop
-                  <Link to="/desktop" />
+                  <Link to="/sistemas/desktop" />
                 </Menu.Item>
                 <Menu.Item key="laptop"><Icon type="laptop" />Laptop
-                  <Link to="/laptop" />
+                  <Link to="/sistemas/laptop" />
                 </Menu.Item>
                 <Menu.Item key="router"><RiRouterLine className="anticon"/>Router
-                  <Link to="/router" />
+                  <Link to="/sistemas/router" />
                 </Menu.Item>
                 <Menu.Item key="impresora"><Icon type="printer" />Impresora
-                  <Link to="/impresora" />
+                  <Link to="/sistemas/impresora" />
                 </Menu.Item>
                 <Menu.Item key="varios"><Icon type="appstore" />Otros equipos
-                <Link to="/otrosEquipos" />
+                <Link to="/sistemas/otrosEquipos" />
                 </Menu.Item>
                 <Menu.Item key="ip"><Icon type="cluster" />IP
-                <Link to="/ip" />
+                <Link to="/sistemas/ip" />
                 </Menu.Item>
                 <Menu.Item key="correo"><Icon type="mail" />Correo
-                <Link to="/correo" />
+                <Link to="/sistemas/correo" />
                 </Menu.Item>
                 <SubMenu
                 key="sub2"
@@ -87,10 +86,10 @@ export default class SiderGeneral extends React.Component{
                 }
               >
                 <Menu.Item key="marcas"><Icon type="global" />Marcas
-                  <Link to="/marca" />
+                  <Link to="/sistemas/marca" />
                 </Menu.Item>
                 <Menu.Item key="programas"><RiTerminalWindowLine className="anticon" />Programas
-                  <Link to="/programa" />
+                  <Link to="/sistemas/programa" />
                 </Menu.Item>
               </SubMenu>
               </SubMenu>
@@ -106,11 +105,11 @@ export default class SiderGeneral extends React.Component{
                 }
               >
                 <Menu.Item key="general"><Icon type="control"/>General
-                  <Link to="/reportes/general" />
+                  <Link to="/sistemas/reportes/general" />
                 </Menu.Item>
 
                 <Menu.Item key="baja"><Icon type="fall"/>Equipos de baja
-                  <Link to="/reportes/de-baja" />
+                  <Link to="/sistemas/reportes/de-baja" />
                 </Menu.Item>
               </SubMenu>
 

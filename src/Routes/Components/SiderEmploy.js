@@ -35,7 +35,7 @@ export default class SiderEmploy extends React.Component{
                 <span>Solicitudes
                 </span>
                 </span>
-                <Link to="/solicitud_empleado" />
+                <Link to="/empleado/solicitudes" />
               </Menu.Item>
              
 

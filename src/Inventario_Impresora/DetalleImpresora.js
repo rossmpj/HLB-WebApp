@@ -3,6 +3,7 @@ import { Tabs, Row, Col, Typography, Button, Descriptions, Badge, message } from
 import { PrinterOutlined, UserOutlined } from '@ant-design/icons';
 import SinResultados from '../Componentes/SinResultados'
 import Axios from '../Servicios/AxiosTipo';
+
 const { TabPane } = Tabs;
 const { Title } = Typography;
 

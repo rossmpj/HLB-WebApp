@@ -98,7 +98,7 @@ class FormularioRouter extends React.Component {
                         setTimeout(() => {
                             message.success({ content: 'Registro modificado satisfactoriamente', key, duration: 3 });
                         }, 1000);
-                        this.props.history.push("/router");
+                        this.props.history.push("/sistemas/router");
                         })
                     }else{
                         AxiosRouter.crear_equipo_router(router).then(res => {
@@ -106,7 +106,7 @@ class FormularioRouter extends React.Component {
                         setTimeout(() => {
                             message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
                         }, 1000);
-                        this.props.history.push("/router");
+                        this.props.history.push("/sistemas/router");
                         })
                     }
                 }
@@ -148,7 +148,7 @@ class FormularioRouter extends React.Component {
     return (
       <Content> 
         <div className="div-container-title">      
-          <VistaFormulario enlace='/router' titulo={this.state.titulo}></VistaFormulario> 
+          <VistaFormulario enlace='/sistemas/router' titulo={this.state.titulo}></VistaFormulario> 
           <div className="div-border-top" >
             <div className="div-container"> 
               <Form {...layout} 
@@ -184,7 +184,7 @@ class FormularioRouter extends React.Component {
                 </Form.Item>
                 <Form.Item {...tailLayout}>
                   <Button style={{marginRight: 7}} type="primary" htmlType="submit">Guardar</Button>   
-                  <Link to={{ pathname: '/router' }} ><Button type="primary">Cancelar</Button></Link> 
+                  <Link to={{ pathname: '/sistemas/router' }} ><Button type="primary">Cancelar</Button></Link> 
                 </Form.Item> 
               </Form>
             </div>  

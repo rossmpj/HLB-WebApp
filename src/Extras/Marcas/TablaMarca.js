@@ -132,7 +132,7 @@ class TablaMarca extends React.Component {
                 render: (record) => (
                     <div>
                         <Link to={{
-                            pathname: '/marca/form',
+                            pathname: '/sistemas/marca/form',
                             state: {
                                 info: record,
                                 titulo: "Editar Marca"
@@ -156,7 +156,7 @@ class TablaMarca extends React.Component {
                     <Row>
                         <Col span={12}><Title level={2}>Inventario de Marcas</Title></Col>
                         <Col className='flexbox'>
-                            <Link to={{ pathname: '/marca/form', state: { titulo: "Nueva Marca" } }} >
+                            <Link to={{ pathname: '/sistema/marca/form', state: { titulo: "Nueva Marca" } }} >
                                 <Button type="primary" icon="plus">Agregar marca</Button>
                             </Link>
                         </Col>

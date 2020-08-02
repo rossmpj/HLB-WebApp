@@ -55,7 +55,7 @@ class FormularioPrograma extends React.Component {
                             setTimeout(() => {
                                 message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
                                 }, 1000);
-                                this.props.history.push("/programa");
+                                this.props.history.push("/sistemas/programa");
                                 })
                     } else {
                         Axios.editar_programa(programa).then(res => {
@@ -63,7 +63,7 @@ class FormularioPrograma extends React.Component {
                             setTimeout(() => {
                                 message.success({ content: "Edición realizada satisfactoriamente", key, duration: 3 });
                             }, 1000);
-                            this.props.history.push("/programa");
+                            this.props.history.push("/sistemas/programa");
                         })
                     }
                 }
@@ -104,7 +104,7 @@ class FormularioPrograma extends React.Component {
         return (
             <Content> 
                 <div className="div-container-title">      
-                    <VistaFormulario enlace='/programa' titulo={this.state.titulo}></VistaFormulario>
+                    <VistaFormulario enlace='/sistemas/programa' titulo={this.state.titulo}></VistaFormulario>
                     <div className="div-border-top" >
                         <div className="div-container"> 
                             <Form {...layout}
@@ -127,7 +127,7 @@ class FormularioPrograma extends React.Component {
                         
                                 <Form.Item {...tailLayout}>
                                     <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
-                                    <Link to='/programa'>
+                                    <Link to='/sistemas/programa'>
                                         <Button type="primary">Cancelar</Button>
                                     </Link>
                                 </Form.Item>

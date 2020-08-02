@@ -5,15 +5,18 @@ import Pusher from 'pusher-js';
 import Auth from '../../Login/Auth';
 import AxiosSolicitud from '../../Servicios/AxiosSolicitud';
 import '../../custom-antd.css';
+
 const { Header } = Layout;
 const { SubMenu } = Menu;
+
 export default class HeaderComp extends React.Component {
   state = {
     pendientes: 0,
+    isNotSistemas: Auth.isNotSistemas()
   };
 
   componentDidMount() {
-    if (!this.esEmpleado()) {
+    if (!this.state.isNotSistemas) {
       const pusher = new Pusher('2d39c81bffd91db217b5', { cluster: 'us2', encrypted: true });
       const channel = pusher.subscribe('solicitud');
       channel.bind('notificar', data => {
@@ -52,8 +55,15 @@ export default class HeaderComp extends React.Component {
     }
     return '';
   }
-  esEmpleado() {
-    return Auth.getDataLog().user.rol.toLowerCase().indexOf('empleado') > -1
+
+  getRoutePerfil = () =>{
+    if(Auth.isFinanzas()){
+      return '/finanzas';
+    }
+    if(Auth.isEmpleado()){
+      return '/empleado';
+    }
+    return '/sistemas'
   }
 
 
@@ -61,11 +71,11 @@ export default class HeaderComp extends React.Component {
     return (
       <Header className="site-layout-background" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
         <Menu theme="dark" mode="horizontal"  >
-          {this.esEmpleado() ? null : <SubMenu
+          {this.state.isNotSistemas ? null : <SubMenu
             key="notificacion"
             title={
               <div>
-                <Link to="/solicitud_sistemas">
+                <Link to="/sistemas/solicitudes">
                   <Badge count={this.state.pendientes} overflowCount={99}>
                     <Icon type="bell" />
                   </Badge>
@@ -83,7 +93,7 @@ export default class HeaderComp extends React.Component {
               </span>
             }
           >
-            <Menu.Item key="40">Mi Perfil<Link to={this.esEmpleado() ? '/empleado/perfil' : "/sistemas/perfil"} /></Menu.Item>
+            <Menu.Item key="40">Mi Perfil<Link to={this.getRoutePerfil() + '/perfil'} /></Menu.Item>
             <Menu.Item key="30" onClick={(e) => { Auth.logout() }} >Cerrar Sesion<Link to="/login" /></Menu.Item>
           </SubMenu>
 

@@ -190,7 +190,7 @@ class FormularioCorreo extends React.Component {
 
                     <Form.Item {...tailLayout}>
                         <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
-                        <Link to='/correo'>
+                        <Link to='/sistemas/correo'>
                             <Button type="primary">Cancelar</Button>
                         </Link>
                     </Form.Item>

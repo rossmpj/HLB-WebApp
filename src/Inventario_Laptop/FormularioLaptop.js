@@ -266,7 +266,7 @@ class FormularioLaptop extends React.Component {
                     setTimeout(() => {
                     message.success({ content: 'Registro modificado satisfactoriamente', key, duration: 3 });
                     }, 1000);
-                    this.props.history.push("/laptop");
+                    this.props.history.push("/sistemas/laptop");
                 }).catch(err =>{
                     if (err.response) {
                         message.error(err.response.data.log, 4)
@@ -275,7 +275,7 @@ class FormularioLaptop extends React.Component {
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
                     }
                 })
-                this.props.history.push("/laptop");
+                this.props.history.push("/sistemas/laptop");
             }else{
                 console.log("intentando")
                 Axios.crear_laptop(this.state).then(res => {
@@ -283,7 +283,7 @@ class FormularioLaptop extends React.Component {
                 setTimeout(() => {
                     message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
                 }, 1000);
-                this.props.history.push("/laptop");
+                this.props.history.push("/sistemas/laptop");
                 }).catch(err =>{
                     if (err.response) {
                         message.error(err.response.data.log, 4)
@@ -292,7 +292,7 @@ class FormularioLaptop extends React.Component {
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
                     }
                 })
-                this.props.history.push("/laptop");
+                this.props.history.push("/sistemas/laptop");
             }
         }catch(error) {
             console.log(error)
@@ -378,7 +378,7 @@ class FormularioLaptop extends React.Component {
         return(
             <Content>
                 <div className="div-container-title">                          
-                    <VistaFormulario enlace='/laptop' titulo={this.state.titulo}></VistaFormulario>
+                    <VistaFormulario enlace='/sistemas/laptop' titulo={this.state.titulo}></VistaFormulario>
                     <div className="div-border-top" >
                         <div className="div-container"> 
                             <Steps 

@@ -7,6 +7,7 @@ import {
 } from 'antd';
 import FormularioIp from './FormularioIp';
 import { Link } from 'react-router-dom';
+
 const { Title } = Typography;
 
 class VistaIp extends React.Component {
@@ -32,7 +33,7 @@ class VistaIp extends React.Component {
                 <Row>
                     <Col span={12}><Title level={2}>{this.state.titulo}</Title></Col>
                     <Col className='flexbox'>
-                        <Link to={{ pathname: '/ip' }} ><Button type="primary" icon="left">Volver</Button></Link>
+                        <Link to={{ pathname: '/sistemas/ip' }} ><Button type="primary" icon="left">Volver</Button></Link>
                     </Col>
                 </Row>
                 <div className="div-border-top" >

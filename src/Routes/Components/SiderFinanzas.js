@@ -55,9 +55,6 @@ export default class SiderGeneral extends React.Component{
                 <Menu.Item key="varios"><Icon type="appstore" />Otros equipos
                 <Link to="/finanzas/otrosEquipos" />
                 </Menu.Item>
-                {/* <Menu.Item key="ip"><Icon type="cluster" />IP
-                <Link to="/finanzas/ip" />
-                </Menu.Item> */}
               </SubMenu>
               
 

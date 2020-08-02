@@ -2,7 +2,7 @@ import axios from 'axios';
 import VariableGlobal from './VariableGlobal'
 export default class AxiosLaptop {
   static instanceAxios = axios.create({
-    baseURL: VariableGlobal.baseUR,
+    baseURL: VariableGlobal.baseURL,
   });
 
   static listar_laptops = () => {

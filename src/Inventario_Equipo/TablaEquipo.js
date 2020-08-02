@@ -4,6 +4,8 @@ import ExcelExportEquipo from './ExcelExportEquipo';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosTipo';
 import FuncionesAuxiliares from '../FuncionesAuxiliares';
+import Auth from '../Login/Auth';
+
 const { Title } = Typography;
 
 class TablaEquipo extends React.Component {
@@ -20,6 +22,7 @@ class TablaEquipo extends React.Component {
             index: 0,
             currentDataSource:[],
             disabelExport:true,
+            isNotSistemas: Auth.isNotSistemas()
         };
 
     }
@@ -77,7 +80,6 @@ class TablaEquipo extends React.Component {
         });
     }
 
-
     busqueda_array(arr, dataIndex, value) {
         if (arr[dataIndex] !== null) {
             return arr[dataIndex]
@@ -131,24 +133,46 @@ class TablaEquipo extends React.Component {
             searchedColumn: dataIndex,
         });
     };
+    
     handleReset = clearFilters => {
         clearFilters();
         this.setState({ searchText: '' });
     };
-
-
-
-    render() {
+    
+    getColumns = () => {
+        let route = this.state.isNotSistemas ? '/finanzas' : '/sistemas';
         let { sortedInfo, filteredInfo } = this.state;
         sortedInfo = sortedInfo || {};
         filteredInfo = filteredInfo || {};
-        const columns = [
+        let actionColumn = [
+            {
+                title: 'Acción',
+                key: 'accion',
+                fixed: 'right',
+                render: (text, record) => (
+                    <div>
+                        <Link to={{ pathname:'/sistemas/otrosequipos/form', state: { info: record, titulo: "Editar equipo" } }}>
+                            <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
+                        </Link>
+                        <Popconfirm
+                            title="¿Desea dar de baja este equipo?"
+                            okText="Si" cancelText="No"
+                            onConfirm={() => this.handleDelete(record.key)}>
+                                {record.estado_operativo === 'B' ?
+                            <Button disabled type="danger" icon="delete" size="small" /> : <Button type="danger" icon="delete" size="small" />}
+                        </Popconfirm>
+                    </div>
+                ),
+            },
+        ];
+
+        let generalColumns = [
             {
                 title: 'Código',
                 dataIndex: 'codigo',
                 key: 'codigo',
                 fixed: 'left',
-                render: (text, record) => <Link to={{ pathname: '/equipo/view/'+record.key}}>{text}</Link>,
+                render: (text, record) => <Link to={{ pathname: route+'/equipo/view/'+record.key}}>{text}</Link>,
                 ...this.getColumnSearchProps('codigo')
             },
             {
@@ -230,7 +254,6 @@ class TablaEquipo extends React.Component {
                     </div>
                   ),
             },
-
             {
                 title: 'Tipo',
                 dataIndex: 'tipo_equipo',
@@ -243,7 +266,6 @@ class TablaEquipo extends React.Component {
                 key: 'modelo',
                 ...this.getColumnSearchProps('modelo')
             },
-
             {
                 title: 'Marca',
                 dataIndex: 'marca',
@@ -279,32 +301,23 @@ class TablaEquipo extends React.Component {
                 dataIndex: 'descripcion',
                 key: 'descripcion'
             },
-            {
-                title: 'Acción',
-                key: 'accion',
-                fixed: 'right',
-                render: (text, record) => (
-                    <div>
-                        <Link to={{ pathname: '/otrosequipos/form', state: { info: record, titulo: "Editar equipo" } }}>
-                            <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
-                        </Link>
-                        <Popconfirm
-                            title="¿Desea dar de baja este equipo?"
-                            okText="Si" cancelText="No"
-                            onConfirm={() => this.handleDelete(record.key)}>
-                                {record.estado_operativo === 'B' ?
-                            <Button disabled type="danger" icon="delete" size="small" /> : <Button type="danger" icon="delete" size="small" />}
-                        </Popconfirm>
-                    </div>
-                ),
-            },
+            
         ];
+
+        return this.state.isNotSistemas ? generalColumns : generalColumns.concat(actionColumn) 
+    }
+
+
+    render() {
+        
+        let columns = this.getColumns();
+        
         return (
             <div className="div-container-title">
                 <Row>
                     <Col span={12}><Title level={2}>Inventario equipos informáticos</Title></Col>
-                    <Col className='flexbox'>
-                        <Link to={{ pathname: '/otrosequipos/form', state: { titulo: "Nuevo equipo" } }} >
+                    <Col hidden = {this.state.isNotSistemas} className='flexbox'>
+                        <Link to={{ pathname: '/sistemas/otrosequipos/form', state: { titulo: "Nuevo equipo" } }} >
                             <Button type="primary" icon="plus">Agregar tipo de equipo</Button>
                         </Link>
                     </Col>
@@ -314,7 +327,7 @@ class TablaEquipo extends React.Component {
                         <Row>
                             <Col className='flexbox'>
                                 {/* <ButtonGroup> */}
-                                    <Button type="primary" icon="import">Importar</Button>
+                                    <Button hidden = {this.state.isNotSistemas} type="primary" icon="import">Importar</Button>
                                     <ExcelExportEquipo data={this.state.currentDataSource} dis = {this.state.disabelExport} masiva = {false}></ExcelExportEquipo>
 
                                     {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}

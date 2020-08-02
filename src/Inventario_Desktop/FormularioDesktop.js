@@ -348,7 +348,7 @@ class FormularioDesktop extends React.Component {
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
                     }
                 })
-                this.props.history.push("/desktop");
+                this.props.history.push("/sistemas/desktop");
             }else{
                 console.log("intentando")
                 Axios.crear_desktop(this.state).then(res => {
@@ -364,7 +364,7 @@ class FormularioDesktop extends React.Component {
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
                     }
                 })
-                this.props.history.push("/desktop");
+                this.props.history.push("/sistemas/desktop");
             }
         }catch(error) {
             console.log(error)
@@ -564,7 +564,7 @@ class FormularioDesktop extends React.Component {
         return(
             <Content id={"conteniht"}>
                 <div id={"contenth1"} className="div-container-title">      
-                    <VistaFormulario enlace='/desktop' titulo={this.state.titulo}></VistaFormulario> 
+                    <VistaFormulario enlace='/sistemas/desktop' titulo={this.state.titulo}></VistaFormulario> 
                     <div id={"styleform1"} className="div-border-top" >
                         <div id={"conth1"} className="div-container"> 
                             <Steps id={"srhe"}

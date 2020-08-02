@@ -26,6 +26,10 @@ export default class AxiosAuth {
         return AxiosAuth.instanceAxios.get(`/mostrar_usuario_det/${username}`);
     }
 
+    static editar_user_web = (user) => {
+        return AxiosAuth.instanceAxios.put(`/editar_user_web`,user);
+    }
+
     static getProfile = () => {
         return AxiosAuth.instanceAxios.get('/user',
             {

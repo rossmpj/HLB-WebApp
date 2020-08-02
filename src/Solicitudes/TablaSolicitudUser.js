@@ -291,7 +291,7 @@ class TablaSolicitudUser extends React.Component {
                 <Row>
                     <Col span={12}><Title level={2}>Solicitudes</Title></Col>
                     <Col className='flexbox'>
-                        <Link to={{ pathname: '/solicitud/form', state: { titulo: "Nueva Solicitud" } }} >
+                        <Link to={{ pathname: '/empleado/solicitud/form', state: { titulo: "Nueva Solicitud" } }} >
                             <Button type="primary" icon="plus">Crear una Nueva Solicitud</Button>
                         </Link>
                     </Col>

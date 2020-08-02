@@ -1,13 +1,13 @@
 import React from 'react';
 import { Tabs, Row, Col, Typography, Button, Descriptions, Badge, message } from 'antd';
 import { RobotOutlined, UserOutlined } from '@ant-design/icons';
-import SinResultados from '../Componentes/SinResultados'
+import SinResultados from '../Componentes/SinResultados';
 import Axios from '../Servicios/AxiosTipo';
 import { Link } from 'react-router-dom';
+import Auth from '../Login/Auth';
+
 const { TabPane } = Tabs;
 const { Title } = Typography;
-
-
 
 class DetalleEquipo extends React.Component {
     constructor(props) {
@@ -30,7 +30,8 @@ class DetalleEquipo extends React.Component {
             campo1: undefined,
             campo2: undefined,
             label1: "",
-            label2: ""
+            label2: "",
+            route: Auth.isNotSistemas() ? '/finanzas' : '/sistemas'
         }
     }
 
@@ -144,7 +145,7 @@ class DetalleEquipo extends React.Component {
                             <Title level={2}>Detalle equipo informático</Title>
                         </Col>
                         <Col className='flexbox'>
-                            <Link to={{ pathname: '/otrosequipos' }}>
+                            <Link to={{ pathname: this.state.route+'/otrosequipos' }}>
                                 <Button type="primary" icon="left">Volver</Button>
                             </Link>
                         </Col>

@@ -4,6 +4,7 @@ import ExcelExportIP from './ExcelExportIP';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosTipo';
 import FuncionesAuxiliares from '../FuncionesAuxiliares';
+
 const { Title } = Typography;
 
 class TablaIp extends React.Component {
@@ -179,7 +180,7 @@ class TablaIp extends React.Component {
                 dataIndex: 'ip',
                 key: 'ip',
                 fixed: 'left',
-                render: (text, record) => <Link to={{ pathname: '/ip/detail/' + record.key }}>{text}</Link>,
+                render: (text, record) => <Link to={{ pathname: '/sistemas/ip/detail/' + record.key }}>{text}</Link>,
                 ...this.getColumnSearchProps('ip')
             },
             {
@@ -314,7 +315,7 @@ class TablaIp extends React.Component {
                 render: (text, record) => (
                     <div>
                         <Link to={{
-                            pathname: '/ip/form',
+                            pathname: '/sistemas/ip/form',
                             state: {
                                 info: record,
                                 titulo: "Editar dirección IP"
@@ -339,7 +340,7 @@ class TablaIp extends React.Component {
                 <Row>
                     <Col span={12}><Title level={2}>Inventario IP</Title></Col>
                     <Col className='flexbox'>
-                        <Link to={{ pathname: '/ip/form', state: { titulo: "Nueva dirección IP" } }} >
+                        <Link to={{ pathname: '/sistemas/ip/form', state: { titulo: "Nueva dirección IP" } }} >
                             <Button type="primary" icon="plus">Agregar dirección IP</Button>
                         </Link>
                     </Col>

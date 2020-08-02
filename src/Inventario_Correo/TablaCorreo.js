@@ -223,7 +223,7 @@ class TablaCorreo extends React.Component {
                 render: (text, record) => (
                     <div>
                         <Link to={{
-                            pathname: '/correo/form',
+                            pathname: '/sistemas/correo/form',
                             state: {
                                 info: record,
                                 titulo: "Editar Correo"
@@ -248,7 +248,7 @@ class TablaCorreo extends React.Component {
                 <Row>
                     <Col span={12}><Title level={2}>Inventario de Correos</Title></Col>
                     <Col className='flexbox'>
-                        <Link to={{ pathname: '/correo/form', state: { titulo: "Nuevo Correo" } }} >
+                        <Link to={{ pathname: '/sistemas/correo/form', state: { titulo: "Nuevo Correo" } }} >
                             <Button type="primary" icon="plus">Agregar Correo</Button>
                         </Link>
                     </Col>

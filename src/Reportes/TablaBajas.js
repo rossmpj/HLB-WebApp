@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-    Button,
-    Row,
-    Col,
-    Table,
-    Input,
-    Icon,
-    message,
-    Typography
-} from 'antd';
+import { Button, Row, Col, Table, Input, Icon, message, Typography } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosReporte'
@@ -16,10 +7,10 @@ import ModalDownload from '../Componentes/ModalDownload';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 import FuncionesAuxiliares from '../FuncionesAuxiliares';
+import Auth from '../Login/Auth'
 
 const { Title } = Typography;
 const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-
 
 class TablaBajas extends React.Component {
     constructor(props) {
@@ -34,7 +25,8 @@ class TablaBajas extends React.Component {
             sortedInfo: null,
             index: 0,
             visible: false,
-            archivo: ""
+            archivo: "",
+            isNotSistemas: Auth.isNotSistemas()
         };
 
     }
@@ -243,17 +235,18 @@ class TablaBajas extends React.Component {
 
     render() {
         const tipo_link = (record) => {
+            let route = this.state.isNotSistemas ? '/finanzas' : '/sistemas';
             switch (record.tipo_equipo.toLowerCase()) {
                 case "impresora":
-                    return '/impresora/view/' + record.key;
+                    return route+'/impresora/view/' + record.key;
                 case "desktop":
-                    return '/desktop/view/' + record.key;
+                    return route+'/desktop/view/' + record.key;
                 case "laptop":
-                    return '/laptop/view/' + record.key;
+                    return route+'/laptop/view/' + record.key;
                 case "router":
-                    return '/router/view/' + record.key;
+                    return route+'/router/view/' + record.key;
                 default:
-                    return '/equipo/view/' + record.key;
+                    return route+'/equipo/view/' + record.key;
             }
         }
         const columns = [

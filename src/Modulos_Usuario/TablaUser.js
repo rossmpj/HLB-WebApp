@@ -5,6 +5,7 @@ import {
 import { Link } from 'react-router-dom';
 import AxiosAuth from '../Servicios/AxiosAuth';
 import FuncionesAuxiliares from '../FuncionesAuxiliares';
+
 const { Title } = Typography;
 
 
@@ -231,16 +232,16 @@ class TablaCorreo extends React.Component {
                 fixed: 'right',
                 render: (text, record) => (
                     <div>
-                        {/* <Link to={{
-                            pathname: '/correo/form',
+                        <Link to={{
+                            pathname: '/sistemas/users/form',
                             state: {
                                 info: record,
-                                titulo: "Editar Correo"
+                                titulo: "Editar Usuario"
                             }
                         }} >
                             <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
                         </Link>
-                        <Popconfirm
+                        {/* <Popconfirm
                             title="¿Desea eliminar este correo?"
                             okText="Si" cancelText="No"
                             onConfirm={() => this.handleDelete(record.key)}>
@@ -257,7 +258,7 @@ class TablaCorreo extends React.Component {
                 <Row>
                     <Col span={12}><Title level={2}>Usuarios Del Sistema</Title></Col>
                     <Col className='flexbox'>
-                        <Link to={{ pathname: '/users/form', state: { titulo: "Nuevo Usuario" } }} >
+                        <Link to={{ pathname: '/sistemas/users/form', state: { titulo: "Nuevo Usuario" } }} >
                             <Button type="primary" icon="plus">Agregar Usuario</Button>
                         </Link>
                     </Col>

@@ -5,6 +5,7 @@ import FuncionesAuxiliares from '../FuncionesAuxiliares'
 import Axios from '../Servicios/AxiosDesktop' 
 import AxiosLaptop from '../Servicios/AxiosLaptop';
 import ExcelExportDesktop from './ExcelExportDesktop';
+import Auth from '../Login/Auth';
 
 const { Title } = Typography;
 const key = 'updatable';
@@ -22,7 +23,8 @@ class TablaDesktop extends React.Component{
             searchedColumn: '',
             index: 0,
             dataSource: [],
-            currentDataSource:[]
+            currentDataSource:[],
+            isNotSistemas: Auth.isNotSistemas()
         };
         this.handleClick = this.handleClick.bind(this);
     }
@@ -143,17 +145,19 @@ class TablaDesktop extends React.Component{
     this.setState({ searchText: '' });
   };
 
-  render() {
+  getColumns = () =>{
+    let route = this.state.isNotSistemas ? '/finanazas' : '/sistemas';
     let { sortedInfo, filteredInfo } = this.state;
     sortedInfo = sortedInfo || {};
     filteredInfo = filteredInfo || {};
-    const columns = [
+
+    let generalColumns = [
       {
         title: 'Código', 
         dataIndex: 'codigo',
         key: 'codigo',
         fixed: 'left',
-        render: (text, record) =>  <Link to={{ pathname: '/desktop/view/'+record.key }} >{text}</Link>,
+        render: (text, record) =>  <Link to={{ pathname: route+'/desktop/view/'+record.key }} >{text}</Link>,
         ...this.getColumnSearchProps('codigo')
       },
       {
@@ -337,14 +341,14 @@ class TablaDesktop extends React.Component{
         title: 'IP',
         dataIndex: 'ip',
         key: 'ip',
-        render: (text, record) =>  <Link to={{ pathname: '/ip/view/'+record.ip}} >{text}</Link>,
+        render: (text, record) =>  <Link to={{ pathname: route+'/ip/view/'+record.ip}} >{text}</Link>,
       },
       {
         title: 'Monitor',
         dataIndex: 'monitor',
         key: 'monitor',
         render: monitor => 
-            <Link key={monitor.codigo} to={{ pathname: '/otros/view', state: { info: monitor, tipo_equipo: 'monitor' } }} >
+            <Link key={monitor.codigo} to={{ pathname: route+'/otros/view', state: { info: monitor, tipo_equipo: 'monitor' } }} >
                 {monitor.codigo}
             </Link>,
       },
@@ -353,7 +357,7 @@ class TablaDesktop extends React.Component{
         dataIndex: 'teclado',
         key: 'teclado',
         render: teclado => 
-            <Link key={teclado.codigo} to={{ pathname: '/otros/view', state: { info: teclado, tipo_equipo: 'teclado' } }} >
+            <Link key={teclado.codigo} to={{ pathname: route+'/otros/view', state: { info: teclado, tipo_equipo: 'teclado' } }} >
                 {teclado.codigo}
             </Link>
       }, 
@@ -361,7 +365,7 @@ class TablaDesktop extends React.Component{
         title: 'Parlantes',
         dataIndex: 'parlantes',
         key: 'parlantes',
-        render: parlantes => <Link key={parlantes.codigo} to={{ pathname: '/otros/view', state: { info: parlantes, tipo_equipo: 'parlantes' } }} >
+        render: parlantes => <Link key={parlantes.codigo} to={{ pathname: route+'/otros/view', state: { info: parlantes, tipo_equipo: 'parlantes' } }} >
         {parlantes.codigo}
      </Link>,
         //text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'parlantes'} }} >{text}</Link>,
@@ -370,7 +374,7 @@ class TablaDesktop extends React.Component{
         title: 'Mouse',
         dataIndex: 'mouse',
         key: 'mouse',
-        render: mouse => <Link key={mouse.codigo} to={{ pathname: '/otros/view', state: { info: mouse, tipo_equipo: 'mouse' } }} >
+        render: mouse => <Link key={mouse.codigo} to={{ pathname: route+'/otros/view', state: { info: mouse, tipo_equipo: 'mouse' } }} >
         {mouse.codigo}
      </Link>,
         //text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'mouse'} }} >{text}</Link>,
@@ -379,7 +383,7 @@ class TablaDesktop extends React.Component{
         title: 'Mainboard',
         dataIndex: 'mainboard',
         key: 'mainboard',
-        render: mainboard => <Link key={mainboard.codigo} to={{ pathname: '/otros/view', state: { info: mainboard, tipo_equipo: 'tarjeta madre' } }} >
+        render: mainboard => <Link key={mainboard.codigo} to={{ pathname: route+'/otros/view', state: { info: mainboard, tipo_equipo: 'tarjeta madre' } }} >
         {mainboard.codigo}
      </Link>,
         //text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'mainboard'} }} >{text}</Link>,
@@ -393,7 +397,7 @@ class TablaDesktop extends React.Component{
           <div>
             {rams.map(memoria => {
                         return (
-                            <Link key={memoria.codigo} to={{ pathname: '/otros/view', state: { info: memoria, tipo_equipo: 'memoria RAM' } }} >
+                            <Link key={memoria.codigo} to={{ pathname: route+'/otros/view', state: { info: memoria, tipo_equipo: 'memoria RAM' } }} >
                             <Tag style={{margin: 2}} color="cyan" key={memoria.id_equipo}>{memoria.codigo}</Tag>
                             </Link>              
                         );
@@ -410,7 +414,7 @@ class TablaDesktop extends React.Component{
           <div>
              {discos.map(disco => {
                     return (
-                        <Link key={disco.codigo} to={{ pathname: '/otros/view', state: { info: disco, tipo_equipo: 'disco duro' } }} >
+                        <Link key={disco.codigo} to={{ pathname: route+'/otros/view', state: { info: disco, tipo_equipo: 'disco duro' } }} >
                         <Tag style={{margin: 2}} color="blue" key={disco.id_equipo}>{disco.codigo}</Tag>
                         </Link>              
                     );
@@ -422,7 +426,7 @@ class TablaDesktop extends React.Component{
         title: 'Procesador',
         dataIndex: 'procesador',
         key: 'procesador',
-        render: proces => <Link key={proces.codigo} to={{ pathname: '/otros/view', state: { info: proces, tipo_equipo: 'procesador' } }} >
+        render: proces => <Link key={proces.codigo} to={{ pathname: route+'/otros/view', state: { info: proces, tipo_equipo: 'procesador' } }} >
         {proces.codigo}
      </Link>,
         //text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'procesador'} }} >{text}</Link>,
@@ -431,7 +435,7 @@ class TablaDesktop extends React.Component{
         title: 'Tarjeta de red',
         dataIndex: 'tarj_red',
         key: 'tarj_red',
-        render: tred => <Link key={tred.codigo} to={{ pathname: '/otros/view', state: { info: tred, tipo_equipo: 'tarjeta de red' } }} >
+        render: tred => <Link key={tred.codigo} to={{ pathname: route+'/otros/view', state: { info: tred, tipo_equipo: 'tarjeta de red' } }} >
         {tred.codigo}
      </Link>,
         //text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'tarjeta de red'} }} >{text}</Link>,
@@ -440,7 +444,7 @@ class TablaDesktop extends React.Component{
         title: 'Case',
         dataIndex: 'case',
         key: 'case',
-        render: carcasa => <Link key={carcasa.codigo} to={{ pathname: '/otros/view', state: { info: carcasa, tipo_equipo: 'carcasa' } }} >
+        render: carcasa => <Link key={carcasa.codigo} to={{ pathname: route+'/otros/view', state: { info: carcasa, tipo_equipo: 'carcasa' } }} >
         {carcasa.codigo}
      </Link>,
         //text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'case'} }} >{text}</Link>,
@@ -449,7 +453,7 @@ class TablaDesktop extends React.Component{
         title: 'Fuente poder',
         dataIndex: 'f_poder',
         key: 'f_poder',
-        render: f_poder => <Link key={f_poder.codigo} to={{ pathname: '/otros/view', state: { info: f_poder, tipo_equipo: 'fuente de poder' } }} >
+        render: f_poder => <Link key={f_poder.codigo} to={{ pathname: route+'/otros/view', state: { info: f_poder, tipo_equipo: 'fuente de poder' } }} >
         {f_poder.codigo}
      </Link>,
         //text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'fuente de poder' } }} >{text}</Link>,
@@ -458,7 +462,7 @@ class TablaDesktop extends React.Component{
         title: 'Alimentación',
         dataIndex: 'f_alim',
         key: 'f_alim',
-        render: f_alim => <Link key={f_alim.codigo} to={{ pathname: '/otros/view', state: { info: f_alim, tipo_equipo: f_alim.tipo_equipo } }} >
+        render: f_alim => <Link key={f_alim.codigo} to={{ pathname: route+'/otros/view', state: { info: f_alim, tipo_equipo: f_alim.tipo_equipo } }} >
         {f_alim.codigo}
      </Link>,
         //text =>  <Link to={{ pathname: '/otros/view', state: { info: text, tipo_equipo: 'fuente de alimentación'} }} >{text}</Link>,
@@ -483,13 +487,16 @@ class TablaDesktop extends React.Component{
         dataIndex: 'descripcion',
         key: 'descripcion',
       },
+    ];
+
+    let actionsColumns = [
       {
         title: 'Acción',
         key: 'accion',
         fixed: 'right',
         render: (text, record) => (
             <span>
-              <Link to={{ pathname: '/desktop/form', state: { info: record, titulo: "Editar computadora", disabled: true } }} >
+              <Link to={{ pathname: '/sistemas/desktop/form', state: { info: record, titulo: "Editar computadora", disabled: true } }} >
               {record.estado === 'B' ? <Button disabled style= {{marginRight: '2px'}} size="small" type="primary" icon="edit" /> :
               <Button  style= {{marginRight: '2px'}} size="small" type="primary" icon="edit" />}
               </Link>
@@ -503,14 +510,21 @@ class TablaDesktop extends React.Component{
         ),
       },
     ];
+
+    return this.state.isNotSistemas ? generalColumns : generalColumns.concat(actionsColumns) 
+  }
+
+  render() {
+
+    let columns = this.getColumns();
       
     return (
       <div>
         <div className="div-container-title">    
           <Row>
             <Col span={12}><Title level={2}>Inventario de computadoras</Title></Col>
-            <Col className='flexbox'>
-              <Link to={{ pathname: '/desktop/form', state: { titulo: "Nueva computadora" } }} > 
+            <Col hidden={this.state.isNotSistemas} className='flexbox'>
+              <Link to={{ pathname: '/sistemas/desktop/form', state: { titulo: "Nueva computadora" } }} > 
                 <Button type="primary" icon="plus">Agregar computadora</Button>
               </Link> 
             </Col>
@@ -520,7 +534,7 @@ class TablaDesktop extends React.Component{
         <Row>
           <Col className='flexbox'>
             {/* <ButtonGroup size="medium"> */}
-              <Button type="primary" icon="import">Importar</Button>
+              <Button hidden={this.state.isNotSistemas} type="primary" icon="import">Importar</Button>
               <ExcelExportDesktop data={this.state.currentDataSource} dis = {this.state.disabelExport} ></ExcelExportDesktop>
               {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
             {/* </ButtonGroup> */}

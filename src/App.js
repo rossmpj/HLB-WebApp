@@ -41,10 +41,7 @@ import PrivateRouteEmpleado from './Routes/PrivateRouteEmpleado'
 import PrivateRouteGeneral from './Routes/PrivateRouteGeneral';
 import PublicRoute from './Routes/PublicRoute';
 import PublicLayout from './Routes/Layouts/PublicLayout'
-<<<<<<< HEAD
 import VistaUser from './Modulos_Usuario/VistaUser'
-=======
->>>>>>> 1b553824940f43fb9a039b08f7167cbe2dd2fa15
 import PerfilUser from './Modulos_Usuario/PerfilUser'
 import TablaUser from './Modulos_Usuario/TablaUser'
 import PrivateRouteFinanzas from './Routes/PrivateRouteFinanzas';
@@ -60,38 +57,29 @@ class App extends React.Component {
           <HomeRoute exact path='/'/>
           <PublicRoute exact path='/login' component={LoginHLB} layout = {PublicLayout}  />
 
-          {/* Routes para empelados institucionales */}
+          {/* Routes para empleados institucionales */}
           <PrivateRouteEmpleado exact path = '/empleado' component = {Home} layout = {EmployLayout} />
-          <PrivateRouteEmpleado exact path = '/solicitud/form' component = {VistaSolicitud} layout = {EmployLayout} />
-          <PrivateRouteEmpleado exact path = '/solicitud_empleado' component = {TablaSolicitudUser} layout = {EmployLayout} />
+          <PrivateRouteEmpleado exact path = '/empleado/solicitud/form' component = {VistaSolicitud} layout = {EmployLayout} />
+          <PrivateRouteEmpleado exact path = '/empleado/solicitudes' component = {TablaSolicitudUser} layout = {EmployLayout} />
           <PrivateRouteEmpleado exact path = '/empleado/perfil/' component = {PerfilUser} layout = {EmployLayout} />
 
           {/* Routes para finanzas */}
           <PrivateRouteFinanzas exact path = '/finanzas' component = {Home} layout = {FinanzasLayout} />
+          <PrivateRouteFinanzas exact path = '/finanzas/perfil/' component = {PerfilUser} layout = {FinanzasLayout} />
           <PrivateRouteFinanzas exact path='/finanzas/router' component={TablaRouter} layout = {FinanzasLayout} />
           <PrivateRouteFinanzas exact path='/finanzas/router/view/:id' component={DetalleRouter} layout = {FinanzasLayout} />
-          <PrivateRouteFinanzas exact path='/finanzas/router/form' component={FormularioRouter} layout = {FinanzasLayout} />
           <PrivateRouteFinanzas exact path='/finanzas/desktop' component={TablaDesktop} layout = {FinanzasLayout} />
           <PrivateRouteFinanzas exact path='/finanzas/desktop/view/:id' component={DetalleDesktop} layout = {FinanzasLayout} />
-          <PrivateRouteFinanzas exact path='/finanzas/desktop/form' component={FormularioDesktop} layout = {FinanzasLayout} />
           <PrivateRouteFinanzas exact path='/finanzas/laptop' component={TablaLaptop} layout = {FinanzasLayout} />
           <PrivateRouteFinanzas exact path='/finanzas/laptop/view/:id' component={DetalleLaptop} layout = {FinanzasLayout} />
-          <PrivateRouteFinanzas exact path='/finanzas/laptop/form' component={FormularioLaptop} layout = {FinanzasLayout} />
           <PrivateRouteFinanzas exact path='/finanzas/otros/view' component={DetalleOtrosEquipos} layout = {FinanzasLayout} />
           <PrivateRouteFinanzas exact path='/finanzas/ip/view/:ip' component={DetalleIP} layout = {FinanzasLayout} />
           <PrivateRouteFinanzas exact path='/finanzas/impresora' component={Impresora} layout = {FinanzasLayout} />
-          {/* <PrivateRouteFinanzas exact path='/finanzas/ip' component={TablaIp} layout = {FinanzasLayout} /> */}
           <PrivateRouteFinanzas exact path='/finanzas/otrosequipos' component={HomeEquipo} layout = {FinanzasLayout} />
-          <PrivateRouteFinanzas exact path='/finanzas/otrosequipos/form' component={VistaEquipo} layout = {FinanzasLayout} />
-          {/* <PrivateRouteFinanzas exact path='/finanzas/ip/form' component={VistaIp} layout = {GeneralLayout} />
-          <PrivateRouteFinanzas exact path='/finanzas/ip/detail/:id' component={DetalleIIp} layout = {GeneralLayout} /> */}
-          <PrivateRouteFinanzas exact path='/finanzas/impresora/form' component={VistaImpresora} layout = {FinanzasLayout} />
           <PrivateRouteFinanzas exact path='/finanzas/impresora/view/:id' component={DetalleImpresora} layout = {FinanzasLayout} />
           <PrivateRouteFinanzas exact path='/finanzas/equipo/view/:id' component={DetalleEquipo} layout = {FinanzasLayout} />
           <PrivateRouteFinanzas exact path='/finanzas/reportes/general' component={TablaReporte} layout = {FinanzasLayout} />
           <PrivateRouteFinanzas exact path='/finanzas/reportes/de-baja' component={TablaBajas} layout = {FinanzasLayout} />
-
-
 
           {/* Routes para usuarios de sistemas */}
           <PrivateRouteGeneral exact path = '/sistemas' component = {Home} layout = {GeneralLayout} />
@@ -126,7 +114,7 @@ class App extends React.Component {
           <PrivateRouteGeneral exact path='/sistemas/correo/form' component={VistaCorreo} layout = {GeneralLayout} />
           <PrivateRouteGeneral exact path='/sistemas/users/form' component={VistaUser} layout = {GeneralLayout} />
           <PrivateRouteGeneral exact path='/sistemas/users' component={TablaUser} layout = {GeneralLayout} />
-          <PrivateRouteGeneral exact path='/solicitud_sistemas' component={TablaSolicitudSistemas} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/solicitudes' component={TablaSolicitudSistemas} layout = {GeneralLayout} />
         
       </Router>
     );

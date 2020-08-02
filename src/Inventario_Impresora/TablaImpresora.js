@@ -3,7 +3,9 @@ import { Button, Row, Col, Table, Input, Icon, Popconfirm, message, Typography }
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosTipo';
 import FuncionesAuxiliares from '../FuncionesAuxiliares';
-import ExcelExportImpresora from './ExcelExportImpresora'
+import ExcelExportImpresora from './ExcelExportImpresora';
+import Auth from '../Login/Auth';
+
 const { Title } = Typography;
 
 class TablaImpresora extends React.Component {
@@ -18,7 +20,8 @@ class TablaImpresora extends React.Component {
             filteredInfo: null,
             sortedInfo: null,
             index: 0,
-            currentDataSource:[]
+            currentDataSource:[],
+            isNotSistemas: Auth.isNotSistemas()
         };
     }
 
@@ -147,15 +150,15 @@ class TablaImpresora extends React.Component {
         this.setState({ searchText: '' });
     };
 
-
-    render() {
-        const columns = [
+    getColumns = () =>{
+        let route = this.state.isNotSistemas ? '/finanzas' : '/sistemas';
+        let generalColumns = [
             {
                 title: 'Código',
                 dataIndex: 'codigo',
                 key: 'codigo',
                 fixed: 'left',
-                render: (text, record) => <Link to={{ pathname: '/impresora/view/'+record.id_equipo}}>{text}</Link>,
+                render: (text, record) => <Link to={{ pathname: route+'/impresora/view/'+record.id_equipo}}>{text}</Link>,
                 ...this.getColumnSearchProps('codigo')
             },
             {
@@ -321,6 +324,10 @@ class TablaImpresora extends React.Component {
                 dataIndex: 'descripcion',
                 key: 'descripcion'
             },
+            
+        ];
+
+        let actionsColumns = [
             {
                 title: 'Acción',
                 key: 'accion',
@@ -328,7 +335,7 @@ class TablaImpresora extends React.Component {
                 render: (text, record) => (
                     <div>
                         <Link to={{
-                            pathname: '/impresora/form',
+                            pathname: '/sistemas/impresora/form',
                             state: {
                                 info: record,
                                 titulo: "Editar impresora"
@@ -348,13 +355,20 @@ class TablaImpresora extends React.Component {
             },
         ];
 
+        return this.state.isNotSistemas ? generalColumns : generalColumns.concat(actionsColumns) 
+    }
+
+
+    render() {
+
+        let columns = this.getColumns();
 
         return (
             <div className="div-container-title">
                 <Row>
                     <Col span={12}><Title level={2}>Inventario Impresora</Title></Col>
-                    <Col className='flexbox'>
-                        <Link to={{ pathname: '/impresora/form', state: { titulo: "Nueva Impresora" } }} >
+                    <Col hidden = {this.state.isNotSistemas} className='flexbox'>
+                        <Link to={{ pathname: '/sistemas/impresora/form', state: { titulo: "Nueva Impresora" } }} >
                             <Button type="primary" icon="plus">Agregar Impresora</Button>
                         </Link>
                     </Col>
@@ -364,7 +378,7 @@ class TablaImpresora extends React.Component {
                         <Row>
                             <Col className='flexbox'>
                                 {/* <ButtonGroup style={{ align: 'right' }}> */}
-                                    <Button type="primary" icon="import">Importar</Button>
+                                    <Button hidden = {this.state.isNotSistemas} type="primary" icon="import">Importar</Button>
                                     <ExcelExportImpresora data={this.state.currentDataSource} dis = {this.state.disabelExport}></ExcelExportImpresora>
                                     {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
                                 {/* </ButtonGroup> */}

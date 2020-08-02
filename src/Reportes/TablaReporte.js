@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosReporte'
 import ModalDownload from '../Componentes/ModalDownload';
 import FuncionesAuxiliares from '../FuncionesAuxiliares';
+import Auth from '../Login/Auth';
 /* import {saveAs} from 'file-saver';
 import * as XLSX from 'xlsx'; */
 
@@ -30,7 +31,8 @@ class TablaReporte extends React.Component {
             archivo: "",
             currentDataSource:[],
             disabelExport:true,
-            data_detallada:{}
+            data_detallada:{},
+            isNotSistemas: Auth.isNotSistemas()
         };
 
     }
@@ -73,7 +75,7 @@ class TablaReporte extends React.Component {
                 datos.push(registro)
             });
             this.transform_data_detallada(res.data.detalles);
-            this.setState({ dataSource: datos, currentDataSource:datos, disabelExport:false});
+            this.setState({ dataSource:datos, currentDataSource:datos, disabelExport:false});
         }).catch(err => {
             console.log(err)
             message.error('No se pueden cargar los datos, revise la conexión con el servidor', 4);
@@ -199,17 +201,18 @@ class TablaReporte extends React.Component {
 
     render() {
         const tipo_link = (record) => {
+            let route = this.state.isNotSistemas ? '/finanzas' : '/sistemas'
             switch (record.tipo_equipo.toLowerCase()) {
                 case "impresora":
-                    return '/impresora/view/'+record.key;
+                    return route+'/impresora/view/'+record.key;
                 case "desktop":
-                    return '/desktop/view/'+record.key;
+                    return route+'/desktop/view/'+record.key;
                 case "laptop":
-                    return '/laptop/view/'+record.key
+                    return route+'/laptop/view/'+record.key
                 case "router":
-                    return '/router/view/'+record.key;
+                    return route+'/router/view/'+record.key;
                 default:
-                    return '/equipo/view/'+record.key;
+                    return route+'/equipo/view/'+record.key;
             }
         }
         const columns = [

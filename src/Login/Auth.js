@@ -7,7 +7,8 @@ const Auth = {
         localStorage.removeItem('userdata');
     },
     getAuth() {
-       return localStorage.getItem('userdata') !== null && localStorage.getItem('userdata') !== undefined;
+        // console.log(localStorage.getItem('userdata'),'hhh')
+        return localStorage.getItem('userdata') !== null && localStorage.getItem('userdata') !== undefined;
     },
     getDataLog(){
         return JSON.parse(localStorage.getItem('userdata')) ;
@@ -19,7 +20,7 @@ const Auth = {
     isFinanzas(){
         return JSON.parse(localStorage.getItem('userdata')).user.rol.toLowerCase().indexOf('finanzas') > -1
     },
-    isEmpelado(){
+    isEmpleado(){
         return JSON.parse(localStorage.getItem('userdata')).user.rol.toLowerCase().indexOf('empleado') > -1
     } 
 };

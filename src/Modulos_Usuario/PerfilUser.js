@@ -1,54 +1,36 @@
 import React from 'react';
 import '../App.css';
-import { Form, Input, Button, Layout, Typography, Row, Col, Select } from 'antd';
+import { Form, Input, Button, Layout, Typography, Row, Col, Select, message } from 'antd';
 import '../custom-antd.css';
 import InputComp from '../Componentes/InputComponent';
 import AxiosTipo from '../Servicios/AxiosTipo';
 //import { Link } from 'react-router-dom';
-import AxiosAuth from '../Servicios/AxiosAuth'
+import AxiosAuth from '../Servicios/AxiosAuth';
 //import VistaFormulario from '../Componentes/VistaFormulario'
-import Auth from '../Login/Auth'
+import Auth from '../Login/Auth';
+import FuncionesAuxiliares from '../FuncionesAuxiliares';
 
 const { Content } = Layout;
 //const { TextArea } = Input;
 const { Title } = Typography;
-const tailLayout = { wrapperCol: { offset: 9, span: 5 } };
+const tailLayout = { wrapperCol: { offset: 11, span: 5 } };
 const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 }, };
-//const key = 'updatable';
+const key = 'updatable';
 
-class FormularioUser extends React.Component {
+class PerfilUser extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             titulo: "Perfil De Usario",
             username: Auth.getDataLog().user.username,
-            esEmpleado: Auth.getDataLog().user.rol.toLowerCase().indexOf('empleado') > -1,
+            cedula: Auth.getDataLog().user.cedula,
             roles: [],
-            dptos: []
-
+            dptos: [],
+            isNotSistemas: Auth.isNotSistemas()
         };
         this.handle_guardar = this.handle_guardar.bind(this);
     }
 
-    strongValidator = (rule, value, callback) => {
-        try {
-            if (!value.match('(([a-z A-Z 1-9])(?=.*[A-Z][a-z])).{7,15}')) {
-                throw new Error("Su contaseña debe tener entre 7 y 15 caracteres, incluya al menos una mayúscula, minúscula y un número");
-            }
-        } catch (err) {
-            callback(err);
-        }
-    }
-
-    IDValidator = (rule, value, callback) => {
-        try {
-            if (value.length < 10) {
-                throw new Error("La cedula Ingresada no es valida");
-            }
-        } catch (err) {
-            callback(err);
-        }
-    }
 
     cargar_dptos() {
         AxiosTipo.mostrar_dep_org().then(res => {
@@ -74,63 +56,34 @@ class FormularioUser extends React.Component {
         this.cargar_datos(this.state.username);
     }
 
+    strongValidator = (rule, value, callback) => {
+        try {
+            let regExp = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]{7,15}$');
+            if (!regExp.test(value)) {
+                throw new Error("Su contaseña debe tener entre 7 y 15 caracteres, incluya al menos una mayúscula, minúscula y un número");
+            }
+        } catch (err) {
+            callback(err);
+        }
+    }
+
+    IDValidator = (rule, value, callback) => {
+        try {
+            if (value.length < 10) {
+                throw new Error("La cedula Ingresada no es valida");
+            }
+        } catch (err) {
+            callback(err);
+        }
+    }
+
     handle_guardar = e => {
         e.preventDefault();
-        // this.props.form.validateFields((err, values) => {
-        //     if (this.state.titulo === 'Nuevo router'){
-        //         if (this.state.codigos.includes(values.codigo)){
-        //             message.error("El código ingresado ya existe en la base de datos, ingrese uno válido para continuar", 4)
-        //         }
-        //     }
-        //         if (!err) {
-        //             console.log("valores al guardar:",values)
-        //             let router = {
-        //                 id_equipo: this.state.id_equipo_router,
-        //                 codigo: values.codigo,
-        //                 tipo_equipo: "Router",
-        //                 id_marca: values.marca,
-        //                 modelo: values.modelo,
-        //                 numero_serie: values.nserie,
-        //                 asignado: values.asignar,
-        //                 encargado_registro: 'admin',
-        //                 componente_principal: null,
-        //                 ip: values.ip,
-        //                 nombre: values.nombre,
-        //                 pass: values.pass,
-        //                 usuario: values.usuario,
-        //                 clave: values.clave,
-        //                 estado_operativo: values.estado,
-        //                 puerta_enlace: values.penlace,
-        //                 descripcion: values.descripcion,
-        //                 fecha_registro: '2020-03-26'
-        //             }
-        //             console.log("El router", router)
-        //             try{
-        //                 if(this.state.titulo === "Editar router"){
-        //                     AxiosRouter.editar_equipo_router(router).then(res => {
-        //                     message.loading({ content: 'Guardando modificaciones...', key });
-        //                     setTimeout(() => {
-        //                         message.success({ content: 'Registro modificado satisfactoriamente', key, duration: 3 });
-        //                     }, 1000);
-        //                     this.props.history.push("/router");
-        //                     })
-        //                 }else{
-        //                     AxiosRouter.crear_equipo_router(router).then(res => {
-        //                     message.loading({ content: 'Guardando datos...', key });
-        //                     setTimeout(() => {
-        //                         message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
-        //                     }, 1000);
-        //                     this.props.history.push("/router");
-        //                     })
-        //                 }
-        //             }
-        //             catch(error) {
-        //                 console.log(error)
-        //                 message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
-        //             }
-        //         }
-
-        // });
+        this.props.form.validateFields((err, values) => {
+            values.old_cedula = this.state.cedula;
+            values.old_user = this.state.username;
+            FuncionesAuxiliares.updateUser(values, key);
+        });
     }
 
     cargar_datos(username) {
@@ -168,14 +121,18 @@ class FormularioUser extends React.Component {
                                 action={this.state.titulo}
                                 id={this.state.titulo}
                             >
-                                <InputComp label="Nombres" id="nombre" decorator={getFieldDecorator} />
-                                <InputComp label="Apellidos" id="apellido" decorator={getFieldDecorator} />
-                                <InputComp disabled={true} label="Cedula" id="cedula" decorator={getFieldDecorator} />
-                                <InputComp label="Usuario" id="username" decorator={getFieldDecorator} />
+                                <InputComp disabled={this.state.isNotSistemas} label="Nombres" id="nombre" decorator={getFieldDecorator} />
+                                <InputComp disabled={this.state.isNotSistemas} label="Apellidos" id="apellido" decorator={getFieldDecorator} />
+                                <Form.Item label="Cedula">
+                                    {getFieldDecorator('cedula', {
+                                        rules: [{ required: true, message: 'Por favor, ingrese una Cedula Valida' }],
+                                    })(<Input disabled={this.state.isNotSistemas}/>)}
+                                </Form.Item>
+                                <InputComp disabled={this.state.isNotSistemas} label="Usuario" id="username" decorator={getFieldDecorator} />
                                 <Form.Item label="Contraseña">
                                     {getFieldDecorator('password', {
-                                        rules: [{ required: true, message: 'Por favor, ingrese una contraseña' }, { validator: this.strongValidator }],
-                                    })(<Input.Password disabled={true} />)}
+                                        rules: [{ required: true, message: 'Por favor, ingrese una contraseña' }],
+                                    })(<Input.Password  disabled={this.state.isNotSistemas}/>)}
                                 </Form.Item>
                                 <Form.Item
                                     label="Departamento"
@@ -185,7 +142,7 @@ class FormularioUser extends React.Component {
                                         rules: [{ required: true, message: 'Debe completar este campo' }]
                                     })(
                                         <Select
-                                            disabled={this.state.esEmpleado}
+                                            disabled={this.state.isNotSistemas}
                                             showSearch
                                             optionFilterProp="children"
                                             filterOption={(input, option) =>
@@ -209,7 +166,7 @@ class FormularioUser extends React.Component {
                                         rules: [{ required: true, message: 'Debe completar este campo' }]
                                     })(
                                         <Select
-                                            disabled={this.state.esEmpleado}
+                                            disabled={this.state.isNotSistemas}
                                             showSearch
                                             optionFilterProp="children"
                                             filterOption={(input, option) =>
@@ -227,8 +184,8 @@ class FormularioUser extends React.Component {
                                 </Form.Item >
 
 
-                                <Form.Item {...tailLayout}>
-                                    <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar Cambios</Button>
+                                <Form.Item  {...tailLayout}>
+                                    <Button hidden={this.state.isNotSistemas} style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar Cambios</Button>
                                 </Form.Item>
                             </Form>
                         </div>
@@ -239,5 +196,5 @@ class FormularioUser extends React.Component {
     }
 }
 
-FormularioUser = Form.create({})(FormularioUser);
-export default FormularioUser;
+PerfilUser = Form.create({})(PerfilUser);
+export default PerfilUser;
