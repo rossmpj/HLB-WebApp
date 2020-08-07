@@ -99,3 +99,7 @@
   min-height: 200px;
   padding-top: 25px;
 }
+
+#QRCodeDownloadable {
+  display: none;
+}
