@@ -18,6 +18,7 @@
     "minimist": "^1.2.5",
     "pusher": "^3.0.1",
     "pusher-js": "^6.0.3",
+    "qrcode.react": "^1.0.0",
     "react": "^16.13.1",
     "react-data-export": "^0.6.0",
     "react-dom": "^16.13.1",
