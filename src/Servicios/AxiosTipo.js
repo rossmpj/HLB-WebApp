@@ -1,9 +1,8 @@
 import axios from 'axios';
-
+import VariableGlobal from './VariableGlobal'
 export default class AxiosTipo {
     static instanceAxios = axios.create({
-        baseURL: 'http://localhost:8000/api',
-       /*  https://backend-hlb.herokuapp.com/api http://localhost:8000/api*/
+        baseURL: VariableGlobal.baseURL,
     });
 
 
@@ -51,6 +50,15 @@ export default class AxiosTipo {
         return AxiosTipo.instanceAxios.get(`/organizaciones`);
     }
 
+    /*Mostrar roles*/
+    static mostrar_roles = () => {
+        return AxiosTipo.instanceAxios.get(`/mostrar_roles`);
+    }
+
+    /* Mostrar Departamentos*/
+    static mostrar_dep_org = () => {
+        return AxiosTipo.instanceAxios.get(`/mostrar_dep_org`);
+    }
     /******************************************************************************/
 
     /*---------- Inventario IP ----------*/
@@ -58,8 +66,11 @@ export default class AxiosTipo {
         return AxiosTipo.instanceAxios.post(`/crear_ip`, ip);
     }
 
+    // static ver_ips = () => {
+    //     return AxiosTipo.instanceAxios.get(`/mostrar_ips`);
+    // }
     static ver_ips = () => {
-        return AxiosTipo.instanceAxios.get(`/listar_ips`);
+        return AxiosTipo.instanceAxios.get(`/mostrar_ips_detalladas`);
     }
 
     static editar_ip = (ip) => {

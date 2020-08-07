@@ -1,9 +1,8 @@
 import axios from 'axios';
-
+import VariableGlobal from './VariableGlobal'
 export default class AxiosLaptop {
   static instanceAxios = axios.create({
-    baseURL: 'http://localhost:8000/api',
-    //baseURL: 'https://backend-hlb.herokuapp.com/api',
+    baseURL: VariableGlobal.baseURL,
   });
 
   static listar_laptops = () => {

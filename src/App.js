@@ -1,13 +1,12 @@
 import React from 'react';
-import { Menu, Icon, Layout } from 'antd';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import './custom-antd.css'; //lessc --js mytheme.less ../../../src/custom-antd.css @import "./antd.less"; @primary-color: #0081C3;  
-import { RiRouterLine, RiTerminalWindowLine } from "react-icons/ri";
 import TablaRouter from './Inventario_Router/TablaRouter';
 import FormularioRouter from './Inventario_Router/FormularioRouter';
 import DetalleRouter from './Inventario_Router/DetalleRouter';
 import VistaSolicitud from './Solicitudes/VistaSolicitud';
-import TablaSolicitud from './Solicitudes/TablaSolicitud';
+import TablaSolicitudSistemas from './Solicitudes/TablaSolicitudSistemas';
+import TablaSolicitudUser from './Solicitudes/TablaSolicitudUser';
 import TablaLaptop from './Inventario_Laptop/TablaLaptop';
 import FormularioLaptop from './Inventario_Laptop/FormularioLaptop';
 import DetalleLaptop from './Inventario_Laptop/DetalleLaptop';
@@ -33,158 +32,90 @@ import TablaReporte from './Reportes/TablaReporte';
 import TablaBajas from './Reportes/TablaBajas';
 import TablaCorreo from './Inventario_Correo/TablaCorreo';
 import VistaCorreo from './Inventario_Correo/VistaCorreo'
-
+import LoginHLB from './Login/Login'
 import Home from './Home/Home'
-
-const { Sider } = Layout;
-const { SubMenu } = Menu;
-const { Header, Footer, Content } = Layout;
+import HomeRoute from './Routes/HomeRoute'
+import EmployLayout from './Routes/Layouts/EmployLayout'
+import GeneralLayout from './Routes/Layouts/GeneralLayout'
+import PrivateRouteEmpleado from './Routes/PrivateRouteEmpleado'
+import PrivateRouteGeneral from './Routes/PrivateRouteGeneral';
+import PublicRoute from './Routes/PublicRoute';
+import PublicLayout from './Routes/Layouts/PublicLayout'
+import VistaUser from './Modulos_Usuario/VistaUser'
+import PerfilUser from './Modulos_Usuario/PerfilUser'
+import TablaUser from './Modulos_Usuario/TablaUser'
+import PrivateRouteFinanzas from './Routes/PrivateRouteFinanzas';
+import FinanzasLayout from './Routes/Layouts/FinanzasLayout'
 
 class App extends React.Component {
-  state = {
-    collapsed: false,
-  };
 
-  onCollapse = collapsed => {
-    this.setState({ collapsed });
-  };
+
 
   render() {
     return (
       <Router>
-        <Layout style={{ minHeight: '100vh' }}>
-          <Sider
-            breakpoint="lg"
-            collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
-            {this.state.collapsed ? <img className="App-logo" src={"./Boton.png"} alt="icon" /> : <img className="App-logo" src={"./logo.png"} alt="logo" />}
-            <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-              <Menu.Item key="11">
-                <span>
-                <Icon type="home" />
-                <span>Inicio
-                
-                </span>
-                </span>
-                <Link to="/" />
-              </Menu.Item>
-              <Menu.Item key="12">
-                <span>
-                <Icon type="message" />
-                <span>Solicitudes
-                
-                </span>
-                </span>
-                <Link to="/solicitud" />
-              </Menu.Item>
-              <SubMenu
-                key="dash"
-                title={
-                  <span>
-                    <Icon type="database" />
-                    <span>Inventario</span>
-                  </span>
-                }
-              >
-                <Menu.Item key="desktop"><Icon type="desktop" />Desktop
-                  <Link to="/desktop" />
-                </Menu.Item>
-                <Menu.Item key="laptop"><Icon type="laptop" />Laptop
-                  <Link to="/laptop" />
-                </Menu.Item>
-                <Menu.Item key="router"><RiRouterLine className="anticon"/>Router
-                  <Link to="/router" />
-                </Menu.Item>
-                <Menu.Item key="impresora"><Icon type="printer" />Impresora
-                  <Link to="/impresora" />
-                </Menu.Item>
-                <Menu.Item key="varios"><Icon type="appstore" />Otros equipos
-                <Link to="/otrosEquipos" />
-                </Menu.Item>
-                <Menu.Item key="ip"><Icon type="cluster" />IP
-                <Link to="/ip" />
-                </Menu.Item>
-                <Menu.Item key="correo"><Icon type="mail" />Correo
-                <Link to="/correo" />
-                </Menu.Item>
-                <SubMenu
-                key="sub2"
-                title={
-                  <span>
-                    <Icon type="rocket" />
-                    <span>Extra</span>
-                  </span>
-                }
-              >
-                <Menu.Item key="marcas"><Icon type="global" />Marcas
-                  <Link to="/marca" />
-                </Menu.Item>
-                <Menu.Item key="programas"><RiTerminalWindowLine className="anticon" />Programas
-                  <Link to="/programa" />
-                </Menu.Item>
-              </SubMenu>
-              </SubMenu>
-              
+          <HomeRoute exact path='/'/>
+          <PublicRoute exact path='/login' component={LoginHLB} layout = {PublicLayout}  />
 
-              <SubMenu
-                key="rep"
-                title={
-                  <span>
-                    <Icon type="bar-chart" />
-                    <span>Reportes</span>
-                  </span>
-                }
-              >
-                <Menu.Item key="general"><Icon type="control"/>General
-                  <Link to="/reportes/general" />
-                </Menu.Item>
+          {/* Routes para empleados institucionales */}
+          <PrivateRouteEmpleado exact path = '/empleado' component = {Home} layout = {EmployLayout} />
+          <PrivateRouteEmpleado exact path = '/empleado/solicitud/form' component = {VistaSolicitud} layout = {EmployLayout} />
+          <PrivateRouteEmpleado exact path = '/empleado/solicitudes' component = {TablaSolicitudUser} layout = {EmployLayout} />
+          <PrivateRouteEmpleado exact path = '/empleado/perfil/' component = {PerfilUser} layout = {EmployLayout} />
 
-                <Menu.Item key="baja"><Icon type="fall"/>Equipos de baja
-                  <Link to="/reportes/de-baja" />
-                </Menu.Item>
-              </SubMenu>
+          {/* Routes para finanzas */}
+          <PrivateRouteFinanzas exact path = '/finanzas' component = {Home} layout = {FinanzasLayout} />
+          <PrivateRouteFinanzas exact path = '/finanzas/perfil/' component = {PerfilUser} layout = {FinanzasLayout} />
+          <PrivateRouteFinanzas exact path='/finanzas/router' component={TablaRouter} layout = {FinanzasLayout} />
+          <PrivateRouteFinanzas exact path='/finanzas/router/view/:id' component={DetalleRouter} layout = {FinanzasLayout} />
+          <PrivateRouteFinanzas exact path='/finanzas/desktop' component={TablaDesktop} layout = {FinanzasLayout} />
+          <PrivateRouteFinanzas exact path='/finanzas/desktop/view/:id' component={DetalleDesktop} layout = {FinanzasLayout} />
+          <PrivateRouteFinanzas exact path='/finanzas/laptop' component={TablaLaptop} layout = {FinanzasLayout} />
+          <PrivateRouteFinanzas exact path='/finanzas/laptop/view/:id' component={DetalleLaptop} layout = {FinanzasLayout} />
+          <PrivateRouteFinanzas exact path='/finanzas/otros/view' component={DetalleOtrosEquipos} layout = {FinanzasLayout} />
+          <PrivateRouteFinanzas exact path='/finanzas/ip/view/:ip' component={DetalleIP} layout = {FinanzasLayout} />
+          <PrivateRouteFinanzas exact path='/finanzas/impresora' component={Impresora} layout = {FinanzasLayout} />
+          <PrivateRouteFinanzas exact path='/finanzas/otrosequipos' component={HomeEquipo} layout = {FinanzasLayout} />
+          <PrivateRouteFinanzas exact path='/finanzas/impresora/view/:id' component={DetalleImpresora} layout = {FinanzasLayout} />
+          <PrivateRouteFinanzas exact path='/finanzas/equipo/view/:id' component={DetalleEquipo} layout = {FinanzasLayout} />
+          <PrivateRouteFinanzas exact path='/finanzas/reportes/general' component={TablaReporte} layout = {FinanzasLayout} />
+          <PrivateRouteFinanzas exact path='/finanzas/reportes/de-baja' component={TablaBajas} layout = {FinanzasLayout} />
 
-              
-            </Menu>
-          </Sider>
-          <Layout className="site-layout">
-            <Header className="site-layout-background"></Header>
-            <Content style={{ margin: '16px' }}>
-              <Route exact path='/router' component={TablaRouter} />
-              <Route exact path='/router/view/:id' component={DetalleRouter} />
-              <Route exact path='/router/form' component={FormularioRouter} />
-              <Route exact path='/desktop' component={TablaDesktop} />
-              <Route exact path='/desktop/view/:id' component={DetalleDesktop} />
-              <Route exact path='/desktop/form' component={FormularioDesktop} />
-              <Route exact path='/solicitud/form' component={VistaSolicitud} />
-              <Route exact path='/solicitud' component={TablaSolicitud} />
-              <Route exact path='/laptop' component={TablaLaptop} />
-              <Route exact path='/laptop/view/:id' component={DetalleLaptop} />
-              <Route exact path='/laptop/form' component={FormularioLaptop} />
-              <Route exact path='/otros/view' component={DetalleOtrosEquipos} />
-              <Route exact path='/ip/view/:ip' component={DetalleIP} />
-              <Route exact path='/impresora' component={Impresora} />
-              <Route exact path='/ip' component={TablaIp} />
-              <Route exact path='/otrosequipos' component={HomeEquipo} />
-              <Route exact path='/otrosequipos/form' component={VistaEquipo} />
-              <Route exact path='/marca' component={TablaMarca} />
-              <Route exact path='/programa' component={TablaPrograma} />
-              <Route exact path='/marca/form' component={VistaMarca} />
-              <Route exact path='/programa/form' component={FormularioPrograma} />
-              <Route exact path='/ip/form' component={VistaIp} />
-              <Route exact path='/ip/detail/:id' component={DetalleIIp} />
-              <Route exact path='/impresora/form' component={VistaImpresora} />
-              <Route exact path='/impresora/view/:id' component={DetalleImpresora} />
-              <Route exact path='/equipo/view/:id' component={DetalleEquipo} />
-              <Route exact path='/reportes/general' component={TablaReporte} />
-              <Route exact path='/reportes/de-baja' component={TablaBajas} />
-              <Route exact path='/correo' component={TablaCorreo} />
-              <Route exact path='/correo/form' component={VistaCorreo} />
-
-              <Route exact path='/' component={Home} />
-            </Content>
-            <Footer className="style-footer">Inventario Hospital León Becerra ©2020 Creado por EasySoft [ESPOL]</Footer>
-          </Layout>
-        </Layout>
+          {/* Routes para usuarios de sistemas */}
+          <PrivateRouteGeneral exact path = '/sistemas' component = {Home} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path = '/sistemas/perfil/' component = {PerfilUser} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/router' component={TablaRouter} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/router/view/:id' component={DetalleRouter} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/router/form' component={FormularioRouter} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/desktop' component={TablaDesktop} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/desktop/view/:id' component={DetalleDesktop} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/desktop/form' component={FormularioDesktop} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/laptop' component={TablaLaptop} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/laptop/view/:id' component={DetalleLaptop} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/laptop/form' component={FormularioLaptop} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/otros/view' component={DetalleOtrosEquipos} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/ip/view/:ip' component={DetalleIP} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/impresora' component={Impresora} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/ip' component={TablaIp} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/otrosequipos' component={HomeEquipo} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/otrosequipos/form' component={VistaEquipo} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/marca' component={TablaMarca} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/programa' component={TablaPrograma} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/marca/form' component={VistaMarca} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/programa/form' component={FormularioPrograma} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/ip/form' component={VistaIp} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/ip/detail/:id' component={DetalleIIp} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/impresora/form' component={VistaImpresora} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/impresora/view/:id' component={DetalleImpresora} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/equipo/view/:id' component={DetalleEquipo} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/reportes/general' component={TablaReporte} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/reportes/de-baja' component={TablaBajas} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/correo' component={TablaCorreo} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/correo/form' component={VistaCorreo} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/users/form' component={VistaUser} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/users' component={TablaUser} layout = {GeneralLayout} />
+          <PrivateRouteGeneral exact path='/sistemas/solicitudes' component={TablaSolicitudSistemas} layout = {GeneralLayout} />
+        
       </Router>
     );
   }

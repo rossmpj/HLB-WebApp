@@ -34,7 +34,7 @@ export default class VistaSolicitud extends React.Component {
                 <Row>
                     <Col span={12}><Title level={2}>{this.state.titulo}</Title></Col>
                     <Col className='flexbox'>
-                        <Link to={{ pathname: '/solicitud' }} ><Button type="primary" icon="left">Volver</Button></Link>
+                        <Link to={{ pathname: '/empleado/solicitudes' }} ><Button type="primary" icon="left">Volver</Button></Link>
                     </Col>
                 </Row>
                 <div className="div-border-top" >

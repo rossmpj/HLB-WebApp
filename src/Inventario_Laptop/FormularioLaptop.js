@@ -8,11 +8,11 @@ import { LaptopOutlined, WindowsOutlined } from '@ant-design/icons';
 import { FiHardDrive } from "react-icons/fi";
 import { FaMemory } from "react-icons/fa";
 import { GiProcessor } from "react-icons/gi";
-import { Button, Layout, Row, Col, Typography, message } from 'antd';
-import { Link } from 'react-router-dom';
+import { Layout, Typography, message } from 'antd';
 import { Steps } from 'antd';
 import Axios from '../Servicios/AxiosLaptop'
 import AxiosTipo from '../Servicios/AxiosTipo'
+import VistaFormulario from '../Componentes/VistaFormulario'
 
 const { Step } = Steps;
 const { Content } = Layout;
@@ -243,11 +243,6 @@ class FormularioLaptop extends React.Component {
     handleNextButton = () => {
         const { step } = this.state;
         this.setState({ step: step+1 });
-        // if(step>=1){
-        // if(this.state.general_fields.codigo === this.state.procesador_fields.codigo_proc){
-        //     message.error("El código ingresado ya fue asignado al equipo Laptop", 4)
-        // }}
-        // console.log("codigo ",this.state.general_fields.codigo)
         console.log("step",this.state)
     }
     
@@ -271,7 +266,7 @@ class FormularioLaptop extends React.Component {
                     setTimeout(() => {
                     message.success({ content: 'Registro modificado satisfactoriamente', key, duration: 3 });
                     }, 1000);
-                    this.props.history.push("/laptop");
+                    this.props.history.push("/sistemas/laptop");
                 }).catch(err =>{
                     if (err.response) {
                         message.error(err.response.data.log, 4)
@@ -280,7 +275,7 @@ class FormularioLaptop extends React.Component {
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
                     }
                 })
-                this.props.history.push("/laptop");
+                this.props.history.push("/sistemas/laptop");
             }else{
                 console.log("intentando")
                 Axios.crear_laptop(this.state).then(res => {
@@ -288,7 +283,7 @@ class FormularioLaptop extends React.Component {
                 setTimeout(() => {
                     message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
                 }, 1000);
-                this.props.history.push("/laptop");
+                this.props.history.push("/sistemas/laptop");
                 }).catch(err =>{
                     if (err.response) {
                         message.error(err.response.data.log, 4)
@@ -297,7 +292,7 @@ class FormularioLaptop extends React.Component {
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
                     }
                 })
-                this.props.history.push("/laptop");
+                this.props.history.push("/sistemas/laptop");
             }
         }catch(error) {
             console.log(error)
@@ -382,13 +377,8 @@ class FormularioLaptop extends React.Component {
 
         return(
             <Content>
-                <div className="div-container-title">      
-                    <Row>
-                        <Col span={12}><Title level={2}>{this.state.titulo}</Title></Col>
-                        <Col className='flexbox'>
-                            <Link to={{ pathname: '/laptop' }} ><Button type="primary" icon="left">Volver</Button></Link>
-                        </Col>
-                    </Row>  
+                <div className="div-container-title">                          
+                    <VistaFormulario enlace='/sistemas/laptop' titulo={this.state.titulo}></VistaFormulario>
                     <div className="div-border-top" >
                         <div className="div-container"> 
                             <Steps 

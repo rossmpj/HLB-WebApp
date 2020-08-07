@@ -1,15 +1,10 @@
 import React from 'react';
 import '../App.css';
-import {
-    Form,
-    Button,
-    Select,
-    Input,
-    message
-} from 'antd';
+import {Form, Button, Select, Input, message } from 'antd';
 import '../custom-antd.css';
 import { Link } from 'react-router-dom';
 import AxiosSolicitud from '../Servicios/AxiosSolicitud';
+import Auth from '../Login/Auth'
 const tailLayout = {
     wrapperCol: { offset: 9, span: 8 }
 };
@@ -29,6 +24,7 @@ class FormularioSolicitud extends React.Component {
         this.state = {
             key: "",
             editionMode: false,
+            id_usuario: Auth.getDataLog().user.username
         }
         this.handle_guardar = this.handle_guardar.bind(this);
     }
@@ -41,26 +37,19 @@ class FormularioSolicitud extends React.Component {
             if (!err) {
                 if (!this.state.editionMode) {
                     console.log(values)
+                    values.id_usuario = this.state.id_usuario;
                     AxiosSolicitud.crear_solicitud(values).then(res => {
                         console.log(res);
-                        message.loading({ content: 'Guardando datos...', key });
+                        message.loading({ content: 'Procesando solicitud...', key });
                         setTimeout(() => {
-                            message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+                            message.success({ content: 'Solicitud enviada satisfactoriamente', key, duration: 3 });
                         }, 1000);
-                    }).catch(err => {
-                        console.log(err.response)
+                       // this.props.history.push("/solicitud_empleado");
+                    }).catch(error => {
+                        console.log(error)
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
                     });
                 } else {
-                    // values.key = this.state.key;
-                    // AxiosSolicitud.editar_marca(values).then(res => {
-                    //     message.loading({ content: 'Actualizando datos...', key });
-                    //     setTimeout(() => {
-                    //         message.success({ content: "Edición realizada satisfactoriamente", key, duration: 3 });
-                    //     }, 1000);
-                    // }).catch(err => {
-                    //     console.log(err);
-                    // });
                 }
             }
         });
@@ -101,13 +90,13 @@ class FormularioSolicitud extends React.Component {
                     >
                         {getFieldDecorator('prioridad', {
                             rules: [{ required: true, message: 'Debe seleccionar la prioridad de la Solicitud' }],
-                            initialValue: 'ALTA'
+                            initialValue: 'A'
                         })(
                             <Select>
-                                <Select.Option value="ALTA">Alta</Select.Option>
-                                <Select.Option value="MEDIA">Media</Select.Option>
-                                <Select.Option value="BAJA">Baja</Select.Option>
-                                <Select.Option value="CRITICA">Critica</Select.Option>
+                                <Select.Option value="A">Alta</Select.Option>
+                                <Select.Option value="M">Media</Select.Option>
+                                <Select.Option value="B">Baja</Select.Option>
+                                <Select.Option value="CT">Critica</Select.Option>
                             </Select>
                         )}
 
@@ -122,8 +111,8 @@ class FormularioSolicitud extends React.Component {
                             initialValue: 'AE'
                         })(
                             <Select>
-                                <Select.Option value="AE">Asignacion de Equipos</Select.Option>
-                                <Select.Option value="ST">Servicio Tecnico</Select.Option>
+                                <Select.Option value="AE">Asignación de Equipos</Select.Option>
+                                <Select.Option value="ST">Servicio Técnico</Select.Option>
                             </Select>
                         )}
 
@@ -145,7 +134,7 @@ class FormularioSolicitud extends React.Component {
 
                     <Form.Item {...tailLayout}>
                         <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Enviar Solicitud</Button>
-                        <Link to='/solicitud'>
+                        <Link to='/empleado/solicitudes'>
                             <Button type="primary">Cancelar</Button>
                         </Link>
                     </Form.Item>

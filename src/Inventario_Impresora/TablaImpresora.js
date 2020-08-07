@@ -1,8 +1,11 @@
 import React from 'react';
 import { Button, Row, Col, Table, Input, Icon, Popconfirm, message, Typography } from 'antd';
-import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
-import Axios from '../Servicios/AxiosTipo'
+import Axios from '../Servicios/AxiosTipo';
+import FuncionesAuxiliares from '../FuncionesAuxiliares';
+import ExcelExportImpresora from './ExcelExportImpresora';
+import Auth from '../Login/Auth';
+
 const { Title } = Typography;
 
 class TablaImpresora extends React.Component {
@@ -17,7 +20,8 @@ class TablaImpresora extends React.Component {
             filteredInfo: null,
             sortedInfo: null,
             index: 0,
-            currentDataSource:[]
+            currentDataSource:[],
+            isNotSistemas: Auth.isNotSistemas()
         };
     }
 
@@ -39,35 +43,8 @@ class TablaImpresora extends React.Component {
     llenar_tabla() {
         let datos = [];
         Axios.mostrar_impresoras().then(res => {
-            res.data.forEach(function (dato) {
-                let empleado = ""
-                if (dato.empleado !== null) {
-                    empleado = dato.empleado.concat(" ", dato.apellido);
-                }
-                let impresoras = {
-                    key: dato.id_impresora,
-                    numero_serie: dato.numero_serie,
-                    bspi: dato.bspi_punto,
-                    asignado: empleado,
-                    dpto: dato.nombre,
-                    tipo: dato.tipo,
-                    marca: dato.marca,
-                    codigo: dato.codigo,
-                    estado_operativo: dato.estado_operativo,
-                    modelo: dato.modelo,
-                    tinta: dato.tinta,
-                    cartucho: dato.cartucho,
-                    descripcion: dato.descripcion,
-                    toner: dato.toner,
-                    rodillo: dato.rodillo,
-                    cinta: dato.cinta,
-                    rollo: dato.rollo,
-                    ip: dato.direccion_ip,
-                    componente_principal: dato.componente_principal,
-                    id_equipo: dato.id_equipo
-                }
-                datos.push(impresoras)
-            });
+            console.log(res.data)
+            datos = FuncionesAuxiliares.transform_data_impresora(res.data);
             this.setState({ dataSource: datos, currentDataSource:datos, disabelExport:false }); 
         }).catch(err => {
             console.log(err)
@@ -79,10 +56,11 @@ class TablaImpresora extends React.Component {
         this.setState({ filteredInfo: null });
     };
 
-    handleChange = (pagination, filters, sorter) => {
+    handleChange = (pagination, filters, sorter, currentDataSource) => {
         this.setState({
             filteredInfo: filters,
             sortedInfo: sorter,
+            currentDataSource: currentDataSource.currentDataSource
         });
     };
 
@@ -102,18 +80,6 @@ class TablaImpresora extends React.Component {
 
     componentDidMount() {
         this.llenar_tabla();
-    }
-
-    stringSorter(a, b) {
-        let y = a || '';
-        let u = b || '';
-        return y.localeCompare(u);
-    }
-
-    filtrar_array(arr, value) {
-        if (arr !== null) {
-            return arr.indexOf(value) === 0;
-        }
     }
 
     busqueda_array(arr, dataIndex, value) {
@@ -184,15 +150,15 @@ class TablaImpresora extends React.Component {
         this.setState({ searchText: '' });
     };
 
-
-    render() {
-        const columns = [
+    getColumns = () =>{
+        let route = this.state.isNotSistemas ? '/finanzas' : '/sistemas';
+        let generalColumns = [
             {
                 title: 'Código',
                 dataIndex: 'codigo',
                 key: 'codigo',
                 fixed: 'left',
-                render: (text, record) => <Link to={{ pathname: '/impresora/view/'+record.id_equipo}}>{text}</Link>,
+                render: (text, record) => <Link to={{ pathname: route+'/impresora/view/'+record.id_equipo}}>{text}</Link>,
                 ...this.getColumnSearchProps('codigo')
             },
             {
@@ -227,8 +193,8 @@ class TablaImpresora extends React.Component {
                         value: 'Multifuncional',
                     },
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.tipo, value),
-                sorter: (a, b) => this.stringSorter(a.tipo, b.tipo)
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.tipo, value),
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.tipo, b.tipo)
 
             },
             {
@@ -263,8 +229,8 @@ class TablaImpresora extends React.Component {
                         value: 'B',
                     }
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.estado_operativo, value),
-                sorter: (a, b) => this.stringSorter(a.estado_operativo, b.estado_operativo)
+                onFilter: (value, record) =>FuncionesAuxiliares.filtrar_array(record.estado_operativo, value),
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado_operativo, b.estado_operativo)
             },
             {
                 title: 'Modelo',
@@ -300,16 +266,16 @@ class TablaImpresora extends React.Component {
                         value: 'Unidad Educativa San José del Buen Pastor',
                     }
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.bspi, value),
-                sorter: (a, b) => this.stringSorter(a.bspi, b.bspi)
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.bspi, value),
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.bspi, b.bspi)
             },
             {
                 title: 'Departamento',
                 dataIndex: 'dpto',
                 key: 'dpto',
                 filters: this.departamentos(),
-                onFilter: (value, record) => this.filtrar_array(record.dpto, value),
-                sorter: (a, b) => this.stringSorter(a.dpto, b.dpto)
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.dpto, value),
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.dpto, b.dpto)
             },
             {
                 title: 'Asignado',
@@ -358,6 +324,10 @@ class TablaImpresora extends React.Component {
                 dataIndex: 'descripcion',
                 key: 'descripcion'
             },
+            
+        ];
+
+        let actionsColumns = [
             {
                 title: 'Acción',
                 key: 'accion',
@@ -365,7 +335,7 @@ class TablaImpresora extends React.Component {
                 render: (text, record) => (
                     <div>
                         <Link to={{
-                            pathname: '/impresora/form',
+                            pathname: '/sistemas/impresora/form',
                             state: {
                                 info: record,
                                 titulo: "Editar impresora"
@@ -385,13 +355,20 @@ class TablaImpresora extends React.Component {
             },
         ];
 
+        return this.state.isNotSistemas ? generalColumns : generalColumns.concat(actionsColumns) 
+    }
+
+
+    render() {
+
+        let columns = this.getColumns();
 
         return (
             <div className="div-container-title">
                 <Row>
                     <Col span={12}><Title level={2}>Inventario Impresora</Title></Col>
-                    <Col className='flexbox'>
-                        <Link to={{ pathname: '/impresora/form', state: { titulo: "Nueva Impresora" } }} >
+                    <Col hidden = {this.state.isNotSistemas} className='flexbox'>
+                        <Link to={{ pathname: '/sistemas/impresora/form', state: { titulo: "Nueva Impresora" } }} >
                             <Button type="primary" icon="plus">Agregar Impresora</Button>
                         </Link>
                     </Col>
@@ -400,10 +377,11 @@ class TablaImpresora extends React.Component {
                     <div >
                         <Row>
                             <Col className='flexbox'>
-                                <ButtonGroup style={{ align: 'right' }}>
-                                    <Button type="primary" icon="import">Importar</Button>
-                                    <Button type="primary" icon="cloud-download">Exportar</Button>
-                                </ButtonGroup>
+                                {/* <ButtonGroup style={{ align: 'right' }}> */}
+                                    <Button hidden = {this.state.isNotSistemas} type="primary" icon="import">Importar</Button>
+                                    <ExcelExportImpresora data={this.state.currentDataSource} dis = {this.state.disabelExport}></ExcelExportImpresora>
+                                    {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
+                                {/* </ButtonGroup> */}
                             </Col>
                         </Row>
                     </div>

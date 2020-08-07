@@ -1,8 +1,10 @@
 import React from 'react';
-import {Button,Row,Col,Table,Input,Icon,Popconfirm,message,Typography} from 'antd';
-import ButtonGroup from 'antd/lib/button/button-group';
+import { Button, Row, Col, Table, Input, Icon, Popconfirm, message, Typography, Tag} from 'antd';
+import ExcelExportIP from './ExcelExportIP';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosTipo';
+import FuncionesAuxiliares from '../FuncionesAuxiliares';
+
 const { Title } = Typography;
 
 class TablaIp extends React.Component {
@@ -18,7 +20,9 @@ class TablaIp extends React.Component {
             dataSource: [],
             filteredInfo: null,
             sortedInfo: null,
-            index: 0
+            index: 0,
+            currentDataSource: [],
+            disabelExport: true,
         };
         this.handleClick = this.handleClick.bind(this);
     }
@@ -34,6 +38,10 @@ class TablaIp extends React.Component {
         let datos = [];
         Axios.ver_ips().then(res => {
             res.data.forEach(function (dato) {
+                let empleado = ""
+                if (dato.nombre !== null) {
+                    empleado = dato.nombre.concat(" ", dato.apellido);
+                }
                 let registro = {
                     key: dato.id_ip,
                     ip: dato.direccion_ip,
@@ -44,12 +52,18 @@ class TablaIp extends React.Component {
                     maquinas: dato.maquinas_adicionales,
                     asignado: dato.nombre_usuario,
                     encargado: dato.encargado_registro,
-                    observacion: dato.observacion
+                    observacion: dato.observacion,
+                    empleado: empleado,
+                    bspi: dato.bspi_punto,
+                    departamento: dato.departamento,
+                    codigo_equipo: dato.codigo,
+                    tipo_equipo: FuncionesAuxiliares.UpperCase(dato.tipo_equipo,'')
                 }
                 datos.push(registro)
             });
-            this.setState({ dataSource: datos });
+            this.setState({ dataSource: datos, currentDataSource: datos, disabelExport: false });
         }).catch(err => {
+            console.log(err)
             message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
         });
     }
@@ -58,10 +72,12 @@ class TablaIp extends React.Component {
         this.setState({ filteredInfo: null });
     };
 
-    handleChange = (pagination, filters, sorter) => {
+    handleChange = (pagination,filters, sorter, currentDataSource) => {
+        console.log('Various parameters', pagination, filters, sorter, currentDataSource);
         this.setState({
             filteredInfo: filters,
             sortedInfo: sorter,
+            currentDataSource: currentDataSource.currentDataSource 
         });
     };
 
@@ -93,18 +109,6 @@ class TablaIp extends React.Component {
         });
         const dataSource = [...this.state.dataSource];
         this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
-    }
-
-    stringSorter(a, b) {
-        let y = a || '';
-        let u = b || '';
-        return y.localeCompare(u);
-    }
-
-    filtrar_array(arr, value) {
-        if (arr !== null) {
-            return arr.indexOf(value) === 0;
-        }
     }
 
     busqueda_array(arr, dataIndex, value) {
@@ -167,14 +171,74 @@ class TablaIp extends React.Component {
 
 
     render() {
+        let { sortedInfo, filteredInfo } = this.state;
+        sortedInfo = sortedInfo || {};
+        filteredInfo = filteredInfo || {};
         const columns = [
             {
                 title: 'Ip',
                 dataIndex: 'ip',
                 key: 'ip',
                 fixed: 'left',
-                render: (text, record) => <Link to={{ pathname: '/ip/detail/'+record.key}}>{text}</Link>,
+                render: (text, record) => <Link to={{ pathname: '/sistemas/ip/detail/' + record.key }}>{text}</Link>,
                 ...this.getColumnSearchProps('ip')
+            },
+            {
+                title: 'BSPI Punto',
+                dataIndex: 'bspi',
+                key: 'bspi',
+                width: 130,
+                filters: [
+                    {
+                        text: 'Hospital León Becerra',
+                        value: 'Hospital León Becerra',
+                    },
+                    {
+                        text: 'Hogar Inés Chambers',
+                        value: 'Hogar Inés Chambers',
+                    },
+                    {
+                        text: 'Unidad Educativa San José Buen Pastor',
+                        value: 'Unidad Educativa San José Buen Pastor',
+                    },
+                    {
+                        text: 'Residencia Mercedes Begué',
+                        value: 'Residencia Mercedes Begué',
+                    }
+                ],
+                filteredValue: filteredInfo.bspi || null,
+                onFilter: (value, record) => record.bspi.indexOf(value) === 0,
+                sorter: (a, b) => a.bspi.length - b.bspi.length,
+                sortOrder: sortedInfo.columnKey === 'bspi' && sortedInfo.order,
+            },
+            {
+                title: 'Departamento',
+                dataIndex: 'departamento',
+                key: 'departamento',
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.departamento, b.departamento),
+                sortOrder: sortedInfo.columnKey === 'departamento' && sortedInfo.order,
+            },
+            {
+                title: 'Empleado',
+                dataIndex: 'empleado',
+                key: 'empleado',
+                ...this.getColumnSearchProps('empleado'),
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.empleado, b.empleado),
+                sortOrder: sortedInfo.columnKey === 'empleado' && sortedInfo.order,
+            },
+            {
+                title: 'Código Equipo Asignado',
+                dataIndex: 'codigo_equipo',
+                key: 'codigo_equipo',
+                ...this.getColumnSearchProps('codigo_equipo'),
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.codigo, b.codigo),
+                sortOrder: sortedInfo.columnKey === 'codigo_equipo' && sortedInfo.order,
+            },
+            {
+                title: 'Tipo Equipo Asignado',
+                dataIndex: 'tipo_equipo',
+                key: 'tipo_equipo',
+                ...this.getColumnSearchProps('tipo_equipo')
             },
             {
                 title: 'Estado',
@@ -183,54 +247,61 @@ class TablaIp extends React.Component {
                 filters: [
                     {
                         text: 'En uso',
-                        value: 'En uso',
+                        value: 'EU',
                     },
                     {
                         text: 'Libre',
-                        value: 'Libre',
+                        value: 'L',
                     }
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.estado, value),
-                sorter: (a, b) => this.stringSorter(a.estado, b.estado)
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.estado, value),
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado, b.estado),
+                render: (text, value) => (
+                    <div >
+                        {text==="L" ? <Tag style={{margin: 2}} color="green" key={value}>Libre</Tag> : 
+                        
+                                        <Tag style={{margin: 2}} color="red" key={value}>En Uso</Tag> }
+                    </div>
+                  ),
             },
             {
                 title: 'Hostname',
                 dataIndex: 'hostname',
                 key: 'hostname',
-                sorter: (a, b) => this.stringSorter(a.hostname, b.hostname)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.hostname, b.hostname)
 
             },
             {
                 title: 'Subred',
                 dataIndex: 'subred',
                 key: 'subred',
-                sorter: (a, b) => this.stringSorter(a.subred, b.subred)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.subred, b.subred)
             },
             {
                 title: 'Fortigate',
                 dataIndex: 'fortigate',
                 key: 'fortigate',
-                sorter: (a, b) => this.stringSorter(a.fortigate, b.fortigate)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.fortigate, b.fortigate)
             },
             {
                 title: 'Máquinas adicionales',
                 dataIndex: 'maquinas',
                 key: 'maquinas',
-                sorter: (a, b) => this.stringSorter(a.maquinas, b.maquinas)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.maquinas, b.maquinas)
 
             },
             {
                 title: 'Asignado',
                 dataIndex: 'asignado',
                 key: 'asignado',
-                sorter: (a, b) => this.stringSorter(a.asignado, b.asignado)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.asignado, b.asignado)
 
             },
             {
                 title: 'Encargado',
                 dataIndex: 'encargado',
                 key: 'encargado',
-                sorter: (a, b) => this.stringSorter(a.encargado, b.encargado)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.encargado, b.encargado)
             },
             {
                 title: 'Observación',
@@ -244,7 +315,7 @@ class TablaIp extends React.Component {
                 render: (text, record) => (
                     <div>
                         <Link to={{
-                            pathname: '/ip/form',
+                            pathname: '/sistemas/ip/form',
                             state: {
                                 info: record,
                                 titulo: "Editar dirección IP"
@@ -269,7 +340,7 @@ class TablaIp extends React.Component {
                 <Row>
                     <Col span={12}><Title level={2}>Inventario IP</Title></Col>
                     <Col className='flexbox'>
-                        <Link to={{ pathname: '/ip/form', state: { titulo: "Nueva dirección IP" } }} >
+                        <Link to={{ pathname: '/sistemas/ip/form', state: { titulo: "Nueva dirección IP" } }} >
                             <Button type="primary" icon="plus">Agregar dirección IP</Button>
                         </Link>
                     </Col>
@@ -278,10 +349,11 @@ class TablaIp extends React.Component {
                     <div >
                         <Row>
                             <Col className='flexbox'>
-                                <ButtonGroup style={{ align: 'right' }}>
+                                {/* <ButtonGroup style={{ align: 'right' }}> */}
                                     <Button type="primary" icon="import">Importar</Button>
-                                    <Button type="primary" icon="cloud-download">Exportar</Button>
-                                </ButtonGroup>
+                                    <ExcelExportIP data={this.state.currentDataSource} dis = {this.state.disabelExport} ></ExcelExportIP>
+                                    {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
+                                {/* </ButtonGroup> */}
                             </Col>
                         </Row>
                     </div>
@@ -292,7 +364,7 @@ class TablaIp extends React.Component {
                         <Button onClick={this.clearAll}>Limpiar todo</Button>
                     </div>
                     <Table bordered key={this.state.index} onChange={this.handleChange} size="small"
-                     scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
+                        scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
             </div>
         );

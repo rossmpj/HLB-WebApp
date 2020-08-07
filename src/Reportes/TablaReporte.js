@@ -1,11 +1,13 @@
 import React from 'react';
 import {
-    Button, Row, Col, Table, Input, Icon, message, Typography
+    Button, Row, Col, Table, Input, Icon, message, Typography, Tag
 } from 'antd';
-import ButtonGroup from 'antd/lib/button/button-group';
+import ExcelExportMasivo from './ExcelExportMasivo';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosReporte'
 import ModalDownload from '../Componentes/ModalDownload';
+import FuncionesAuxiliares from '../FuncionesAuxiliares';
+import Auth from '../Login/Auth';
 /* import {saveAs} from 'file-saver';
 import * as XLSX from 'xlsx'; */
 
@@ -26,17 +28,39 @@ class TablaReporte extends React.Component {
             index: 0,
             visible: false,
             confirmLoading: false,
-            archivo: ""
+            archivo: "",
+            currentDataSource:[],
+            disabelExport:true,
+            data_detallada:{},
+            isNotSistemas: Auth.isNotSistemas()
         };
 
+    }
+
+    transform_data_detallada(detalles){
+        let desktop = FuncionesAuxiliares.transform_data_desktop(detalles.desktop);
+        let laptop = FuncionesAuxiliares.transform_data_laptop(detalles.laptop);
+        let impresora = FuncionesAuxiliares.transform_data_impresora(detalles.impresora);
+        let router = FuncionesAuxiliares.transform_data_router(detalles.router);
+        let otros = FuncionesAuxiliares.transform_data_otros(detalles.otros);
+        this.setState({
+            data_detallada:{
+                'desktop': desktop,
+                'laptop': laptop,
+                'impresora': impresora,
+                'router':router,
+                'otros': otros
+            }
+        })
     }
 
     llenar_tabla() {
         let datos = [];
         Axios.reporte_general().then(res => {
-            res.data.forEach(function (dato) {
+            res.data.equipos.forEach(function (dato) {
                 let registro = {
                     key: dato.id_equipo,
+                    id_equipo:dato.id_equipo,
                     departamento: dato.departamento,
                     bspi: dato.bspi_punto,
                     empleado: dato.empleado.concat(" ", dato.apellido),
@@ -50,7 +74,8 @@ class TablaReporte extends React.Component {
                 }
                 datos.push(registro)
             });
-            this.setState({ dataSource: datos });
+            this.transform_data_detallada(res.data.detalles);
+            this.setState({ dataSource:datos, currentDataSource:datos, disabelExport:false});
         }).catch(err => {
             console.log(err)
             message.error('No se pueden cargar los datos, revise la conexión con el servidor', 4);
@@ -61,12 +86,14 @@ class TablaReporte extends React.Component {
         this.setState({ filteredInfo: null });
     };
 
-    handleChange = (pagination, filters, sorter) => {
+    handleChange = (pagination, filters, sorter, currentDataSource) => {
+        console.log('Various parameters', pagination, filters, sorter, currentDataSource);
         this.setState({
-            filteredInfo: filters,
-            sortedInfo: sorter,
+          filteredInfo: filters,
+          sortedInfo: sorter,
+          currentDataSource: currentDataSource.currentDataSource
         });
-    };
+      };
 
     clearAll = () => {
         this.setState({
@@ -84,18 +111,6 @@ class TablaReporte extends React.Component {
 
     componentDidMount() {
         this.llenar_tabla();
-    }
-
-    stringSorter(a, b) {
-        let y = a || '';
-        let u = b || '';
-        return y.localeCompare(u);
-    }
-
-    filtrar_array(arr, value) {
-        if (arr !== null) {
-            return arr.indexOf(value) === 0;
-        }
     }
 
     busqueda_array(arr, dataIndex, value) {
@@ -166,60 +181,7 @@ class TablaReporte extends React.Component {
 
 
     handleOk = (extension) => {
-       /*  let fileExtension = ""; */
-        switch (extension) {
-            case "xlsx":
-                /* fileExtension = '.xlsx';
-               let datos = [];
-                let wb = XLSX.utils.book_new();
-                 Axios.reporte_bajas().then(res => {
-                    res.data.forEach(function (dato) {
-                        let equipos = {
-                            tipo_equipo: dato.tipo_equipo,
-                            codigo: dato.codigo,
-                            marca: dato.marca,
-                            modelo: dato.modelo,
-                            estado_operativo: dato.estado_operativo,
-                            numero_serie: dato.numero_serie,
-                            descripcion: dato.descripcion,
-                        }
-                        datos.push(equipos)
-                    });
-                    let ws1 = XLSX.utils.json_to_sheet(datos);
-                    XLSX.utils.book_append_sheet(wb, ws1, "Datos");
-
-                    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-                    const data = new Blob([excelBuffer], { type: fileType });
-                    saveAs(data, "equipos_de_baja" + fileExtension);
-                }).catch(err => {
-                    message.error('No se pudieron cargar los datos, revise la conexión con el servidor', 4);
-                }); 
-                let registro={
-                    empleado: "empleado",
-                    departamento: "departamento",
-                    tipo_equipo: "tipo_equipo",
-                    marca: "marca",
-                    modelo: "modelo",
-                    numero_serie: "numero_serie",
-                    direccion_ip: "direccion_ip",
-                    so: "so",
-                    services_pack: "services_pack",
-                    licencia: "licencia",
-                    tipo_so: "tipo_so",
-                    nombre_pc: "nombre_pc",
-                    usuario_pc: "usuario_pc",
-                    office: "office",
-                    estado_operativo: "estado_operativo",
-                    descripcion: "descripcion" 
-                }*/
-                break;
-            default:
-                message.error('Debe seleccionar un formato de descarga');
-                break;
-        }
-        this.setState({
-            visible: false
-        });
+        console.log("Función por completar");
     };
 
     handleCancel = () => {
@@ -239,17 +201,18 @@ class TablaReporte extends React.Component {
 
     render() {
         const tipo_link = (record) => {
+            let route = this.state.isNotSistemas ? '/finanzas' : '/sistemas'
             switch (record.tipo_equipo.toLowerCase()) {
                 case "impresora":
-                    return '/impresora/view/'+record.key;
+                    return route+'/impresora/view/'+record.key;
                 case "desktop":
-                    return '/desktop/view/'+record.key;
+                    return route+'/desktop/view/'+record.key;
                 case "laptop":
-                    return '/laptop/view/'+record.key
+                    return route+'/laptop/view/'+record.key
                 case "router":
-                    return '/router/view/'+record.key;
+                    return route+'/router/view/'+record.key;
                 default:
-                    return '/equipo/view/'+record.key;
+                    return route+'/equipo/view/'+record.key;
             }
         }
         const columns = [
@@ -282,8 +245,8 @@ class TablaReporte extends React.Component {
                         value: 'Unidad Educativa San José del Buen Pastor',
                     }
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.bspi, value),
-                sorter: (a, b) => this.stringSorter(a.bspi, b.bspi)
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.bspi, value),
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.bspi, b.bspi)
             },
             {
                 title: 'Empleado',
@@ -354,8 +317,17 @@ class TablaReporte extends React.Component {
                         value: 'B',
                     }
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.estado_operativo, value),
-                sorter: (a, b) => this.stringSorter(a.estado_operativo, b.estado_operativo)
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.estado_operativo, value),
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado_operativo, b.estado_operativo),
+                render: (text, value) => (
+                    <div >
+                        {text==="D" ? <Tag style={{margin: 2}} color="green" key={value}>Disponible</Tag> : 
+                        text==="O" ?  <Tag style={{margin: 2}} color="blue" key={value}>Operativo</Tag> :
+                        text==="ER" ?  <Tag style={{margin: 2}} color="orange" key={value}>En revisión</Tag> :
+                        text==="R" ?  <Tag style={{margin: 2}} color="magenta" key={value}>Reparado</Tag> :
+                                        <Tag style={{margin: 2}} color="red" key={value}>De baja</Tag> }
+                    </div>
+                  ),
             }
         ];
         return (
@@ -363,18 +335,14 @@ class TablaReporte extends React.Component {
                 <Row>
                     <Col span={12}><Title level={3}>Reporte de equipos informáticos asignados</Title></Col>
                     <Col className='flexbox'>
-                        <ButtonGroup>
+                        {/* <ButtonGroup>
                             <Button type="primary" icon="cloud-download" onClick={this.showModal}>Exportar</Button>
-                        </ButtonGroup>
+                        </ButtonGroup> */}
+                        <ExcelExportMasivo data={this.state.currentDataSource} data_detallada = {this.state.data_detallada} dis = {this.state.disabelExport}></ExcelExportMasivo>
+
                     </Col>
                 </Row>
                 <div className="div-container">
-                    {/* <div >
-                        <Row>
-                           
-                        </Row>
-                    </div> 
-                    <br />*/}
                     <div className="table-operations">
                         <Button onClick={this.limpiarFiltros}>Limpiar filtros</Button>
                         <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>

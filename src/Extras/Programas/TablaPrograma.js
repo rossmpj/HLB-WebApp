@@ -174,7 +174,7 @@ class TablaPrograma extends React.Component {
                 render: (text, record) => (
                     <div style={{alignContent: 'center'}}>
                         <Link to={{
-                            pathname: '/programa/form',
+                            pathname: '/sistemas/programa/form',
                             state: {
                                 info: record,
                                 titulo: "Editar programa"
@@ -197,7 +197,7 @@ class TablaPrograma extends React.Component {
                     <Row>
                         <Col span={12}><Title level={2}>Inventario de programas</Title></Col>
                         <Col className='flexbox'>
-                            <Link to={{ pathname: '/programa/form', state: { titulo: "Nuevo programa" } }} >
+                            <Link to={{ pathname: '/sistemas/programa/form', state: { titulo: "Nuevo programa" } }} >
                                 <Button type="primary" icon="plus">Agregar programa</Button>
                             </Link>
                         </Col>

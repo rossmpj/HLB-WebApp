@@ -12,10 +12,9 @@ export default class ExcelExportLaptop extends Component {
 
 
 
-    generateData() {
-        console.log(this.props.data, "data excel")
+    static generateData(data) {
         let ArrayData = []
-        this.props.data.forEach(element => {
+        data.forEach(element => {
             let rowGeneral = FuncionesAuxiliares.generateGeneralData(element);
             let rowsRAM = FuncionesAuxiliares.generateDataRAM_DISK(element.rams);
             let rowsDISK = FuncionesAuxiliares.generateDataRAM_DISK(element.discos);
@@ -43,7 +42,7 @@ export default class ExcelExportLaptop extends Component {
         return (
             <div>
                 <ExcelFile filename={'Inventario Laptops'} element={<Button disabled={this.props.dis} type="primary" icon="cloud-download">Exportar</Button>}>
-                    <ExcelSheet dataSet={this.generateData()} name="Inventario Laptops" />
+                    <ExcelSheet dataSet={ExcelExportLaptop.generateData(this.props.data)} name="Inventario Laptops" />
                 </ExcelFile>
             </div>
         );

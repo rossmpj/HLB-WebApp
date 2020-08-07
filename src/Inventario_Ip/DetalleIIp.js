@@ -99,7 +99,7 @@ class DetalleIIp extends React.Component {
                             <Title level={2}>Detalle de dirección IP</Title>
                         </Col>
                         <Col className='flexbox'>
-                            <Link to={{ pathname: '/ip' }}>
+                            <Link to={{ pathname: '/sistemas/ip' }}>
                                 <Button type="primary" icon="left">Volver</Button>
                             </Link>
                         </Col>

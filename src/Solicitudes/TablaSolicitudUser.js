@@ -1,11 +1,12 @@
 import React from 'react';
-import { Button, Row, Col, Table, Input, Icon, Popconfirm, message, Tag, Typography } from 'antd';
-import ButtonGroup from 'antd/lib/button/button-group';
+import { Button, Row, Col, Table, Input, Icon,  message, Tag, Typography } from 'antd';
+// import ButtonGroup from 'antd/lib/button/button-group';Popconfirm,
 import { Link } from 'react-router-dom';
+import Auth from '../Login/Auth'
 import Axios from '../Servicios/AxiosSolicitud'
 const { Title } = Typography;
 
-class TablaEquipo extends React.Component {
+class TablaSolicitudUser extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -16,26 +17,21 @@ class TablaEquipo extends React.Component {
             info: [],
             filteredInfo: null,
             sortedInfo: null,
-            index: 0
+            index: 0,
+            id_usuario: Auth.getDataLog().user.username
         };
 
     }
 
     llenar_tabla() {
         let datos = [];
-        Axios.mostrar_solicitudes().then(res => {
+        Axios.mostrar_solicitudes_user(this.state.id_usuario).then(res => {
             res.data.forEach(function (dato) {
-                let empleado = "";
-                if (dato.id_usuario !== null) {
-                    empleado = dato.nombre.concat(" ", dato.apellido);
-                }
                 let equipos = {
                     key: dato.id_solicitud,
                     estado: dato.estado,
                     tipo: dato.tipo,
                     observacion: dato.observacion,
-                    user: dato.id_usuario,
-                    empleado: empleado,
                     fecha: dato.fecha_realizacion + " " + dato.hora_realizacion,
                     prioridad: dato.prioridad
                 }
@@ -52,7 +48,7 @@ class TablaEquipo extends React.Component {
         this.setState({ filteredInfo: null });
     };
 
-    handleChange = (pagination, filters, sorter) => {
+    handleChange = (filters, sorter) => {
         this.setState({
             filteredInfo: filters,
             sortedInfo: sorter,
@@ -160,14 +156,7 @@ class TablaEquipo extends React.Component {
 
     render() {
         const columns = [
-            {
-                title: 'Realizada por:',
-                dataIndex: 'empleado',
-                key: 'empleado',
-                fixed: 'left',
-                //render: (text, record) => <Link to={{ pathname: '/equipo/view/'+record.key}}>{text}</Link>,
-                ...this.getColumnSearchProps('empleado')
-            },
+            
 
             {
                 title: 'Estado Solicitud',
@@ -238,12 +227,7 @@ class TablaEquipo extends React.Component {
                 )
 
             },
-            {
-                title: 'Usuario',
-                dataIndex: 'user',
-                key: 'user',
-                ...this.getColumnSearchProps('user')
-            },
+
             {
                 title: 'Tipo de Asistencia',
                 dataIndex: 'tipo',
@@ -307,7 +291,7 @@ class TablaEquipo extends React.Component {
                 <Row>
                     <Col span={12}><Title level={2}>Solicitudes</Title></Col>
                     <Col className='flexbox'>
-                        <Link to={{ pathname: '/solicitud/form', state: { titulo: "Nueva Solicitud" } }} >
+                        <Link to={{ pathname: '/empleado/solicitud/form', state: { titulo: "Nueva Solicitud" } }} >
                             <Button type="primary" icon="plus">Crear una Nueva Solicitud</Button>
                         </Link>
                     </Col>
@@ -328,4 +312,4 @@ class TablaEquipo extends React.Component {
     }
 }
 
-export default TablaEquipo;
+export default TablaSolicitudUser;

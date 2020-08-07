@@ -1,24 +1,16 @@
 import React from 'react';
-import {
-    Button,
-    Row,
-    Col,
-    Table,
-    Input,
-    Icon,
-    message,
-    Typography
-} from 'antd';
+import { Button, Row, Col, Table, Input, Icon, message, Typography } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosReporte'
 import ModalDownload from '../Componentes/ModalDownload';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
+import FuncionesAuxiliares from '../FuncionesAuxiliares';
+import Auth from '../Login/Auth'
 
 const { Title } = Typography;
 const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-
 
 class TablaBajas extends React.Component {
     constructor(props) {
@@ -33,7 +25,8 @@ class TablaBajas extends React.Component {
             sortedInfo: null,
             index: 0,
             visible: false,
-            archivo: ""
+            archivo: "",
+            isNotSistemas: Auth.isNotSistemas()
         };
 
     }
@@ -42,7 +35,7 @@ class TablaBajas extends React.Component {
         let datos = [];
         Axios.reporte_bajas().then(res => {
             res.data.forEach(function (dato) {
-                console.log("dq",dato)
+                console.log("dq", dato)
                 let equipos = {
                     key: dato.id_equipo,
                     tipo_equipo: dato.tipo_equipo,
@@ -91,17 +84,6 @@ class TablaBajas extends React.Component {
         this.llenar_tabla();
     }
 
-    stringSorter(a, b) {
-        let y = a || '';
-        let u = b || '';
-        return y.localeCompare(u);
-    }
-
-    filtrar_array(arr, value) {
-        if (arr !== null) {
-            return arr.indexOf(value) === 0;
-        }
-    }
 
     busqueda_array(arr, dataIndex, value) {
         if (arr[dataIndex] !== null) {
@@ -189,49 +171,47 @@ class TablaBajas extends React.Component {
 
     handleOk = async (extension) => {
         let fileExtension = "";
-        switch (extension) {
-            case "xlsx":
-                fileExtension = '.xlsx';
-                try {
-                    let datos = []
-                    let datos2=[]
-                    const resumen = await this.resumen_bajas();
-                    const reporte = await this.reporte_bajas();
-                    reporte.forEach(function (dato) {
-                        let equipos = {
-                            tipo_equipo: dato.tipo_equipo,
-                            codigo: dato.codigo,
-                            marca: dato.marca,
-                            modelo: dato.modelo,
-                            estado_operativo: dato.estado_operativo,
-                            numero_serie: dato.numero_serie,
-                            descripcion: dato.descripcion,
-                        }
-                        datos.push(equipos);
-                    });
-                    resumen.forEach(function (dato) {
-                        let resumen = {
-                            tipo_equipo: dato.tipo_equipo,
-                            cantidad: dato.cantidad
-                        }
-                        datos2.push(resumen);
-                    });
-                    let wb = XLSX.utils.book_new();
-                    const ws1 = XLSX.utils.json_to_sheet(datos);
-                    const ws2 = XLSX.utils.json_to_sheet(datos2);
-                    XLSX.utils.book_append_sheet(wb, ws1, "Datos");
-                     XLSX.utils.book_append_sheet(wb, ws2, "Resumen"); 
-                     const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-                     const data = new Blob([excelBuffer], { type: fileType });
-                     saveAs(data, "equipos_de_baja" + fileExtension);
-                } catch (error) {
-                    message.error(error.message)
+        if (extension === "xlsx") {
+            fileExtension = '.xlsx';
+            try {
+                let datos = []
+                let datos2 = []
+                const resumen = await this.resumen_bajas();
+                const reporte = await this.reporte_bajas();
+                reporte.forEach(function (dato) {
+                    let equipos = {
+                        tipo_equipo: dato.tipo_equipo,
+                        codigo: dato.codigo,
+                        marca: dato.marca,
+                        modelo: dato.modelo,
+                        estado_operativo: dato.estado_operativo,
+                        numero_serie: dato.numero_serie,
+                        descripcion: dato.descripcion,
+                    }
+                    datos.push(equipos);
+                });
+                resumen.forEach(function (dato) {
+                    let informacion = {
+                        tipo_equipo: dato.tipo_equipo,
+                        cantidad: dato.cantidad
+                    }
+                    datos2.push(informacion);
+                });
+                let wb = XLSX.utils.book_new();
+                const ws1 = XLSX.utils.json_to_sheet(datos);
+                const ws2 = XLSX.utils.json_to_sheet(datos2);
+                XLSX.utils.book_append_sheet(wb, ws1, "Datos");
+                XLSX.utils.book_append_sheet(wb, ws2, "Resumen");
+                const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+                const data = new Blob([excelBuffer], { type: fileType });
+                saveAs(data, "equipos_de_baja" + fileExtension);
+            } catch (error) {
+                message.error(error.message)
                     .then(() => message.error('No fue posible generar el archivo', 2.5))
-                }
-                break;
-            default:
-                message.error('Debe seleccionar un formato de descarga');
-                break;
+            }
+
+        } else {
+            message.error('Debe seleccionar un formato de descarga');
         }
         this.setState({
             visible: false
@@ -255,17 +235,18 @@ class TablaBajas extends React.Component {
 
     render() {
         const tipo_link = (record) => {
+            let route = this.state.isNotSistemas ? '/finanzas' : '/sistemas';
             switch (record.tipo_equipo.toLowerCase()) {
                 case "impresora":
-                    return '/impresora/view/'+record.key;
+                    return route+'/impresora/view/' + record.key;
                 case "desktop":
-                    return '/desktop/view/'+record.key;
+                    return route+'/desktop/view/' + record.key;
                 case "laptop":
-                    return '/laptop/view/'+record.key;
+                    return route+'/laptop/view/' + record.key;
                 case "router":
-                    return '/router/view/'+record.key;
+                    return route+'/router/view/' + record.key;
                 default:
-                    return '/equipo/view/'+record.key;
+                    return route+'/equipo/view/' + record.key;
             }
         }
         const columns = [
@@ -279,7 +260,7 @@ class TablaBajas extends React.Component {
                 title: 'Código',
                 dataIndex: 'codigo',
                 key: 'codigo',
-                render: (text, record) => <Link to={{ pathname: `${tipo_link(record)}`}}>{text}</Link>,
+                render: (text, record) => <Link to={{ pathname: `${tipo_link(record)}` }}>{text}</Link>,
                 ...this.getColumnSearchProps('codigo')
             },
             {
@@ -326,8 +307,8 @@ class TablaBajas extends React.Component {
                         value: 'B',
                     }
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.estado_operativo, value),
-                sorter: (a, b) => this.stringSorter(a.estado_operativo, b.estado_operativo)
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.estado_operativo, value),
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado_operativo, b.estado_operativo)
             },
             {
                 title: 'Descripción',

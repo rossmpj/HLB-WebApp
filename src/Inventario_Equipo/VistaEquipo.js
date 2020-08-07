@@ -2,6 +2,8 @@ import React from 'react';
 import {Typography,Button, Row, Col} from 'antd';
 import FormularioEquipo from './FormularioEquipo';
 import { Link } from 'react-router-dom';
+import Auth from '../Login/Auth';
+
 const { Title } = Typography;
 
 class VistaEquipo extends React.Component {
@@ -10,7 +12,8 @@ class VistaEquipo extends React.Component {
         super(props);
         this.state = {
             titulo: "Inventario de Equipos informáticos",
-            data: this.props.location
+            data: this.props.location,
+            route: Auth.isNotSistemas() ? '/finanzas' : '/sistemas'
         };
     }
 
@@ -27,7 +30,7 @@ class VistaEquipo extends React.Component {
                 <Row>
                     <Col span={12}><Title level={2}>{this.state.titulo}</Title></Col>
                     <Col className='flexbox'>
-                        <Link to={{ pathname: '/otrosequipos' }} ><Button type="primary" icon="left">Volver</Button></Link>
+                        <Link to={{ pathname: this.state.route+'/otrosequipos' }} ><Button type="primary" icon="left">Volver</Button></Link>
                     </Col>
                 </Row>
                 <div className="div-miniborder-top" >

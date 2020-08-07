@@ -1,14 +1,14 @@
 import React from 'react';
 import { Tabs, Row, Col, Typography, Button, Descriptions, Badge, message } from 'antd';
 import { RobotOutlined, UserOutlined } from '@ant-design/icons';
-import SinResultados from '../Componentes/SinResultados'
+import SinResultados from '../Componentes/SinResultados';
 import Axios from '../Servicios/AxiosTipo';
 import { Link } from 'react-router-dom';
 import QRCodeComponent from '../Extras/QRCode/QRCodeComponent'
+import Auth from '../Login/Auth';
+
 const { TabPane } = Tabs;
 const { Title } = Typography;
-
-
 
 class DetalleEquipo extends React.Component {
     constructor(props) {
@@ -33,7 +33,8 @@ class DetalleEquipo extends React.Component {
             label1: "",
             label2: "",
             key: "",
-            url: ""
+            url: "",
+            route: Auth.isNotSistemas() ? '/finanzas' : '/sistemas'
         }
     }
 
@@ -167,7 +168,9 @@ class DetalleEquipo extends React.Component {
                             <Button size="large" onClick={this.downloadQRCode}>Descargar Codigo QR</Button>
                         </Col>
                         <Col xs={24} sm={24} md={6} lg={6} xl={6}>
-                            <Button size="large" onClick={this.props.history.goBack} type="primary" icon="left">Volver</Button>
+                            <Link to={{ pathname: this.state.route+'/otrosequipos' }}>
+                                <Button type="primary" icon="left">Volver</Button>
+                            </Link>
                         </Col>
                     </Row>
                     <Row justify="space-around" align="middle">

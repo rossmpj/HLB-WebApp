@@ -1,10 +1,11 @@
 import React from 'react';
 import {
-    Button, Row, Col, Table, Input, Icon, message, Typography, Popconfirm
+    Button, Row, Col, Table, Input, Icon, message, Typography, Popconfirm, Tag
 } from 'antd';
-import ButtonGroup from 'antd/lib/button/button-group';
+import ExcelExportCorreo from './ExcelExportCorreo';
 import { Link } from 'react-router-dom';
 import AxiosTipo from '../Servicios/AxiosTipo';
+import FuncionesAuxiliares from '../FuncionesAuxiliares';
 const { Title } = Typography;
 
 
@@ -18,7 +19,9 @@ class TablaCorreo extends React.Component {
             dataSource: [],
             filteredInfo: null,
             sortedInfo: null,
-            index: 0
+            index: 0,
+            currentDataSource: [],
+            disabelExport: true
         };
     }
 
@@ -39,7 +42,7 @@ class TablaCorreo extends React.Component {
                 }
                 datos.push(registro)
             });
-            this.setState({ dataSource: datos });
+            this.setState({ dataSource: datos, currentDataSource: datos, disabelExport: false });
         }).catch(err => {
             message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
         });
@@ -67,11 +70,12 @@ class TablaCorreo extends React.Component {
         });
     };
 
-    handleChange = (pagination, filters, sorter) => {
-        console.log('Various parameters', pagination, filters, sorter);
+    handleChange = (pagination, filters, sorter, currentDataSource) => {
+        console.log('Various parameters', pagination, filters, sorter, currentDataSource);
         this.setState({
             filteredInfo: filters,
             sortedInfo: sorter,
+            currentDataSource: currentDataSource.currentDataSource
         });
     };
 
@@ -138,19 +142,6 @@ class TablaCorreo extends React.Component {
         });
     }
 
-    filtrar_array(arr, value) {
-        if (arr !== null) {
-            return arr.indexOf(value) === 0;
-        }
-    }
-
-    stringSorter(a, b) {
-        let y = a || '';
-        let u = b || '';
-        return y.localeCompare(u);
-    }
-
-
     render() {
         const columns = [
             {
@@ -187,8 +178,8 @@ class TablaCorreo extends React.Component {
                         value: 'Unidad Educativa San José del Buen Pastor',
                     }
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.bspi_punto, value),
-                sorter: (a, b) => this.stringSorter(a.bspi_punto, b.bspi_punto)
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.bspi_punto, value),
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.bspi_punto, b.bspi_punto)
             },
             {
                 title: 'Departamento',
@@ -210,8 +201,14 @@ class TablaCorreo extends React.Component {
                         value: 'I',
                     }
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.estado, value),
-                sorter: (a, b) => this.stringSorter(a.estado, b.estado)
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.estado, value),
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado, b.estado),
+                render: (text, value) => (
+                    <div >
+                        {text === "EU" ? <Tag style={{ margin: 2 }} color="green" key={value}>En Uso</Tag> :
+                            <Tag style={{ margin: 2 }} color="red" key={value}>Inactivo</Tag>}
+                    </div>
+                ),
             },
             {
                 title: 'Fecha de asignación',
@@ -222,10 +219,11 @@ class TablaCorreo extends React.Component {
             {
                 title: 'Acción',
                 key: 'accion',
+                fixed: 'right',
                 render: (text, record) => (
                     <div>
                         <Link to={{
-                            pathname: '/correo/form',
+                            pathname: '/sistemas/correo/form',
                             state: {
                                 info: record,
                                 titulo: "Editar Correo"
@@ -246,34 +244,36 @@ class TablaCorreo extends React.Component {
             },
         ];
         return (
-                <div className="div-container-title">
-                    <Row>
-                        <Col span={12}><Title level={2}>Inventario de Correos</Title></Col>
-                        <Col className='flexbox'>
-                            <Link to={{ pathname: '/correo/form', state: { titulo: "Nuevo Correo" } }} >
-                                <Button type="primary" icon="plus">Agregar Correo</Button>
-                            </Link>
-                        </Col>
-                    </Row>
-                    <div className="div-container">
-                        <div >
-                            <Row>
-                                <Col className='flexbox'>
-                                    <ButtonGroup>
-                                        <Button type="primary" icon="import">Importar</Button>
-                                        <Button type="primary" icon="cloud-download">Exportar</Button>
-                                    </ButtonGroup>
-                                </Col>
-                            </Row>
-                        </div>
-                        <br />
+            <div className="div-container-title">
+                <Row>
+                    <Col span={12}><Title level={2}>Inventario de Correos</Title></Col>
+                    <Col className='flexbox'>
+                        <Link to={{ pathname: '/sistemas/correo/form', state: { titulo: "Nuevo Correo" } }} >
+                            <Button type="primary" icon="plus">Agregar Correo</Button>
+                        </Link>
+                    </Col>
+                </Row>
+                <div className="div-container">
+                    <div >
+                        <Row>
+                            <Col className='flexbox'>
+                                {/* <ButtonGroup> */}
+                                    <Button type="primary" icon="import">Importar</Button>
+                                    <ExcelExportCorreo data={this.state.currentDataSource} dis = {this.state.disabelExport} ></ExcelExportCorreo>
+
+                                    {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
+                                {/* </ButtonGroup> */}
+                            </Col>
+                        </Row>
+                    </div>
+                    <br />
                     <div className="table-operations">
                         <Button onClick={this.limpiarFiltros}>Limpiar filtros</Button>
                         <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>
                         <Button onClick={this.clearAll}>Limpiar todo</Button>
                     </div>
-                        <Table bordered key={this.state.index} onChange={this.handleChange} size="small"
-                            scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
+                    <Table bordered key={this.state.index} onChange={this.handleChange} size="small"
+                        scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
             </div>
         );

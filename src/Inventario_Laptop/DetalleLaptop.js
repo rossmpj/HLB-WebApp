@@ -7,6 +7,7 @@ import { GiProcessor } from "react-icons/gi";
 import Axios from '../Servicios/AxiosLaptop'
 import SinResultados from '../Componentes/SinResultados'
 import QRCodeComponent from '../Extras/QRCode/QRCodeComponent'
+import DetalleEquipo from '../Componentes/DetalleEquipo'
 
 const { TabPane } = Tabs;
 const { Title } = Typography;
@@ -110,148 +111,129 @@ class DetalleLaptop extends React.Component {
       return (<SinResultados></SinResultados>)
     } else {
       return (
-        <div>
-          <div className="div-container-title">
-            <Row justify="end">
-              <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-                <Title level={2}>Detalle de laptop</Title>
-              </Col>
-              <Col xs={24} sm={24} md={6} lg={6} xl={6}>
-                <Button size="large" onClick={this.downloadQRCode}>Descargar Codigo QR</Button>
-              </Col>
-              <Col xs={24} sm={24} md={6} lg={6} xl={6}>
-                <Button size="large" onClick={this.props.history.goBack} type="primary" icon="left">Volver</Button>
-              </Col>
-            </Row>
-            <Row justify="space-around" align="middle">
-              <Col md={16} lg={16}>
-                <Tabs defaultActiveKey="1">
-                  <TabPane tab={<span><LaptopOutlined />General</span>} key="1">
-                    <Descriptions title="Datos generales del equipo" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                      <Descriptions.Item label="Código Laptop" span={3}>{this.state.codigo}</Descriptions.Item>
-                      {this.state.bspi === undefined ? null :
-                        <>
-                          <Descriptions.Item label="BSPI-Punto">{this.state.bspi}</Descriptions.Item>
-                          <Descriptions.Item label="Departamento">{this.state.departamento}</Descriptions.Item>
-                          <Descriptions.Item label="Empleado a cargo">{this.state.empleado}</Descriptions.Item>
-                        </>
-                      }
-                      <Descriptions.Item label="Marca">{this.state.marca}</Descriptions.Item>
-                      <Descriptions.Item label="Modelo">{this.state.modelo}</Descriptions.Item>
-                      <Descriptions.Item label="Número de serie">{this.state.num_serie}</Descriptions.Item>
-                      <Descriptions.Item label="Nombre PC">{this.state.name_pc}</Descriptions.Item>
-                      <Descriptions.Item label="Usuario PC">{this.state.user_pc}</Descriptions.Item>
-                      <Descriptions.Item label="Estado">
-                        {this.state.estado === "D" ? <Badge status="processing" color="green" text="Disponible" /> :
-                          this.state.estado === "O" ? <Badge status="processing" color="blue" text="Operativo" /> :
-                            this.state.estado === "ER" ? <Badge status="processing" color="orange" text="En revision" /> :
-                              this.state.estado === "R" ? <Badge status="processing" color="magenta" text="Reparado" /> :
-                                <Badge status="processing" color="red" text="De baja" />}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Dirección IP" span={3}>{this.state.ip}</Descriptions.Item>
-                      <Descriptions.Item label="Descripción">
-                        {this.state.descripcion}
-                      </Descriptions.Item>
-                    </Descriptions>
-                  </TabPane>
+        <div className="div-container-title">
+          <Row justify="end">
+            <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+              <Title level={2}>Detalle de laptop</Title>
+            </Col>
+            <Col xs={24} sm={24} md={6} lg={6} xl={6}>
+              <Button size="large" onClick={this.downloadQRCode}>Descargar Codigo QR</Button>
+            </Col>
+            <Col xs={24} sm={24} md={6} lg={6} xl={6}>
+              <Button size="large" onClick={this.props.history.goBack} type="primary" icon="left">Volver</Button>
+            </Col>
+          </Row>
+          <Row justify="space-around" align="middle">
+            <Col md={16} lg={16}>
+              <Tabs defaultActiveKey="1">
+                <TabPane tab={<span><LaptopOutlined />General</span>} key="1">
+                  <Descriptions title="Datos generales del equipo" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
+                    <Descriptions.Item label="Código Laptop" span={3}>{this.state.codigo}</Descriptions.Item>
+                    {this.state.bspi === undefined ? null :
+                      <>
+                        <Descriptions.Item label="BSPI-Punto">{this.state.bspi}</Descriptions.Item>
+                        <Descriptions.Item label="Departamento">{this.state.departamento}</Descriptions.Item>
+                        <Descriptions.Item label="Empleado a cargo">{this.state.empleado}</Descriptions.Item>
+                      </>
+                    }
+                    <Descriptions.Item label="Marca">{this.state.marca}</Descriptions.Item>
+                    <Descriptions.Item label="Modelo">{this.state.modelo}</Descriptions.Item>
+                    <Descriptions.Item label="Número de serie">{this.state.num_serie}</Descriptions.Item>
+                    <Descriptions.Item label="Nombre PC">{this.state.name_pc}</Descriptions.Item>
+                    <Descriptions.Item label="Usuario PC">{this.state.user_pc}</Descriptions.Item>
+                    <Descriptions.Item label="Estado">
+                      {this.state.estado === "D" ? <Badge status="processing" color="green" text="Disponible" /> :
+                        this.state.estado === "O" ? <Badge status="processing" color="blue" text="Operativo" /> :
+                          this.state.estado === "ER" ? <Badge status="processing" color="orange" text="En revision" /> :
+                            this.state.estado === "R" ? <Badge status="processing" color="magenta" text="Reparado" /> :
+                              <Badge status="processing" color="red" text="De baja" />}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Dirección IP" span={3}>{this.state.ip}</Descriptions.Item>
+                    <Descriptions.Item label="Descripción">
+                      {this.state.descripcion}
+                    </Descriptions.Item>
+                  </Descriptions>
+                </TabPane>
 
-                  <TabPane tab={<span><WindowsOutlined />SO</span>} key="2" >
-                    <Descriptions title="Datos del sistema operativo" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                      <Descriptions.Item label="Sistema operativo" span={2}>{this.state.so}</Descriptions.Item>
-                      <Descriptions.Item label="Tipo de sistema operativo">{this.state.so_type}</Descriptions.Item>
-                      <Descriptions.Item label="Service Pack 1" span={3}><Badge status="success" text={this.state.servpack} /></Descriptions.Item>
-                      <Descriptions.Item label="Licencia" span={3}>
-                        <Badge status="warning" text={this.state.licencia} />
-                      </Descriptions.Item>
-                      {/* <Descriptions.Item label="Office">{this.state.office}</Descriptions.Item> */}
-                    </Descriptions>
-                    <br />
-                    <div>
-                      {this.state.office.map((ram, i) => {
+                <TabPane tab={<span><WindowsOutlined />SO</span>} key="2" >
+                  <DetalleEquipo
+                    titulo={'Datos del sistema operativo'} so={this.state.so} so_type={this.state.so_type} servpack={this.state.servpack}
+                    licencia={this.state.licencia} >
+                  </DetalleEquipo>
+                  <br />
+                  <div>
+                    {this.state.office === undefined ? null :
+                      this.state.office.map((programa, i) => {
                         return (
-                          <div key={ram.id_programa}>
-                            <Descriptions title={"Programa " + (i + 1)} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                              <Descriptions.Item span={1} label="Código">{ram.codigo} </Descriptions.Item>
-                              <Descriptions.Item span={1} label="Nombre">{ram.nombre} </Descriptions.Item>
-                              <Descriptions.Item span={1} label="Versión">{ram.version} </Descriptions.Item>
-                              <Descriptions.Item span={1} label="Editor">{ram.editor} </Descriptions.Item>
-                              <Descriptions.Item span={1} label="Fecha de instalación">{ram.fecha_instalacion.slice(0, 10)} </Descriptions.Item>
-                              <Descriptions.Item span={1} label="Observación">{ram.observacion} </Descriptions.Item>
-                            </Descriptions>
+                          <div key={programa.id_programa}>
+                            <DetalleEquipo
+                              titulo={'Programa '} index={i} codigo={programa.codigo} nombre={programa.nombre} version={programa.version}
+                              editor={programa.editor} fecha_instalacion={programa.fecha_instalacion} observacion={programa.observacion} >
+                            </DetalleEquipo>
                             <br />
                           </div>
                         );
-                      })}
-                    </div>
-                  </TabPane>
+                      })
+                    }
+                  </div>
+                </TabPane>
 
-                  <TabPane tab={<span><GiProcessor className="anticon" />Procesador</span>} key="3" >
-                    <Descriptions title="Procesador" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                      <Descriptions.Item label="Código">{this.state.procesador.codigo}</Descriptions.Item>
-                      <Descriptions.Item label="Marca">{this.state.procesador.marca}</Descriptions.Item>
-                      <Descriptions.Item label="Modelo">{this.state.procesador.modelo}</Descriptions.Item>
-                      <Descriptions.Item label="Número de serie">{this.state.procesador.numero_serie}</Descriptions.Item>
-                      <Descriptions.Item label="Frecuencia">{this.state.procesador.frecuencia + " GHz"}</Descriptions.Item>
-                      <Descriptions.Item label="Número de núcleos">{this.state.procesador.nucleos}</Descriptions.Item>
-                      <Descriptions.Item label="Descripción">{this.state.procesador.descripcion}</Descriptions.Item>
-                    </Descriptions>
-                    <br />
-                  </TabPane>
+                <TabPane tab={<span><GiProcessor className="anticon" />Procesador</span>} key="3" >
+                  <Descriptions title="Procesador" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
+                    <Descriptions.Item label="Código">{this.state.procesador.codigo}</Descriptions.Item>
+                    <Descriptions.Item label="Marca">{this.state.procesador.marca}</Descriptions.Item>
+                    <Descriptions.Item label="Modelo">{this.state.procesador.modelo}</Descriptions.Item>
+                    <Descriptions.Item label="Número de serie">{this.state.procesador.numero_serie}</Descriptions.Item>
+                    <Descriptions.Item label="Frecuencia">{this.state.procesador.frecuencia + " GHz"}</Descriptions.Item>
+                    <Descriptions.Item label="Número de núcleos">{this.state.procesador.nucleos}</Descriptions.Item>
+                    <Descriptions.Item label="Descripción">{this.state.procesador.descripcion}</Descriptions.Item>
+                  </Descriptions>
+                  <br />
+                </TabPane>
 
-                  <TabPane tab={<span><FaMemory className="anticon" />Memoria RAM</span>} key="4" >
-                    <Descriptions title="Datos generales de memoria RAM" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                      <Descriptions.Item label="RAM soportada">{this.state.ram_soportada}</Descriptions.Item>
-                      <Descriptions.Item label="Número de slots">{this.state.slots_ram}</Descriptions.Item>
-                    </Descriptions>
-                    <br />
-                    <div>
-                      {this.state.rams.map((ram, i) => {
-                        return (
-                          <div key={ram.id_equipo}>
-                            <Descriptions title={"Memoria RAM " + (i + 1)} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                              <Descriptions.Item label="Código">{ram.codigo} </Descriptions.Item>
-                              <Descriptions.Item label="Marca">{ram.marca} </Descriptions.Item>
-                              <Descriptions.Item label="Modelo">{ram.modelo} </Descriptions.Item>
-                              <Descriptions.Item label="Número de serie">{ram.numero_serie} </Descriptions.Item>
-                              <Descriptions.Item label="Capacidad">{ram.capacidad} </Descriptions.Item>
-                              <Descriptions.Item label="Tipo">{ram.tipo} </Descriptions.Item>
-                              <Descriptions.Item label="Descripción">{ram.descripcion} </Descriptions.Item>
-                            </Descriptions>
-                            <br />
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </TabPane>
-                  {/* {this.state.discos !== [] ? <> */}
-                  <TabPane tab={<span><FiHardDrive className="anticon" />Disco Duro</span>} key="5" >
-                    <div>
-                      {this.state.discos.map((dd, i) => {
+                <TabPane tab={<span><FaMemory className="anticon" />Memoria RAM</span>} key="4" >
+                  <Descriptions title="Datos generales de memoria RAM" bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
+                    <Descriptions.Item label="RAM soportada">{this.state.ram_soportada}</Descriptions.Item>
+                    <Descriptions.Item label="Número de slots">{this.state.slots_ram}</Descriptions.Item>
+                  </Descriptions>
+                  <br />
+                  <div>
+                    {this.state.rams.map((ram, i) => {
+                      return (
+                        <div key={ram.id_equipo}>
+                          <DetalleEquipo
+                            titulo={'Memoria RAM '} index={i} codigo={ram.codigo} marca={ram.marca} modelo={ram.modelo}
+                            numero_serie={ram.numero_serie} capacidad={ram.capacidad} tipo={ram.tipo} descripcion={ram.descripcion}>
+                          </DetalleEquipo>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </TabPane>
+                {/* {this.state.discos !== [] ? <> */}
+                <TabPane tab={<span><FiHardDrive className="anticon" />Disco Duro</span>} key="5" >
+                  <div>
+                    {this.state.discos === undefined ? null :
+                      this.state.discos.map((dd, i) => {
                         return (
                           <div key={dd.id_equipo}>
-                            <Descriptions title={"Disco duro " + (i + 1)} bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                              <Descriptions.Item label="Código">{dd.codigo} </Descriptions.Item>
-                              <Descriptions.Item label="Marca">{dd.marca} </Descriptions.Item>
-                              <Descriptions.Item label="Modelo">{dd.modelo} </Descriptions.Item>
-                              <Descriptions.Item label="Número de serie">{dd.numero_serie} </Descriptions.Item>
-                              <Descriptions.Item label="Capacidad">{dd.capacidad} </Descriptions.Item>
-                              <Descriptions.Item label="Tipo">{dd.tipo} </Descriptions.Item>
-                              <Descriptions.Item label="Descripción">{dd.descripcion} </Descriptions.Item>
-                            </Descriptions>
-                            <br />
+                            <DetalleEquipo
+                              titulo={'Disco duro '} index={i} codigo={dd.codigo} marca={dd.marca} modelo={dd.modelo}
+                              numero_serie={dd.numero_serie} capacidad={dd.capacidad} tipo={dd.tipo} descripcion={dd.descripcion}>
+                            </DetalleEquipo>
                           </div>
                         );
-                      })}
-                    </div>
-                  </TabPane>
-                  {/* </> : null} */}
-                </Tabs>
-              </Col>
-              <QRCodeComponent
-                url={this.state.url}
-              />
-            </Row>
-          </div>
+                      })
+                    }
+                  </div>
+                </TabPane>
+                {/* </> : null} */}
+              </Tabs>
+            </Col>
+            <QRCodeComponent
+              url={this.state.url}
+            />
+          </Row>
         </div>
       )
     }

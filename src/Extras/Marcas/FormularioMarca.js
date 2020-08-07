@@ -1,10 +1,6 @@
 import React from 'react';
 import '../../App.css';
-import {
-    Form,
-    Button,
-    message
-} from 'antd';
+import {Form, Button, message} from 'antd';
 import '../../custom-antd.css';
 import InputComponent from '../../Componentes/InputComponent';
 import { Link } from 'react-router-dom';
@@ -42,9 +38,9 @@ class FormularioMarca extends React.Component {
                         setTimeout(() => {
                             message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
                         }, 1000);
-                    }).catch(err => {
-                        if (err.response) {
-                            message.error(err.response.data.log, 4)
+                    }).catch(error_creacion => {
+                        if (error_creacion.response) {
+                            message.error(error_creacion.response.data.log, 4)
                                 .then(() => message.error('No fue posible actualizar los datos', 3))
                         } else {
                             message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
@@ -57,9 +53,9 @@ class FormularioMarca extends React.Component {
                         setTimeout(() => {
                             message.success({ content: "Edición realizada satisfactoriamente", key, duration: 3 });
                         }, 1000);
-                    }).catch(err => {
-                        if (err.response) {
-                            message.error(err.response.data.log, 4)
+                    }).catch(error_edicion => {
+                        if (error_edicion.response) {
+                            message.error(error_edicion.response.data.log, 4)
                                 .then(() => message.error('No fue posible actualizar los datos', 3))
                         } else {
                             message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
@@ -105,7 +101,7 @@ class FormularioMarca extends React.Component {
 
                     <Form.Item {...tailLayout}>
                         <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
-                        <Link to='/marca'>
+                        <Link to='/sistemas/marca'>
                             <Button type="primary">Cancelar</Button>
                         </Link>
                     </Form.Item>

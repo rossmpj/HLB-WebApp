@@ -13,8 +13,7 @@ import FormProcess from '../FormulariosPC/FormProcesador'
 import FormMainboard from '../FormulariosPC/FormMainboard';
 import FormRAM from '../FormulariosPC/FormularioDinamico.js';
 import FormDD from '../FormulariosPC/FormularioDinamicoDD.js';
-import { Button, Layout, Row, Col, Typography, message } from 'antd';
-import { Link } from 'react-router-dom';
+import { Layout, Typography, message } from 'antd';
 import { DesktopOutlined, WindowsOutlined } from '@ant-design/icons';
 import { GiDesk, GiComputerFan } from "react-icons/gi";
 import { FiCpu, FiSpeaker, FiHardDrive } from "react-icons/fi";
@@ -24,6 +23,7 @@ import { GoCircuitBoard, GoServer } from "react-icons/go";
 import { Steps } from 'antd';
 import Axios from '../Servicios/AxiosDesktop'
 import AxiosTipo from '../Servicios/AxiosTipo'
+import VistaFormulario from '../Componentes/VistaFormulario'
 
 const { Step } = Steps;
 const { Content } = Layout;
@@ -348,7 +348,7 @@ class FormularioDesktop extends React.Component {
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
                     }
                 })
-                this.props.history.push("/desktop");
+                this.props.history.push("/sistemas/desktop");
             }else{
                 console.log("intentando")
                 Axios.crear_desktop(this.state).then(res => {
@@ -364,7 +364,7 @@ class FormularioDesktop extends React.Component {
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
                     }
                 })
-                this.props.history.push("/desktop");
+                this.props.history.push("/sistemas/desktop");
             }
         }catch(error) {
             console.log(error)
@@ -564,12 +564,7 @@ class FormularioDesktop extends React.Component {
         return(
             <Content id={"conteniht"}>
                 <div id={"contenth1"} className="div-container-title">      
-                    <Row>
-                        <Col span={12}><Title level={2}>{this.state.titulo}</Title></Col>
-                        <Col className='flexbox'>
-                            <Link to={{ pathname: '/desktop' }} ><Button type="primary" icon="left">Volver</Button></Link>
-                        </Col>
-                    </Row>  
+                    <VistaFormulario enlace='/sistemas/desktop' titulo={this.state.titulo}></VistaFormulario> 
                     <div id={"styleform1"} className="div-border-top" >
                         <div id={"conth1"} className="div-container"> 
                             <Steps id={"srhe"}

@@ -1,16 +1,12 @@
 import React from 'react';
 import '../App.css';
-import {
-    Form,
-    Select,
-    Input,
-    Button,
-    InputNumber,
-    message
+import { Form, Select, Input, Button, InputNumber, message
 } from 'antd';
 import '../custom-antd.css';
 import InputComponent from '../Componentes/InputComponent'
 import Axios from '../Servicios/AxiosTipo';
+import Auth from '../Login/Auth';
+import FuncionesAuxiliares from '../FuncionesAuxiliares';
 const { TextArea } = Input;
 
 const tailLayout = {
@@ -29,7 +25,7 @@ class FormularioIp extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            encargado_registro: "admin",
+            encargado_registro: Auth.getDataLog().user.username,
             editionMode: false,
             key: ""
         }
@@ -60,9 +56,9 @@ class FormularioIp extends React.Component {
                         setTimeout(() => {
                             message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
                         }, 1000);
-                    }).catch(err => {
-                        if (err.response) {
-                            message.error(err.response.data.log, 4)
+                    }).catch(error_creacion => {
+                        if (error_creacion.response) {
+                            message.error(error_creacion.response.data.log, 4)
                             .then(() => message.error('No fue posible registrar los datos', 3))
                         } else{
                             message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
@@ -74,9 +70,9 @@ class FormularioIp extends React.Component {
                         setTimeout(() => {
                             message.success({ content: 'Registro actualizado satisfactoriamente', key, duration: 3 });
                         }, 1000);
-                    }).catch(err => {
-                        if (err.response) {
-                            message.error(err.response.data.log, 4)
+                    }).catch(error_edicion => {
+                        if (error_edicion.response) {
+                            message.error(error_edicion.response.data.log, 4)
                             .then(() => message.error('No fue posible actualizar los datos', 3))
                         } else{
                             message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
@@ -123,7 +119,8 @@ class FormularioIp extends React.Component {
                     <Form.Item label="Dirección IP">
                         {getFieldDecorator('ip',
                            {
-                                rules: [{ required: true, message: 'Debe colocar una dirección IP' }]
+                                rules: [{ required: true, message: 'Debe colocar una dirección IP' },
+                                {validator: FuncionesAuxiliares.ipValidator}]
                            })(
                                 <Input
                                     placeholder="[0-255].[0-255].[0-255].[0-255]"

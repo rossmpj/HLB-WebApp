@@ -4,6 +4,7 @@ import { PrinterOutlined, UserOutlined } from '@ant-design/icons';
 import SinResultados from '../Componentes/SinResultados'
 import Axios from '../Servicios/AxiosTipo';
 import QRCodeComponent from '../Extras/QRCode/QRCodeComponent'
+
 const { TabPane } = Tabs;
 const { Title } = Typography;
 

@@ -1,10 +1,11 @@
 import React from 'react';
 import { Button, Row, Col, Table, Input, Icon, Popconfirm, Tag, Typography, message } from 'antd';
-import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import AxiosLaptop from '../Servicios/AxiosLaptop'
 import FuncionesAuxiliares from '../FuncionesAuxiliares'
 import ExcelExport from './ExcelExportLaptop';
+import Auth from '../Login/Auth';
+
 const { Title } = Typography;
 const key = 'updatable';
 
@@ -20,15 +21,22 @@ class TablaLaptop extends React.Component {
       searchedColumn: '',
       disabelExport: true,
       index: 0,
-      dataSource: [],
-      currentDataSource: []
+      dataSource : [],
+      currentDataSource:[],
+      isNotSistemas: Auth.isNotSistemas()
     };
     this.handleClick = this.handleClick.bind(this);
   }
 
-  generarCodigoQR() {
-
-  }
+    obtener_datos = () => {
+        let datos = [];
+        AxiosLaptop.listar_laptops().then(res => {
+        datos = FuncionesAuxiliares.transform_data_laptop(res.data);
+        this.setState({ dataSource: datos, currentDataSource:datos, disabelExport:false });
+        }).catch(err => {
+            message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
+        });
+    }
 
   recargar_datos() {
     this.obtener_datos();
@@ -179,367 +187,354 @@ class TablaLaptop extends React.Component {
     }
   });
 
-  render() {
-    let { sortedInfo, filteredInfo } = this.state;
-    sortedInfo = sortedInfo || {};
-    filteredInfo = filteredInfo || {};
-    const columns = [
-      {
-        title: 'Código',
-        dataIndex: 'codigo',
-        key: 'codigo',
-        fixed: 'left',
-        render: (text, record) => <Link to={{ pathname: '/laptop/view/' + record.key }} >{text}</Link>,
-        ...this.getColumnSearchProps('codigo'),
-        sorter: (a, b) => a.codigo.length - b.codigo.length,
-        sortOrder: sortedInfo.columnKey === 'codigo' && sortedInfo.order,
-      },
-      {
-        title: 'BSPI Punto',
-        dataIndex: 'bspi',
-        key: 'bspi',
-        elipsis: true,
-        width: 130,
-        filters: [
-          {
-            text: 'Hospital León Becerra',
-            value: 'Hospital León Becerra',
-          },
-          {
-            text: 'Hogar Inés Chambers',
-            value: 'Hogar Inés Chambers',
-          },
-          {
-            text: 'Unidad Educativa San José Buen Pastor',
-            value: 'Unidad Educativa San José Buen Pastor',
-          },
-          {
-            text: 'Residencia Mercedes Begué',
-            value: 'Residencia Mercedes Begué',
-          }
-        ],
+  getColumns = () =>{
+      let route = this.state.isNotSistemas ? '/finanzas' : '/sistemas';
+      let { sortedInfo, filteredInfo } = this.state;
+      sortedInfo = sortedInfo || {};
+      filteredInfo = filteredInfo || {};
 
-        filteredValue: filteredInfo.bspi || null,
-        onFilter: (value, record) => record.bspi.indexOf(value) === 0,
-        sorter: (a, b) => a.bspi.length - b.bspi.length,
-        sortOrder: sortedInfo.columnKey === 'bspi' && sortedInfo.order,
-      },
-      {
-        title: 'Departamento',
-        dataIndex: 'departamento',
-        key: 'departamento',
-        sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.departamento, b.departamento),
-        sortOrder: sortedInfo.columnKey === 'departamento' && sortedInfo.order,
-      },
-      {
-        title: 'Empleado',
-        dataIndex: 'empleado',
-        key: 'empleado',
-        ...this.getColumnSearchProps('empleado'),
-        sorter: (a, b) => a.empleado.length - b.empleado.length,
-        sortOrder: sortedInfo.columnKey === 'empleado' && sortedInfo.order,
-      },
-      {
-        title: 'Marca',
-        dataIndex: 'marca',
-        key: 'marca',
-        sorter: (a, b) => a.marca.length - b.marca.length,
-        sortOrder: sortedInfo.columnKey === 'marca' && sortedInfo.order,
-      },
-      {
-        title: 'Modelo',
-        dataIndex: 'modelo',
-        key: 'modelo',
-        ...this.getColumnSearchProps('modelo'),
-        sorter: (a, b) => a.modelo.length - b.modelo.length,
-        sortOrder: sortedInfo.columnKey === 'modelo' && sortedInfo.order,
-      },
-      {
-        title: 'S/N',
-        dataIndex: 'num_serie',
-        key: 'num_serie',
-        ...this.getColumnSearchProps('num_serie'),
-        sorter: (a, b) => a.num_serie.length - b.num_serie.length,
-        sortOrder: sortedInfo.columnKey === 'num_serie' && sortedInfo.order,
-      },
-      {
-        title: 'Estado',
-        dataIndex: 'estado',
-        key: 'estado',
-        filters: [
-          {
-            text: 'Disponible',
-            value: 'D',
-          },
-          {
-            text: 'Operativo',
-            value: 'O',
-          },
-          {
-            text: 'En revisión',
-            value: 'ER',
-          },
-          {
-            text: 'Reparado',
-            value: 'R',
-          },
-          {
-            text: 'De baja',
-            value: 'B',
-          }
-        ],
-        filteredValue: filteredInfo.estado || null,
-        onFilter: (value, record) => record.estado.indexOf(value) === 0,
-        sorter: (a, b) => a.estado.length - b.estado.length,
-        sortOrder: sortedInfo.columnKey === 'estado' && sortedInfo.order,
-        render: (text, value) => (
-          <div >
-            {text === "D" ? <Tag style={{ margin: 2 }} color="green" key={value}>Disponible</Tag> :
-              text === "O" ? <Tag style={{ margin: 2 }} color="blue" key={value}>Operativo</Tag> :
-                text === "ER" ? <Tag style={{ margin: 2 }} color="orange" key={value}>En revisión</Tag> :
-                  text === "R" ? <Tag style={{ margin: 2 }} color="magenta" key={value}>Reparado</Tag> :
-                    <Tag style={{ margin: 2 }} color="red" key={value}>De baja</Tag>}
-          </div>
-        ),
-      },
-      {
-        title: 'Nombre PC',
-        dataIndex: 'name_pc',
-        key: 'name_pc',
-        ...this.getColumnSearchProps('name_pc'),
-        sorter: (a, b) => a.name_pc.length - b.name_pc.length,
-        sortOrder: sortedInfo.columnKey === 'name_pc' && sortedInfo.order,
-      },
-      {
-        title: 'Usuario PC',
-        dataIndex: 'user_pc',
-        key: 'user_pc',
-        ...this.getColumnSearchProps('user_pc'),
-        sorter: (a, b) => a.user_pc.length - b.user_pc.length,
-        sortOrder: sortedInfo.columnKey === 'user_pc' && sortedInfo.order,
-      },
-      {
-        title: 'Sistema operativo',
-        dataIndex: 'so',
-        key: 'so',
-        elipsis: true,
-        width: 150,
-        sorter: (a, b) => a.so.length - b.so.length,
-        sortOrder: sortedInfo.columnKey === 'so' && sortedInfo.order,
-      },
-      {
-        title: 'Tipo SO',
-        dataIndex: 'so_type',
-        key: 'so_type',
-        filters: [
-          {
-            text: '32 Bits',
-            value: '32 Bits',
-          },
-          {
-            text: '64 Bits',
-            value: '64 Bits',
-          }
-        ],
-        filterMultiple: false,
-        filteredValue: filteredInfo.so_type || null,
-        onFilter: (value, record) => record.so_type.indexOf(value) === 0,
-        sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.so_type, b.so_type),
-        sortOrder: sortedInfo.columnKey === 'so_type' && sortedInfo.order,
-      },
-      {
-        title: 'Service Pack 1',
-        dataIndex: 'servpack',
-        key: 'servpack',
-        width: 110,
-        filters: [
-          {
-            text: 'Si',
-            value: 'Si',
-          },
-          {
-            text: 'No',
-            value: 'No',
-          }
-        ],
-        filterMultiple: false,
-        filteredValue: filteredInfo.servpack || null,
-        onFilter: (value, record) => record.servpack.indexOf(value) === 0,
-        sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.servpack, b.servpack),
-        sortOrder: sortedInfo.columnKey === 'servpack' && sortedInfo.order,
-      },
-      {
-        title: 'Licencia',
-        dataIndex: 'licencia',
-        key: 'licencia',
-        filters: [
-          {
-            text: 'Si',
-            value: 'Si',
-          },
-          {
-            text: 'No',
-            value: 'No',
-          }
-        ],
-        filterMultiple: false,
-        filteredValue: filteredInfo.licencia || null,
-        onFilter: (value, record) => record.licencia.indexOf(value) === 0,
-        sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.licencia, b.licencia),
-        sortOrder: sortedInfo.columnKey === 'licencia' && sortedInfo.order,
-      },
-      {
-        title: 'Programas',
-        dataIndex: 'office',
-        key: 'office',
-        width: 100,
-
-        render: (office) => (
-          <div>
-            {office.map((disco, index) => {
-              return (
-                // <Link key={disco.codigo} to={{ pathname: '/otros/view', state: { info: disco, tipo_equipo: 'disco duro' } }} >
-                <Tag style={{ margin: 2 }} color="purple" key={index}>{disco.nombre}</Tag>
-                // </Link>              
-              );
-            })}
-          </div>
-        ),
-        // filters: [
-        //   {
-        //       text: '2007',
-        //       value: '2007',
-        //   },
-        //   {
-        //       text: '2010',
-        //       value: '2010',
-        //   },
-        //   {
-        //       text: '2013',
-        //       value: '2013',
-        //   },
-        //   {
-        //       text: '2016',
-        //       value: '2016',
-        //   },
-        //   {
-        //       text: '2019',
-        //       value: '2019',
-        //   }
-        // ],
-        // filteredValue: filteredInfo.office || null,
-        // onFilter: (value, record) => record.office.indexOf(value) === 0,
-        // sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.office,b.office),
-        // sortOrder: sortedInfo.columnKey === 'office' && sortedInfo.order,
-      },
-      {
-        title: 'IP',
-        dataIndex: 'ip',
-        key: 'ip',
-        render: (text, record) => <Link to={{ pathname: '/ip/view/' + record.ip }} >{text}</Link>,
-      },
-      {
-        title: 'Procesador',
-        dataIndex: 'id_procesador',
-        key: 'id_procesador',
-        render: proces => <Link key={proces.codigo} to={{ pathname: '/otros/view', state: { info: proces, tipo_equipo: 'procesador' } }} >
-          {proces.codigo}
-        </Link>,
-        sorter: (a, b) => a.nombre_procesador.length - b.nombre_procesador.length,
-        sortOrder: sortedInfo.columnKey === 'id_procesador' && sortedInfo.order,
-      },
-      {
-        title: 'RAM',
-        dataIndex: 'ram',
-        key: 'ram',
-        children: [
-          {
-            title: 'Capacidad',
-            dataIndex: 'ram_soportada',
-            key: 'ram_soportada',
-            // width: 130,
-            ...this.getColumnSearchProps('ram_soportada'),
-            sorter: (a, b) => a.ram_soportada.length - b.ram_soportada.length,
-            sortOrder: sortedInfo.columnKey === 'ram_soportada' && sortedInfo.order,
-          },
-          {
-            title: 'Slots',
-            dataIndex: 'slots_ram',
-            key: 'slots_ram',
-            // width: 140,
-            ...this.getColumnSearchProps('slots_ram'),
-            sorter: (a, b) => a.slots_ram.length - b.slots_ram.length,
-            sortOrder: sortedInfo.columnKey === 'slots_ram' && sortedInfo.order,
-          },
-          {
-            title: 'Memorias RAM',
-            dataIndex: 'rams',
-            key: 'rams',
-            width: 70,
-            render: (rams) => (
-              <div>
-                {rams.map(memoria => {
-                  return (
-                    <Link key={memoria.codigo} to={{ pathname: '/otros/view', state: { info: memoria, tipo_equipo: 'memoria RAM' } }} >
-                      <Tag style={{ margin: 2 }} color="cyan" key={memoria.id_equipo}>{memoria.codigo}</Tag>
-                    </Link>
-                  );
-                })}
+      let generalColumns = [
+        {
+          title: 'Código',
+          dataIndex: 'codigo',
+          key: 'codigo',
+          fixed: 'left',
+          render: (text, record) =>  <Link to={{ pathname: route+'/laptop/view/'+record.key }} >{text}</Link>,
+          ...this.getColumnSearchProps('codigo'),
+          sorter: (a, b) => a.codigo.length - b.codigo.length,
+          sortOrder: sortedInfo.columnKey === 'codigo' && sortedInfo.order,
+        },
+        {
+          title: 'BSPI Punto',
+          dataIndex: 'bspi',
+          key: 'bspi',
+          elipsis: true,
+          width: 130,
+          filters: [
+            {
+                text: 'Hospital León Becerra',
+                value: 'Hospital León Becerra',
+            },
+            {
+                text: 'Hogar Inés Chambers',
+                value: 'Hogar Inés Chambers',
+            },
+            {
+              text: 'Unidad Educativa San José Buen Pastor',
+              value: 'Unidad Educativa San José Buen Pastor',
+            },
+            {
+              text: 'Residencia Mercedes Begué',
+              value: 'Residencia Mercedes Begué',
+            }
+          ],
+          
+          filteredValue: filteredInfo.bspi || null,
+          onFilter: (value, record) => record.bspi.indexOf(value) === 0,
+          sorter: (a, b) => a.bspi.length - b.bspi.length,
+          sortOrder: sortedInfo.columnKey === 'bspi' && sortedInfo.order,
+        },
+        {
+          title: 'Departamento',
+          dataIndex: 'departamento',
+          key: 'departamento',
+          sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.departamento, b.departamento),
+          sortOrder: sortedInfo.columnKey === 'departamento' && sortedInfo.order,
+        },
+        {
+          title: 'Empleado',
+          dataIndex: 'empleado',
+          key: 'empleado',
+          ...this.getColumnSearchProps('empleado'),
+          sorter: (a, b) => a.empleado.length - b.empleado.length,
+          sortOrder: sortedInfo.columnKey === 'empleado' && sortedInfo.order,
+        },
+        {
+          title: 'Marca',
+          dataIndex: 'marca',
+          key: 'marca',
+          sorter: (a, b) => a.marca.length - b.marca.length,
+          sortOrder: sortedInfo.columnKey === 'marca' && sortedInfo.order,
+        },
+        {
+          title: 'Modelo',
+          dataIndex: 'modelo',
+          key: 'modelo',
+          ...this.getColumnSearchProps('modelo'),
+          sorter: (a, b) => a.modelo.length - b.modelo.length,
+          sortOrder: sortedInfo.columnKey === 'modelo' && sortedInfo.order,
+        }, 
+        {
+          title: 'S/N',
+          dataIndex: 'num_serie',
+          key: 'num_serie',
+          ...this.getColumnSearchProps('num_serie'),
+          sorter: (a, b) => a.num_serie.length - b.num_serie.length,
+          sortOrder: sortedInfo.columnKey === 'num_serie' && sortedInfo.order,
+        },
+        {
+          title: 'Estado',
+          dataIndex: 'estado',
+          key: 'estado',
+          filters: [
+              {
+                  text: 'Disponible',
+                  value: 'D',
+              },
+              {
+                  text: 'Operativo',
+                  value: 'O',
+              },
+              {
+                  text: 'En revisión',
+                  value: 'ER',
+              },
+              {
+                  text: 'Reparado',
+                  value: 'R',
+              },
+              {
+                  text: 'De baja',
+                  value: 'B',
+              }
+          ],
+          filteredValue: filteredInfo.estado || null,
+          onFilter: (value, record) => record.estado.indexOf(value) === 0,
+          sorter: (a, b) => a.estado.length - b.estado.length,
+          sortOrder: sortedInfo.columnKey === 'estado' && sortedInfo.order,
+          render: (text, value) => (
+              <div >
+                  {text==="D" ? <Tag style={{margin: 2}} color="green" key={value}>Disponible</Tag> : 
+                  text==="O" ?  <Tag style={{margin: 2}} color="blue" key={value}>Operativo</Tag> :
+                  text==="ER" ?  <Tag style={{margin: 2}} color="orange" key={value}>En revisión</Tag> :
+                  text==="R" ?  <Tag style={{margin: 2}} color="magenta" key={value}>Reparado</Tag> :
+                                  <Tag style={{margin: 2}} color="red" key={value}>De baja</Tag> }
               </div>
             ),
-          },
-        ],
-      },
-      {
-        title: 'Discos duros',
-        dataIndex: 'discos',
-        key: 'discos',
-        width: 70,
-        render: (discos) => (
-          <div>
-            {discos.map(disco => {
-              return (
-                <Link key={disco.codigo} to={{ pathname: '/otros/view', state: { info: disco, tipo_equipo: 'disco Duro' } }} >
-                  <Tag style={{ margin: 2 }} color="blue" key={disco.id_equipo}>{disco.codigo}</Tag>
-                </Link>
-              );
-            })}
-          </div>
-        ),
-      },
-      {
-        title: 'Descripción',
-        dataIndex: 'descripcion',
-        key: 'descripcion',
-      },
-      {
-        title: 'Acción',
-        key: 'accion',
-        fixed: 'right',
-        render: (text, record) => (
-          <span>
-            <Link to={{ pathname: '/laptop/form', state: { info: record, titulo: "Editar laptop", disabled: true } }} >
-              {record.estado === 'B' ? <Button disabled style={{ marginRight: '2px' }} size="small" type="primary" icon="edit" /> :
-                <Button style={{ marginRight: '2px' }} size="small" type="primary" icon="edit" />}
-            </Link>
-            <Popconfirm placement="topRight"
-              title="¿Desea eliminar este registro?"
+        },
+        {
+          title: 'Nombre PC',
+          dataIndex: 'name_pc',
+          key: 'name_pc',
+          ...this.getColumnSearchProps('name_pc'),
+          sorter: (a, b) => a.name_pc.length - b.name_pc.length,
+          sortOrder: sortedInfo.columnKey === 'name_pc' && sortedInfo.order,
+        },
+        {
+          title: 'Usuario PC',
+          dataIndex: 'user_pc',
+          key: 'user_pc',
+          ...this.getColumnSearchProps('user_pc'),
+          sorter: (a, b) => a.user_pc.length - b.user_pc.length,
+          sortOrder: sortedInfo.columnKey === 'user_pc' && sortedInfo.order,
+        },
+        {
+          title: 'Sistema operativo',
+          dataIndex: 'so',
+          key: 'so',
+          elipsis: true,
+          width: 150,
+          sorter: (a, b) => a.so.length - b.so.length,
+          sortOrder: sortedInfo.columnKey === 'so' && sortedInfo.order,
+        }, 
+        {
+          title: 'Tipo SO',
+          dataIndex: 'so_type',
+          key: 'so_type',
+          filters: [
+            {
+                text: '32 Bits',
+                value: '32 Bits',
+            },
+            {
+                text: '64 Bits',
+                value: '64 Bits',
+            }
+          ],
+          filterMultiple: false,
+          filteredValue: filteredInfo.so_type || null,
+          onFilter: (value, record) => record.so_type.indexOf(value) === 0,
+          sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.so_type,b.so_type),
+          sortOrder: sortedInfo.columnKey === 'so_type' && sortedInfo.order,
+        }, 
+        {
+          title: 'Service Pack 1',
+          dataIndex: 'servpack',
+          key: 'servpack',
+          width: 110,
+          filters: [
+            {
+                text: 'Si',
+                value: 'Si',
+            },
+            {
+                text: 'No',
+                value: 'No',
+            }
+          ],
+          filterMultiple: false,
+          filteredValue: filteredInfo.servpack || null,
+          onFilter: (value, record) => record.servpack.indexOf(value) === 0,
+          sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.servpack,b.servpack),
+          sortOrder: sortedInfo.columnKey === 'servpack' && sortedInfo.order,
+        }, 
+        {
+          title: 'Licencia',
+          dataIndex: 'licencia',
+          key: 'licencia',
+          filters: [
+            {
+                text: 'Si',
+                value: 'Si',
+            },
+            {
+                text: 'No',
+                value: 'No',
+            }
+          ],
+          filterMultiple: false,
+          filteredValue: filteredInfo.licencia || null,
+          onFilter: (value, record) => record.licencia.indexOf(value) === 0,
+          sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.licencia,b.licencia),
+          sortOrder: sortedInfo.columnKey === 'licencia' && sortedInfo.order,
+        }, 
+          {
+              title: 'Programas',
+              dataIndex: 'office',
+              key: 'office',
+              width: 100,
+  
+              render: (office) => (
+                <div>
+                   {office.map((disco, index) => {
+                          return (
+                              // <Link key={disco.codigo} to={{ pathname: '/otros/view', state: { info: disco, tipo_equipo: 'disco duro' } }} >
+                              <Tag style={{margin: 2}} color="purple" key={index}>{disco.nombre}</Tag>
+                              // </Link>              
+                          );
+                      })}
+                </div>
+              ),
+        },
+        {
+          title: 'IP',
+          dataIndex: 'ip',
+          key: 'ip',
+          render: (text, record) =>  <Link to={{ pathname: route+'/ip/view/'+record.ip}} >{text}</Link>,
+        },
+        {
+          title: 'Procesador',
+          dataIndex: 'id_procesador',
+          key: 'id_procesador',       
+          render: proces => <Link key={proces.codigo} to={{ pathname: route+'/otros/view', state: { info: proces, tipo_equipo: 'procesador' } }} >
+                              {proces.codigo}
+                           </Link>,
+          sorter: (a, b) => a.nombre_procesador.length - b.nombre_procesador.length,
+          sortOrder: sortedInfo.columnKey === 'id_procesador' && sortedInfo.order,
+        }, 
+        {
+          title: 'RAM',
+          dataIndex: 'ram',
+          key: 'ram',
+          children: [
+            {
+              title: 'Capacidad',
+              dataIndex: 'ram_soportada',
+              key: 'ram_soportada',
+              // width: 130,
+              ...this.getColumnSearchProps('ram_soportada'),
+              sorter: (a, b) => a.ram_soportada.length - b.ram_soportada.length,
+              sortOrder: sortedInfo.columnKey === 'ram_soportada' && sortedInfo.order,
+            },  
+            {
+              title: 'Slots',
+              dataIndex: 'slots_ram',
+              key: 'slots_ram',
+              // width: 140,
+              ...this.getColumnSearchProps('slots_ram'),
+              sorter: (a, b) => a.slots_ram.length - b.slots_ram.length,
+              sortOrder: sortedInfo.columnKey === 'slots_ram' && sortedInfo.order,
+            },
+            {
+              title: 'Memorias RAM',
+              dataIndex: 'rams',
+              key: 'rams',
+              width: 70,
+              render: (rams) => (
+                  <div>
+                      {rams.map(memoria => {
+                          return (
+                              <Link key={memoria.codigo} to={{ pathname: route+'/otros/view', state: { info: memoria, tipo_equipo: 'memoria RAM' } }} >
+                              <Tag style={{margin: 2}} color="cyan" key={memoria.id_equipo}>{memoria.codigo}</Tag>
+                              </Link>              
+                          );
+                      })}
+                  </div>
+              ),
+            },  
+          ],
+        },   
+        {
+          title: 'Discos duros',
+          dataIndex: 'discos',
+          key: 'discos',
+          width: 70,
+          render: (discos) => (
+              <div>
+                  {discos.map(disco => {
+                      return (
+                          <Link key={disco.codigo} to={{ pathname: route+'/otros/view', state: { info: disco, tipo_equipo: 'disco Duro' } }} >
+                          <Tag style={{margin: 2}} color="blue" key={disco.id_equipo}>{disco.codigo}</Tag>
+                          </Link>              
+                      );
+                  })}
+              </div>
+          ),
+        },
+        {
+          title: 'Descripción',
+          dataIndex: 'descripcion',
+          key: 'descripcion',
+        },
+        
+      ];
+
+      let actionsColumns = [
+        {
+          title: 'Acción',
+          key: 'accion',
+          fixed: 'right',
+          render: (text, record) => (
+            <span>
+              <Link to={{ pathname: '/sistemas/laptop/form', state: { info: record, titulo: "Editar laptop", disabled: true } }} >
+                {record.estado === 'B'? <Button disabled style= {{marginRight: '2px'}} size="small" type="primary" icon="edit" /> : 
+                <Button style= {{marginRight: '2px'}} size="small" type="primary" icon="edit" />}
+              </Link>
+              <Popconfirm placement="topRight" 
+              title="¿Desea eliminar este registro?" 
               okText="Si" cancelText="No" onConfirm={() => this.handleDelete(record.key)}>
-              {record.estado === 'B' ?
-                <Button onClick={() => console.log("reocoodr", record)} disabled type="danger" icon="delete" size="small" /> : <Button type="danger" icon="delete" size="small" />}
-            </Popconfirm>
-          </span>
-        ),
-      },
-    ];
+              {record.estado === 'B' ? 
+                <Button onClick={()=>console.log("reocoodr",record)} disabled type="danger" icon="delete" size="small" /> : <Button type="danger" icon="delete" size="small" /> }
+              </Popconfirm>
+            </span>
+          ),
+        },
+      ];
+
+      return this.state.isNotSistemas ? generalColumns : generalColumns.concat(actionsColumns) 
+  }
+
+  render() {
+    
+    let columns = this.getColumns();
 
     return (
       <div>
         <div className="div-container-title">
           <Row>
             <Col span={12}><Title level={2}>Inventario de laptops</Title></Col>
-            <Col className='flexbox'>
-              <Link to={{ pathname: '/laptop/form', state: { titulo: "Nueva laptop" } }} >
+            <Col hidden={this.state.isNotSistemas} className='flexbox'>
+              <Link to={{ pathname: '/sistemas/laptop/form', state: { titulo: "Nueva laptop" } }} > 
                 <Button type="primary" icon="plus">Agregar laptop</Button>
               </Link>
             </Col>
@@ -549,9 +544,9 @@ class TablaLaptop extends React.Component {
               <Row>
                 <Col className='flexbox'>
                   {/* <ButtonGroup> */}
-                  <Button type="primary" icon="import">Importar</Button>
-                  <ExcelExport data={this.state.currentDataSource} dis={this.state.disabelExport}></ExcelExport>
-                  {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
+                    <Button hidden={this.state.isNotSistemas} type="primary" icon="import">Importar</Button>
+                    <ExcelExport data={this.state.currentDataSource} dis = {this.state.disabelExport}></ExcelExport>
+                    {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
 
                   {/* </ButtonGroup> */}
                 </Col>

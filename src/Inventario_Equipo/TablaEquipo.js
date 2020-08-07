@@ -1,8 +1,11 @@
 import React from 'react';
-import { Button, Row, Col, Table, Input, Icon, Popconfirm, message, Typography } from 'antd';
-import ButtonGroup from 'antd/lib/button/button-group';
+import { Button, Row, Col, Table, Input, Icon, Popconfirm, message, Typography, Tag} from 'antd';
+import ExcelExportEquipo from './ExcelExportEquipo';
 import { Link } from 'react-router-dom';
-import Axios from '../Servicios/AxiosTipo'
+import Axios from '../Servicios/AxiosTipo';
+import FuncionesAuxiliares from '../FuncionesAuxiliares';
+import Auth from '../Login/Auth';
+
 const { Title } = Typography;
 
 class TablaEquipo extends React.Component {
@@ -16,7 +19,10 @@ class TablaEquipo extends React.Component {
             info: [],
             filteredInfo: null,
             sortedInfo: null,
-            index: 0
+            index: 0,
+            currentDataSource:[],
+            disabelExport:true,
+            isNotSistemas: Auth.isNotSistemas()
         };
 
     }
@@ -24,29 +30,9 @@ class TablaEquipo extends React.Component {
     llenar_tabla() {
         let datos = [];
         Axios.mostrar_equipos().then(res => {
-            res.data.forEach(function (dato) {
-                let empleado = "";
-                if (dato.empleado !== null) {
-                    empleado = dato.empleado.concat(" ", dato.apellido);
-                }
-                let equipos = {
-                    key: dato.id_equipo,
-                    estado_operativo: dato.estado_operativo,
-                    codigo: dato.codigo,
-                    tipo_equipo: dato.tipo_equipo,
-                    marca: dato.marca,
-                    modelo: dato.modelo,
-                    descripcion: dato.descripcion,
-                    numero_serie: dato.numero_serie,
-                    encargado_registro: dato.encargado,
-                    componente_principal: dato.principal,
-                    asignado: empleado,
-                    fecha_registro: dato.fecha_registro,
-                    ip: dato.direccion_ip
-                }
-                datos.push(equipos)
-            });
-            this.setState({ dataSource: datos });
+            console.log(res.data)
+            datos = FuncionesAuxiliares.transform_data_otros(res.data);
+            this.setState({ dataSource: datos, currentDataSource:datos, disabelExport:false }); 
         }).catch(err => {
             console.log(err)
             message.error('No se pueden cargar los datos, revise la conexión con el servidor', 4);
@@ -57,12 +43,14 @@ class TablaEquipo extends React.Component {
         this.setState({ filteredInfo: null });
     };
 
-    handleChange = (pagination, filters, sorter) => {
+    handleChange = (pagination, filters, sorter, currentDataSource) => {
+        console.log('Various parameters', pagination, filters, sorter, currentDataSource);
         this.setState({
-            filteredInfo: filters,
-            sortedInfo: sorter,
+          filteredInfo: filters,
+          sortedInfo: sorter,
+          currentDataSource: currentDataSource.currentDataSource
         });
-    };
+      };
 
     clearAll = () => {
         this.setState({
@@ -90,18 +78,6 @@ class TablaEquipo extends React.Component {
             console.log(err)
             message.error('Error al eliminar el registro, inténtelo más tarde', 4);
         });
-    }
-
-    stringSorter(a, b) {
-        let y = a || '';
-        let u = b || '';
-        return y.localeCompare(u);
-    }
-
-    filtrar_array(arr, value) {
-        if (arr !== null) {
-            return arr.indexOf(value) === 0;
-        }
     }
 
     busqueda_array(arr, dataIndex, value) {
@@ -157,23 +133,83 @@ class TablaEquipo extends React.Component {
             searchedColumn: dataIndex,
         });
     };
+    
     handleReset = clearFilters => {
         clearFilters();
         this.setState({ searchText: '' });
     };
+    
+    getColumns = () => {
+        let route = this.state.isNotSistemas ? '/finanzas' : '/sistemas';
+        let { sortedInfo, filteredInfo } = this.state;
+        sortedInfo = sortedInfo || {};
+        filteredInfo = filteredInfo || {};
+        let actionColumn = [
+            {
+                title: 'Acción',
+                key: 'accion',
+                fixed: 'right',
+                render: (text, record) => (
+                    <div>
+                        <Link to={{ pathname:'/sistemas/otrosequipos/form', state: { info: record, titulo: "Editar equipo" } }}>
+                            <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
+                        </Link>
+                        <Popconfirm
+                            title="¿Desea dar de baja este equipo?"
+                            okText="Si" cancelText="No"
+                            onConfirm={() => this.handleDelete(record.key)}>
+                                {record.estado_operativo === 'B' ?
+                            <Button disabled type="danger" icon="delete" size="small" /> : <Button type="danger" icon="delete" size="small" />}
+                        </Popconfirm>
+                    </div>
+                ),
+            },
+        ];
 
-
-
-    render() {
-        const columns = [
+        let generalColumns = [
             {
                 title: 'Código',
                 dataIndex: 'codigo',
                 key: 'codigo',
                 fixed: 'left',
-                render: (text, record) => <Link to={{ pathname: '/equipo/view/'+record.key}}>{text}</Link>,
+                render: (text, record) => <Link to={{ pathname: route+'/equipo/view/'+record.key}}>{text}</Link>,
                 ...this.getColumnSearchProps('codigo')
             },
+            {
+                title: 'BSPI Punto',
+                dataIndex: 'bspi',
+                key: 'bspi',
+                width: 130,
+                filters: [
+                  {
+                      text: 'Hospital León Becerra',
+                      value: 'Hospital León Becerra',
+                  },
+                  {
+                      text: 'Hogar Inés Chambers',
+                      value: 'Hogar Inés Chambers',
+                  },
+                  {
+                    text: 'Unidad Educativa San José Buen Pastor',
+                    value: 'Unidad Educativa San José Buen Pastor',
+                  },
+                  {
+                    text: 'Residencia Mercedes Begué',
+                    value: 'Residencia Mercedes Begué',
+                  }
+                ],
+                filteredValue: filteredInfo.bspi || null,
+                onFilter: (value, record) => record.bspi.indexOf(value) === 0,
+                sorter: (a, b) => a.bspi.length - b.bspi.length,
+                sortOrder: sortedInfo.columnKey === 'bspi' && sortedInfo.order,
+              },  
+              {
+                title: 'Departamento',
+                dataIndex: 'departamento',
+                key: 'departamento',
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.departamento, b.departamento),
+                sortOrder: sortedInfo.columnKey === 'departamento' && sortedInfo.order,
+              },
             {
                 title: 'Número de serie',
                 dataIndex: 'numero_serie',
@@ -206,10 +242,18 @@ class TablaEquipo extends React.Component {
                         value: 'B',
                     }
                 ],
-                onFilter: (value, record) => this.filtrar_array(record.estado_operativo, value),
-                sorter: (a, b) => this.stringSorter(a.estado_operativo, b.estado_operativo)
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.estado_operativo, value),
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado_operativo, b.estado_operativo),
+                render: (text, value) => (
+                    <div >
+                        {text==="D" ? <Tag style={{margin: 2}} color="green" key={value}>Disponible</Tag> : 
+                        text==="O" ?  <Tag style={{margin: 2}} color="blue" key={value}>Operativo</Tag> :
+                        text==="ER" ?  <Tag style={{margin: 2}} color="orange" key={value}>En revisión</Tag> :
+                        text==="R" ?  <Tag style={{margin: 2}} color="magenta" key={value}>Reparado</Tag> :
+                                        <Tag style={{margin: 2}} color="red" key={value}>De baja</Tag> }
+                    </div>
+                  ),
             },
-
             {
                 title: 'Tipo',
                 dataIndex: 'tipo_equipo',
@@ -222,7 +266,6 @@ class TablaEquipo extends React.Component {
                 key: 'modelo',
                 ...this.getColumnSearchProps('modelo')
             },
-
             {
                 title: 'Marca',
                 dataIndex: 'marca',
@@ -233,7 +276,7 @@ class TablaEquipo extends React.Component {
                 title: 'Fecha registro',
                 dataIndex: 'fecha_registro',
                 key: 'fecha_registro',
-                sorter: (a, b) => this.stringSorter(a.fecha_registro, b.fecha_registro)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.fecha_registro, b.fecha_registro)
             },
             {
                 title: 'Asignado',
@@ -258,32 +301,23 @@ class TablaEquipo extends React.Component {
                 dataIndex: 'descripcion',
                 key: 'descripcion'
             },
-            {
-                title: 'Acción',
-                key: 'accion',
-                fixed: 'right',
-                render: (text, record) => (
-                    <div>
-                        <Link to={{ pathname: '/otrosequipos/form', state: { info: record, titulo: "Editar equipo" } }}>
-                            <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
-                        </Link>
-                        <Popconfirm
-                            title="¿Desea dar de baja este equipo?"
-                            okText="Si" cancelText="No"
-                            onConfirm={() => this.handleDelete(record.key)}>
-                                {record.estado_operativo === 'B' ?
-                            <Button disabled type="danger" icon="delete" size="small" /> : <Button type="danger" icon="delete" size="small" />}
-                        </Popconfirm>
-                    </div>
-                ),
-            },
+            
         ];
+
+        return this.state.isNotSistemas ? generalColumns : generalColumns.concat(actionColumn) 
+    }
+
+
+    render() {
+        
+        let columns = this.getColumns();
+        
         return (
             <div className="div-container-title">
                 <Row>
                     <Col span={12}><Title level={2}>Inventario equipos informáticos</Title></Col>
-                    <Col className='flexbox'>
-                        <Link to={{ pathname: '/otrosequipos/form', state: { titulo: "Nuevo equipo" } }} >
+                    <Col hidden = {this.state.isNotSistemas} className='flexbox'>
+                        <Link to={{ pathname: '/sistemas/otrosequipos/form', state: { titulo: "Nuevo equipo" } }} >
                             <Button type="primary" icon="plus">Agregar tipo de equipo</Button>
                         </Link>
                     </Col>
@@ -292,10 +326,12 @@ class TablaEquipo extends React.Component {
                     <div >
                         <Row>
                             <Col className='flexbox'>
-                                <ButtonGroup>
-                                    <Button type="primary" icon="import">Importar</Button>
-                                    <Button type="primary" icon="cloud-download">Exportar</Button>
-                                </ButtonGroup>
+                                {/* <ButtonGroup> */}
+                                    <Button hidden = {this.state.isNotSistemas} type="primary" icon="import">Importar</Button>
+                                    <ExcelExportEquipo data={this.state.currentDataSource} dis = {this.state.disabelExport} masiva = {false}></ExcelExportEquipo>
+
+                                    {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
+                                {/* </ButtonGroup> */}
                             </Col>
                         </Row>
                     </div>
