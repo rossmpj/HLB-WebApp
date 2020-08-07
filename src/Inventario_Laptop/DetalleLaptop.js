@@ -6,8 +6,8 @@ import { FaMemory } from "react-icons/fa";
 import { GiProcessor } from "react-icons/gi";
 import Axios from '../Servicios/AxiosLaptop'
 import SinResultados from '../Componentes/SinResultados'
-import QRCodeComponent from '../Extras/QRCode/QRCodeComponent'
 import DetalleEquipo from '../Componentes/DetalleEquipo'
+import QRCodeComponent from '../Extras/QRCode/QRCodeComponent'
 
 const { TabPane } = Tabs;
 const { Title } = Typography;
@@ -77,7 +77,7 @@ class DetalleLaptop extends React.Component {
       console.log("registro:", registro);
       this.setState({
         key: registro.general.id_equipo,
-        url: "http://localhost:3000/laptop/view/" + registro.general.id_equipo,
+        url: "https://hlb-web-application.herokuapp.com/sistemas/laptop/view/" + registro.general.id_equipo,
         codigo: registro.general.codigo,
         bspi: registro.general.bspi,
         departamento: registro.general.departamento,

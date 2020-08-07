@@ -65,7 +65,7 @@ class DetalleEquipo extends React.Component {
                 const registro = {};
                 respuesta.forEach(function (dato) {
                     registro.key = dato.id_equipo;
-                    registro.url = "http://localhost:3000/equipo/view/" + dato.id_equipo;
+                    registro.url = "https://hlb-web-application.herokuapp.com/sistemas/equipo/view/" + dato.id_equipo;
                     registro.ip = dato.direccion_ip === null ? "No asignada" : dato.direccion_ip;
                     registro.codigo = dato.codigo;
                     registro.nserie = dato.numero_serie;

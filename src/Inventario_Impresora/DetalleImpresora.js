@@ -63,7 +63,7 @@ class DetalleImpresora extends React.Component {
                 const registro = {};
                 respuesta.forEach(function (dato) {
                     registro.key = dato.id_impresora;
-                    registro.url = "http://localhost:3000/impresora/view/" + dato.id_impresora;
+                    registro.url = "https://hlb-web-application.herokuapp.com/sistemas/impresora/view/" + dato.id_impresora;
                     registro.numero_serie = dato.numero_serie;
                     registro.tipo = dato.tipo;
                     registro.marca = dato.id_marca;

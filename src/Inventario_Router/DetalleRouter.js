@@ -59,7 +59,7 @@ class DetalleRouter extends React.Component {
             let dato = res.data;
             this.setState({
                 key: dato.id_router,
-                url: "http://localhost:3000/router/view/" + dato.id_router,
+                url: "https://hlb-web-application.herokuapp.com/sistemas/router/view/" + dato.id_router,
                 codigo: dato.codigo,
                 bspi: dato.bspi_punto === null ? "Sin asignar" : dato.bspi_punto,
                 departamento: dato.departamento === null ? "Sin asignar" : dato.departamento,
