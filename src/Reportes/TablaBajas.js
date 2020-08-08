@@ -3,7 +3,6 @@ import { Button, Row, Col, Table, Input, Icon, message, Typography } from 'antd'
 import ButtonGroup from 'antd/lib/button/button-group';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosReporte'
-import ModalDownload from '../Componentes/ModalDownload';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 import FuncionesAuxiliares from '../FuncionesAuxiliares';
@@ -24,8 +23,6 @@ class TablaBajas extends React.Component {
             filteredInfo: null,
             sortedInfo: null,
             index: 0,
-            visible: false,
-            archivo: "",
             isNotSistemas: Auth.isNotSistemas()
         };
 
@@ -59,7 +56,7 @@ class TablaBajas extends React.Component {
         this.setState({ filteredInfo: null });
     };
 
-    handleChange = (pagination, filters, sorter) => {
+    handleChange = ( filters, sorter) => {
         this.setState({
             filteredInfo: filters,
             sortedInfo: sorter,
@@ -144,12 +141,12 @@ class TablaBajas extends React.Component {
     };
 
     /* Métodos del modal */
-    showModal = () => {
+   /*  showModal = () => {
         this.setState({
             visible: true,
             archivo: ""
         });
-    };
+    }; */
 
     resumen_bajas = async () => {
         try {
@@ -169,10 +166,8 @@ class TablaBajas extends React.Component {
         }
     }
 
-    handleOk = async (extension) => {
-        let fileExtension = "";
-        if (extension === "xlsx") {
-            fileExtension = '.xlsx';
+    exportar_archivo = async () => {
+        let fileExtension = '.xlsx';
             try {
                 let datos = []
                 let datos2 = []
@@ -209,16 +204,9 @@ class TablaBajas extends React.Component {
                 message.error(error.message)
                     .then(() => message.error('No fue posible generar el archivo', 2.5))
             }
-
-        } else {
-            message.error('Debe seleccionar un formato de descarga');
-        }
-        this.setState({
-            visible: false
-        });
     };
 
-    handleCancel = () => {
+   /*  handleCancel = () => {
         this.setState({
             visible: false,
         });
@@ -229,7 +217,7 @@ class TablaBajas extends React.Component {
         this.setState({
             archivo: e.target.value,
         });
-    };
+    }; */
 
 
 
@@ -323,7 +311,7 @@ class TablaBajas extends React.Component {
                     <Col span={12}><Title level={3}>Reporte de equipos informáticos de baja</Title></Col>
                     <Col className='flexbox'>
                         <ButtonGroup>
-                            <Button type="primary" icon="cloud-download" onClick={this.showModal}>Exportar</Button>
+                            <Button type="primary" icon="cloud-download" onClick={()=> this.exportar_archivo()}>Exportar</Button>
                         </ButtonGroup>
                     </Col>
                 </Row>
@@ -336,14 +324,14 @@ class TablaBajas extends React.Component {
                     <Table bordered key={this.state.index} onChange={this.handleChange} size="middle"
                         scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
-                <ModalDownload
+                {/* <ModalDownload
                     title="Descargar reporte de equipos dados de baja"
                     visible={this.state.visible}
                     onOk={() => this.handleOk(this.state.archivo)}
                     onCancel={this.handleCancel}
                     onChange={this.tipo_archivo}
                     value={this.state.archivo}
-                ></ModalDownload>
+                ></ModalDownload> */}
             </div>
         );
     }
