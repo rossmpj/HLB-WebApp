@@ -22,6 +22,7 @@ class TablaLaptop extends React.Component {
       disabelExport: true,
       index: 0,
       dataSource : [],
+      loading: false,
       currentDataSource:[],
       isNotSistemas: Auth.isNotSistemas()
     };
@@ -44,6 +45,7 @@ class TablaLaptop extends React.Component {
 
   obtener_datos = () => {
     let datos = [];
+    this.setState({loading: true});
     AxiosLaptop.listar_laptops().then(res => {
       res.data.forEach(function (r) {
         let registro = r.original
@@ -79,9 +81,10 @@ class TablaLaptop extends React.Component {
         }
         datos.push(router);
       });
-      this.setState({ dataSource: datos, currentDataSource: datos, disabelExport: false });
+      this.setState({ dataSource: datos, currentDataSource: datos, disabelExport: false, loading: false });
     }).catch(err => {
       message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
+      this.setState({loading: false});
     });
   }
 
@@ -418,8 +421,8 @@ class TablaLaptop extends React.Component {
         },
         {
           title: 'IP',
-          dataIndex: 'ip',
-          key: 'ip',
+          dataIndex: 'dirIP',
+          key: 'dirIP',
           render: (text, record) =>  <Link to={{ pathname: route+'/ip/view/'+record.ip}} >{text}</Link>,
         },
         {
@@ -558,7 +561,7 @@ class TablaLaptop extends React.Component {
               <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>
               <Button onClick={this.clearAll}>Limpiar todo</Button>
             </div>
-            <Table bordered key={this.state.index} onChange={this.handleChange} size="small"
+            <Table loading={this.state.loading} bordered key={this.state.index} onChange={this.handleChange} size="small"
               scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}>
             </Table>
           </div>

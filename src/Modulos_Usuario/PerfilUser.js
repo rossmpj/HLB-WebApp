@@ -1,6 +1,6 @@
 import React from 'react';
 import '../App.css';
-import { Form, Input, Button, Layout, Typography, Row, Col, Select, message } from 'antd';
+import { Form, Input, Button, Layout, Typography, Row, Col, Select } from 'antd';
 import '../custom-antd.css';
 import InputComp from '../Componentes/InputComponent';
 import AxiosTipo from '../Servicios/AxiosTipo';

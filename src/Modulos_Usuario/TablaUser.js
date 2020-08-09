@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Button, Row, Col, Table, Input, Icon, message, Typography, Popconfirm, Tag
+    Button, Row, Col, Table, Input, Icon, message, Typography
 } from 'antd';
 import { Link } from 'react-router-dom';
 import AxiosAuth from '../Servicios/AxiosAuth';
@@ -19,12 +19,14 @@ class TablaCorreo extends React.Component {
             dataSource: [],
             filteredInfo: null,
             sortedInfo: null,
+            loading: false,
             index: 0,
         };
     }
 
     llenar_tabla() {
         let datos = [];
+        this.setState({loading: true});
         AxiosAuth.get_users().then(res => {
             res.data.forEach(function (dato) {
                 let registro = {
@@ -43,10 +45,11 @@ class TablaCorreo extends React.Component {
                 }
                 datos.push(registro)
             });
-            this.setState({ dataSource: datos });
+            this.setState({ dataSource: datos, loading: false });
         }).catch(err => {
             console.log(err.response)
             message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
+            this.setState({loading: false});
         });
     }
 
@@ -270,7 +273,7 @@ class TablaCorreo extends React.Component {
                         <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>
                         <Button onClick={this.clearAll}>Limpiar todo</Button>
                     </div>
-                    <Table bordered key={this.state.index} onChange={this.handleChange} size="small"
+                    <Table loading={this.state.loading} bordered key={this.state.index} onChange={this.handleChange} size="small"
                         scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
             </div>

@@ -22,6 +22,7 @@ class TablaBajas extends React.Component {
             dataSource: [],
             info: [],
             filteredInfo: null,
+            loading: false,
             sortedInfo: null,
             index: 0,
             visible: false,
@@ -33,6 +34,7 @@ class TablaBajas extends React.Component {
 
     llenar_tabla() {
         let datos = [];
+        this.setState({loading: true});
         Axios.reporte_bajas().then(res => {
             res.data.forEach(function (dato) {
                 console.log("dq", dato)
@@ -48,10 +50,11 @@ class TablaBajas extends React.Component {
                 }
                 datos.push(equipos)
             });
-            this.setState({ dataSource: datos });
+            this.setState({ dataSource: datos, loading: false });
         }).catch(err => {
             console.log(err)
             message.error('No se pueden cargar los datos, revise la conexión con el servidor', 4);
+            this.setState({loading: false});
         });
     }
 
@@ -333,7 +336,7 @@ class TablaBajas extends React.Component {
                         <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>
                         <Button onClick={this.clearAll}>Limpiar todo</Button>
                     </div>
-                    <Table bordered key={this.state.index} onChange={this.handleChange} size="middle"
+                    <Table loading={this.state.loading} bordered key={this.state.index} onChange={this.handleChange} size="middle"
                         scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
                 <ModalDownload

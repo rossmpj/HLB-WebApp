@@ -10,6 +10,7 @@ const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } };
 
 const FormularioDinamicoDD = Form.create({
     name:'Dinamico'})( props => {
+        const [nSlotsValido, setNSlotsValido] = useState(true);
         const disco = { codigo: '', marca: '', modelo: '', nserie: '', capacidad: {cant: 0, un: "Mb"}, tipo: '', descr: '' };
         var obj = [];
         if (props.editionMode ===false) { 
@@ -142,7 +143,7 @@ const FormularioDinamicoDD = Form.create({
                                     initialValue: registro[index].capacidad.cant,
                                 })(
                                     <InputNumber 
-                                    min={0}
+                                    min={1}
                                     onChange={(value, e) => handleInputChange(index, value, 'capac', e)} 
                                     style={{ width: '70%' }} />
                                 )}
@@ -200,23 +201,46 @@ const FormularioDinamicoDD = Form.create({
     const validateInput = (e) => {
         e.preventDefault();
         validateFields((err, values) => {
-            if(props.editionMode === false){
-                registro.forEach( element => {
-                    props.datos.push(element)
-                })    
-            }
-            if(!err) {
-                if (props.isStepFinal === true){
-                    props.handleConfirmButton(registro);
-                    props.handle_guardar()
-                } else{
-                    props.submittedValues(registro)
-                    props.handleNextButton()
-                } 
+            if (nSlotsValido) {
+                if(props.editionMode === false){
+                    registro.forEach( element => {
+                        props.datos.push(element)
+                    })    
+                }
+                if(!err) {
+                    if (props.isStepFinal === true){
+                        props.handleConfirmButton(registro);
+                        props.handle_guardar()
+                    } else{
+                        props.submittedValues(registro)
+                        props.handleNextButton()
+                    } 
+                }
             }
         });
     }
+
+    const slotsValidator = (value) => {       
+        let num_slots = value;
+        if (num_slots >= registro.length) {
+            console.log("exito")
+            setNSlotsValido(true)
+            return true;
+        }else{
+            console.log("error")
+            setNSlotsValido(false)
+            return false;
+        }
+    }
     
+    const handleSlotsChange = (value, name, e) => {
+        const { form } = props;
+        setNSlotsValido(slotsValidator(value));
+        const fvalue = value;
+        form.setFieldsValue({
+            'conexiones_dd': fvalue
+        });
+    };
     // const storeValues = () => {
     //     const values = getFieldsValue();
     //     console.log("valores", values)
@@ -232,6 +256,20 @@ const FormularioDinamicoDD = Form.create({
 
     return (   
         <Form {...layout} name="form" layout="horizontal" onSubmit={validateInput}> 
+        {props.verDetalleRAM === true ?
+            <div style={{marginLeft: 40, marginRight: 40,}} key={props.nombre+"c"}>
+                <div style={{borderRadius: 10,}}>
+                    <Form.Item 
+                        label="Conexiones de disco duro" hasFeedback help="El número de discos duros agregados no debe exceder el número de conexiones" 
+                        validateStatus={!nSlotsValido ? 'error' :  'success' }>
+                        {getFieldDecorator('conexiones_dd', {
+                        rules: [{ required: true, message: 'Debe completar este campo. ' }],
+                        initialValue: props.conexiones_dd
+                        })( <InputNumber min={1} max={8} style={{ width: '100%' }} onChange={(value, e) => handleSlotsChange(value, 'conexiones_dd', e)}/> )}
+                    </Form.Item>
+                </div>
+            </div>
+            : null}
             {formuItems}
             {props.editionMode===false ?
             <Form.Item {...buttonItemLayout}>

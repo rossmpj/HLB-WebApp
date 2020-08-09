@@ -36,6 +36,7 @@ class TablaIp extends React.Component {
 
     llenar_tabla() {
         let datos = [];
+        this.setState({loading: true});
         Axios.ver_ips().then(res => {
             res.data.forEach(function (dato) {
                 let empleado = ""
@@ -61,10 +62,11 @@ class TablaIp extends React.Component {
                 }
                 datos.push(registro)
             });
-            this.setState({ dataSource: datos, currentDataSource: datos, disabelExport: false });
+            this.setState({ dataSource: datos, currentDataSource: datos, disabelExport: false, loading: false });
         }).catch(err => {
             console.log(err)
             message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
+            this.setState({loading: false});
         });
     }
 
@@ -363,7 +365,7 @@ class TablaIp extends React.Component {
                         <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>
                         <Button onClick={this.clearAll}>Limpiar todo</Button>
                     </div>
-                    <Table bordered key={this.state.index} onChange={this.handleChange} size="small"
+                    <Table loading={this.state.loading} bordered key={this.state.index} onChange={this.handleChange} size="small"
                         scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
             </div>

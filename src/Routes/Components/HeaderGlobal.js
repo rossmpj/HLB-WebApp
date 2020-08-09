@@ -1,7 +1,6 @@
 import React from 'react';
-import { Menu, Layout} from 'antd';
+import { Layout} from 'antd';
 import '../../custom-antd.css';
-import { Link } from 'react-router-dom';
 const { Header } = Layout;
 
 export default class HeaderGlobal extends React.Component {
