@@ -23,6 +23,7 @@ class TablaRouter extends React.Component {
       dataSource: [],
       currentDataSource: [],
       disabelExport: true,
+      loading: false,
       isNotSistemas: Auth.isNotSistemas()
     };
     this.handleClick = this.handleClick.bind(this);
@@ -34,12 +35,14 @@ class TablaRouter extends React.Component {
 
   obtener_datos = () => {
     let datos = [];
+    this.setState({loading: true});
     AxiosRouter.listar_routers().then(res => {
       console.log(res.data);
       datos = FuncionesAuxiliares.transform_data_router(res.data);
-      this.setState({ dataSource: datos, currentDataSource: datos, disabelExport: false });
+      this.setState({ dataSource: datos, currentDataSource: datos, disabelExport: false, loading: false });
     }).catch(err => {
       message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
+      this.setState({loading: false});
     });
   }
 
@@ -375,7 +378,7 @@ class TablaRouter extends React.Component {
               <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>
               <Button onClick={this.clearAll}>Limpiar todo</Button>
             </div>
-            <Table size="small" bordered key={this.state.index} onChange={this.handleChange} tableLayout={undefined}
+            <Table loading={this.state.loading} size="small" bordered key={this.state.index} onChange={this.handleChange} tableLayout={undefined}
               scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
           </div>
         </div>

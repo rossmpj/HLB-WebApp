@@ -1,6 +1,6 @@
 import React from 'react';
 import '../App.css';
-import { Form, Input, Button, Layout, message } from 'antd';
+import { Form, Input, Button, Layout, message, Spin } from 'antd';
 import '../custom-antd.css';
 import InputComp from '../Componentes/InputComponent';
 import MarcaSelect from '../Componentes/MarcaSelect';
@@ -12,7 +12,6 @@ import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosDesktop'
 import VistaFormulario from '../Componentes/VistaFormulario'
 import Auth from '../Login/Auth';
-import FuncionesAuxiliares from '../FuncionesAuxiliares';
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -22,27 +21,63 @@ const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 }, };
 const key = 'updatable';
 
 class FormularioRouter extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-        titulo: "",
-        id_equipo_router: "",
-        disabled: false,
-        codigos: []
-    };
-    this.handle_guardar = this.handle_guardar.bind(this);
-  }
-
-  strongValidator = (rule, value, callback) => {
-    try {
-        if (!value.match('(([a-z A-Z 1-9])(?=.*[A-Z][a-z])).{7,15}')) {
-            throw new Error("Su contaseña debe tener entre 7 y 15 caracteres, incluya al menos una mayúscula, minúscula y un número");
-        }
-    } catch (err) {
-        callback(err);
+    constructor(props) {
+        super(props);
+        this.state = {
+            titulo: "",
+            id_equipo_router: "",
+            disabled: false,
+            loading: false,
+            ipValida: true,
+            passValida: true,
+            claveValida: true,
+            codigos: []
+        };
+        this.handle_guardar = this.handle_guardar.bind(this);
     }
-}
-  
+ 
+    handleInputChange = (name, e) => {
+        const { form } = this.props;
+        if (name === "penlace"){
+            this.setState({ipValida: this.ipValidator(e.currentTarget.value)});
+            const fvalue = e.currentTarget.value;
+            form.setFieldsValue({'penlace': fvalue});
+        }else if (name === "pass"){
+            this.setState({passValida: this.passwordValidator(e.currentTarget.value)});
+            const fvalue = e.currentTarget.value;
+            form.setFieldsValue({'pass': fvalue});
+        }else if (name === "clave"){
+            this.setState({claveValida: this.passwordValidator(e.currentTarget.value)});
+            const fvalue = e.currentTarget.value;
+            form.setFieldsValue({'clave': fvalue});
+        }
+        
+    };
+
+    ipValidator = (penlace) => {
+        try {
+            // eslint-disable-next-line
+            if(penlace.match('^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')){
+                return true;
+            } else {
+                return false;
+            }
+        } catch (err) { 
+            return false;
+        }
+    }
+
+    passwordValidator = (password) => {
+        try {
+            if(password.match('^(?=.*[1-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{5,10}$')){                
+                return true;
+            } else {
+                return false;
+            }
+        } catch (err) { 
+            return false;
+        }
+    }
 
   componentDidMount = () => {
     if (typeof this.props.location !== 'undefined') {
@@ -60,14 +95,11 @@ class FormularioRouter extends React.Component {
     }
   }
 
-  handle_guardar = e => {
+  handle_guardar = e => {  
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-        if (this.state.titulo === 'Nuevo router'){
-            if (this.state.codigos.includes(values.codigo)){
-                message.error("El código ingresado ya existe en la base de datos, ingrese uno válido para continuar", 4)
-            }
-        }
+        console.log("error.",values);
+        message.loading({ content: 'Espere un momento por favor, estamos procesando su solicitud...', key });
             if (!err) {
                 console.log("valores al guardar:",values)
                 let router = {
@@ -88,7 +120,6 @@ class FormularioRouter extends React.Component {
                     estado_operativo: values.estado,
                     puerta_enlace: values.penlace,
                     descripcion: values.descripcion,
-                    fecha_registro: '2020-03-26'
                 }
                 console.log("El router", router)
                 try{
@@ -115,7 +146,11 @@ class FormularioRouter extends React.Component {
                     message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
                 }
             }
-        
+            if (this.state.titulo === 'Nuevo router'){
+                if (this.state.codigos.includes(values.codigo)){
+                    message.error("El código ingresado ya existe en la base de datos, ingrese uno válido para continuar", 4)
+                }
+            }
     });
   }
 
@@ -123,6 +158,7 @@ class FormularioRouter extends React.Component {
     console.log("record:",info);
     this.setState({id_equipo_router: info.key})
     AxiosRouter.router_id(info.key).then(respuesta => {
+        this.setState({ loading: true})
         let res = respuesta.data
         console.log(res)
             this.props.form.setFieldsValue({
@@ -141,6 +177,7 @@ class FormularioRouter extends React.Component {
             descripcion: res.descripcion
         })
     });
+    this.setState({ loading: false})
   } 
 
   render() {
@@ -151,6 +188,7 @@ class FormularioRouter extends React.Component {
           <VistaFormulario enlace='/sistemas/router' titulo={this.state.titulo}></VistaFormulario> 
           <div className="div-border-top" >
             <div className="div-container"> 
+            <Spin spinning={!this.state.loading && this.state.titulo === "Editar router"} tip="Cargando datos, espere un momento por favor...">          
               <Form {...layout} 
                 layout="horizontal" 
                 onSubmit={this.handle_guardar}
@@ -160,24 +198,29 @@ class FormularioRouter extends React.Component {
                 <InputComp label="Código" id="codigo" decorator={getFieldDecorator} disabled={this.state.disabled} />
                 <AsignComp required={false} id="asignar" decorator={getFieldDecorator} />
                 <InputComp label="Nombre" id="nombre" decorator={getFieldDecorator} />  
-                <Form.Item label="Pass">
-                  {getFieldDecorator('pass', { rules: [{ required: true, message: 'Por favor, ingrese una contraseña' }, {validator: this.strongValidator}],
-                  })( <Input.Password /> )}
+                <Form.Item label="Pass" hasFeedback help="La contraseña debe tener de 5 a 10 caracteres e incluir mayúsculas, minúsculas y números" 
+                    validateStatus={!this.state.passValida ? 'error' :  'success' }>
+                    {getFieldDecorator('pass', 
+                        { rules: [{ required: true, message: 'Por favor, ingrese una contraseña' }],
+                    })( <Input.Password onChange={(e) => this.handleInputChange('pass', e)}/> )}
                 </Form.Item>
                 <InputComp label="Usuario" id="usuario" decorator={getFieldDecorator} />  
-                <Form.Item label="Clave">
-                  {getFieldDecorator('clave', { rules: [{ required: true, message: 'Por favor, ingrese una contraseña' }, {validator: this.strongValidator}],
-                  })( <Input.Password /> )}
+                <Form.Item label="Clave" hasFeedback help="La contraseña debe tener de 5 a 10 caracteres e incluir mayúsculas, minúsculas y números" 
+                    validateStatus={!this.state.claveValida ? 'error' :  'success' }>
+                    {getFieldDecorator('clave', { 
+                        rules: [{ required: true, message: 'Por favor, ingrese una contraseña' }],
+                    })( <Input.Password onChange={(e) => this.handleInputChange('clave', e)}/> )}
                 </Form.Item>
                 <MarcaSelect required={true} id="marca" decorator={getFieldDecorator} />
                 <InputComp label="Modelo" id="modelo" decorator={getFieldDecorator} /> 
                 <InputComp label="Número de serie" id="nserie" decorator={getFieldDecorator} />              
                 <EstadComp required={true} id="estado" decorator={getFieldDecorator} />
                 <IpSelect required={false} id="ip" decorator={getFieldDecorator} />
-                <Form.Item label="Puerta de enlace">
-                  {getFieldDecorator('penlace', {
-                    rules: [{ required: false, message: 'Debe completar este campo' }, {validator: FuncionesAuxiliares.ipValidator}],
-                  })( <Input /> )}
+                <Form.Item label="Puerta de enlace" hasFeedback 
+                    validateStatus={!this.state.ipValida ? 'error' :  'success' }>
+                    {getFieldDecorator('penlace', {
+                        rules: [{ required: false, message: 'Debe completar este campo' }],
+                    })( <Input  onChange={(e) => this.handleInputChange('penlace', e)}/> )}
                 </Form.Item>
                 <Form.Item label="Descripción">
                   {getFieldDecorator("descripcion")( <TextArea /> )}
@@ -187,6 +230,7 @@ class FormularioRouter extends React.Component {
                   <Link to={{ pathname: '/sistemas/router' }} ><Button type="primary">Cancelar</Button></Link> 
                 </Form.Item> 
               </Form>
+            </Spin>
             </div>  
           </div>
         </div>

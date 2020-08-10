@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Form, Button, message } from 'antd';
 import InputComp from '../Componentes/InputComponent';
-import InNumComp from '../Componentes/InputNumberComp';
 import DescrComp from '../Componentes/DescripcionComponent';
 import MarcaComp from '../Componentes/MarcaSelect';
 import Axios from '../Servicios/AxiosDesktop'
@@ -50,9 +49,9 @@ const FormMainboard = Form.create({
                 <MarcaComp required={false}              id="marca"   initialValue={props.marca} decorator={getFieldDecorator} />
                 <InputComp label="Modelo"                id="modelo"  initialValue={props.modelo} decorator={getFieldDecorator} />
                 <InputComp label="Número de serie"       id="nserie"  initialValue={props.nserie} decorator={getFieldDecorator} />  
-                <InNumComp label="RAM Soportada"         id="ram_soportada" initialValue={props.ram_soportada} decorator={getFieldDecorator} text="GB" />
-                <InNumComp label="Número slots"          id="num_slots"     initialValue={props.num_slots} decorator={getFieldDecorator} text=""  />
-                <InNumComp label="Conexiones disco duro" id="conexiones_dd" initialValue={props.conexiones_dd} decorator={getFieldDecorator} text=""  />
+                {/* <InNumComp label="RAM Soportada"         id="ram_soportada" initialValue={props.ram_soportada} decorator={getFieldDecorator} text="GB" />
+                <InNumComp label="Número slots"          id="num_slots"     initialValue={props.num_slots} decorator={getFieldDecorator} text=""  /> 
+                <InNumComp label="Conexiones disco duro" id="conexiones_dd" initialValue={props.conexiones_dd} decorator={getFieldDecorator} text=""  />*/}
                 <DescrComp label="Descripción"           id="descr"   initialValue={props.descripcion} decorator={getFieldDecorator} />
             </div>
             <Form.Item {...tailLayout}>

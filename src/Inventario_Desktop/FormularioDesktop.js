@@ -13,17 +13,17 @@ import FormProcess from '../FormulariosPC/FormProcesador'
 import FormMainboard from '../FormulariosPC/FormMainboard';
 import FormRAM from '../FormulariosPC/FormularioDinamico.js';
 import FormDD from '../FormulariosPC/FormularioDinamicoDD.js';
-import { Layout, Typography, message } from 'antd';
+import { Layout, Typography, message, Steps, Spin } from 'antd';
 import { DesktopOutlined, WindowsOutlined } from '@ant-design/icons';
 import { GiDesk, GiComputerFan } from "react-icons/gi";
 import { FiCpu, FiSpeaker, FiHardDrive } from "react-icons/fi";
 import { FaRegKeyboard, FaEthernet, FaMemory, FaPlug } from "react-icons/fa";
 import { MdMouse } from "react-icons/md";
 import { GoCircuitBoard, GoServer } from "react-icons/go";
-import { Steps } from 'antd';
 import Axios from '../Servicios/AxiosDesktop'
 import AxiosTipo from '../Servicios/AxiosTipo'
 import VistaFormulario from '../Componentes/VistaFormulario'
+import Auth from '../../src/Login/Auth';
 
 const { Step } = Steps;
 const { Content } = Layout;
@@ -37,15 +37,16 @@ class FormularioDesktop extends React.Component {
             step: 0,
             titulo: "",
             disabled: false,
+            loading: false,
             key: "",
-            general: { disabled: false, codigo: '', asignar: undefined, nombre_pc: '', usuario_pc: '', ip: undefined, estado: undefined, descripcion: '' },
+            general: { disabled: false, codigo: '', asignar: undefined, nombre_pc: '', usuario_pc: '', ip: undefined, estado: undefined, descripcion: '', encargado_registro: Auth.getDataLog().user.username },
             so: { disabled: false, so: '', tipo_so: '', sp1: false, licencia: false, office: [] },
             monitor: { disabled: false, nombre: 'monitor', codigo: '', marca: undefined, modelo: '', nserie: '', descr: '' }, 
             teclado: { disabled: false, nombre: 'teclado', codigo: '', marca: undefined, modelo: '', nserie: '', descr: '' },
             mouse: { disabled: false, nombre: 'mouse', codigo: '', marca: undefined, modelo: '', nserie: '', descr: '' },
             parlantes: { disabled: false, nombre: 'parlantes', codigo: '', marca: undefined, modelo: '', nserie: '', descr: '' },
             procesador: { disabled: false, codigo_proc: '', marca_proc: undefined, modelo_proc: '', nserie_proc: '', frec_proc: 0, nucleos_proc: 0, descr_proc: '' },
-            mainboard: { disabled: false, nombre: 'tarjeta_madre', codigo: '', marca: undefined, modelo: '', nserie: '', ram_soportada: '', num_slots: '', conexiones_dd: '', descripcion: '' },
+            mainboard: { disabled: false, nombre: 'tarjeta_madre', codigo: '', marca: undefined, modelo: '', nserie: '', descripcion: '' },
             tarjeta_red: { disabled: false, nombre: 'tarjeta_red', codigo: '', marca: undefined, modelo: '', nserie: '', descr: '' },
             carcasa: { disabled: false, nombre: 'case', codigo: '', marca: undefined, modelo: '', nserie: '', descr: '' },
             fuente_poder: { disabled: false, nombre: 'fuente_poder', codigo: '', marca: undefined, modelo: '', nserie: '', descr: '' },
@@ -57,6 +58,8 @@ class FormularioDesktop extends React.Component {
                 verDetalleRAM: true,
                 isStepFinal: false,   
                 datos:[],    
+                ram_soportada: 1, 
+                num_slots: 1, 
                 editionMode:false 
             },
             disco_duro: {
@@ -66,6 +69,7 @@ class FormularioDesktop extends React.Component {
                 isStepFinal: true,
                 datos: [],
                 marcas: [],
+                conexiones_dd: 1, 
                 editionMode:false
             }
         }
@@ -81,6 +85,7 @@ class FormularioDesktop extends React.Component {
             }
             if(titulo === "Nueva computadora"){
                 this.cargar()
+                this.setState({loading: false})
             }
             this.setState({titulo: titulo});    
             this.setState({disabled: disabled})
@@ -89,6 +94,7 @@ class FormularioDesktop extends React.Component {
 
     cargar() {
         let r = []
+
         AxiosTipo.mostrar_marcas().then(res => {
             res.data.forEach(function (dato) {
                 let users = {
@@ -99,6 +105,7 @@ class FormularioDesktop extends React.Component {
             });
         });
         this.setState({
+            loading: false,
             fuente_alimentacion: {
                 tipo: "ups", 
                 nombre: 'fuente_alimentacion', 
@@ -115,6 +122,8 @@ class FormularioDesktop extends React.Component {
                 isStepFinal: false,
                 datos: [], 
                 marcas: r,
+                ram_soportada: 1,
+                num_slots: 1,
                 editionMode:false
             }, 
             disco_duro: {
@@ -123,6 +132,7 @@ class FormularioDesktop extends React.Component {
                 isStepFinal: true,
                 datos: [], 
                 marcas: r,
+                conexiones_dd: 1, 
                 editionMode: false
             }
         })
@@ -142,6 +152,7 @@ class FormularioDesktop extends React.Component {
         });
         Axios.obtenerInfoDesktop(info.key).then(res => {
             let registro = res.data;
+            this.setState({ loading: true})
             console.log("registro7 :",registro);
             let indcx = []
             if(info.rams !== []){
@@ -193,6 +204,7 @@ class FormularioDesktop extends React.Component {
                 general: {
                     disabled: true,
                     codigo: info.codigo,
+                    encargado_registro: Auth.getDataLog().user.username,
                     asignar: registro.general.asignado === null ? undefined : registro.general.asignado,
                     nombre_pc: info.name_pc,
                     usuario_pc: info.user_pc,
@@ -251,9 +263,6 @@ class FormularioDesktop extends React.Component {
                     marca: registro.tarjeta_madre.marca,
                     modelo: registro.tarjeta_madre.modelo,
                     nserie: registro.tarjeta_madre.numero_serie,
-                    ram_soportada: registro.tarjeta_madre.ram_soportada,
-                    num_slots: registro.tarjeta_madre.numero_slots,
-                    conexiones_dd: registro.tarjeta_madre.conexiones_dd,
                     descr: registro.tarjeta_madre.descripcion
                 },
                 tarjeta_red: {
@@ -300,6 +309,8 @@ class FormularioDesktop extends React.Component {
                     isStepFinal: false,
                     datos: indcx, 
                     marcas: r,
+                    ram_soportada: registro.tarjeta_madre.ram_soportada,
+                    num_slots: registro.tarjeta_madre.numero_slots,
                     editionMode: true
                 },
                 disco_duro: {
@@ -309,10 +320,12 @@ class FormularioDesktop extends React.Component {
                     isStepFinal: true,
                     datos: inddcx, 
                     marcas: r,
+                    conexiones_dd: registro.tarjeta_madre.conexiones_dd,
                     editionMode: true
                 }
             })
         })
+        this.setState({loading: false})
     }
 
     handleNextButton = () => {
@@ -333,6 +346,7 @@ class FormularioDesktop extends React.Component {
     handle_guardar = () => {
         console.log("valores al guardar:",this.state)
         try{
+            message.loading({ content: 'Espere un momento por favor, estamos procesando su solicitud...', key });
             if(this.state.titulo === "Editar computadora"){
                 console.log('ingresé a edicion')
                 Axios.editar_desktop(this.state).then(res => {
@@ -340,6 +354,7 @@ class FormularioDesktop extends React.Component {
                     setTimeout(() => {
                     message.success({ content: 'Registro modificado satisfactoriamente', key, duration: 3 });
                     }, 1000);
+                    this.props.history.push("/sistemas/desktop");
                 }).catch(err =>{
                     if (err.response) {
                         message.error(err.response.data.log, 4)
@@ -347,8 +362,7 @@ class FormularioDesktop extends React.Component {
                     } else{
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
                     }
-                })
-                this.props.history.push("/sistemas/desktop");
+                })    
             }else{
                 console.log("intentando")
                 Axios.crear_desktop(this.state).then(res => {
@@ -356,6 +370,7 @@ class FormularioDesktop extends React.Component {
                 setTimeout(() => {
                     message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
                 }, 1000);
+                this.props.history.push("/sistemas/desktop");
                 }).catch(err =>{
                     if (err.response) {
                         message.error(err.response.data.log, 4)
@@ -364,7 +379,6 @@ class FormularioDesktop extends React.Component {
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
                     }
                 })
-                this.props.history.push("/sistemas/desktop");
             }
         }catch(error) {
             console.log(error)
@@ -574,10 +588,12 @@ class FormularioDesktop extends React.Component {
                                 {steps.map((item,index) => (
                                 <Step key={index} icon={item.icon} title={item.title} />
                                 ))}
-                            </Steps>           
-                            <div id={"rtg"} className="steps-content">
-                                {steps[step].content}
-                            </div>
+                            </Steps>  
+                            <Spin spinning={!this.state.loading && this.state.titulo === "Editar computadora"} tip="Cargando datos, espere un momento por favor...">          
+                                <div id={"rtg"} className="steps-content">
+                                    {steps[step].content}
+                                </div>
+                            </Spin>
                         </div>  
                     </div>
                 </div> 

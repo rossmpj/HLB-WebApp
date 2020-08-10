@@ -18,6 +18,7 @@ class TablaSolicitudUser extends React.Component {
             filteredInfo: null,
             sortedInfo: null,
             index: 0,
+            loading: false,
             id_usuario: Auth.getDataLog().user.username
         };
 
@@ -25,6 +26,7 @@ class TablaSolicitudUser extends React.Component {
 
     llenar_tabla() {
         let datos = [];
+        this.setState({loading: true});
         Axios.mostrar_solicitudes_user(this.state.id_usuario).then(res => {
             res.data.forEach(function (dato) {
                 let equipos = {
@@ -37,10 +39,11 @@ class TablaSolicitudUser extends React.Component {
                 }
                 datos.push(equipos)
             });
-            this.setState({ dataSource: datos });
+            this.setState({ dataSource: datos, loading: false });
         }).catch(err => {
             console.log(err)
             message.error('No se pueden cargar los datos, revise la conexión con el servidor', 4);
+            this.setState({loading: false});
         });
     }
 
@@ -297,14 +300,12 @@ class TablaSolicitudUser extends React.Component {
                     </Col>
                 </Row>
                 <div className="div-container">
-
-
                     <div className="table-operations">
                         <Button onClick={this.limpiarFiltros}>Limpiar filtros</Button>
                         <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>
                         <Button onClick={this.clearAll}>Limpiar todo</Button>
                     </div>
-                    <Table bordered key={this.state.index} onChange={this.handleChange} size="small"
+                    <Table loading={this.state.loading} bordered key={this.state.index} onChange={this.handleChange} size="small"
                         scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
             </div>

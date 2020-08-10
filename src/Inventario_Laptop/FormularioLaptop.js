@@ -8,12 +8,12 @@ import { LaptopOutlined, WindowsOutlined } from '@ant-design/icons';
 import { FiHardDrive } from "react-icons/fi";
 import { FaMemory } from "react-icons/fa";
 import { GiProcessor } from "react-icons/gi";
-import { Layout, Typography, message } from 'antd';
+import { Layout, Typography, message, Spin } from 'antd';
 import { Steps } from 'antd';
 import Axios from '../Servicios/AxiosLaptop'
 import AxiosTipo from '../Servicios/AxiosTipo'
 import VistaFormulario from '../Componentes/VistaFormulario'
-
+import Auth from '../../src/Login/Auth';
 const { Step } = Steps;
 const { Content } = Layout;
 const { Title } = Typography;
@@ -27,6 +27,7 @@ class FormularioLaptop extends React.Component {
             titulo: "",
             disabled: false,
             key: "",
+            loading: false,
             general_fields: {
                 disabled: false,
                 codigo: '',
@@ -38,6 +39,7 @@ class FormularioLaptop extends React.Component {
                 usuario_pc: '',
                 ip: undefined,
                 estado: undefined,
+                encargado_registro: Auth.getDataLog().user.username ,
                 descripcion: ''
             },
             so_fields: {
@@ -56,7 +58,7 @@ class FormularioLaptop extends React.Component {
                 modelo_proc: '', 
                 nserie_proc: '', 
                 frec_proc: 0,
-                nucleos_proc: 0,
+                nucleos_proc: 1,
                 marcas: [],
                 descr_proc: ''
             },
@@ -65,8 +67,8 @@ class FormularioLaptop extends React.Component {
                 nombre: 'memoria RAM',
                 verDetalleRAM: true,
                 isStepFinal: false,        
-                ram_soportada: 0,
-                num_slots: 0,
+                ram_soportada: 1,
+                num_slots: 1,
                 datos: [],
                 editionMode: false,
                 marcas: []
@@ -113,6 +115,7 @@ class FormularioLaptop extends React.Component {
         });
         let codigo_e = this.state.general_fields.codigo
         this.setState({
+            loading: false,
             procesador_fields: {
                 codigo_equipo: codigo_e,
                 disabled: false,
@@ -121,7 +124,7 @@ class FormularioLaptop extends React.Component {
                 modelo_proc: '', 
                 nserie_proc: '', 
                 frec_proc: 0,
-                nucleos_proc: 0,
+                nucleos_proc: 1,
                 marcas: [],
                 descr_proc: ''
             },
@@ -129,8 +132,8 @@ class FormularioLaptop extends React.Component {
                 nombre: 'memoria RAM',
                 verDetalleRAM: true,
                 isStepFinal: false,
-                ram_soportada: 0,
-                num_slots: 0,
+                ram_soportada: 1,
+                num_slots: 1,
                 datos: [], 
                 marcas: r,
                 editionMode:false
@@ -161,6 +164,7 @@ class FormularioLaptop extends React.Component {
     
         Axios.obtenerInfoLaptop(info.key).then(res => {
             let registro = res.data;
+            this.setState({ loading: true})
             console.log("registro7:",registro);
             let indcx = []
             if(info.rams !== []){
@@ -193,6 +197,7 @@ class FormularioLaptop extends React.Component {
                 nombre_pc: info.name_pc,
                 usuario_pc: info.user_pc,
                 estado: info.estado,
+                encargado_registro: Auth.getDataLog().user.username,
                 ip: registro.general.direccion_ip === null ? null : registro.general.direccion_ip,
                 descripcion: info.descripcion
             },
@@ -238,6 +243,7 @@ class FormularioLaptop extends React.Component {
             }
         })
     })
+    this.setState({loading: false})
       }
 
     handleNextButton = () => {
@@ -260,6 +266,7 @@ class FormularioLaptop extends React.Component {
     handle_guardar = () => {
         console.log("valores al guardar:",this.state)
         try{
+            message.loading({ content: 'Espere un momento por favor, estamos procesando su solicitud...', key });
             if(this.state.titulo === "Editar laptop"){
                 Axios.editar_laptop(this.state).then(res => {
                     message.loading({ content: 'Guardando modificaciones...', key });
@@ -275,7 +282,7 @@ class FormularioLaptop extends React.Component {
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
                     }
                 })
-                this.props.history.push("/sistemas/laptop");
+                //this.props.history.push("/sistemas/laptop");
             }else{
                 console.log("intentando")
                 Axios.crear_laptop(this.state).then(res => {
@@ -292,7 +299,7 @@ class FormularioLaptop extends React.Component {
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
                     }
                 })
-                this.props.history.push("/sistemas/laptop");
+                //this.props.history.push("/sistemas/laptop");
             }
         }catch(error) {
             console.log(error)
@@ -386,10 +393,12 @@ class FormularioLaptop extends React.Component {
                                 current={step}
                                 key={"lap"+step}>
                                 {steps.map(item => ( <Step key={item.title} icon={item.icon} title={item.title} /> ))}
-                            </Steps>   
-                            <div className="steps-content">
-                                {steps[step].content}
-                            </div>
+                            </Steps>  
+                            <Spin spinning={!this.state.loading && this.state.titulo==="Editar laptop"} tip="Cargando datos, espere un momento por favor..."> 
+                                <div className="steps-content">
+                                    {steps[step].content}
+                                </div>
+                            </Spin>
                         </div>  
                     </div>
                 </div> 

@@ -14,6 +14,7 @@ class TablaPrograma extends React.Component {
             showTable: true,
             searchText: '',
             dataSource: [],
+            loading: false,
             index: 0
         };
         this.handleClick = this.handleClick.bind(this);
@@ -24,6 +25,7 @@ class TablaPrograma extends React.Component {
 
     llenar_tabla() {
         let datos = [];
+        this.setState({loading: true});
         AxiosPrograma.listado_programas().then(res => {
             res.data.forEach(function (dato) {
                 let registro = {
@@ -36,9 +38,10 @@ class TablaPrograma extends React.Component {
                 }
                 datos.push(registro)
             });
-            this.setState({ dataSource: datos });
+            this.setState({ dataSource: datos, loading: false });
         }).catch(err => {
             message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
+            this.setState({loading: false});
         });
     }
 
@@ -203,7 +206,7 @@ class TablaPrograma extends React.Component {
                         </Col>
                     </Row>
                     <div className="div-container">
-                        <Table bordered key={this.state.index} onChange={this.handleChange} size="small"
+                        <Table loading={this.state.loading} bordered key={this.state.index} onChange={this.handleChange} size="small"
                         scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                     </div>
                 </div>

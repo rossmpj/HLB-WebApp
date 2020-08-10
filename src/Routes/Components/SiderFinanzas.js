@@ -2,7 +2,7 @@ import React from 'react';
 import { Menu, Icon, Layout  } from 'antd';
 import { Link } from 'react-router-dom';
 import '../../custom-antd.css';
-import { RiRouterLine, RiTerminalWindowLine } from "react-icons/ri";
+import { RiRouterLine } from "react-icons/ri";
 const { SubMenu } = Menu;
 const { Sider } = Layout; 
 

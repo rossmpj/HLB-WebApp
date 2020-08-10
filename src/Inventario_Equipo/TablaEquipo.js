@@ -41,13 +41,15 @@ class TablaEquipo extends React.Component {
 
     llenar_tabla() {
         let datos = [];
+        this.setState({loading: true});
         Axios.mostrar_equipos().then(res => {
             console.log(res.data)
             datos = FuncionesAuxiliares.transform_data_otros(res.data);
-            this.setState({ dataSource: datos, currentDataSource: datos, disabelExport: false });
+            this.setState({ dataSource: datos, currentDataSource:datos, disabelExport:false, loading: false }); 
         }).catch(err => {
             console.log(err)
             message.error('No se pueden cargar los datos, revise la conexión con el servidor', 4);
+            this.setState({loading: false});
         });
     }
 
@@ -479,7 +481,7 @@ class TablaEquipo extends React.Component {
                         <Button onClick={this.limpiarBusquedas}>Limpiar búsquedas</Button>
                         <Button onClick={this.clearAll}>Limpiar todo</Button>
                     </div>
-                    <Table bordered key={this.state.index} onChange={this.handleChange} size="small"
+                    <Table loading={this.state.loading} bordered key={this.state.index} onChange={this.handleChange} size="small"
                         scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
                 <ImportModal
