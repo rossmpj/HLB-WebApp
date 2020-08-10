@@ -53,7 +53,7 @@ class TablaEquipo extends React.Component {
         });
     }
 
-    handleUpdate = async () => {
+    handleUpload = async () => {
         this.setState({
             uploading: true,
             responseImport: null,
@@ -94,7 +94,7 @@ class TablaEquipo extends React.Component {
             })
         } catch (e) {
             this.setState({
-                messageFile: e.message,
+                messageFile: 'No se pudo procesar el archivo seleccionado',
                 uploading: false,
                 hiddenBRI:true
             })
@@ -487,7 +487,7 @@ class TablaEquipo extends React.Component {
                 <ImportModal
                     title="Importar Equipos"
                     visible={this.state.visibleModal}
-                    onOk={this.handleUpdate}
+                    onOk={this.handleUpload}
                     onCancel={this.handleCancel}
                     fileList={fileList}
                     uploading={uploading}

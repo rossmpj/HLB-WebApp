@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Button, Upload, Typography, Tag} from 'antd';
+import { Modal, Button, Upload, Typography, Tag } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import ReactExport from "react-data-export";
 
@@ -9,7 +9,9 @@ const { Title } = Typography;
 
 
 export default class ImportModal extends React.Component {
-
+    state = {
+        message: "No olvides eliminar los 'registros ejemplo' del archivo 'Formato Importacion'!"
+    }
 
     render() {
 
@@ -39,10 +41,11 @@ export default class ImportModal extends React.Component {
                 <div style={{ textAlign: "center" }}>
                     <img className="center" src="/upload.png" alt=":)"></img>
                     <Title level={4}>{this.props.title}</Title>
+                    <div hidden={!this.state.message} style={{ textAlign: "center" }}><Tag style={{ margin: 2 }} color="green">{this.state.message}</Tag></div>
+                    <br />
                     <div className="table-operations">
                         <ExcelFile filename={this.props.fileName} element={<Button icon="cloud-download">Formato Importacion</Button>}>
-                            <ExcelSheet dataSet={this.props.dataFormat} name={this.props.sheetName}>
-                            </ExcelSheet>
+                            <ExcelSheet dataSet={this.props.dataFormat} name={this.props.sheetName} />
                         </ExcelFile>
                         <Upload fileList={this.props.fileList} {...this.props.uploadProps}>
                             <Button>

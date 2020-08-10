@@ -138,6 +138,8 @@ export default class AxiosTipo {
     }
 
 
+
+
     /* Inventario de correos */
     static crear_correo = (correo) => {
         return AxiosTipo.instanceAxios.post(`/correos`, correo);
@@ -154,4 +156,8 @@ export default class AxiosTipo {
     static eliminar_correo = (id_correo) => {
         return AxiosTipo.instanceAxios.put(`/eliminar_correo/${id_correo}`);
     } 
+
+    static reg_masivo_correos = (correos) =>{
+        return AxiosTipo.instanceAxios.post(`/masivo_correos`, correos);
+    }
 }

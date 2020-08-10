@@ -3,7 +3,7 @@ import * as XLSX from 'xlsx';
 export default class FunAuxImport {
 
     static dataFormatEquipos() {
-        let titlesnames = ['Asignado', 'Codigo', 'Marca', 'Modelo', 'Numero de Serie',
+        let titlesnames = ['Empleado', 'Codigo', 'Marca', 'Modelo', 'Numero de Serie',
             'Estado', 'Tipo', 'IP', 'Capacidad Almacenamiento', 'Tipo Almacenamiento', 'Numero de Slots RAM', 'RAM Soportada',
             'Conexiones para Discos', 'Nucleos', 'Frecuencia', 'Componente Principal', 'Descripcion']
         let values = [["0825730575", "HLB_CAS_012", "Asus", "802ew.11ac", "246-FDX", "Operativo", "DISCO DURO", "", "1 TB", "SSD", '', '', '', '', '', "HLB_DSK_003", "etiquetar"],
@@ -11,6 +11,12 @@ export default class FunAuxImport {
         
         // let titlesDesc = ['Descripcion Columnas']
         // let valuesDesc =[['Asignado: Cedula del empleado al cual se asignara el equipo'],['Codigo']];
+        return FunAuxImport.generateData(titlesnames, values);
+    }
+
+    static dataFormatCorreos(){
+        let titlesnames =['Empleado', 'Correo', 'Pass'];
+        let values = [['0825730544','example@hospitalleonbecerra.org','passwordexample'],['0829930544','example2@hospitalleonbecerra.org','password2example']]; 
         return FunAuxImport.generateData(titlesnames, values);
     }
 
@@ -63,7 +69,7 @@ export default class FunAuxImport {
     //     return hojas;
     // }
 
-    static ExcelToJson = (inputFile, encargado_registro) => {
+    static ExcelToJson = (inputFile, encargado_registro=null) => {
         const temporaryFileReader = new FileReader();
 
         return new Promise((resolve, reject) => {
@@ -80,7 +86,7 @@ export default class FunAuxImport {
                 const ws = workbook.Sheets[wsname];
                 let XL_row_object = XLSX.utils.sheet_to_row_object_array(ws, { defval: '' });
                 XL_row_object.forEach(elem => {
-                    elem['Asignado'] = String(elem['Asignado']).length === 9 ? String('0'+elem['Asignado']) : String(elem['Asignado']);
+                    elem['Empleado'] = String(elem['Empleado']).length === 9 ? String('0'+elem['Empleado']) : String(elem['Empleado']);
                     elem['rowNum'] = elem.__rowNum__ + 1;
                 })
                 let hojas = {

@@ -6,8 +6,11 @@ import ExcelExportCorreo from './ExcelExportCorreo';
 import { Link } from 'react-router-dom';
 import AxiosTipo from '../Servicios/AxiosTipo';
 import FuncionesAuxiliares from '../FuncionesAuxiliares';
-const { Title } = Typography;
+import FunAuxImport from '../Componentes/ImportModals/FunAuxImport';
+import ImportModal from '../Componentes/ImportModals/ImportModal';
+import ResponseModal from '../Componentes/ImportModals/ResponseModal';
 
+const { Title } = Typography;
 
 class TablaCorreo extends React.Component {
     constructor(props) {
@@ -22,7 +25,16 @@ class TablaCorreo extends React.Component {
             index: 0,
             currentDataSource: [],
             loading: false,
-            disabelExport: true
+            disabelExport: true,
+            fileList: [],
+            uploading: false,
+            visibleModal: false,
+            disabledImport: false,
+            messageFile: '',
+            responseImport: null,
+            messageImport: '',
+            visibleModalResp: false,
+            hiddenBRI: true
         };
     }
 
@@ -48,6 +60,87 @@ class TablaCorreo extends React.Component {
         }).catch(err => {
             message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
         });
+    }
+
+    handleUpload = async () => {
+        this.setState({
+            uploading: true,
+            responseImport: null,
+            messageImport:'',
+            hiddenBRI:true
+        });
+        const { fileList } = this.state;
+        try {
+            const hoja = await FunAuxImport.ExcelToJson(fileList[0], this.state.encargado_registro);
+            console.log(hoja)
+            if(hoja.data.length > 50){
+                this.setState({
+                    uploading: false,
+                    messageFile: 'El archivo posee mas de 50 registros. No es posible procesar tantos registros'
+                });
+                return;
+            }
+            AxiosTipo.reg_masivo_correos(hoja).then(res => {
+                console.log(res.data, 'res')
+                this.setState({
+                    uploading: false,
+                    visibleModal: false,
+                    responseImport: res.data,
+                    visibleModalResp: true,
+                    messageImport: '',
+                    hiddenBRI:true,
+                    fileList:[]
+                })
+            }).catch(err => {
+                console.log('err import', err, err.response);
+                this.setState({
+                    uploading: false,
+                    visibleModal: false,
+                    messageImport: "Ha ocurrido un error en el servidor. Intentelo mas tarde",
+                    visibleModalResp: true,
+                    hiddenBRI:true
+                })
+            })
+        } catch (e) {
+            this.setState({
+                messageFile: 'No se pudo procesar el archivo seleccionado',
+                uploading: false,
+                hiddenBRI:true
+            })
+        }
+    }
+
+    showModal = () => {
+        this.setState({
+            visibleModal: true,
+        });
+    };
+
+    handleCancel = () => {
+        this.setState({ visibleModal: false });
+    };
+
+    handleCancelMR = () => {
+        this.setState({
+            visibleModalResp: false,
+            hiddenBRI:false
+
+        });
+    };
+
+    handleOkMR = () => {
+        this.setState({
+            visibleModalResp: false,
+            responseImport: null,
+            messageImport:'',
+            hiddenBRI:true
+        });
+    };
+
+    showModalResp = () => {
+        this.setState({
+            visibleModalResp: true
+        })
     }
 
     componentDidMount() {
@@ -245,6 +338,48 @@ class TablaCorreo extends React.Component {
                 ),
             },
         ];
+
+        const { uploading, fileList } = this.state;
+        const uploadProps = {
+            onRemove: file => {
+                this.setState(state => {
+                    const index = state.fileList.indexOf(file);
+                    const newFileList = state.fileList.slice();
+                    newFileList.splice(index, 1);
+                    return {
+                        fileList: newFileList,
+                    };
+                });
+                this.setState({
+                    messageFile: ''
+                })
+            },
+            beforeUpload: file => {
+                let l_fn = file.name.toLowerCase().split('.');
+                let ext = l_fn[l_fn.length - 1];
+                if (ext !== 'xlsx') {
+                    this.setState({
+                        messageFile: '[' + file.name + ']: El archivo debe ser Excel (.xlsx)'
+                    })
+                }
+                else if (fileList.length > 0) {
+                    this.setState({
+                        messageFile: 'Solo se puede importar un archivo a la vez'
+                    })
+                }
+                else {
+                    this.setState({
+                        messageFile: ''
+                    })
+                    this.setState(state => ({
+                        fileList: [...state.fileList, file],
+                    }));
+                }
+                return false;
+
+            }
+        };
+
         return (
             <div className="div-container-title">
                 <Row>
@@ -260,9 +395,9 @@ class TablaCorreo extends React.Component {
                         <Row>
                             <Col className='flexbox'>
                                 {/* <ButtonGroup> */}
-                                    <Button type="primary" icon="import">Importar</Button>
+                                    <Button onClick={this.showModal} type="primary" icon="import">Importar</Button>
                                     <ExcelExportCorreo data={this.state.currentDataSource} dis = {this.state.disabelExport} ></ExcelExportCorreo>
-
+                                    <Button hidden={this.state.hiddenBRI} onClick={this.showModalResp} type="primary">Result. Importación</Button>
                                     {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
                                 {/* </ButtonGroup> */}
                             </Col>
@@ -277,6 +412,29 @@ class TablaCorreo extends React.Component {
                     <Table loading={this.state.loading} bordered key={this.state.index} onChange={this.handleChange} size="small"
                         scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
+                <ImportModal
+                    title="Importar Correos"
+                    visible={this.state.visibleModal}
+                    onOk={this.handleUpload}
+                    onCancel={this.handleCancel}
+                    fileList={fileList}
+                    uploading={uploading}
+                    uploadProps={uploadProps}
+                    dataFormat={FunAuxImport.dataFormatCorreos()}
+                    messageFile={this.state.messageFile}
+                    fileName='Formato Correos'
+                    sheetName='Correos'
+                >
+                </ImportModal>
+                <ResponseModal
+                    title="Importar Correos"
+                    visible={this.state.visibleModalResp}
+                    onOk={this.handleOkMR}
+                    onCancel={this.handleCancelMR}
+                    messageImport={this.state.messageImport}
+                    response={this.state.responseImport}
+                >
+                </ResponseModal>
             </div>
         );
     }

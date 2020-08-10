@@ -11,27 +11,26 @@ export default class ResponseModal extends React.Component {
             {
                 title: 'Fila Excel',
                 dataIndex: 'rowNum',
-                key: 'rowNum' + key,
+                key: 'rowNum_' + key,
 
             },
             {
                 title: 'Mensaje de Registro',
                 dataIndex: 'message',
-                key: 'message' + key,
+                key: 'message_' + key,
 
             }
         ]
-        let dataSource = []
-        registros.forEach(element => {
-            let reg = {
-                ...element,
-                key: element['rowNum'] + '_' + element['estado']
-            }
-            dataSource.push(reg);
+        // let dataSource = []
+        // registros.forEach(element => {
+        //     let reg = {
+        //         ...element,
+        //         key: element['rowNum'] + '_' + element['estado']
+        //     }
+        //     dataSource.push(reg);
 
-        })
-        return (<Table bordered key={key} size="small"
-            scroll={{ x: 'max-content' }} columns={columns} dataSource={dataSource}></Table>);
+        // })
+        return (<Table bordered key={key} size="small" scroll={{ x: 'max-content' }} columns={columns} dataSource={registros}></Table>);
     }
 
     render() {
