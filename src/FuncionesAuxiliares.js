@@ -354,7 +354,9 @@ export default class FuncionesAuxiliares {
                 tipo: dato.tipo,
                 numero_slots: dato.numero_slots,
                 ram_soportada: dato.ram_soportada,
-                conexiones_dd: dato.conexiones_dd
+                conexiones_dd: dato.conexiones_dd,
+                frecuencia:dato.frecuencia,
+                nucleos:dato.nucleos
             }
             datos.push(equipos)
         });

@@ -20,7 +20,7 @@ export default class SiderGeneral extends React.Component{
             <Sider
             breakpoint="lg"
             collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
-            {this.state.collapsed ? <img className="App-logo" src={"./Boton.png"} alt="icon" /> : <img className="App-logo" src={"./logo.png"} alt="logo" />}
+            {this.state.collapsed ? <img className="App-logo" src={"Boton.png"} alt="icon" /> : <img className="App-logo" src={"./logo.png"} alt="logo" />}
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
               <Menu.Item key="11">
                 <span>

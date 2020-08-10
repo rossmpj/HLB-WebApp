@@ -133,6 +133,10 @@ export default class AxiosTipo {
         return AxiosTipo.instanceAxios.put(`/eliminar_equipo/${id_equipo}`);
     }  
 
+    static reg_masivo_equipos = (equipos) =>{
+        return AxiosTipo.instanceAxios.post(`/masivo_equipos`, equipos);
+    }
+
 
     /* Inventario de correos */
     static crear_correo = (correo) => {

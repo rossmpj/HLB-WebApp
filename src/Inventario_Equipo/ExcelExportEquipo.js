@@ -12,7 +12,7 @@ export default class ExcelExportEquipo extends Component {
 
     static generateTitlesImp(){
         let titulos = ['BSPI Punto', 'Departamento', 'Asignado', 'Codigo', 'Marca', 'Modelo', 'Numero de Serie',
-         'Estado','Tipo', 'IP', 'Capacidad Almacenamiento', 'Tipo Almacenamiento', 'Numero de Slots RAM', 'RAM Soportada', 'Conexiones para Discos','Componente Principal', 'Encargado de Registro', 'Fecha de Registro', 'Descripcion'] 
+         'Estado','Tipo', 'IP', 'Capacidad Almacenamiento', 'Tipo Almacenamiento', 'Numero de Slots RAM', 'RAM Soportada', 'Conexiones para Discos','Nucleos','Frecuencia','Componente Principal', 'Encargado de Registro', 'Fecha de Registro', 'Descripcion'] 
         return FuncionesAuxiliares.generateTitlesExcel(titulos,'9BBB59');
     }
 
@@ -35,6 +35,8 @@ export default class ExcelExportEquipo extends Component {
                 { 'value': FuncionesAuxiliares.validarCampo(element.numero_slots, '-') },
                 { 'value': FuncionesAuxiliares.validarCampo(element.ram_soportada, '-') },
                 { 'value': FuncionesAuxiliares.validarCampo(element.conexiones_dd, '-') },
+                { 'value': FuncionesAuxiliares.validarCampo(element.nucleos, '-') },
+                { 'value': FuncionesAuxiliares.validarCampo(element.frecuencia, '-') },
                 { 'value': FuncionesAuxiliares.validarCampo(element.componente_principal, '-')},
                 { 'value': FuncionesAuxiliares.validarCampo(element.encargado_registro, '-') },
                 { 'value': FuncionesAuxiliares.validarCampo(element.fecha_registro, '-') },

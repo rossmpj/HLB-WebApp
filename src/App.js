@@ -54,6 +54,7 @@ class App extends React.Component {
   render() {
     return (
       <Router>
+          {/* Routes Publicas */}
           <HomeRoute exact path='/'/>
           <PublicRoute exact path='/login' component={LoginHLB} layout = {PublicLayout}  />
 
