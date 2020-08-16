@@ -1,9 +1,13 @@
 import React from 'react';
-import { Button, Row, Col, Table, Input, Icon, Popconfirm, message, Typography, Tag} from 'antd';
+import { Button, Row, Col, Table, Input, Icon, Popconfirm, message, Typography, Tag } from 'antd';
 import ExcelExportIP from './ExcelExportIP';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosTipo';
 import FuncionesAuxiliares from '../FuncionesAuxiliares';
+import Auth from '../Login/Auth';
+import FunAuxImport from '../Componentes/ImportModals/FunAuxImport';
+import ImportModal from '../Componentes/ImportModals/ImportModal';
+import ResponseModal from '../Componentes/ImportModals/ResponseModal';
 
 const { Title } = Typography;
 
@@ -23,6 +27,16 @@ class TablaIp extends React.Component {
             index: 0,
             currentDataSource: [],
             disabelExport: true,
+            fileList: [],
+            uploading: false,
+            visibleModal: false,
+            disabledImport: false,
+            messageFile: '',
+            responseImport: null,
+            messageImport: '',
+            visibleModalResp: false,
+            hiddenBRI: true,
+            encargado_registro: Auth.getDataLog().user.username,
         };
         this.handleClick = this.handleClick.bind(this);
     }
@@ -34,9 +48,90 @@ class TablaIp extends React.Component {
         });
     }
 
+    handleUpload = async () => {
+        this.setState({
+            uploading: true,
+            responseImport: null,
+            messageImport: '',
+            hiddenBRI: true
+        });
+        const { fileList } = this.state;
+        try {
+            const hoja = await FunAuxImport.ExcelToJson(fileList[0]);
+            console.log(hoja)
+            if (hoja.data.length > 50) {
+                this.setState({
+                    uploading: false,
+                    messageFile: 'El archivo posee mas de 50 registros. No es posible procesar tantos registros.'
+                });
+                return;
+            }
+            Axios.reg_masivo_correos(hoja).then(res => {
+                console.log(res.data, 'res')
+                this.setState({
+                    uploading: false,
+                    visibleModal: false,
+                    responseImport: res.data,
+                    visibleModalResp: true,
+                    messageImport: '',
+                    hiddenBRI: true,
+                    fileList: []
+                })
+            }).catch(err => {
+                console.log('err import', err, err.response);
+                this.setState({
+                    uploading: false,
+                    visibleModal: false,
+                    messageImport: "Ha ocurrido un error en el servidor. Intentelo mas tarde",
+                    visibleModalResp: true,
+                    hiddenBRI: true
+                })
+            })
+        } catch (e) {
+            this.setState({
+                messageFile: 'No se pudo procesar el archivo seleccionado',
+                uploading: false,
+                hiddenBRI: true
+            })
+        }
+    }
+
+    showModal = () => {
+        this.setState({
+            visibleModal: true,
+        });
+    };
+
+    handleCancel = () => {
+        this.setState({ visibleModal: false });
+    };
+
+    handleCancelMR = () => {
+        this.setState({
+            visibleModalResp: false,
+            hiddenBRI: false
+
+        });
+    };
+
+    handleOkMR = () => {
+        this.setState({
+            visibleModalResp: false,
+            responseImport: null,
+            messageImport: '',
+            hiddenBRI: true
+        });
+    };
+
+    showModalResp = () => {
+        this.setState({
+            visibleModalResp: true
+        })
+    }
+
     llenar_tabla() {
         let datos = [];
-        this.setState({loading: true});
+        this.setState({ loading: true });
         Axios.ver_ips().then(res => {
             res.data.forEach(function (dato) {
                 let empleado = ""
@@ -58,7 +153,7 @@ class TablaIp extends React.Component {
                     bspi: dato.bspi_punto,
                     departamento: dato.departamento,
                     codigo_equipo: dato.codigo,
-                    tipo_equipo: FuncionesAuxiliares.UpperCase(dato.tipo_equipo,'')
+                    tipo_equipo: FuncionesAuxiliares.UpperCase(dato.tipo_equipo, '')
                 }
                 datos.push(registro)
             });
@@ -66,7 +161,7 @@ class TablaIp extends React.Component {
         }).catch(err => {
             console.log(err)
             message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
-            this.setState({loading: false});
+            this.setState({ loading: false });
         });
     }
 
@@ -74,12 +169,12 @@ class TablaIp extends React.Component {
         this.setState({ filteredInfo: null });
     };
 
-    handleChange = (pagination,filters, sorter, currentDataSource) => {
+    handleChange = (pagination, filters, sorter, currentDataSource) => {
         console.log('Various parameters', pagination, filters, sorter, currentDataSource);
         this.setState({
             filteredInfo: filters,
             sortedInfo: sorter,
-            currentDataSource: currentDataSource.currentDataSource 
+            currentDataSource: currentDataSource.currentDataSource
         });
     };
 
@@ -260,11 +355,11 @@ class TablaIp extends React.Component {
                 sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado, b.estado),
                 render: (text, value) => (
                     <div >
-                        {text==="L" ? <Tag style={{margin: 2}} color="green" key={value}>Libre</Tag> : 
-                        
-                                        <Tag style={{margin: 2}} color="red" key={value}>En Uso</Tag> }
+                        {text === "L" ? <Tag style={{ margin: 2 }} color="green" key={value}>Libre</Tag> :
+
+                            <Tag style={{ margin: 2 }} color="red" key={value}>En Uso</Tag>}
                     </div>
-                  ),
+                ),
             },
             {
                 title: 'Hostname',
@@ -291,19 +386,6 @@ class TablaIp extends React.Component {
                 key: 'maquinas',
                 sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.maquinas, b.maquinas)
 
-            },
-            {
-                title: 'Asignado',
-                dataIndex: 'asignado',
-                key: 'asignado',
-                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.asignado, b.asignado)
-
-            },
-            {
-                title: 'Encargado',
-                dataIndex: 'encargado',
-                key: 'encargado',
-                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.encargado, b.encargado)
             },
             {
                 title: 'Observación',
@@ -337,6 +419,47 @@ class TablaIp extends React.Component {
             },
         ];
 
+        const { uploading, fileList } = this.state;
+        const uploadProps = {
+            onRemove: file => {
+                this.setState(state => {
+                    const index = state.fileList.indexOf(file);
+                    const newFileList = state.fileList.slice();
+                    newFileList.splice(index, 1);
+                    return {
+                        fileList: newFileList,
+                    };
+                });
+                this.setState({
+                    messageFile: ''
+                })
+            },
+            beforeUpload: file => {
+                let l_fn = file.name.toLowerCase().split('.');
+                let ext = l_fn[l_fn.length - 1];
+                if (ext !== 'xlsx') {
+                    this.setState({
+                        messageFile: '[' + file.name + ']: El archivo debe ser Excel (.xlsx)'
+                    })
+                }
+                else if (fileList.length > 0) {
+                    this.setState({
+                        messageFile: 'Solo se puede importar un archivo a la vez'
+                    })
+                }
+                else {
+                    this.setState({
+                        messageFile: ''
+                    })
+                    this.setState(state => ({
+                        fileList: [...state.fileList, file],
+                    }));
+                }
+                return false;
+
+            }
+        };
+
         return (
             <div className="div-container-title">
                 <Row>
@@ -352,9 +475,10 @@ class TablaIp extends React.Component {
                         <Row>
                             <Col className='flexbox'>
                                 {/* <ButtonGroup style={{ align: 'right' }}> */}
-                                    <Button type="primary" icon="import">Importar</Button>
-                                    <ExcelExportIP data={this.state.currentDataSource} dis = {this.state.disabelExport} ></ExcelExportIP>
-                                    {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
+                                <Button type="primary" icon="import">Importar</Button>
+                                <ExcelExportIP onClick={this.showModal}  data={this.state.currentDataSource} dis={this.state.disabelExport} ></ExcelExportIP>
+                                <Button hidden={this.state.hiddenBRI} onClick={this.showModalResp} type="primary">Result. Importación</Button>
+                                {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
                                 {/* </ButtonGroup> */}
                             </Col>
                         </Row>
@@ -368,6 +492,29 @@ class TablaIp extends React.Component {
                     <Table loading={this.state.loading} bordered key={this.state.index} onChange={this.handleChange} size="small"
                         scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
+                <ImportModal
+                    title="Importar IPs"
+                    visible={this.state.visibleModal}
+                    onOk={this.handleUpload}
+                    onCancel={this.handleCancel}
+                    fileList={fileList}
+                    uploading={uploading}
+                    uploadProps={uploadProps}
+                    dataFormat={FunAuxImport.dataFormatIPs()}
+                    messageFile={this.state.messageFile}
+                    fileName='Formato IPs'
+                    sheetName='IPs'
+                >
+                </ImportModal>
+                <ResponseModal
+                    title="Importar IPs"
+                    visible={this.state.visibleModalResp}
+                    onOk={this.handleOkMR}
+                    onCancel={this.handleCancelMR}
+                    messageImport={this.state.messageImport}
+                    response={this.state.responseImport}
+                >
+                </ResponseModal>
             </div>
         );
     }

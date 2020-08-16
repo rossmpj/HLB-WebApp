@@ -20,6 +20,12 @@ export default class FunAuxImport {
         return FunAuxImport.generateData(titlesnames, values);
     }
 
+    static dataFormatIPs(){
+        let titlesnames = ['IP', 'Hostname', 'Subred', 'Fortigate', 'Maquinas Adicionales', 'Observacion']
+        let values = [['192.168.0.1', '192.168.0.0', '192.168.0.0','192.168.0.0', 3, 'Ninguna'],[['192.168.0.2', '192.168.0.0', '192.168.0.0','192.168.0.0', 4, 'Revisar']]]
+        return FunAuxImport.generateData(titlesnames, values);
+    }
+
 
     static generateData(titlesnames, values) {
         let titles = [];

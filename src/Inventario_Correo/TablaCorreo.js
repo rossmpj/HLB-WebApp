@@ -40,7 +40,7 @@ class TablaCorreo extends React.Component {
 
     llenar_tabla() {
         let datos = [];
-        this.setState({loading: true});
+        this.setState({ loading: true });
         AxiosTipo.mostrar_correos().then(res => {
             res.data.forEach(function (dato) {
                 let registro = {
@@ -66,17 +66,17 @@ class TablaCorreo extends React.Component {
         this.setState({
             uploading: true,
             responseImport: null,
-            messageImport:'',
-            hiddenBRI:true
+            messageImport: '',
+            hiddenBRI: true
         });
         const { fileList } = this.state;
         try {
-            const hoja = await FunAuxImport.ExcelToJson(fileList[0], this.state.encargado_registro);
+            const hoja = await FunAuxImport.ExcelToJson(fileList[0]);
             console.log(hoja)
-            if(hoja.data.length > 50){
+            if (hoja.data.length > 50) {
                 this.setState({
                     uploading: false,
-                    messageFile: 'El archivo posee mas de 50 registros. No es posible procesar tantos registros'
+                    messageFile: 'El archivo posee mas de 50 registros. No es posible procesar tantos registros.'
                 });
                 return;
             }
@@ -88,8 +88,8 @@ class TablaCorreo extends React.Component {
                     responseImport: res.data,
                     visibleModalResp: true,
                     messageImport: '',
-                    hiddenBRI:true,
-                    fileList:[]
+                    hiddenBRI: true,
+                    fileList: []
                 })
             }).catch(err => {
                 console.log('err import', err, err.response);
@@ -98,14 +98,14 @@ class TablaCorreo extends React.Component {
                     visibleModal: false,
                     messageImport: "Ha ocurrido un error en el servidor. Intentelo mas tarde",
                     visibleModalResp: true,
-                    hiddenBRI:true
+                    hiddenBRI: true
                 })
             })
         } catch (e) {
             this.setState({
                 messageFile: 'No se pudo procesar el archivo seleccionado',
                 uploading: false,
-                hiddenBRI:true
+                hiddenBRI: true
             })
         }
     }
@@ -123,7 +123,7 @@ class TablaCorreo extends React.Component {
     handleCancelMR = () => {
         this.setState({
             visibleModalResp: false,
-            hiddenBRI:false
+            hiddenBRI: false
 
         });
     };
@@ -132,8 +132,8 @@ class TablaCorreo extends React.Component {
         this.setState({
             visibleModalResp: false,
             responseImport: null,
-            messageImport:'',
-            hiddenBRI:true
+            messageImport: '',
+            hiddenBRI: true
         });
     };
 
@@ -395,10 +395,10 @@ class TablaCorreo extends React.Component {
                         <Row>
                             <Col className='flexbox'>
                                 {/* <ButtonGroup> */}
-                                    <Button onClick={this.showModal} type="primary" icon="import">Importar</Button>
-                                    <ExcelExportCorreo data={this.state.currentDataSource} dis = {this.state.disabelExport} ></ExcelExportCorreo>
-                                    <Button hidden={this.state.hiddenBRI} onClick={this.showModalResp} type="primary">Result. Importación</Button>
-                                    {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
+                                <Button onClick={this.showModal} type="primary" icon="import">Importar</Button>
+                                <ExcelExportCorreo data={this.state.currentDataSource} dis={this.state.disabelExport} ></ExcelExportCorreo>
+                                <Button hidden={this.state.hiddenBRI} onClick={this.showModalResp} type="primary">Result. Importación</Button>
+                                {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
                                 {/* </ButtonGroup> */}
                             </Col>
                         </Row>

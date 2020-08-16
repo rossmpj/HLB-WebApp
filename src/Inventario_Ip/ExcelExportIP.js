@@ -12,7 +12,7 @@ export default class ExcelExportIP extends Component {
 
     generateTitlesRouter(){
         let titulos = ['IP','BSPI Punto', 'Departamento', 'Empleado',  'Codigo Equipo Asignado', 'Tipo Eqipo Asignado',
-         'Estado','Hostname', 'Subred', 'Fortigate', 'Maquinas Adicionales', 'Asignado', 'Encargado', 'Observacion'] 
+         'Estado','Hostname', 'Subred', 'Fortigate', 'Maquinas Adicionales', 'Observacion'] 
         return FuncionesAuxiliares.generateTitlesExcel(titulos,'00B050');
     }
 
@@ -37,8 +37,8 @@ export default class ExcelExportIP extends Component {
                 { 'value': FuncionesAuxiliares.validarCampo(element.subred, '-') },
                 { 'value': FuncionesAuxiliares.validarCampo(element.fortigate, '-')},
                 { 'value': FuncionesAuxiliares.validarCampo(element.maquinas, '-') },
-                { 'value': FuncionesAuxiliares.validarCampo(element.asignado, '-') },
-                { 'value': FuncionesAuxiliares.validarCampo(element.encargado, '-') },
+                // { 'value': FuncionesAuxiliares.validarCampo(element.asignado, '-') },
+                // { 'value': FuncionesAuxiliares.validarCampo(element.encargado, '-') },
                 { 'value': FuncionesAuxiliares.validarCampo(element.observacion, '-')},
             ]
             rows.push(row);

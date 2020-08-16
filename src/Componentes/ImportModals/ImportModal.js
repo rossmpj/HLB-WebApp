@@ -10,7 +10,7 @@ const { Title } = Typography;
 
 export default class ImportModal extends React.Component {
     state = {
-        message: "No olvides eliminar los 'registros ejemplo' del archivo 'Formato Importacion'!"
+        message: "No olvides eliminar los 'registros ejemplo' del archivo Formato Importacion."
     }
 
     render() {
