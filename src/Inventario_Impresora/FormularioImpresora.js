@@ -1,6 +1,6 @@
 import React from 'react';
 import '../App.css';
-import {Form, Select, Input, Button, Layout, message} from 'antd';
+import { Form, Select, Input, Button, Layout, message } from 'antd';
 import '../custom-antd.css';
 import InputComponent from '../Componentes/InputComponent'
 import AsignarSelect from '../Componentes/AsignarSelect'
@@ -69,7 +69,9 @@ class FormularioImpresora extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
+                values.codigo = values.codigo.toUpperCase();
                 values.encargado_registro = this.state.encargado_registro;
+
                 if (!this.state.editionMode) {
                     console.log(values);
                     Axios.crear_impresora(values).then(res => {
@@ -186,7 +188,7 @@ class FormularioImpresora extends React.Component {
         if (info.tipo.toLocaleLowerCase() === "multifuncional") {
             this.setState({ tinta: info.tinta, toner: info.toner });
             this.setState({ cartucho: info.cartucho });
-            
+
             if (info.tinta !== null) {
                 this.setState({ suministro: "tinta" });
             }
@@ -212,7 +214,9 @@ class FormularioImpresora extends React.Component {
                             class=""
                             label="Código"
                             id="codigo"
-                            decorator={getFieldDecorator} />
+                            decorator={getFieldDecorator}
+                            disabled={this.state.editionMode}
+                        />
 
                         <InputComponent
                             class=""
@@ -425,7 +429,6 @@ class FormularioImpresora extends React.Component {
 
                         <Form.Item {...tailLayout}>
                             <Button style={{ marginRight: 7 }} type="primary" htmlType="submit">Guardar</Button>
-
                         </Form.Item>
                     </Form>
                 </div>

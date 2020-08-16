@@ -1,6 +1,7 @@
 import React from 'react';
 import '../App.css';
-import { Form, Select, Input, Button, InputNumber, message
+import {
+    Form, Input, Button, InputNumber, message
 } from 'antd';
 import '../custom-antd.css';
 import InputComponent from '../Componentes/InputComponent'
@@ -27,59 +28,69 @@ class FormularioIp extends React.Component {
         this.state = {
             encargado_registro: Auth.getDataLog().user.username,
             editionMode: false,
-            key: ""
+            key: "",
+            ipValida: true,
         }
         this.handle_guardar = this.handle_guardar.bind(this);
     }
 
 
+    handleInputChange = (name, e) => {
+        const { form } = this.props;
+        if (name === "ip") {
+            this.setState({ ipValida: FuncionesAuxiliares.ipValidator(e.currentTarget.value) });
+            const fvalue = e.currentTarget.value;
+            form.setFieldsValue({ 'ip': fvalue });
+        }
+    }
+
     handle_guardar = e => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
+                console.log(values)
                 let ip = {
                     direccion_ip: values.ip,
-                    estado: values.estado,
                     hostname: values.hostname,
                     subred: values.subred,
                     fortigate: values.fortigate,
                     maquinas_adicionales: parseInt(values.maquinas),
-                    nombre_usuario: values.nombre_usuario,
                     encargado_registro: this.state.encargado_registro,
                     observacion: values.observacion,
                     key: this.state.key
                 }
                 if (!this.state.editionMode) {
 
-                    Axios.crear_ip(ip).then(res => {
+                    Axios.crear_ip(ip).then(() => {
                         message.loading({ content: 'Guardando datos...', key });
                         setTimeout(() => {
                             message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
                         }, 1000);
+                  //      this.props.history.push("/sistemas/ip");
                     }).catch(error_creacion => {
                         if (error_creacion.response) {
-                            message.error(error_creacion.response.data.log, 4)
-                            .then(() => message.error('No fue posible registrar los datos', 3))
-                        } else{
-                            message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
+                            message.error(error_creacion.response.data.log, 3)
+                                .then(() => message.error('No fue posible registrar los datos', 3))
+                        } else {
+                            message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 3)
                         }
                     });
                 } else {
-                    Axios.editar_ip(ip).then(res => {
+                    Axios.editar_ip(ip).then(() => {
                         message.loading({ content: 'Actualizando datos...', key });
                         setTimeout(() => {
                             message.success({ content: 'Registro actualizado satisfactoriamente', key, duration: 3 });
                         }, 1000);
+                    //    this.props.history.push("/sistemas/ip");
                     }).catch(error_edicion => {
                         if (error_edicion.response) {
-                            message.error(error_edicion.response.data.log, 4)
-                            .then(() => message.error('No fue posible actualizar los datos', 3))
-                        } else{
-                            message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
+                            message.error(error_edicion.response.data.log, 3)
+                                .then(() => message.error('No fue posible actualizar los datos', 3))
+                        } else {
+                            message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 3)
                         }
                     });
                 }
-
             }
         });
     }
@@ -87,13 +98,11 @@ class FormularioIp extends React.Component {
     cargar_datos(info) {
         this.props.form.setFieldsValue({
             ip: info.ip,
-            estado: info.estado,
             hostname: info.hostname,
             subred: info.subred,
             fortigate: info.fortigate,
             observacion: info.observacion,
-            maquinas: info.maquinas,
-            nombre_usuario: info.asignado
+            maquinas: info.maquinas
         })
         this.setState({ key: info.key });
     }
@@ -116,29 +125,18 @@ class FormularioIp extends React.Component {
                 <Form {...layout}
                     layout="horizontal"
                     onSubmit={this.handle_guardar}>
-                    <Form.Item label="Dirección IP">
+                    <Form.Item label="Dirección IP"
+                        hasFeedback
+                        help="Formato: 0-255.0-255.0-255.0-255"
+                        validateStatus={!this.state.ipValida ? 'error' : 'success'}>
                         {getFieldDecorator('ip',
-                           {
-                                rules: [{ required: true, message: 'Debe colocar una dirección IP' },
-                                {validator: FuncionesAuxiliares.ipValidator}]
-                           })(
+                            {
+                                rules: [{ required: true, message: 'Debe colocar una dirección IP' }]
+                            })(
                                 <Input
-                                    placeholder="[0-255].[0-255].[0-255].[0-255]"
+                                    onChange={(e) => this.handleInputChange('ip', e)}
                                 />
                             )}
-                    </Form.Item>
-
-
-                    <Form.Item label="Estado">
-                        {getFieldDecorator('estado', {
-                            rules: [{ required: true, message: 'Debe seleccionar el estado' }],
-                            initialValue: 'EU'
-                        })(
-                            <Select>
-                                <Select.Option value="EU">En uso</Select.Option>
-                                <Select.Option value="L">Libre</Select.Option>
-                            </Select>
-                        )}
                     </Form.Item>
 
                     <InputComponent
@@ -162,16 +160,6 @@ class FormularioIp extends React.Component {
                     <Form.Item label="Observación">
                         {getFieldDecorator('observacion')(
                             <TextArea />
-                        )}
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Nombre de usuario">
-                        {getFieldDecorator('nombre_usuario', {
-                            rules: [{ required: false }]
-                        })(
-                            <Input
-                            />
                         )}
                     </Form.Item>
 

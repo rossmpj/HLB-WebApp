@@ -234,7 +234,7 @@ class FormularioEquipo extends React.Component {
                                 rules: [{ required: true, message: 'Debe completar este campo' }],
                                 initialValue: this.state.codigo
                             })
-                                (<Input />)}
+                                (<Input disabled={this.state.editionMode}/>)}
                         </Form.Item>
 
                         <Form.Item

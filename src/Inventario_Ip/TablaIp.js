@@ -51,7 +51,6 @@ class TablaIp extends React.Component {
                     subred: dato.subred,
                     fortigate: dato.fortigate,
                     maquinas: dato.maquinas_adicionales,
-                    asignado: dato.nombre_usuario,
                     encargado: dato.encargado_registro,
                     observacion: dato.observacion,
                     empleado: empleado,
@@ -290,13 +289,6 @@ class TablaIp extends React.Component {
                 dataIndex: 'maquinas',
                 key: 'maquinas',
                 sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.maquinas, b.maquinas)
-
-            },
-            {
-                title: 'Asignado',
-                dataIndex: 'asignado',
-                key: 'asignado',
-                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.asignado, b.asignado)
 
             },
             {

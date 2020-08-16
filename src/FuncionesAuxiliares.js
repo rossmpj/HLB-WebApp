@@ -15,14 +15,28 @@ export default class FuncionesAuxiliares {
         }
     }
 
-    static ipValidator = (rule, value, callback) => {
+    static ipValidator = (penlace) => {
         try {
-            // eslint-disable-next-line 
-            if (!value.match('^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')) {
-                throw new Error("Escriba una dirección IP válida");
+            // eslint-disable-next-line
+            if (penlace.match('^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')) {
+                return true;
+            } else {
+                return false;
             }
         } catch (err) {
-            callback(err);
+            return false;
+        }
+    }
+
+    static  passwordValidator = (password) => {
+        try {
+            if(password.match('^(?=.*[1-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{5,10}$')){                
+                return true;
+            } else {
+                return false;
+            }
+        } catch (err) { 
+            return false;
         }
     }
 
@@ -355,16 +369,16 @@ export default class FuncionesAuxiliares {
                 numero_slots: dato.numero_slots,
                 ram_soportada: dato.ram_soportada,
                 conexiones_dd: dato.conexiones_dd,
-                frecuencia:dato.frecuencia,
-                nucleos:dato.nucleos
+                frecuencia: dato.frecuencia,
+                nucleos: dato.nucleos
             }
             datos.push(equipos)
         });
         return datos;
     }
 
-    static updateUser(values, key){
-            AxiosAuth.editar_user_web(values).then(res => {
+    static updateUser(values, key) {
+        AxiosAuth.editar_user_web(values).then(res => {
             message.loading({ content: 'Guardando datos...', key });
             setTimeout(() => {
                 message.success({ content: 'Usuario actualizado satisfactoriamente', key, duration: 3 });
@@ -373,13 +387,13 @@ export default class FuncionesAuxiliares {
             if (error.response) {
                 if (error.response.status === 400) {
                     message.error(error.response.data.log, 4)
-                    .then(() => message.error('No fue posible registrar los datos', 3))
+                        .then(() => message.error('No fue posible registrar los datos', 3))
                 }
                 if (error.response.status === 500) {
                     message.error('Ocurrió un error al procesar los datos, inténtelo más tarde', 4);
                 }
                 console.log(error.response)
-                
+
             } else {
                 message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
             }
