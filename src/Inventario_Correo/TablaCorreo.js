@@ -67,7 +67,8 @@ class TablaCorreo extends React.Component {
             uploading: true,
             responseImport: null,
             messageImport: '',
-            hiddenBRI: true
+            hiddenBRI: true,
+            messageFile: ''
         });
         const { fileList } = this.state;
         try {
@@ -89,7 +90,8 @@ class TablaCorreo extends React.Component {
                     visibleModalResp: true,
                     messageImport: '',
                     hiddenBRI: true,
-                    fileList: []
+                    fileList: [],
+                    messageFile: ''
                 })
             }).catch(err => {
                 console.log('err import', err, err.response);
@@ -98,7 +100,8 @@ class TablaCorreo extends React.Component {
                     visibleModal: false,
                     messageImport: "Ha ocurrido un error en el servidor. Intentelo mas tarde",
                     visibleModalResp: true,
-                    hiddenBRI: true
+                    hiddenBRI: true,
+                    messageFile: ''
                 })
             })
         } catch (e) {

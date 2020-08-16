@@ -33,4 +33,8 @@ export default class AxiosRouter {
     return AxiosRouter.instanceAxios.get(`/router_id/${id_equipo}`)
   }
 
+  static reg_masivo_routers = (routers) => {
+    return AxiosRouter.instanceAxios.post(`/masivo_routers`,routers);
+  }
+
 }

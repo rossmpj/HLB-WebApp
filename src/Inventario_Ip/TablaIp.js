@@ -53,11 +53,12 @@ class TablaIp extends React.Component {
             uploading: true,
             responseImport: null,
             messageImport: '',
-            hiddenBRI: true
+            hiddenBRI: true,
+            messageFile: ''
         });
         const { fileList } = this.state;
         try {
-            const hoja = await FunAuxImport.ExcelToJson(fileList[0]);
+            const hoja = await FunAuxImport.ExcelToJson(fileList[0], this.state.encargado_registro);
             console.log(hoja)
             if (hoja.data.length > 50) {
                 this.setState({
@@ -66,7 +67,7 @@ class TablaIp extends React.Component {
                 });
                 return;
             }
-            Axios.reg_masivo_correos(hoja).then(res => {
+            Axios.reg_masivo_ips(hoja).then(res => {
                 console.log(res.data, 'res')
                 this.setState({
                     uploading: false,
@@ -75,7 +76,8 @@ class TablaIp extends React.Component {
                     visibleModalResp: true,
                     messageImport: '',
                     hiddenBRI: true,
-                    fileList: []
+                    fileList: [],
+                    messageFile: ''
                 })
             }).catch(err => {
                 console.log('err import', err, err.response);
@@ -84,7 +86,8 @@ class TablaIp extends React.Component {
                     visibleModal: false,
                     messageImport: "Ha ocurrido un error en el servidor. Intentelo mas tarde",
                     visibleModalResp: true,
-                    hiddenBRI: true
+                    hiddenBRI: true,
+                    messageFile: ''
                 })
             })
         } catch (e) {
@@ -474,8 +477,8 @@ class TablaIp extends React.Component {
                         <Row>
                             <Col className='flexbox'>
                                 {/* <ButtonGroup style={{ align: 'right' }}> */}
-                                <Button type="primary" icon="import">Importar</Button>
-                                <ExcelExportIP onClick={this.showModal}  data={this.state.currentDataSource} dis={this.state.disabelExport} ></ExcelExportIP>
+                                <Button onClick={this.showModal} type="primary" icon="import">Importar</Button>
+                                <ExcelExportIP data={this.state.currentDataSource} dis={this.state.disabelExport} ></ExcelExportIP>
                                 <Button hidden={this.state.hiddenBRI} onClick={this.showModalResp} type="primary">Result. Importación</Button>
                                 {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
                                 {/* </ButtonGroup> */}

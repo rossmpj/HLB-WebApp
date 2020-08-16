@@ -3,7 +3,7 @@ import * as XLSX from 'xlsx';
 export default class FunAuxImport {
 
     static dataFormatEquipos() {
-        let titlesnames = ['Empleado', 'Codigo', 'Marca', 'Modelo', 'Numero de Serie',
+        let titlesnames = ['Empleado', 'Codigo', 'Marca', 'Modelo', 'N/S',
             'Estado', 'Tipo', 'IP', 'Capacidad Almacenamiento', 'Tipo Almacenamiento', 'Numero de Slots RAM', 'RAM Soportada',
             'Conexiones para Discos', 'Nucleos', 'Frecuencia', 'Componente Principal', 'Descripcion']
         let values = [["0825730575", "HLB_CAS_012", "Asus", "802ew.11ac", "246-FDX", "Operativo", "DISCO DURO", "", "1 TB", "SSD", '', '', '', '', '', "HLB_DSK_003", "etiquetar"],
@@ -22,7 +22,14 @@ export default class FunAuxImport {
 
     static dataFormatIPs(){
         let titlesnames = ['IP', 'Hostname', 'Subred', 'Fortigate', 'Maquinas Adicionales', 'Observacion']
-        let values = [['192.168.0.1', '192.168.0.0', '192.168.0.0','192.168.0.0', 3, 'Ninguna'],[['192.168.0.2', '192.168.0.0', '192.168.0.0','192.168.0.0', 4, 'Revisar']]]
+        let values = [['192.168.0.1', 'Asistente_finan', '192.168.0.0','ADMINISTRACION_KATHIUSKA_QUINDE', 3, 'Ninguna'],['192.168.0.2', 'BSPI_1-PC', '192.168.0.0','UCI_ROUTER_UCI', 4, 'Revisar']]
+        return FunAuxImport.generateData(titlesnames, values);
+    }
+
+    static dataFormatRouters(){
+        let titlesnames =['Empleado', 'Codigo', 'Marca', 'Modelo', 'N/S', 'Estado','Nombre', 'Pass', 'Usuario', 'Clave', 'IP', 'Puerta Enlace', 'Descripcion'];
+        let values = [['0945683123', 'HLB_ROU_011','LG', '1fersd45', '112wderft566', 'Operativo','Lab', '1wes345', 'administrador', '1weJl45' ,'192.168.0.9','192.168.9.1', 'Ninguna'],
+        ['0933683123', 'HLB_ROU_013','LG', '1rrrtd45', '112cverfvg66', 'Operativo','Lab3', '1wes345', 'sistemas', '1jkD345' ,'192.168.1.9','192.168.1.0', 'Revisar']];
         return FunAuxImport.generateData(titlesnames, values);
     }
 
@@ -56,25 +63,6 @@ export default class FunAuxImport {
         return resp;
     }
 
-    // static ExcelToJson(file) {
-    //     let hojas = {}
-    //     let reader = new FileReader()
-    //     reader.readAsArrayBuffer(file)
-    //     reader.onloadend = (e) => {
-    //         var data = new Uint8Array(e.target.result);
-    //         var workbook = XLSX.read(data, { type: 'array' });
-    //         const wsname = workbook.SheetNames[0];
-    //         const ws = workbook.Sheets[wsname];
-    //         const XL_row_object = XLSX.utils.sheet_to_row_object_array(ws);
-    //         hojas = {
-    //             data: XL_row_object,
-    //             sheetName: wsname
-    //         }
-
-    //     }
-    //     return hojas;
-    // }
-
     static ExcelToJson = (inputFile, encargado_registro=null) => {
         const temporaryFileReader = new FileReader();
 
@@ -92,7 +80,9 @@ export default class FunAuxImport {
                 const ws = workbook.Sheets[wsname];
                 let XL_row_object = XLSX.utils.sheet_to_row_object_array(ws, { defval: '' });
                 XL_row_object.forEach(elem => {
-                    elem['Empleado'] = String(elem['Empleado']).length === 9 ? String('0'+elem['Empleado']) : String(elem['Empleado']);
+                    if (elem['Empleado'] !== null && elem['Empleado'] !== undefined ){
+                        elem['Empleado'] = String(elem['Empleado']).length === 9 ? String('0'+elem['Empleado']) : String(elem['Empleado']);
+                    }
                     elem['rowNum'] = elem.__rowNum__ + 1;
                 })
                 let hojas = {

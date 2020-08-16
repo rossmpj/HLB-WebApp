@@ -5,6 +5,9 @@ import AxiosRouter from '../Servicios/AxiosRouter';
 import ExcelExportRouter from './ExcelExportRouter';
 import FuncionesAuxiliares from '../FuncionesAuxiliares';
 import Auth from '../Login/Auth';
+import ImportModal from '../Componentes/ImportModals/ImportModal';
+import FunAuxImport from '../Componentes/ImportModals/FunAuxImport';
+import ResponseModal from '../Componentes/ImportModals/ResponseModal';
 
 const { Title } = Typography;
 
@@ -24,10 +27,105 @@ class TablaRouter extends React.Component {
       currentDataSource: [],
       disabelExport: true,
       loading: false,
-      isNotSistemas: Auth.isNotSistemas()
+      isNotSistemas: Auth.isNotSistemas(),
+      fileList: [],
+      uploading: false,
+      visibleModal: false,
+      disabledImport: false,
+      messageFile: '',
+      responseImport: null,
+      messageImport: '',
+      visibleModalResp: false,
+      hiddenBRI: true,
+      encargado_registro: Auth.getDataLog().user.username,
+
     };
     this.handleClick = this.handleClick.bind(this);
   }
+
+
+  handleUpload = async () => {
+    this.setState({
+      uploading: true,
+      responseImport: null,
+      messageImport: '',
+      hiddenBRI: true
+    });
+    const { fileList } = this.state;
+    try {
+      const hoja = await FunAuxImport.ExcelToJson(fileList[0], this.state.encargado_registro);
+      console.log(hoja)
+      if (hoja.data.length > 50) {
+        this.setState({
+          uploading: false,
+          messageFile: 'El archivo posee mas de 50 registros. No es posible procesar tantos registros'
+        });
+        return;
+      }
+      AxiosRouter.reg_masivo_routers(hoja).then(res => {
+        console.log(res.data, 'res')
+        this.setState({
+          uploading: false,
+          visibleModal: false,
+          responseImport: res.data,
+          visibleModalResp: true,
+          messageImport: '',
+          hiddenBRI: true,
+          fileList: []
+        })
+      }).catch(err => {
+        console.log('err import', err, err.response);
+        this.setState({
+          uploading: false,
+          visibleModal: false,
+          messageImport: "Ha ocurrido un error en el servidor. Intentelo mas tarde",
+          visibleModalResp: true,
+          hiddenBRI: true
+        })
+      })
+    } catch (e) {
+      this.setState({
+        messageFile: 'No se pudo procesar el archivo seleccionado',
+        uploading: false,
+        hiddenBRI: true
+      })
+    }
+  }
+
+  showModal = () => {
+    this.setState({
+      visibleModal: true,
+    });
+  };
+
+  handleCancel = () => {
+    this.setState({ visibleModal: false });
+  };
+
+  handleCancelMR = () => {
+    this.setState({
+      visibleModalResp: false,
+      hiddenBRI: false
+
+    });
+  };
+
+  handleOkMR = () => {
+    this.setState({
+      visibleModalResp: false,
+      responseImport: null,
+      messageImport: '',
+      hiddenBRI: true
+    });
+  };
+
+  showModalResp = () => {
+    this.setState({
+      visibleModalResp: true
+    })
+  }
+
+
 
   recargar_datos() {
     this.obtener_datos();
@@ -35,14 +133,14 @@ class TablaRouter extends React.Component {
 
   obtener_datos = () => {
     let datos = [];
-    this.setState({loading: true});
+    this.setState({ loading: true });
     AxiosRouter.listar_routers().then(res => {
       console.log(res.data);
       datos = FuncionesAuxiliares.transform_data_router(res.data);
       this.setState({ dataSource: datos, currentDataSource: datos, disabelExport: false, loading: false });
     }).catch(err => {
       message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
-      this.setState({loading: false});
+      this.setState({ loading: false });
     });
   }
 
@@ -342,12 +440,54 @@ class TablaRouter extends React.Component {
         ),
       },
     ];
-    return this.state.isNotSistemas ? generalColumns : generalColumns.concat(actionsColumns) 
+    return this.state.isNotSistemas ? generalColumns : generalColumns.concat(actionsColumns)
   }
 
   render() {
 
     let columns = this.getColumns();
+
+
+    const { uploading, fileList } = this.state;
+    const uploadProps = {
+      onRemove: file => {
+        this.setState(state => {
+          const index = state.fileList.indexOf(file);
+          const newFileList = state.fileList.slice();
+          newFileList.splice(index, 1);
+          return {
+            fileList: newFileList,
+          };
+        });
+        this.setState({
+          messageFile: ''
+        })
+      },
+      beforeUpload: file => {
+        let l_fn = file.name.toLowerCase().split('.');
+        let ext = l_fn[l_fn.length - 1];
+        if (ext !== 'xlsx') {
+          this.setState({
+            messageFile: '[' + file.name + ']: El archivo debe ser Excel (.xlsx)'
+          })
+        }
+        else if (fileList.length > 0) {
+          this.setState({
+            messageFile: 'Solo se puede importar un archivo a la vez'
+          })
+        }
+        else {
+          this.setState({
+            messageFile: ''
+          })
+          this.setState(state => ({
+            fileList: [...state.fileList, file],
+          }));
+        }
+        return false;
+
+      }
+    };
 
     return (
       <div>
@@ -365,9 +505,10 @@ class TablaRouter extends React.Component {
               <Row>
                 <Col className='flexbox'>
                   {/* <ButtonGroup> */}
-                  <Button hidden={this.state.isNotSistemas} type="primary" icon="import">Importar</Button>
+                  <Button onClick={this.showModal} hidden={this.state.isNotSistemas} type="primary" icon="import">Importar</Button>
                   {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
                   <ExcelExportRouter data={this.state.currentDataSource} dis={this.state.disabelExport}></ExcelExportRouter>
+                  <Button hidden={this.state.hiddenBRI} onClick={this.showModalResp} type="primary">Result. Importación</Button>
                   {/* </ButtonGroup> */}
                 </Col>
               </Row>
@@ -382,6 +523,29 @@ class TablaRouter extends React.Component {
               scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
           </div>
         </div>
+        <ImportModal
+          title="Importar Routers"
+          visible={this.state.visibleModal}
+          onOk={this.handleUpload}
+          onCancel={this.handleCancel}
+          fileList={fileList}
+          uploading={uploading}
+          uploadProps={uploadProps}
+          dataFormat={FunAuxImport.dataFormatRouters()}
+          messageFile={this.state.messageFile}
+          fileName='Formato Routers'
+          sheetName='Routers'
+        >
+        </ImportModal>
+        <ResponseModal
+          title="Importar Routers"
+          visible={this.state.visibleModalResp}
+          onOk={this.handleOkMR}
+          onCancel={this.handleCancelMR}
+          messageImport={this.state.messageImport}
+          response={this.state.responseImport}
+        >
+        </ResponseModal>
       </div>
     );
   }

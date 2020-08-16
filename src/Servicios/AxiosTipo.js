@@ -85,6 +85,9 @@ export default class AxiosTipo {
         return AxiosTipo.instanceAxios.delete(`/eliminar_ip/${id_ip}`);
     }
 
+    static reg_masivo_ips = (ips) =>{
+        return AxiosTipo.instanceAxios.post("/masivo_dirips", ips);
+    }
 
     /*---------- Inventario Impresora ----------*/
     static crear_impresora = (impresora) => {
