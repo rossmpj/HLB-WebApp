@@ -8,9 +8,9 @@ import IpSelect from '../Componentes/IpSelect';
 import AsignComp from '../Componentes/AsignarSelect';
 import EstadComp from '../Componentes/EstadoSelect';
 import AxiosRouter from '../Servicios/AxiosRouter';
-import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosDesktop'
 import VistaFormulario from '../Componentes/VistaFormulario'
+import FuncionesAuxiliares from '../FuncionesAuxiliares';
 import Auth from '../Login/Auth';
 
 const { Content } = Layout;
@@ -39,45 +39,22 @@ class FormularioRouter extends React.Component {
     handleInputChange = (name, e) => {
         const { form } = this.props;
         if (name === "penlace"){
-            this.setState({ipValida: this.ipValidator(e.currentTarget.value)});
+            this.setState({ipValida: FuncionesAuxiliares.ipValidator(e.currentTarget.value)});
             const fvalue = e.currentTarget.value;
             form.setFieldsValue({'penlace': fvalue});
         }else if (name === "pass"){
-            this.setState({passValida: this.passwordValidator(e.currentTarget.value)});
+            this.setState({passValida: FuncionesAuxiliares.passwordValidator(e.currentTarget.value)});
             const fvalue = e.currentTarget.value;
             form.setFieldsValue({'pass': fvalue});
         }else if (name === "clave"){
-            this.setState({claveValida: this.passwordValidator(e.currentTarget.value)});
+            this.setState({claveValida: FuncionesAuxiliares.passwordValidator(e.currentTarget.value)});
             const fvalue = e.currentTarget.value;
             form.setFieldsValue({'clave': fvalue});
         }
         
     };
 
-    ipValidator = (penlace) => {
-        try {
-            // eslint-disable-next-line
-            if(penlace.match('^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')){
-                return true;
-            } else {
-                return false;
-            }
-        } catch (err) { 
-            return false;
-        }
-    }
-
-    passwordValidator = (password) => {
-        try {
-            if(password.match('^(?=.*[1-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{5,10}$')){                
-                return true;
-            } else {
-                return false;
-            }
-        } catch (err) { 
-            return false;
-        }
-    }
+   
 
   componentDidMount = () => {
     if (typeof this.props.location !== 'undefined') {
@@ -227,7 +204,6 @@ class FormularioRouter extends React.Component {
                 </Form.Item>
                 <Form.Item {...tailLayout}>
                   <Button style={{marginRight: 7}} type="primary" htmlType="submit">Guardar</Button>   
-                  <Link to={{ pathname: '/sistemas/router' }} ><Button type="primary">Cancelar</Button></Link> 
                 </Form.Item> 
               </Form>
             </Spin>

@@ -146,7 +146,6 @@ class TablaIp extends React.Component {
                     subred: dato.subred,
                     fortigate: dato.fortigate,
                     maquinas: dato.maquinas_adicionales,
-                    asignado: dato.nombre_usuario,
                     encargado: dato.encargado_registro,
                     observacion: dato.observacion,
                     empleado: empleado,

@@ -6,6 +6,7 @@ import {
 import '../custom-antd.css';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosTipo';
+import FuncionesAuxiliares from '../FuncionesAuxiliares';
 
 const tailLayout = {
     wrapperCol: { offset: 9, span: 5 }
@@ -26,7 +27,8 @@ class FormularioCorreo extends React.Component {
             editionMode: false,
             estado: "",
             id_correo: "",
-            empleados: []
+            empleados: [],
+            contrasenaValida: true,
         }
         this.handle_guardar = this.handle_guardar.bind(this);
     }
@@ -115,6 +117,16 @@ class FormularioCorreo extends React.Component {
         }
     }
 
+    handleInputChange = (name, e) => {
+        const { form } = this.props;
+        if (name === "contrasena"){
+            this.setState({contrasenaValida: FuncionesAuxiliares.passwordValidator(e.currentTarget.value)});
+            const fvalue = e.currentTarget.value;
+            form.setFieldsValue({'contrasena': fvalue});
+        }        
+    };
+
+
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -165,11 +177,12 @@ class FormularioCorreo extends React.Component {
                     </Form.Item>
 
                     <Form.Item
-                        label="Contraseña">
+                        label="Contraseña" hasFeedback help="La contraseña debe tener de 5 a 10 caracteres e incluir mayúsculas, minúsculas y números" 
+                        validateStatus={!this.state.contrasenaValida ? 'error' :  'success' }>
                         {getFieldDecorator('contrasena', {
                             rules: [{ required: true, message: 'Debe completar este campo' }]
                         })(
-                            <Input.Password placeholder="Contraseña" />
+                            <Input.Password placeholder="Contraseña" onChange={(e) => this.handleInputChange('contrasena', e)}/>
                         )}
                     </Form.Item>
 
