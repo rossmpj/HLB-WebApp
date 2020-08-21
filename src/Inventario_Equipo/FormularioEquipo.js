@@ -8,6 +8,7 @@ import MarcaSelect from '../Componentes/MarcaSelect'
 import IpSelect from '../Componentes/IpSelect'
 import EstadoSelect from '../Componentes/EstadoSelect'
 import ComponentePrincipal from '../Componentes/ComponentePrincipal'
+import { Redirect } from 'react-router-dom';
 import Axios from '../Servicios/AxiosTipo';
 import Auth from '../Login/Auth';
 
@@ -49,7 +50,8 @@ class FormularioEquipo extends React.Component {
             unidad: "Mb",
             frecuencia: 0,
             nucleo: 0,
-            tipo_mem: ""
+            tipo_mem: "",
+            redireccionar: false
         };
         this.handle_guardar = this.handle_guardar.bind(this);
     }
@@ -87,35 +89,29 @@ class FormularioEquipo extends React.Component {
             if (!err) {
                 values.encargado_registro = this.state.encargado_registro;
                 if (!this.state.editionMode) {
-                    Axios.crear_otro_equipo(values).then(res => {
-                        message.loading({ content: 'Guardando datos...', key });
-                        setTimeout(() => {
-                            message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
-                        }, 1000);
-                    }).catch(error => {
-                        if (error.response) {
-                            message.error(error.response.data.log, 4)
-                                .then(() => message.error('No fue posible registrar los datos', 3))
-                        } else {
-                            message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
-                        }
-                    });
+                    this.crear_equipo(values);
                 } else {
                     values.key = this.state.key;
-                    Axios.editar_equipo(values).then(res => {
-                        message.loading({ content: 'Actualizando datos...', key });
-                        setTimeout(() => {
-                            message.success({ content: "Edición realizada satisfactoriamente", key, duration: 3 });
-                        }, 1000);
-                    }).catch(er => {
-                        if (er.response) {
-                            message.error(er.response.data.log, 4)
-                                .then(() => message.error('No fue posible actualizar los datos', 3))
-                        } else {
-                            message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
-                        }
-                    });
+                    this.editar_equipo(values);
                 }
+            }
+        });
+    }
+
+
+    crear_equipo(values) {
+        Axios.crear_otro_equipo(values).then(() => {
+            message.loading({ content: 'Guardando datos...', key });
+            setTimeout(() => {
+                message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+            }, 1000);
+            this.setState({ redireccionar: true });
+        }).catch(error => {
+            if (error.response) {
+                message.error(error.response.data.log, 4)
+                    .then(() => message.error('No fue posible registrar los datos', 3))
+            } else {
+                message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
             }
         });
     }
@@ -183,12 +179,36 @@ class FormularioEquipo extends React.Component {
 
     }
 
+    editar_equipo(values) {
+        Axios.editar_equipo(values).then(res => {
+            message.loading({ content: 'Actualizando datos...', key });
+            setTimeout(() => {
+                message.success({ content: "Edición realizada satisfactoriamente", key, duration: 3 });
+            }, 1000);
+            this.setState({ redireccionar: true });
+        }).catch(er => {
+            if (er.response) {
+                message.error(er.response.data.log, 4)
+                    .then(() => message.error('No fue posible actualizar los datos', 3))
+            } else {
+                message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
+            }
+        });
+    }
+
+    redireccionar() {
+        if (this.state.redireccionar) {
+            return <Redirect to='/sistemas/otrosequipos' />
+        }
+    }
+
 
 
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
             <Content>
+                {this.redireccionar()}
                 <div className="div-container">
                     <Form {...layout}
                         layout="horizontal"
@@ -234,7 +254,7 @@ class FormularioEquipo extends React.Component {
                                 rules: [{ required: true, message: 'Debe completar este campo' }],
                                 initialValue: this.state.codigo
                             })
-                                (<Input disabled={this.state.editionMode}/>)}
+                                (<Input disabled={this.state.editionMode} />)}
                         </Form.Item>
 
                         <Form.Item
