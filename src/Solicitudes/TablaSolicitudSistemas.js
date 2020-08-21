@@ -154,7 +154,7 @@ class TablaSolicitudSistemas extends React.Component {
                 title: 'Realizada por:',
                 dataIndex: 'empleado',
                 key: 'empleado',
-                fixed: 'left',
+                
                 //render: (text, record) => <Link to={{ pathname: '/equipo/view/'+record.key}}>{text}</Link>,
                 ...this.getColumnSearchProps('empleado')
             },
@@ -211,7 +211,7 @@ class TablaSolicitudSistemas extends React.Component {
                         value: 'M',
                     },
                     {
-                        text: 'Critica',
+                        text: 'Crítica',
                         value: 'C',
                     }
                 ],
@@ -223,7 +223,7 @@ class TablaSolicitudSistemas extends React.Component {
                             text === "B" ? <Tag style={{ margin: 2 }} color="blue" key={value}>Baja</Tag> :
                                 text === "M" ? <Tag style={{ margin: 2 }} color="orange" key={value}>Media</Tag> :
                                     text === "A" ? <Tag style={{ margin: 2 }} color="magenta" key={value}>Alta</Tag> :
-                                        <Tag style={{ margin: 2 }} color="red" key={value}>Critica</Tag>}
+                                        <Tag style={{ margin: 2 }} color="red" key={value}>Crítica</Tag>}
                     </div>
                 )
 
@@ -240,11 +240,11 @@ class TablaSolicitudSistemas extends React.Component {
                 key: 'tipo',
                 filters: [
                     {
-                        text: 'Asignacion de Equipo',
+                        text: 'Asignación de Equipo',
                         value: 'AE',
                     },
                     {
-                        text: 'Servicio Tecnico',
+                        text: 'Servicio Técnico',
                         value: 'ST',
                     }
                 ],
@@ -253,30 +253,25 @@ class TablaSolicitudSistemas extends React.Component {
                 render: (text, value) => (
                     <div >
                         {
-                            text === "AE" ? <div>Asignacion de Equipo</div> :
-                                <div>Servicio Tecnico</div>}
+                            text === "AE" ? <div>Asignación de Equipo</div> :
+                                <div>Servicio Técnico</div>}
                     </div>
                 )
 
 
             },
             {
-                title: 'Fecha Realizacion',
+                title: 'Fecha Realización',
                 dataIndex: 'fecha',
                 key: 'fecha',
                 sorter: (a, b) =>  FuncionesAuxiliares.tringSorter(a.fecha, b.fecha)
             },
 
             {
-                title: 'Observacion',
+                title: 'Observación',
                 dataIndex: 'observacion',
                 key: 'observacion'
-            },
-            {
-                title: 'Acción',
-                key: 'accion',
-                fixed: 'right'
-            },
+            }
         ];
         return (
             <div className="div-container-title">
