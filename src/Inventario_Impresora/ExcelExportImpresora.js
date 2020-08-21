@@ -12,7 +12,7 @@ export default class ExcelExportImpresora extends Component {
 
     static generateTitlesImp(){
         let titulos = ['BSPI Punto', 'Departamento', 'Asignado', 'Codigo', 'Marca', 'Modelo', 'Numero de Serie',
-         'Estado','Tipo', 'IP', 'Tinta', 'Cartucho', 'Toner', 'Rodillo', 'Cinta', 'Rollo/Brazalete','Fecha de Registro' , 'Descripcion'] 
+         'Estado','Tipo', 'IP','Componente Principal','Tinta', 'Cartucho', 'Toner', 'Rodillo', 'Cinta', 'Rollo/Brazalete','Fecha de Registro' , 'Descripcion'] 
         return FuncionesAuxiliares.generateTitlesExcel(titulos,'FFC000');
     }
 
@@ -30,6 +30,7 @@ export default class ExcelExportImpresora extends Component {
                 { 'value': FuncionesAuxiliares.transform_estado(element.estado_operativo) },
                 { 'value': FuncionesAuxiliares.validarCampo(element.tipo, '-') },
                 { 'value': FuncionesAuxiliares.validarCampo(element.ip, '-') },
+                { 'value': FuncionesAuxiliares.validarCampo(element.componente_principal, '-') },
                 { 'value': FuncionesAuxiliares.validarCampo(element.tinta, '-')},
                 { 'value': FuncionesAuxiliares.validarCampo(element.cartucho, '-') },
                 { 'value': FuncionesAuxiliares.validarCampo(element.toner, '-') },

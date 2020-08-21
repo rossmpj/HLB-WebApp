@@ -44,12 +44,13 @@ class FormularioSolicitud extends React.Component {
                         setTimeout(() => {
                             message.success({ content: 'Solicitud enviada satisfactoriamente', key, duration: 3 });
                         }, 1000);
-                       // this.props.history.push("/solicitud_empleado");
+                       this.props.hist.push("/empleado/solicitudes");
                     }).catch(error => {
                         console.log(error)
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
                     });
                 } else {
+
                 }
             }
         });

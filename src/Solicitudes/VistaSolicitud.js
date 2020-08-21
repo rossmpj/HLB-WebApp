@@ -17,6 +17,7 @@ export default class VistaSolicitud extends React.Component {
         this.state = {
             titulo: "Solicitudes",
             data: this.props.location
+
         };
     }
 
@@ -38,7 +39,7 @@ export default class VistaSolicitud extends React.Component {
                     </Col>
                 </Row>
                 <div className="div-border-top" >
-                     <FormularioSolicitud data={this.state.data}></FormularioSolicitud>
+                     <FormularioSolicitud data={this.state.data} hist={this.props.history}></FormularioSolicitud>
                 </div>
             </div>
 

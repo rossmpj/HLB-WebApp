@@ -1,10 +1,13 @@
 import React from 'react';
-import { Button, Row, Col, Table, Input, Icon, Popconfirm, message, Typography } from 'antd';
+import { Button, Row, Col, Table, Input, Icon, Popconfirm, message, Tag, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosTipo';
 import FuncionesAuxiliares from '../FuncionesAuxiliares';
 import ExcelExportImpresora from './ExcelExportImpresora';
 import Auth from '../Login/Auth';
+import FunAuxImport from '../Componentes/ImportModals/FunAuxImport';
+import ImportModal from '../Componentes/ImportModals/ImportModal';
+import ResponseModal from '../Componentes/ImportModals/ResponseModal';
 
 const { Title } = Typography;
 
@@ -22,7 +25,17 @@ class TablaImpresora extends React.Component {
             index: 0,
             loading: false,
             currentDataSource:[],
-            isNotSistemas: Auth.isNotSistemas()
+            isNotSistemas: Auth.isNotSistemas(),
+            fileList: [],
+            uploading: false,
+            visibleModal: false,
+            disabledImport: false,
+            messageFile: '',
+            responseImport: null,
+            messageImport: '',
+            visibleModalResp: false,
+            hiddenBRI: true,
+            encargado_registro: Auth.getDataLog().user.username,
         };
     }
 
@@ -39,6 +52,90 @@ class TablaImpresora extends React.Component {
 
         }).catch(err => { console.log(err) });
         return dpto;
+    }
+
+    handleUpload = async () => {
+        this.setState({
+            uploading: true,
+            responseImport: null,
+            messageImport: '',
+            hiddenBRI: true,
+            messageFile: ''
+        });
+        const { fileList } = this.state;
+        try {
+            const hoja = await FunAuxImport.ExcelToJson(fileList[0], this.state.encargado_registro);
+            console.log(hoja)
+            if (hoja.data.length > 50) {
+                this.setState({
+                    uploading: false,
+                    messageFile: 'El archivo posee mas de 50 registros. No es posible procesar tantos registros.'
+                });
+                return;
+            }
+            Axios.reg_masivo_ips(hoja).then(res => {
+                console.log(res.data, 'res')
+                this.setState({
+                    uploading: false,
+                    visibleModal: false,
+                    responseImport: res.data,
+                    visibleModalResp: true,
+                    messageImport: '',
+                    hiddenBRI: true,
+                    fileList: [],
+                    messageFile: ''
+                })
+            }).catch(err => {
+                console.log('err import', err, err.response);
+                this.setState({
+                    uploading: false,
+                    visibleModal: false,
+                    messageImport: "Ha ocurrido un error en el servidor. Intentelo mas tarde",
+                    visibleModalResp: true,
+                    hiddenBRI: true,
+                    messageFile: ''
+                })
+            })
+        } catch (e) {
+            this.setState({
+                messageFile: 'No se pudo procesar el archivo seleccionado',
+                uploading: false,
+                hiddenBRI: true
+            })
+        }
+    }
+
+    showModal = () => {
+        this.setState({
+            visibleModal: true,
+        });
+    };
+
+    handleCancel = () => {
+        this.setState({ visibleModal: false });
+    };
+
+    handleCancelMR = () => {
+        this.setState({
+            visibleModalResp: false,
+            hiddenBRI: false
+
+        });
+    };
+
+    handleOkMR = () => {
+        this.setState({
+            visibleModalResp: false,
+            responseImport: null,
+            messageImport: '',
+            hiddenBRI: true
+        });
+    };
+
+    showModalResp = () => {
+        this.setState({
+            visibleModalResp: true
+        })
     }
 
     llenar_tabla() {
@@ -233,7 +330,16 @@ class TablaImpresora extends React.Component {
                     }
                 ],
                 onFilter: (value, record) =>FuncionesAuxiliares.filtrar_array(record.estado_operativo, value),
-                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado_operativo, b.estado_operativo)
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado_operativo, b.estado_operativo),
+                render: (text, value) => (
+                    <div >
+                        {text === "D" ? <Tag style={{ margin: 2 }} color="green" key={value}>Disponible</Tag> :
+                            text === "O" ? <Tag style={{ margin: 2 }} color="blue" key={value}>Operativo</Tag> :
+                                text === "ER" ? <Tag style={{ margin: 2 }} color="orange" key={value}>En revisión</Tag> :
+                                    text === "R" ? <Tag style={{ margin: 2 }} color="magenta" key={value}>Reparado</Tag> :
+                                        <Tag style={{ margin: 2 }} color="red" key={value}>De baja</Tag>}
+                    </div>
+                ),
             },
             {
                 title: 'Modelo',
@@ -285,6 +391,12 @@ class TablaImpresora extends React.Component {
                 dataIndex: 'asignado',
                 key: 'asignado',
                 ...this.getColumnSearchProps('asignado')
+            },
+            {
+                title: 'Componente principal',
+                dataIndex: 'componente_principal',
+                key: 'componente_principal',
+                ...this.getColumnSearchProps('componente_principal')
             },
             {
                 title: 'Tinta',
@@ -366,6 +478,47 @@ class TablaImpresora extends React.Component {
 
         let columns = this.getColumns();
 
+        const { uploading, fileList } = this.state;
+        const uploadProps = {
+            onRemove: file => {
+                this.setState(state => {
+                    const index = state.fileList.indexOf(file);
+                    const newFileList = state.fileList.slice();
+                    newFileList.splice(index, 1);
+                    return {
+                        fileList: newFileList,
+                    };
+                });
+                this.setState({
+                    messageFile: ''
+                })
+            },
+            beforeUpload: file => {
+                let l_fn = file.name.toLowerCase().split('.');
+                let ext = l_fn[l_fn.length - 1];
+                if (ext !== 'xlsx') {
+                    this.setState({
+                        messageFile: '[' + file.name + ']: El archivo debe ser Excel (.xlsx)'
+                    })
+                }
+                else if (fileList.length > 0) {
+                    this.setState({
+                        messageFile: 'Solo se puede importar un archivo a la vez'
+                    })
+                }
+                else {
+                    this.setState({
+                        messageFile: ''
+                    })
+                    this.setState(state => ({
+                        fileList: [...state.fileList, file],
+                    }));
+                }
+                return false;
+
+            }
+        };
+
         return (
             <div className="div-container-title">
                 <Row>
@@ -381,8 +534,9 @@ class TablaImpresora extends React.Component {
                         <Row>
                             <Col className='flexbox'>
                                 {/* <ButtonGroup style={{ align: 'right' }}> */}
-                                    <Button hidden = {this.state.isNotSistemas} type="primary" icon="import">Importar</Button>
+                                    <Button onClick={this.showModal} hidden = {this.state.isNotSistemas} type="primary" icon="import">Importar</Button>
                                     <ExcelExportImpresora data={this.state.currentDataSource} dis = {this.state.disabelExport}></ExcelExportImpresora>
+                                    <Button hidden={this.state.hiddenBRI} onClick={this.showModalResp} type="primary">Result. Importación</Button>
                                     {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
                                 {/* </ButtonGroup> */}
                             </Col>
@@ -397,6 +551,29 @@ class TablaImpresora extends React.Component {
                     <Table loading={this.state.loading} bordered key={this.state.index} onChange={this.handleChange} size="small"
                         scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
+                {/* <ImportModal
+                    title="Importar Impresoras"
+                    visible={this.state.visibleModal}
+                    onOk={this.handleUpload}
+                    onCancel={this.handleCancel}
+                    fileList={fileList}
+                    uploading={uploading}
+                    uploadProps={uploadProps}
+                    dataFormat={FunAuxImport.dataFormatImpresoras()}
+                    messageFile={this.state.messageFile}
+                    fileName='Formato Impresoras'
+                    sheetName='Impresoras'
+                >
+                </ImportModal>
+                <ResponseModal
+                    title="Importar Impresoras"
+                    visible={this.state.visibleModalResp}
+                    onOk={this.handleOkMR}
+                    onCancel={this.handleCancelMR}
+                    messageImport={this.state.messageImport}
+                    response={this.state.responseImport}
+                >
+                </ResponseModal> */}
             </div>
         );
     }

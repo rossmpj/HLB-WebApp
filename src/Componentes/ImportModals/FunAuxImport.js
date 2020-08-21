@@ -33,6 +33,15 @@ export default class FunAuxImport {
         return FunAuxImport.generateData(titlesnames, values);
     }
 
+    static dataFormatImpresoras(){
+       
+        let titlesnames = [ 'Empleado', 'Codigo', 'Marca', 'Modelo', 'N/S',
+        'Estado','Tipo', 'IP', 'Componente Principal', 'Tinta', 'Cartucho', 'Toner', 'Rodillo', 'Cinta', 'Rollo/Brazalete' , 'Descripcion'];
+        let values = [['0945683123', 'HLB_ROU_011','LG', '1fersd45', '112wderft566', 'Operativo','Multifuncional','192.168.0.9', 'HLB_DSK_003', 'Negra', '' , '','','', '', 'Ninguna'],
+        ['0933683123', 'HLB_ROU_013','LG', '1rrrtd45', '112cverfvg66', 'Operativo','Matricial', '', 'HLB_DSK_002', '' ,'Cartucho Nuevo','', '','Cinta', '', 'Revisar']];
+        return FunAuxImport.generateData(titlesnames, values);
+    }
+
 
     static generateData(titlesnames, values) {
         let titles = [];
