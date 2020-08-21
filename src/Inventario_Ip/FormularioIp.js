@@ -7,6 +7,7 @@ import '../custom-antd.css';
 import InputComponent from '../Componentes/InputComponent'
 import Axios from '../Servicios/AxiosTipo';
 import Auth from '../Login/Auth';
+import { Redirect } from 'react-router-dom';
 import FuncionesAuxiliares from '../FuncionesAuxiliares';
 const { TextArea } = Input;
 
@@ -30,6 +31,7 @@ class FormularioIp extends React.Component {
             editionMode: false,
             key: "",
             ipValida: true,
+            redireccionar: false
         }
         this.handle_guardar = this.handle_guardar.bind(this);
     }
@@ -60,37 +62,53 @@ class FormularioIp extends React.Component {
                     key: this.state.key
                 }
                 if (!this.state.editionMode) {
-
-                    Axios.crear_ip(ip).then(() => {
-                        message.loading({ content: 'Guardando datos...', key });
-                        setTimeout(() => {
-                            message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
-                        }, 1000);
-                  //      this.props.history.push("/sistemas/ip");
-                    }).catch(error_creacion => {
-                        if (error_creacion.response) {
-                            message.error(error_creacion.response.data.log, 3)
-                                .then(() => message.error('No fue posible registrar los datos', 3))
-                        } else {
-                            message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 3)
-                        }
-                    });
+                    this.crear_ip(ip);
                 } else {
-                    Axios.editar_ip(ip).then(() => {
-                        message.loading({ content: 'Actualizando datos...', key });
-                        setTimeout(() => {
-                            message.success({ content: 'Registro actualizado satisfactoriamente', key, duration: 3 });
-                        }, 1000);
-                    //    this.props.history.push("/sistemas/ip");
-                    }).catch(error_edicion => {
-                        if (error_edicion.response) {
-                            message.error(error_edicion.response.data.log, 3)
-                                .then(() => message.error('No fue posible actualizar los datos', 3))
-                        } else {
-                            message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 3)
-                        }
-                    });
+                    this.editar_ip(ip)
                 }
+            }
+        })
+    }
+
+
+    crear_ip(ip) {
+        Axios.crear_ip(ip).then(() => {
+            message.loading({ content: 'Guardando datos...', key });
+            setTimeout(() => {
+                message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+            }, 1000);
+            this.setState({ redireccionar: true });
+        }).catch(err => {
+            if (err.response) {
+                message.error(err.response.data.log, 3).then(() => message.error('No fue posible registrar los datos', 3))
+            } else {
+                message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 3)
+            }
+        });
+
+    }
+
+
+
+    redireccionar() {
+        if (this.state.redireccionar) {
+            return <Redirect to='/sistemas/ip' />
+        }
+    }
+
+
+    editar_ip(ip) {
+        Axios.editar_ip(ip).then(() => {
+            message.loading({ content: 'Actualizando datos...', key });
+            setTimeout(() => {
+                message.success({ content: 'Registro actualizado satisfactoriamente', key, duration: 3 });
+            }, 1000);
+            this.setState({ redireccionar: true });
+        }).catch(error => {
+            if (error.response) {
+                message.error(error.response.data.log, 3).then(() => message.error('No fue posible registrar los datos', 3))
+            } else {
+                message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 3)
             }
         });
     }
@@ -122,6 +140,7 @@ class FormularioIp extends React.Component {
         const { getFieldDecorator } = this.props.form;
         return (
             <div className="div-container">
+                {this.redireccionar()}
                 <Form {...layout}
                     layout="horizontal"
                     onSubmit={this.handle_guardar}>

@@ -6,6 +6,7 @@ import {
 import '../custom-antd.css';
 import { Link } from 'react-router-dom';
 import Axios from '../Servicios/AxiosTipo';
+import { Redirect } from 'react-router-dom';
 import FuncionesAuxiliares from '../FuncionesAuxiliares';
 
 const tailLayout = {
@@ -29,6 +30,7 @@ class FormularioCorreo extends React.Component {
             id_correo: "",
             empleados: [],
             contrasenaValida: true,
+            redireccionar: false
         }
         this.handle_guardar = this.handle_guardar.bind(this);
     }
@@ -65,11 +67,12 @@ class FormularioCorreo extends React.Component {
     }
 
     crear_correo(values) {
-        Axios.crear_correo(values).then(res => {
+        Axios.crear_correo(values).then(() => {
             message.loading({ content: 'Guardando datos...', key });
             setTimeout(() => {
                 message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
             }, 1000);
+            this.setState({ redireccionar: true });
         }).catch(err => {
             if (err.response) {
                 message.error(err.response.data.log, 2)
@@ -90,11 +93,12 @@ class FormularioCorreo extends React.Component {
     }
 
     editar_correo(values) {
-        Axios.editar_correo(values).then(res => {
+        Axios.editar_correo(values).then(() => {
             message.loading({ content: 'Actualizando datos...', key });
             setTimeout(() => {
                 message.success({ content: "Edición realizada satisfactoriamente", key, duration: 3 });
             }, 1000);
+            this.setState({ redireccionar: true });
         }).catch(err => {
             if (err.response) {
                 message.error(err.response.data.log, 4)
@@ -119,12 +123,18 @@ class FormularioCorreo extends React.Component {
 
     handleInputChange = (name, e) => {
         const { form } = this.props;
-        if (name === "contrasena"){
-            this.setState({contrasenaValida: FuncionesAuxiliares.passwordValidator(e.currentTarget.value)});
+        if (name === "contrasena") {
+            this.setState({ contrasenaValida: FuncionesAuxiliares.passwordValidator(e.currentTarget.value) });
             const fvalue = e.currentTarget.value;
-            form.setFieldsValue({'contrasena': fvalue});
-        }        
+            form.setFieldsValue({ 'contrasena': fvalue });
+        }
     };
+
+    redireccionar() {
+        if (this.state.redireccionar) {
+            return <Redirect to='/sistemas/correo' />
+        }
+    }
 
 
 
@@ -132,6 +142,7 @@ class FormularioCorreo extends React.Component {
         const { getFieldDecorator } = this.props.form;
         return (
             <div className="div-container">
+                {this.redireccionar()}
                 <Form {...layout}
                     layout="horizontal"
                     onSubmit={this.handle_guardar}
@@ -146,7 +157,7 @@ class FormularioCorreo extends React.Component {
                             initialValue: this.state.cedula
                         })(
                             <Select
-                                disabled={this.state.editionMode? true: false}
+                                disabled={this.state.editionMode ? true : false}
                                 showSearch
                                 optionFilterProp="children"
                                 filterOption={(input, option) =>
@@ -177,12 +188,12 @@ class FormularioCorreo extends React.Component {
                     </Form.Item>
 
                     <Form.Item
-                        label="Contraseña" hasFeedback help="La contraseña debe tener de 5 a 10 caracteres e incluir mayúsculas, minúsculas y números" 
-                        validateStatus={!this.state.contrasenaValida ? 'error' :  'success' }>
+                        label="Contraseña" hasFeedback help="La contraseña debe tener de 5 a 10 caracteres e incluir mayúsculas, minúsculas y números"
+                        validateStatus={!this.state.contrasenaValida ? 'error' : 'success'}>
                         {getFieldDecorator('contrasena', {
                             rules: [{ required: true, message: 'Debe completar este campo' }]
                         })(
-                            <Input.Password placeholder="Contraseña" onChange={(e) => this.handleInputChange('contrasena', e)}/>
+                            <Input.Password placeholder="Contraseña" onChange={(e) => this.handleInputChange('contrasena', e)} />
                         )}
                     </Form.Item>
 

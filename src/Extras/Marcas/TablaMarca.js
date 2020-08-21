@@ -30,7 +30,7 @@ class TablaMarca extends React.Component {
 
     llenar_tabla() {
         let datos = [];
-        this.setState({loading: true});
+        this.setState({ loading: true });
         AxiosTipo.mostrar_marcas().then(res => {
             res.data.forEach(function (dato) {
                 let registro = {
@@ -42,7 +42,7 @@ class TablaMarca extends React.Component {
             this.setState({ dataSource: datos, loading: false });
         }).catch(err => {
             message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
-            this.setState({loading: false});
+            this.setState({ loading: false });
         });
     }
 
@@ -112,7 +112,7 @@ class TablaMarca extends React.Component {
 
     handleDelete(key) {
         AxiosTipo.eliminar_marca(key).then(res => {
-            message.success({ content: 'Equipo dado de baja satisfactoriamente', key, duration: 3 });
+            message.success({ content: 'Marca eliminada satisfactoriamente', key, duration: 3 });
             this.llenar_tabla();
         }).catch(err => {
             console.log(err.response.data.log)
@@ -147,6 +147,7 @@ class TablaMarca extends React.Component {
                             title="¿Desea eliminar esta marca?"
                             okText="Si" cancelText="No"
                             onConfirm={() => this.handleDelete(record.key)}>
+                            <Button type="danger" icon="delete" size="small" />
                         </Popconfirm>
 
                     </div>
@@ -159,7 +160,7 @@ class TablaMarca extends React.Component {
                     <Row>
                         <Col span={12}><Title level={2}>Inventario de Marcas</Title></Col>
                         <Col className='flexbox'>
-                            <Link to={{ pathname: '/sistema/marca/form', state: { titulo: "Nueva Marca" } }} >
+                            <Link to={{ pathname: '/sistemas/marca/form', state: { titulo: "Nueva Marca" } }} >
                                 <Button type="primary" icon="plus">Agregar marca</Button>
                             </Link>
                         </Col>

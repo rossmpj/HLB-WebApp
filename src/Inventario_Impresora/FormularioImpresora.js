@@ -9,6 +9,7 @@ import IpSelect from '../Componentes/IpSelect'
 import ComponentePrincipal from '../Componentes/ComponentePrincipal'
 import EstadoSelect from '../Componentes/EstadoSelect'
 import Axios from '../Servicios/AxiosTipo'
+import { Redirect } from 'react-router-dom';
 import Auth from '../Login/Auth';
 
 const { Content } = Layout;
@@ -47,7 +48,8 @@ class FormularioImpresora extends React.Component {
             ip: undefined,
             componente_principal: undefined,
             asignado: undefined,
-            suministro: ""
+            suministro: "",
+            redireccionar: false
         };
         this.handle_guardar = this.handle_guardar.bind(this);
     }
@@ -71,39 +73,29 @@ class FormularioImpresora extends React.Component {
             if (!err) {
                 values.codigo = values.codigo.toUpperCase();
                 values.encargado_registro = this.state.encargado_registro;
-
                 if (!this.state.editionMode) {
-                    console.log(values);
-                    Axios.crear_impresora(values).then(res => {
-                        message.loading({ content: 'Guardando datos...', key });
-                        setTimeout(() => {
-                            message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
-                        }, 1000);
-                    }).catch(error => {
-                        if (error.response) {
-                            message.error(error.response.data.log, 4)
-                                .then(() => message.error('No fue posible registrar los datos', 2.5))
-                        } else {
-                            message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
-                        }
-                    });
+                    this.crear_impresora(values);
                 } else {
                     values.key = this.state.key;
-                    console.log(values);
-                    Axios.editar_impresora(values).then(res => {
-                        message.loading({ content: 'Actualizando datos...', key });
-                        setTimeout(() => {
-                            message.success({ content: 'Registro actualizado satisfactoriamente', key, duration: 3 });
-                        }, 1000);
-                    }).catch(error => {
-                        if (error.response) {
-                            message.error(error.response.data.log, 4)
-                                .then(() => message.error('No fue posible actualizar los datos', 3))
-                        } else {
-                            message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
-                        }
-                    });
+                    this.editar_impresora(values);
                 }
+            }
+        });
+    }
+
+    crear_impresora(values) {
+        Axios.crear_impresora(values).then(() => {
+            message.loading({ content: 'Guardando datos...', key });
+            setTimeout(() => {
+                message.success({ content: 'Registro guardado satisfactoriamente', key, duration: 3 });
+            }, 1000);
+            this.setState({ redireccionar: true });
+        }).catch(error => {
+            if (error.response) {
+                message.error(error.response.data.log, 4)
+                    .then(() => message.error('No fue posible registrar los datos', 2.5))
+            } else {
+                message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
             }
         });
     }
@@ -142,6 +134,23 @@ class FormularioImpresora extends React.Component {
         } else {
             this.cargar_datos(info);
         }
+    }
+
+    editar_impresora(values) {
+        Axios.editar_impresora(values).then(res => {
+            message.loading({ content: 'Actualizando datos...', key });
+            setTimeout(() => {
+                message.success({ content: 'Registro actualizado satisfactoriamente', key, duration: 3 });
+            }, 1000);
+            this.setState({ redireccionar: true });
+        }).catch(error => {
+            if (error.response) {
+                message.error(error.response.data.log, 4)
+                    .then(() => message.error('No fue posible actualizar los datos', 3))
+            } else {
+                message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
+            }
+        });
     }
 
     cargar_datos(info) {
@@ -201,10 +210,17 @@ class FormularioImpresora extends React.Component {
         }
     }
 
+    redireccionar() {
+        if (this.state.redireccionar) {
+            return <Redirect to='/sistemas/impresora' />
+        }
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
             <Content>
+                {this.redireccionar()}
                 <div className="div-container">
                     <Form {...layout}
                         layout="horizontal"
