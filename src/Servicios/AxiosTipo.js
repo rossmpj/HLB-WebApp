@@ -106,6 +106,10 @@ export default class AxiosTipo {
         return AxiosTipo.instanceAxios.get(`/impresora_id/${id_equipo}`);
     }
 
+    static reg_masivo_impresoras = (impresoras) => {
+        return AxiosTipo.instanceAxios.post(`masivo_impresoras`,impresoras);
+    }
+
 
     /*---------- Inventario otros equipos ----------*/
     static crear_otro_equipo = (equipo) => {

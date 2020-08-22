@@ -73,7 +73,7 @@ class TablaImpresora extends React.Component {
                 });
                 return;
             }
-            Axios.reg_masivo_ips(hoja).then(res => {
+            Axios.reg_masivo_impresoras(hoja).then(res => {
                 console.log(res.data, 'res')
                 this.setState({
                     uploading: false,
@@ -551,7 +551,7 @@ class TablaImpresora extends React.Component {
                     <Table loading={this.state.loading} bordered key={this.state.index} onChange={this.handleChange} size="small"
                         scroll={{ x: 'max-content' }} columns={columns} dataSource={this.state.dataSource}></Table>
                 </div>
-                {/* <ImportModal
+                <ImportModal
                     title="Importar Impresoras"
                     visible={this.state.visibleModal}
                     onOk={this.handleUpload}
@@ -573,7 +573,7 @@ class TablaImpresora extends React.Component {
                     messageImport={this.state.messageImport}
                     response={this.state.responseImport}
                 >
-                </ResponseModal> */}
+                </ResponseModal>
             </div>
         );
     }
