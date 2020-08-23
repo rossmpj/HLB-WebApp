@@ -38,6 +38,10 @@ export default class AxiosAuth {
     }
 
     static get_users(){
-        return  AxiosAuth.instanceAxios.get('/get_users');
+        return  AxiosAuth.instanceAxios.get(`/get_users`);
+    }
+
+    static delete_user(username){
+        return AxiosAuth.instanceAxios.put(`/delete_user/${username}`);
     }
 }

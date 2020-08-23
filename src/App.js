@@ -16,14 +16,14 @@ import DetalleDesktop from './Inventario_Desktop/DetalleDesktop';
 import DetalleIP from './Inventario_Router/DetalleIP';
 import DetalleOtrosEquipos from './FormulariosPC/DetalleOtrosEquipos';
 import Impresora from './Inventario_Impresora/TablaImpresora';
-import VistaImpresora from './Inventario_Impresora/VistaImpresora'
+import VistaImpresora from './Inventario_Impresora/VistaImpresora';
 import TablaIp from './Inventario_Ip/TablaIp';
 import VistaIp from './Inventario_Ip/VistaIp';
-import DetalleIIp from './Inventario_Ip/DetalleIIp'
-import HomeEquipo from './Inventario_Equipo/TablaEquipo'
-import VistaEquipo from './Inventario_Equipo/VistaEquipo'
-import TablaMarca from './Extras/Marcas/TablaMarca'
-import TablaPrograma from './Extras/Programas/TablaPrograma'
+import DetalleIIp from './Inventario_Ip/DetalleIIp';
+import HomeEquipo from './Inventario_Equipo/TablaEquipo';
+import VistaEquipo from './Inventario_Equipo/VistaEquipo';
+import TablaMarca from './Extras/Marcas/TablaMarca';
+import TablaPrograma from './Extras/Programas/TablaPrograma';
 import VistaMarca from './Extras/Marcas/VistaMarca';
 import FormularioPrograma from './Extras/Programas/FormularioPrograma';
 import DetalleImpresora from './Inventario_Impresora/DetalleImpresora';
@@ -31,21 +31,21 @@ import DetalleEquipo from './Inventario_Equipo/DetalleEquipo';
 import TablaReporte from './Reportes/TablaReporte';
 import TablaBajas from './Reportes/TablaBajas';
 import TablaCorreo from './Inventario_Correo/TablaCorreo';
-import VistaCorreo from './Inventario_Correo/VistaCorreo'
-import LoginHLB from './Login/Login'
-import Home from './Home/Home'
-import HomeRoute from './Routes/HomeRoute'
-import EmployLayout from './Routes/Layouts/EmployLayout'
-import GeneralLayout from './Routes/Layouts/GeneralLayout'
-import PrivateRouteEmpleado from './Routes/PrivateRouteEmpleado'
+import VistaCorreo from './Inventario_Correo/VistaCorreo';
+import LoginHLB from './Login/Login';
+import Home from './Home/Home';
+import HomeRoute from './Routes/HomeRoute';
+import EmployLayout from './Routes/Layouts/EmployLayout';
+import GeneralLayout from './Routes/Layouts/GeneralLayout';
+import PrivateRouteEmpleado from './Routes/PrivateRouteEmpleado';
 import PrivateRouteGeneral from './Routes/PrivateRouteGeneral';
 import PublicRoute from './Routes/PublicRoute';
-import PublicLayout from './Routes/Layouts/PublicLayout'
-import VistaUser from './Modulos_Usuario/VistaUser'
-import PerfilUser from './Modulos_Usuario/PerfilUser'
-import TablaUser from './Modulos_Usuario/TablaUser'
+import PublicLayout from './Routes/Layouts/PublicLayout';
+import VistaUser from './Modulos_Usuario/VistaUser';
+import PerfilUser from './Modulos_Usuario/PerfilUser';
+import TablaUser from './Modulos_Usuario/TablaUser';
 import PrivateRouteFinanzas from './Routes/PrivateRouteFinanzas';
-import FinanzasLayout from './Routes/Layouts/FinanzasLayout'
+import FinanzasLayout from './Routes/Layouts/FinanzasLayout';
 
 class App extends React.Component {
 

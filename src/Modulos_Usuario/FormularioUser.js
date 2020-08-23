@@ -19,15 +19,16 @@ class FormularioUser extends React.Component {
         this.state = {
             titulo: "",
             username: '',
-            cedula:'',
+            cedula: '',
             editionMode: false,
             roles: [],
-            dptos: []
-
+            dptos: [],
+            estado: 'A',
+            passwordValida: true,
+            cedulaValida: true,
         };
         this.handle_guardar = this.handle_guardar.bind(this);
     }
-
 
 
     cargar_dptos() {
@@ -38,6 +39,7 @@ class FormularioUser extends React.Component {
             console.log(err);
         });
     }
+
     cargar_roles() {
         AxiosTipo.mostrar_roles().then(res => {
             console.log(res.data)
@@ -69,7 +71,7 @@ class FormularioUser extends React.Component {
     handle_guardar = e => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
-            console.log('entro 3')
+            console.log('entro 3', values)
             if (!err) {
                 if (!this.state.editionMode) {
                     this.crear_user(values);
@@ -77,8 +79,10 @@ class FormularioUser extends React.Component {
                     console.log('entro edit')
                     values.old_cedula = this.state.cedula;
                     values.old_user = this.state.username;
-                    FuncionesAuxiliares.updateUser(values,key);
+                    FuncionesAuxiliares.updateUser(values, key, this.props.hist, "/sistemas/users");
                 }
+            }else{
+                message.error('Asegurese de llenar de forma correcta el formulario para continuar con el proceso', 3)
             }
         });
     }
@@ -92,25 +96,28 @@ class FormularioUser extends React.Component {
             apellido: info.apellido,
             id_departamento: info.id_departamento,
             id_rol: info.id_rol,
+
         });
         this.setState({
             username: info.username,
-            cedula: info.cedula
+            cedula: info.cedula,
+            estado: info.estado
         })
 
     }
 
     crear_user(values) {
+        message.loading({ content: 'Guardando datos...', key });
         AxiosAuth.registrar_user_web(values).then(res => {
-            message.loading({ content: 'Guardando datos...', key });
             setTimeout(() => {
                 message.success({ content: 'Usuario creado satisfactoriamente', key, duration: 3 });
             }, 1000);
+            this.props.hist.push("/sistemas/users");
         }).catch(err => {
             if (err.response) {
                 if (err.response.status === 400) {
                     message.error(err.response.data.log, 4)
-                    .then(() => message.error('No fue posible registrar los datos', 3))
+                        .then(() => message.error('No fue posible registrar los datos', 3))
                 }
                 if (err.response.status === 500) {
                     message.error('Ocurrió un error al procesar los datos, inténtelo más tarde', 4);
@@ -123,26 +130,21 @@ class FormularioUser extends React.Component {
     }
 
 
-    strongValidator = (rule, value, callback) => {
-        try {
-            let regExp = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]{7,15}$');
-            if (!regExp.test(value)) {
-                throw new Error("Su contaseña debe tener entre 7 y 15 caracteres, incluya al menos una mayúscula, minúscula y un número");
-            }
-        } catch (err) {
-            callback(err);
-        }
-    }
 
-    IDValidator = (rule, value, callback) => {
-        try {
-            if (value.length < 10) {
-                throw new Error("La cedula Ingresada no es valida");
-            }
-        } catch (err) {
-            callback(err);
+
+    handleInputChange = (name, e) => {
+        const { form } = this.props;
+        if (name === "password") {
+            this.setState({ passwordValida: FuncionesAuxiliares.passwordValidator(e.currentTarget.value) });
+            const fvalue = e.currentTarget.value;
+            form.setFieldsValue({ 'password': fvalue });
         }
-    }
+        else if (name === 'cedula') {
+            this.setState({ cedulaValida: FuncionesAuxiliares.IDValidator(e.currentTarget.value) });
+            const fvalue = e.currentTarget.value;
+            form.setFieldsValue({ 'cedula': fvalue });
+        }
+    };
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -153,29 +155,39 @@ class FormularioUser extends React.Component {
                     <Form {...layout}
                         layout="horizontal"
                         onSubmit={this.handle_guardar}
-
                     >
-
                         <InputComp label="Nombres" id="nombre" decorator={getFieldDecorator} />
                         <InputComp label="Apellidos" id="apellido" decorator={getFieldDecorator} />
-                        <Form.Item label="Cedula">
+                        <Form.Item validateStatus={!this.state.cedulaValida ? 'error' : 'success'} label="Cedula"
+                        hasFeedback help="La cedula debe contener 10 digitos numericos">
                             {getFieldDecorator('cedula', {
                                 rules: [{ required: true, message: 'Por favor, ingrese una Cedula Valida' }],
-                            })(<Input/>)}
+                            })(<Input onChange={(e) => this.handleInputChange('cedula', e)}/>)}
                         </Form.Item>
                         <InputComp label="Usuario" id="username" decorator={getFieldDecorator} />
-                        <Form.Item disabled={this.state.editionMode} label="Contraseña">
+                        <Form.Item validateStatus={!this.state.passwordValida ? 'error' : 'success'} label="Contraseña"
+                        hasFeedback help="La contraseña debe tener de 5 a 10 caracteres e incluir mayúsculas, minúsculas y números">
                             {getFieldDecorator('password', {
                                 rules: [{ required: true, message: 'Por favor, ingrese una contraseña' }],
-                            })(<Input.Password />)}
+                            })(<Input.Password  onChange={(e) => this.handleInputChange('password', e)} />)}
                         </Form.Item>
+                        {this.state.editionMode ? <Form.Item label="Estado">
+                            {getFieldDecorator('estado', {
+                                rules: [{ required: true, message: 'Debe seleccionar el Estado' }],
+                                initialValue: this.state.estado
+                            })(
+                                <Select hidden={!this.state.editionMode}>
+                                    <Select.Option value="A">Activo</Select.Option>
+                                    <Select.Option value="I">Inactivo</Select.Option>
+                                </Select>)}
+                        </Form.Item> : null}
+
                         <Form.Item label="Seleccione Departamento" >
                             {getFieldDecorator('id_departamento', {
                                 rules: [{ required: true, message: 'Debe completar este campo' }],
                                 initialValue: this.state.id_departamento
                             })(
                                 <Select
-                                    //disabled={this.state.editionMode ? true : false}
                                     showSearch
                                     optionFilterProp="children"
                                     filterOption={(input, option) =>

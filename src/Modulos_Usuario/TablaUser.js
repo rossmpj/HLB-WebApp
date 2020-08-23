@@ -1,18 +1,17 @@
 import React from 'react';
-import {
-    Button, Row, Col, Table, Input, Icon, message, Typography
-} from 'antd';
+import { Button, Row, Col, Table, Popconfirm, Input, Icon, message, Typography, Tag } from 'antd';
 import { Link } from 'react-router-dom';
 import AxiosAuth from '../Servicios/AxiosAuth';
 import FuncionesAuxiliares from '../FuncionesAuxiliares';
+import Auth from '../Login/Auth';
 
 const { Title } = Typography;
-
 
 class TablaCorreo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            user: Auth.getDataLog().user.username,
             showComponent: false,
             showTable: true,
             searchText: '',
@@ -28,6 +27,7 @@ class TablaCorreo extends React.Component {
         let datos = [];
         this.setState({loading: true});
         AxiosAuth.get_users().then(res => {
+            console.log(res.data)
             res.data.forEach(function (dato) {
                 let registro = {
                     key: dato.username,
@@ -42,6 +42,7 @@ class TablaCorreo extends React.Component {
                     id_departamento: dato.id_departamento,
                     fecha: dato.created_at,
                     cedula: dato.cedula,
+                    estado: dato.estado
                 }
                 datos.push(registro)
             });
@@ -137,13 +138,14 @@ class TablaCorreo extends React.Component {
     };
 
     handleDelete(key) {
-        // AxiosTipo.eliminar_correo(key).then(res => {
-        //     message.success({ content: 'Correo dado de baja satisfactoriamente', key, duration: 3 });
-        //     this.llenar_tabla();
-        // }).catch(err => {
-        //     console.log(err.response.data.log)
-        //     message.error('Error al eliminar el registro, inténtelo más tarde', 4);
-        // });
+        AxiosAuth.delete_user(key).then(res => {
+            console.log(res)
+            message.success({ content: 'Usuario dado de baja satisfactoriamente', key, duration: 3 });
+            this.llenar_tabla();
+        }).catch(err => {
+            console.log(err.response, err, 'err')
+            message.error('Error al eliminar el registro, inténtelo más tarde', 4);
+        });
     }
 
     render() {
@@ -187,10 +189,38 @@ class TablaCorreo extends React.Component {
                     {
                         text: 'Pasante',
                         value: 'Pasante',
+                    },
+                    {
+                        text: 'Finanzas',
+                        value: 'Finanzas',
                     }
                 ],
                 onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.rol, value),
                 sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.rol, b.rol)
+            },
+            {
+                title: 'Estado',
+                dataIndex: 'estado',
+                key: 'estado',
+                filters: [
+                    {
+                        text: 'Activo',
+                        value: 'A',
+                    },
+                    {
+                        text: 'Inactivo',
+                        value: 'I',
+                    }
+                ],
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.estado, value),
+                sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado, b.estado),
+                render: (text, value) => (
+                    <div >
+                        {text === "A" ? <Tag style={{ margin: 2 }} color="green" key={value}>Activo</Tag> :
+
+                            <Tag style={{ margin: 2 }} color="red" key={value}>Inactivo</Tag>}
+                    </div>
+                ),
             },
             {
                 title: 'BSPI Punto',
@@ -242,15 +272,15 @@ class TablaCorreo extends React.Component {
                                 titulo: "Editar Usuario"
                             }
                         }} >
-                            <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
+                            <Button disabled={record.username === this.state.user} style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
                         </Link>
-                        {/* <Popconfirm
-                            title="¿Desea eliminar este correo?"
+                        <Popconfirm
+                            title="¿Desea eliminar este usuario?"
                             okText="Si" cancelText="No"
                             onConfirm={() => this.handleDelete(record.key)}>
-                            {record.estado === 'I' ?
+                            {record.estado === 'I' || record.username === this.state.user ?
                                 <Button disabled type="danger" icon="delete" size="small" /> : <Button type="danger" icon="delete" size="small" />}
-                        </Popconfirm> */}
+                        </Popconfirm>
 
                     </div>
                 ),

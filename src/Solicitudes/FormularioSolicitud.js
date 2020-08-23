@@ -49,9 +49,7 @@ class FormularioSolicitud extends React.Component {
                         console.log(error)
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4);
                     });
-                } else {
-
-                }
+                } 
             }
         });
     }

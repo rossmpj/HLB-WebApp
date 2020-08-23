@@ -40,6 +40,11 @@ export default class FuncionesAuxiliares {
         }
     }
 
+    static IDValidator = (value) => {
+        let regexp = new RegExp('^[0-9]{10}$');   
+        return regexp.test(value);
+    }
+
 
     // FUNCIONES PARA EXPORTACION DE EXCEL
 
@@ -377,12 +382,13 @@ export default class FuncionesAuxiliares {
         return datos;
     }
 
-    static updateUser(values, key) {
+    static updateUser(values, key, hist, route) {
         AxiosAuth.editar_user_web(values).then(res => {
             message.loading({ content: 'Guardando datos...', key });
             setTimeout(() => {
                 message.success({ content: 'Usuario actualizado satisfactoriamente', key, duration: 3 });
             }, 1000);
+            hist.push(route);
         }).catch(error => {
             if (error.response) {
                 if (error.response.status === 400) {

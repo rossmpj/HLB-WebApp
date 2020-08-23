@@ -1,6 +1,6 @@
 import React from 'react';
 import '../App.css';
-import { Form, Input, Button, Layout, Typography, Row, Col, Select } from 'antd';
+import { Form, Input, Button, Layout, message, Typography, Row, Col, Select } from 'antd';
 import '../custom-antd.css';
 import InputComp from '../Componentes/InputComponent';
 import AxiosTipo from '../Servicios/AxiosTipo';
@@ -11,7 +11,6 @@ import Auth from '../Login/Auth';
 import FuncionesAuxiliares from '../FuncionesAuxiliares';
 
 const { Content } = Layout;
-//const { TextArea } = Input;
 const { Title } = Typography;
 const tailLayout = { wrapperCol: { offset: 11, span: 5 } };
 const layout = { labelCol: { span: 6 }, wrapperCol: { span: 14 }, };
@@ -26,7 +25,9 @@ class PerfilUser extends React.Component {
             cedula: Auth.getDataLog().user.cedula,
             roles: [],
             dptos: [],
-            isNotSistemas: Auth.isNotSistemas()
+            isNotSistemas: Auth.isNotSistemas(),
+            passwordValida: true,
+            cedulaValida: true,
         };
         this.handle_guardar = this.handle_guardar.bind(this);
     }
@@ -56,33 +57,33 @@ class PerfilUser extends React.Component {
         this.cargar_datos(this.state.username);
     }
 
-    strongValidator = (rule, value, callback) => {
-        try {
-            let regExp = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]{7,15}$');
-            if (!regExp.test(value)) {
-                throw new Error("Su contaseña debe tener entre 7 y 15 caracteres, incluya al menos una mayúscula, minúscula y un número");
-            }
-        } catch (err) {
-            callback(err);
+    handleInputChange = (name, e) => {
+        const { form } = this.props;
+        if (name === "password") {
+            this.setState({ passwordValida: FuncionesAuxiliares.passwordValidator(e.currentTarget.value) });
+            const fvalue = e.currentTarget.value;
+            form.setFieldsValue({ 'password': fvalue });
         }
-    }
+        else if (name === 'cedula') {
+            this.setState({ cedulaValida: FuncionesAuxiliares.IDValidator(e.currentTarget.value) });
+            const fvalue = e.currentTarget.value;
+            form.setFieldsValue({ 'cedula': fvalue });
+        }
+    };
 
-    IDValidator = (rule, value, callback) => {
-        try {
-            if (value.length < 10) {
-                throw new Error("La cedula Ingresada no es valida");
-            }
-        } catch (err) {
-            callback(err);
-        }
-    }
 
     handle_guardar = e => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
-            values.old_cedula = this.state.cedula;
-            values.old_user = this.state.username;
-            FuncionesAuxiliares.updateUser(values, key);
+            if (!err) {
+                values.old_cedula = this.state.cedula;
+                values.old_user = this.state.username;
+                values.estado = 'A';
+                console.log(values, 'values')
+                FuncionesAuxiliares.updateUser(values, key, this.props.history, "/");
+            } else {
+                message.error('Asegurese de llenar de forma correcta el formulario para continuar con el proceso', 3)
+            }
         });
     }
 
@@ -123,16 +124,18 @@ class PerfilUser extends React.Component {
                             >
                                 <InputComp disabled={this.state.isNotSistemas} label="Nombres" id="nombre" decorator={getFieldDecorator} />
                                 <InputComp disabled={this.state.isNotSistemas} label="Apellidos" id="apellido" decorator={getFieldDecorator} />
-                                <Form.Item label="Cedula">
+                                <Form.Item label="Cedula" validateStatus={!this.state.cedulaValida ? 'error' : 'success'}
+                                    hasFeedback help="La cedula debe contener 10 digitos numericos">
                                     {getFieldDecorator('cedula', {
                                         rules: [{ required: true, message: 'Por favor, ingrese una Cedula Valida' }],
-                                    })(<Input disabled={this.state.isNotSistemas}/>)}
+                                    })(<Input disabled={this.state.isNotSistemas} onChange={(e) => this.handleInputChange('cedula', e)} />)}
                                 </Form.Item>
                                 <InputComp disabled={this.state.isNotSistemas} label="Usuario" id="username" decorator={getFieldDecorator} />
-                                <Form.Item label="Contraseña">
+                                <Form.Item validateStatus={!this.state.passwordValida ? 'error' : 'success'} label="Contraseña"
+                                    hasFeedback help="La contraseña debe tener de 5 a 10 caracteres e incluir mayúsculas, minúsculas y números">
                                     {getFieldDecorator('password', {
                                         rules: [{ required: true, message: 'Por favor, ingrese una contraseña' }],
-                                    })(<Input.Password  disabled={this.state.isNotSistemas}/>)}
+                                    })(<Input.Password disabled={this.state.isNotSistemas} />)}
                                 </Form.Item>
                                 <Form.Item
                                     label="Departamento"

@@ -269,25 +269,25 @@ class TablaSolicitudUser extends React.Component {
                 dataIndex: 'observacion',
                 key: 'observacion'
             },
-            {
-                title: 'Acción',
-                key: 'accion',
-                fixed: 'right',
-                render: (text, record) => (
-                    <div>
-                        {/* <Link to={{ pathname: '/otrosequipos/form', state: { info: record, titulo: "Editar equipo" } }}>
-                            <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
-                        </Link>
-                        <Popconfirm
-                            title="¿Desea dar de baja este equipo?"
-                            okText="Si" cancelText="No"
-                            onConfirm={() => this.handleDelete(record.key)}>
-                                {record.estado_operativo === 'B' ?
-                            <Button disabled type="danger" icon="delete" size="small" /> : <Button type="danger" icon="delete" size="small" />}
-                        </Popconfirm> */}
-                    </div>
-                ),
-            },
+            // {
+            //     title: 'Acción',
+            //     key: 'accion',
+            //     fixed: 'right',
+            //     render: (text, record) => (
+            //         <div>
+            //             {/* <Link to={{ pathname: '/otrosequipos/form', state: { info: record, titulo: "Editar equipo" } }}>
+            //                 <Button style={{ marginRight: '2px' }} type="primary" size="small" icon="edit" />
+            //             </Link>
+            //             <Popconfirm
+            //                 title="¿Desea dar de baja este equipo?"
+            //                 okText="Si" cancelText="No"
+            //                 onConfirm={() => this.handleDelete(record.key)}>
+            //                     {record.estado_operativo === 'B' ?
+            //                 <Button disabled type="danger" icon="delete" size="small" /> : <Button type="danger" icon="delete" size="small" />}
+            //             </Popconfirm> */}
+            //         </div>
+            //     ),
+            // },
         ];
         return (
             <div className="div-container-title">

@@ -35,7 +35,7 @@ class VistaCorreo extends React.Component {
                     </Col>
                 </Row>
                 <div className="div-miniborder-top" >
-                    <FormularioUser data={this.state.data}></FormularioUser>
+                    <FormularioUser hist={this.props.history} data={this.state.data}></FormularioUser>
                 </div>
             </div>
 
