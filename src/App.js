@@ -33,6 +33,7 @@ import TablaBajas from './Reportes/TablaBajas';
 import TablaCorreo from './Inventario_Correo/TablaCorreo';
 import VistaCorreo from './Inventario_Correo/VistaCorreo';
 import LoginHLB from './Login/Login';
+import UpdatePass from './Login/UpdatePass';
 import Home from './Home/Home';
 import HomeRoute from './Routes/HomeRoute';
 import EmployLayout from './Routes/Layouts/EmployLayout';
@@ -57,6 +58,7 @@ class App extends React.Component {
           {/* Routes Publicas */}
           <HomeRoute exact path='/'/>
           <PublicRoute exact path='/login' component={LoginHLB} layout = {PublicLayout}  />
+          <PublicRoute exact path='/cambiar_password' component={UpdatePass} layout = {PublicLayout}  />
 
           {/* Routes para empleados institucionales */}
           <PrivateRouteEmpleado exact path = '/empleado' component = {Home} layout = {EmployLayout} />

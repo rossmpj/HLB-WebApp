@@ -44,4 +44,8 @@ export default class AxiosAuth {
     static delete_user(username){
         return AxiosAuth.instanceAxios.put(`/delete_user/${username}`);
     }
+
+    static cambiar_password(data){
+        return AxiosAuth.instanceAxios.put(`/cambiar_password`, data);
+    }
 }

@@ -1,14 +1,6 @@
 import React from 'react';
 import '../App.css';
-import {
-    Form,
-    Button,
-    Typography,
-    Row,
-    Col,
-    Input,
-    message
-} from 'antd';
+import { Form, Button, Typography, Row, Col, Input, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import '../custom-antd.css';
 import './login.css'
@@ -47,25 +39,25 @@ class LoginHLB extends React.Component {
                     }, 1000);
                     this.props.history.push("/");
                 }).catch(error => {
-                    console.log(error, error.response,'error login')
-                    if(error.response){
-                        if (error.response.status === 400){
+                    console.log(error, error.response, 'error login')
+                    if (error.response) {
+                        if (error.response.status === 400) {
                             message.error('Las credenciales ingresadas son incorrectas...', 4);
                         }
-                        else if(error.response.status === 500){
+                        else if (error.response.status === 500) {
                             message.error('Ocurrió un error al procesar los datos, inténtelo más tarde', 4);
                         }
-                        else if(error.response.status === 401){
+                        else if (error.response.status === 401) {
                             message.error('El usuario ingresado está inactivo y no puede acceder al sistema.', 4);
                         }
-                    }else{
+                    } else {
                         message.error('Ocurrió un error al procesar su solicitud, inténtelo más tarde', 4)
                     }
                 });
             }
         });
     }
- 
+
 
 
 
@@ -116,11 +108,16 @@ class LoginHLB extends React.Component {
 
 
                             </Form.Item>
+                            <Form.Item style = {{Float:'right'}} >
+                                <a  className="login-form-forgot" href="/cambiar_password">
+                                    Contraseña Olvidada
+                                </a>
+                            </Form.Item>
 
                             <Form.Item {...tailLayout}>
-                                <Button style={{ marginRight: 7 }} type="primary" className="login-form-button" htmlType="submit">Iniciar Sesión</Button>   
+                                <Button style={{ marginRight: 7 }} type="primary" className="login-form-button" htmlType="submit">Iniciar Sesión</Button>
                             </Form.Item>
-                        </Form>                     
+                        </Form>
                     </div>
                 </div>
             </div>

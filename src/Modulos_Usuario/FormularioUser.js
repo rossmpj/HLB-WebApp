@@ -166,9 +166,10 @@ class FormularioUser extends React.Component {
                         </Form.Item>
                         <InputComp label="Usuario" id="username" decorator={getFieldDecorator} />
                         <Form.Item validateStatus={!this.state.passwordValida ? 'error' : 'success'} label="Contraseña"
-                        hasFeedback help="La contraseña debe tener de 5 a 10 caracteres e incluir mayúsculas, minúsculas y números">
+                        hasFeedback help={(!this.state.editionMode ? "La contraseña debe tener de 5 a 10 caracteres e incluir mayúsculas, minúsculas y números" : 
+                        "Ingrese una contraseña si desea cambiar la actual. Debe tener de 5 a 10 caracteres e incluir mayúsculas, minúsculas y números")}>
                             {getFieldDecorator('password', {
-                                rules: [{ required: true, message: 'Por favor, ingrese una contraseña' }],
+                                rules: [{ required: !this.state.editionMode, message: 'Por favor, ingrese una contraseña' }],
                             })(<Input.Password  onChange={(e) => this.handleInputChange('password', e)} />)}
                         </Form.Item>
                         {this.state.editionMode ? <Form.Item label="Estado">

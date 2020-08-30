@@ -132,10 +132,8 @@ class PerfilUser extends React.Component {
                                 </Form.Item>
                                 <InputComp disabled={this.state.isNotSistemas} label="Usuario" id="username" decorator={getFieldDecorator} />
                                 <Form.Item validateStatus={!this.state.passwordValida ? 'error' : 'success'} label="Contraseña"
-                                    hasFeedback help="La contraseña debe tener de 5 a 10 caracteres e incluir mayúsculas, minúsculas y números">
-                                    {getFieldDecorator('password', {
-                                        rules: [{ required: true, message: 'Por favor, ingrese una contraseña' }],
-                                    })(<Input.Password disabled={this.state.isNotSistemas} />)}
+                                    hasFeedback help="Ingrese una contraseña si desea cambiar la actual. Debe tener de 5 a 10 caracteres e incluir mayúsculas, minúsculas y números">
+                                    {getFieldDecorator('password')(<Input.Password disabled={this.state.isNotSistemas} />)}
                                 </Form.Item>
                                 <Form.Item
                                     label="Departamento"
