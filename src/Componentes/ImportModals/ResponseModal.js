@@ -12,6 +12,16 @@ export default class ResponseModal extends React.Component {
                 title: 'Fila Excel',
                 dataIndex: 'rowNum',
                 key: 'rowNum_' + key,
+                render: (text, value) => (
+                    <div >
+                        {   
+                            
+                            String(text).split('--').map((item,index)=>{
+                               return ( <p key={item+index}>{item}</p> );
+                            })
+                        }
+                    </div>
+                ),
 
             },
             {

@@ -77,18 +77,20 @@ class FormularioDesktop extends React.Component {
 
     componentDidMount = () => {
         if (typeof this.props.location !== 'undefined') {
-            const { info } = this.props.location.state;
-            const { titulo } = this.props.location.state;
-            const { disabled } = this.props.location.state;
-            if (titulo === "Editar computadora" && info !== undefined){
-                this.cargar_datos(info);
+            if(typeof this.props.location.state !== 'undefined' && typeof this.props.location.state.info !== 'undefined'){
+                const { info } = this.props.location.state;
+                const { titulo } = this.props.location.state;
+                const { disabled } = this.props.location.state;
+                if (titulo === "Editar computadora" && info !== undefined){
+                    this.cargar_datos(info);
+                }
+                if(titulo === "Nueva computadora"){
+                    this.cargar()
+                    this.setState({loading: false})
+                }
+                this.setState({titulo: titulo});    
+                this.setState({disabled: disabled})
             }
-            if(titulo === "Nueva computadora"){
-                this.cargar()
-                this.setState({loading: false})
-            }
-            this.setState({titulo: titulo});    
-            this.setState({disabled: disabled})
         }
     }
 

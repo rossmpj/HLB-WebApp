@@ -29,6 +29,10 @@ export default class AxiosLaptop {
     return AxiosLaptop.instanceAxios.post(`/crear_laptop`, laptop);
   }
 
+  static reg_masivo_laptops = (laptops) => {
+    return AxiosLaptop.instanceAxios.post(`/masivo_laptops`, laptops);
+  }
+
   static editar_laptop = (laptop) => {
     return AxiosLaptop.instanceAxios.post(`/editar_laptop`, laptop);
   }

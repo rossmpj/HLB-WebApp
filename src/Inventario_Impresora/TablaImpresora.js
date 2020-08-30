@@ -19,12 +19,12 @@ class TablaImpresora extends React.Component {
             showTable: true,
             searchText: '',
             dataSource: [],
-            disabelExport:true,
+            disabelExport: true,
             filteredInfo: null,
             sortedInfo: null,
             index: 0,
             loading: false,
-            currentDataSource:[],
+            currentDataSource: [],
             isNotSistemas: Auth.isNotSistemas(),
             fileList: [],
             uploading: false,
@@ -140,15 +140,15 @@ class TablaImpresora extends React.Component {
 
     llenar_tabla() {
         let datos = [];
-        this.setState({loading: true});
+        this.setState({ loading: true });
         Axios.mostrar_impresoras().then(res => {
             console.log(res.data)
             datos = FuncionesAuxiliares.transform_data_impresora(res.data);
-            this.setState({ dataSource: datos, currentDataSource:datos, disabelExport:false, loading: false }); 
+            this.setState({ dataSource: datos, currentDataSource: datos, disabelExport: false, loading: false });
         }).catch(err => {
             console.log(err)
             message.error('No se pueden cargar los datos, inténtelo más tarde', 4);
-            this.setState({loading: false});
+            this.setState({ loading: false });
         });
     }
 
@@ -250,7 +250,7 @@ class TablaImpresora extends React.Component {
         this.setState({ searchText: '' });
     };
 
-    getColumns = () =>{
+    getColumns = () => {
         let route = this.state.isNotSistemas ? '/finanzas' : '/sistemas';
         let generalColumns = [
             {
@@ -258,7 +258,7 @@ class TablaImpresora extends React.Component {
                 dataIndex: 'codigo',
                 key: 'codigo',
                 fixed: 'left',
-                render: (text, record) => <Link to={{ pathname: route+'/impresora/view/'+record.id_equipo}}>{text}</Link>,
+                render: (text, record) => <Link to={{ pathname: route + '/impresora/view/' + record.id_equipo }}>{text}</Link>,
                 ...this.getColumnSearchProps('codigo')
             },
             {
@@ -329,7 +329,7 @@ class TablaImpresora extends React.Component {
                         value: 'B',
                     }
                 ],
-                onFilter: (value, record) =>FuncionesAuxiliares.filtrar_array(record.estado_operativo, value),
+                onFilter: (value, record) => FuncionesAuxiliares.filtrar_array(record.estado_operativo, value),
                 sorter: (a, b) => FuncionesAuxiliares.stringSorter(a.estado_operativo, b.estado_operativo),
                 render: (text, value) => (
                     <div >
@@ -439,7 +439,7 @@ class TablaImpresora extends React.Component {
                 dataIndex: 'descripcion',
                 key: 'descripcion'
             },
-            
+
         ];
 
         let actionsColumns = [
@@ -470,7 +470,7 @@ class TablaImpresora extends React.Component {
             },
         ];
 
-        return this.state.isNotSistemas ? generalColumns : generalColumns.concat(actionsColumns) 
+        return this.state.isNotSistemas ? generalColumns : generalColumns.concat(actionsColumns)
     }
 
 
@@ -523,7 +523,7 @@ class TablaImpresora extends React.Component {
             <div className="div-container-title">
                 <Row>
                     <Col span={12}><Title level={2}>Inventario Impresora</Title></Col>
-                    <Col hidden = {this.state.isNotSistemas} className='flexbox'>
+                    <Col hidden={this.state.isNotSistemas} className='flexbox'>
                         <Link to={{ pathname: '/sistemas/impresora/form', state: { titulo: "Nueva Impresora" } }} >
                             <Button type="primary" icon="plus">Agregar Impresora</Button>
                         </Link>
@@ -534,10 +534,10 @@ class TablaImpresora extends React.Component {
                         <Row>
                             <Col className='flexbox'>
                                 {/* <ButtonGroup style={{ align: 'right' }}> */}
-                                    <Button onClick={this.showModal} hidden = {this.state.isNotSistemas} type="primary" icon="import">Importar</Button>
-                                    <ExcelExportImpresora data={this.state.currentDataSource} dis = {this.state.disabelExport}></ExcelExportImpresora>
-                                    <Button hidden={this.state.hiddenBRI} onClick={this.showModalResp} type="primary">Result. Importación</Button>
-                                    {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
+                                <Button onClick={this.showModal} hidden={this.state.isNotSistemas} type="primary" icon="import">Importar</Button>
+                                <ExcelExportImpresora data={this.state.currentDataSource} dis={this.state.disabelExport}></ExcelExportImpresora>
+                                <Button hidden={this.state.hiddenBRI} onClick={this.showModalResp} type="primary">Result. Importación</Button>
+                                {/* <Button type="primary" icon="cloud-download">Exportar</Button> */}
                                 {/* </ButtonGroup> */}
                             </Col>
                         </Row>

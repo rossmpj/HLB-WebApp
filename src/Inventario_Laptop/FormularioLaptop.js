@@ -88,18 +88,20 @@ class FormularioLaptop extends React.Component {
 
     componentDidMount = () => {
         if (typeof this.props.location !== 'undefined') {
-        const { info } = this.props.location.state;
-        const { titulo } = this.props.location.state;
-        const { disabled } = this.props.location.state;
-        if (titulo === "Editar laptop" && info !== undefined){
-          this.cargar_datos(info);
+            if(typeof this.props.location.state !== 'undefined' && typeof this.props.location.state.info !== 'undefined') {
+                const { info } = this.props.location.state;
+                const { titulo } = this.props.location.state;
+                const { disabled } = this.props.location.state;
+                if (titulo === "Editar laptop" && info !== undefined){
+                this.cargar_datos(info);
+                }
+                if(titulo === "Nueva laptop"){
+                    this.cargar()
+                }
+                this.setState({titulo: titulo});        
+                this.setState({disabled: disabled})
+            }
         }
-        if(titulo === "Nueva laptop"){
-            this.cargar()
-        }
-        this.setState({titulo: titulo});        
-        this.setState({disabled: disabled})
-      }
     }
 
     cargar() {

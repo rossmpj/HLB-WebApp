@@ -8,37 +8,54 @@ export default class FunAuxImport {
             'Conexiones para Discos', 'Nucleos', 'Frecuencia', 'Componente Principal', 'Descripcion']
         let values = [["0825730575", "HLB_CAS_012", "Asus", "802ew.11ac", "246-FDX", "Operativo", "DISCO DURO", "", "1 TB", "SSD", '', '', '', '', '', "HLB_DSK_003", "etiquetar"],
         ["", "HLB_TMA_011", "Ricoh", "802ew.222ac", "25466-FDX", "Operativo", "TARJETA MADRE", "", "", "", '5', '12 GB', '2', '', '', "HLB_DSK_002", "etiquetar22"]];
-        
+
         // let titlesDesc = ['Descripcion Columnas']
         // let valuesDesc =[['Asignado: Cedula del empleado al cual se asignara el equipo'],['Codigo']];
         return FunAuxImport.generateData(titlesnames, values);
     }
 
-    static dataFormatCorreos(){
-        let titlesnames =['Empleado', 'Correo', 'Pass'];
-        let values = [['0825730544','example@hospitalleonbecerra.org','passwordexample'],['0829930544','example2@hospitalleonbecerra.org','password2example']]; 
+    static dataFormatCorreos() {
+        let titlesnames = ['Empleado', 'Correo', 'Pass'];
+        let values = [['0825730544', 'example@hospitalleonbecerra.org', 'passwordexample'], ['0829930544', 'example2@hospitalleonbecerra.org', 'password2example']];
         return FunAuxImport.generateData(titlesnames, values);
     }
 
-    static dataFormatIPs(){
+    static dataFormatIPs() {
         let titlesnames = ['IP', 'Hostname', 'Subred', 'Fortigate', 'Maquinas Adicionales', 'Observacion']
-        let values = [['192.168.0.1', 'Asistente_finan', '192.168.0.0','ADMINISTRACION_KATHIUSKA_QUINDE', 3, 'Ninguna'],['192.168.0.2', 'BSPI_1-PC', '192.168.0.0','UCI_ROUTER_UCI', 4, 'Revisar']]
+        let values = [['192.168.0.1', 'Asistente_finan', '192.168.0.0', 'ADMINISTRACION_KATHIUSKA_QUINDE', 3, 'Ninguna'], ['192.168.0.2', 'BSPI_1-PC', '192.168.0.0', 'UCI_ROUTER_UCI', 4, 'Revisar']]
         return FunAuxImport.generateData(titlesnames, values);
     }
 
-    static dataFormatRouters(){
-        let titlesnames =['Empleado', 'Codigo', 'Marca', 'Modelo', 'N/S', 'Estado','Nombre', 'Pass', 'Usuario', 'Clave', 'IP', 'Puerta Enlace', 'Descripcion'];
-        let values = [['0945683123', 'HLB_ROU_011','LG', '1fersd45', '112wderft566', 'Operativo','Lab', '1wes345', 'administrador', '1weJl45' ,'192.168.0.9','192.168.9.1', 'Ninguna'],
-        ['0933683123', 'HLB_ROU_013','LG', '1rrrtd45', '112cverfvg66', 'Operativo','Lab3', '1wes345', 'sistemas', '1jkD345' ,'192.168.1.9','192.168.1.0', 'Revisar']];
+    static dataFormatRouters() {
+        let titlesnames = ['Empleado', 'Codigo', 'Marca', 'Modelo', 'N/S', 'Estado', 'Nombre', 'Pass', 'Usuario', 'Clave', 'IP', 'Puerta Enlace', 'Descripcion'];
+        let values = [['0945683123', 'HLB_ROU_011', 'LG', '1fersd45', '112wderft566', 'Operativo', 'Lab', '1wes345', 'administrador', '1weJl45', '192.168.0.9', '192.168.9.1', 'Ninguna'],
+        ['0933683123', 'HLB_ROU_013', 'LG', '1rrrtd45', '112cverfvg66', 'Operativo', 'Lab3', '1wes345', 'sistemas', '1jkD345', '192.168.1.9', '192.168.1.0', 'Revisar']];
         return FunAuxImport.generateData(titlesnames, values);
     }
 
-    static dataFormatImpresoras(){
-       
-        let titlesnames = [ 'Empleado', 'Codigo', 'Marca', 'Modelo', 'N/S',
-        'Estado','Tipo', 'IP', 'Componente Principal', 'Tinta', 'Cartucho', 'Toner', 'Rodillo', 'Cinta', 'Rollo/Brazalete' , 'Descripcion'];
-        let values = [['0945683123', 'HLB_ROU_011','LG', '1fersd45', '112wderft566', 'Operativo','Multifuncional','192.168.0.9', 'HLB_DSK_003', 'Negra', '' , '','','', '', 'Ninguna'],
-        ['0933683123', 'HLB_ROU_013','LG', '1rrrtd45', '112cverfvg66', 'Operativo','Matricial', '', 'HLB_DSK_002', '' ,'Cartucho Nuevo','', '','Cinta', '', 'Revisar']];
+    static dataFormatImpresoras() {
+        let titlesnames = ['Empleado', 'Codigo', 'Marca', 'Modelo', 'N/S',
+            'Estado', 'Tipo', 'IP', 'Componente Principal', 'Tinta', 'Cartucho', 'Toner', 'Rodillo', 'Cinta', 'Rollo/Brazalete', 'Descripcion'];
+        let values = [['0945683123', 'HLB_ROU_011', 'LG', '1fersd45', '112wderft566', 'Operativo', 'Multifuncional', '192.168.0.9', 'HLB_DSK_003', 'Negra', '', '', '', '', '', 'Ninguna'],
+        ['0933683123', 'HLB_ROU_013', 'LG', '1rrrtd45', '112cverfvg66', 'Operativo', 'Matricial', '', 'HLB_DSK_002', '', 'Cartucho Nuevo', '', '', 'Cinta', '', 'Revisar']];
+        return FunAuxImport.generateData(titlesnames, values);
+    }
+
+    static dataFormatLaptops() {
+        let titlesnames = ['Empleado', 'Codigo', 'Tipo', 'Principal', 'Marca', 'Modelo', 'N/S',
+            'Estado', "NombrePC", "UsuarioPC", "SO",
+            "TipoSO", "ServicePack1", "Licencia", 'IP', 'Frecuencia', 'Nucleos', 'Tipo RAM Soportada', 'RAM Soportada',
+            'Slots RAM', 'Capacidad Almacenamiento', 'Tipo Almacenamiento', 'Descripcion'];
+        let values = [
+            ["0825730575", "HLB_LAP_012", 'Laptop', '', "Asus", "802ew.11ac", "246-FDX", "Operativo", "PC_PRUEBA", "PC_EJEMPLO", "Windows 10 Home Single Language", "64 Bits", '1', '0', '', '', '', "DDR4", '12 GB', '4', '', '', "etiquetar"],
+            ["", "HLB_CAS_02", "DISCO DURO", 'HLB_LAP_012', "Asus", "802rgbr.11ac", "2owr-FDX", "Operativo", '', "", '', '', '', '', '', '', '', '', '', '', "1 TB", "HDD", "etiquetar"],
+            ["", "HLB_PCD_011", "Procesador", 'HLB_LAP_012', "Ricoh", "802ew.222ac", "25466-FDX", "Operativo", "", "", "", '', '', '', '', '3.0', '4', "", '', '', '', '', "etiquetar22"],
+            ["", "HLB_RM_011", "memoria ram", 'HLB_LAP_012', "Ricoh", "ii2ew.222ac", "gg66-FDX", "Operativo", "", "", "", '', '', '', '', '', '', "", '', '', '16 gb', 'DDR4', "etiquer22"],
+            ["0825110575", "HLB_LAP_044", 'Laptop', '', "Asus", "80ethw.11ac", "2ee-FDX", "Operativo", "PC_PRUEBA2", "PC_EJEMPLO2", "Windows 10 Home", "64 Bits", '0', '0', '', '', '', "DDR3", '8 GB', '4', '', '', "etiquetar"],
+            ["", "HLB_CAS_02", "DISCO DURO", 'HLB_LAP_044', "Asus", "8FFFr.11ac", "2oGGGFDX", "Operativo", '', "", '', '', '', '', '', '', '', '', '', '', "500 GB", "HDD", "etiquetar"],
+            ["", "HLB_PCD_991", "Procesador", 'HLB_LAP_044', "Ricoh", "802ew.222ac", "25466-FDX", "Operativo", "", "", "", '', '', '', '', '3.0', '4', "", '', '', '', '', "etiquetar22"],
+            ["", "HLB_RM_331", "memoria ram", 'HLB_LAP_044', "Ricoh", "ii2ew.2ggc", "gg66vvDX", "Operativo", "", "", "", '', '', '', '', '', '', "", '', '', '8 gb', 'DDR3', "etiquer22"]
+        ];
         return FunAuxImport.generateData(titlesnames, values);
     }
 
@@ -72,7 +89,7 @@ export default class FunAuxImport {
         return resp;
     }
 
-    static ExcelToJson = (inputFile, encargado_registro=null) => {
+    static ExcelToJson = (inputFile, encargado_registro = null, equipo_especial = null) => {
         const temporaryFileReader = new FileReader();
 
         return new Promise((resolve, reject) => {
@@ -89,8 +106,11 @@ export default class FunAuxImport {
                 const ws = workbook.Sheets[wsname];
                 let XL_row_object = XLSX.utils.sheet_to_row_object_array(ws, { defval: '' });
                 XL_row_object.forEach(elem => {
-                    if (elem['Empleado'] !== null && elem['Empleado'] !== undefined ){
-                        elem['Empleado'] = String(elem['Empleado']).length === 9 ? String('0'+elem['Empleado']) : String(elem['Empleado']);
+                    if (elem['Empleado'] !== null && elem['Empleado'] !== undefined) {
+                        elem['Empleado'] = String(elem['Empleado']).length === 9 ? String('0' + elem['Empleado']) : String(elem['Empleado']);
+                    }
+                    if (equipo_especial !== null && equipo_especial !== undefined) {
+                        elem['eq_error'] = true;
                     }
                     elem['rowNum'] = elem.__rowNum__ + 1;
                 })
@@ -105,4 +125,15 @@ export default class FunAuxImport {
             temporaryFileReader.readAsArrayBuffer(inputFile);
         });
     };
+
+    // static generateRequestLaptop(hoja){
+    //     let laptops =  hoja.data.filter(function (element){ return element.tipo.toLowerCase() === 'laptop' });
+    //     laptops.forEach(el=>{
+    //         let compomentes = hoja.data.filter(function (element){ return element['Principal'].toLowerCase() === el['Codigo'] });
+    //         compomentes.forEach(comp => {
+    //             el[comp['']]
+    //         })
+
+    //     });
+    // }
 }
