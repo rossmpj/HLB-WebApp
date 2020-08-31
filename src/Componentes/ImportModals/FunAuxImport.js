@@ -59,6 +59,42 @@ export default class FunAuxImport {
         return FunAuxImport.generateData(titlesnames, values);
     }
 
+    static dataFormatDesktops() {
+        let titlesnames = ['Empleado', 'Codigo', 'Tipo', 'Principal', 'Marca', 'Modelo', 'N/S',
+            'Estado', "NombrePC", "UsuarioPC", "SO",
+            "TipoSO", "ServicePack1", "Licencia", 'IP', 'Frecuencia', 'Nucleos', 'Tipo RAM Soportada', 'RAM Soportada',
+            'Slots RAM', 'Capacidad Almacenamiento', 'Tipo Almacenamiento', 'Conexiones Discos', 'Descripcion'];
+        let values = [
+            ["0825730575", "HLB_LAP_012", 'Desktop', '', "Asus", "802ew.11ac", "246-FDX", "Operativo", "PC_PRUEBA", "PC_EJEMPLO", "Windows 10 Home Single Language", "64 Bits", '1', '0', '', '', '', "", '', '', '', '', '', "etiquetar"],
+            ["", "HLB_CAS_02", "DISCO DURO", 'HLB_LAP_012', "Asus", "802rgbr.11ac", "2owr-FDX", "Operativo", '', "", '', '', '', '', '', '', '', '', '', '', "1 TB", "HDD", '', "etiquetar"],
+            ["", "HLB_PCD_011", "Procesador", 'HLB_LAP_012', "Ricoh", "802ew.222ac", "25466-FDX", "Operativo", "", "", "", '', '', '', '', '3.0', '4', "", '', '', '', '', '', "etiquetar22"],
+            ["", "HLB_RM_011", "memoria ram", 'HLB_LAP_012', "Ricoh", "ii2ew.222ac", "gg66-FDX", "Operativo", "", "", "", '', '', '', '', '', '', "", '', '', '16 gb', 'DDR4', '', "etiquer22"],
+            ["", "HLB_TC_02", "Teclado", 'HLB_LAP_012', "Asus", "8ssencbr.11ac", "GCEjwr-FDX", "Operativo", '', "", '', '', '', '', '', '', '', '', '', '', "", "", '', "etiquetar"],
+            ["", "HLB_Mou_011", "Mouse", 'HLB_LAP_012', "Ricoh", "bcye2ew.222ac", "XEN53C-FDX", "Operativo", "", "", "", '', '', '', '', '', '', "", '', '', '', '', '', "etiquetar22"],
+            ["", "HLB_PRL_011", "Parlantes", 'HLB_LAP_012', "Ricoh", "ii2ew.222ac", "gllaa6-FDX", "Operativo", "", "", "", '', '', '', '', '', '', "", '', '', '', '', '', "etiquer22"],
+            ["", "HLB_MJ_8371", "Monitor", 'HLB_LAP_012', "Ricoh", "bcjeok.222ac", "ifnxkPM-FDX", "Operativo", "", "", "", '', '', '', '', '', '', "", '', '', '', '', '', "etiquetar22"],
+            ["", "HLB_PNC_321", "Tarjeta de red", 'HLB_LAP_012', "Ricoh", "bcUgar4.222ac", "gllaa6-BG5gE", "Operativo", "", "", "", '', '', '', '', '', '', "", '', '', '', '', '', "etiquer22"],
+            ["", "HLB_CS_101", "Case", 'HLB_LAP_012', "Ricoh", "bcye2ew.222ac", "XEN53C-bdgT", "Operativo", "", "", "", '', '', '', '', '', '', "", '', '', '', '', '', "etiquetar22"],
+            ["", "HLB_PRL_011", "Fuente de poder", 'HLB_LAP_012', "Ricoh", "ii2ew.222ac", "gllaa6-NCF4", "Operativo", "", "", "", '', '', '', '', '', '', "", '', '', '', '', '', "etiquer22"],
+            ["", "HLB_CS_101", "UPS", 'HLB_LAP_012', "Ricoh", "ncje54.222ac", "XEN53C-bdgT", "Operativo", "", "", "", '', '', '', '', '', '', "", '', '', '', '', '', "etiquetar22"],
+            ["", "HLB_PRL_011", "Tarjeta Madre", 'HLB_LAP_012', "Ricoh", "ii2ew.csxd3", "gllaa6-NCas2", "Operativo", "", "", "", '', '', '', '', '', '', "DDR3", '12 GB', '3', '', '', '4', "etiquer22"],
+            ["0825110575", "HLB_LAP_044", 'Laptop', '', "Asus", "80ethw.11ac", "2ee-FDX", "Operativo", "PC_PRUEBA2", "PC_EJEMPLO2", "Windows 10 Home", "64 Bits", '0', '0', '', '', '', "", '', '', '', '', '', "etiquetar"],
+            ["", "HLB_BDYW_02", "DISCO DURO", 'HLB_LAP_044', "Asus", "8FFFr.11ac", "2oGGGFDX", "Operativo", '', "", '', '', '', '', '', '', '', '', '', '', "500 GB", "HDD", '', "etiquetar"],
+            ["", "HLB_bcgTD_991", "Procesador", 'HLB_LAP_044', "Ricoh", "802ew.222ac", "25466-FDX", "Operativo", "", "", "", '', '', '', '', '3.0', '4', "", '', '', '', '', '', "etiquetar22"],
+            ["", "HLB_NCy_331", "memoria ram", 'HLB_LAP_044', "Ricoh", "ii2ew.2ggc", "gg66vvDX", "Operativo", "", "", "", '', '', '', '', '', '', "", '', '', '8 gb', 'DDR3', '', "etiquer22"],
+            ["", "HLB_NCU7_02", "Teclado", 'HLB_LAP_044', "Asus", "8ssencbr.11ac", "GCEjwr-FDX", "Operativo", '', "", '', '', '', '', '', '', '', '', '', '', "", "", '', "etiquetar"],
+            ["", "HLB_MNN_6382", "Mouse", 'HLB_LAP_044', "Ricoh", "bcye2ew.222ac", "XEN53C-FDX", "Operativo", "", "", "", '', '', '', '', '', '', "", '', '', '', '', '', "etiquetar22"],
+            ["", "HLB_NHCY_123", "Parlantes", 'HLB_LAP_044', "Ricoh", "ii2ew.222ac", "gllaa6-FDX", "Operativo", "", "", "", '', '', '', '', '', '', "", '', '', '', '', '', "etiquer22"],
+            ["", "HLB_MJHB_71", "Monitor", 'HLB_LAP_044', "Ricoh", "bcjeok.222ac", "ifnxkPM-FDX", "Operativo", "", "", "", '', '', '', '', '', '', "", '', '', '', '', '', "etiquetar22"],
+            ["", "HLB_NJC_231", "Tarjeta de red", 'HLB_LAP_044', "Ricoh", "bcUgar4.222ac", "gllaa6-BG5gE", "Operativo", "", "", "", '', '', '', '', '', '', "", '', '', '', '', '', "etiquer22"],
+            ["", "HLB_CBBS_121", "Case", 'HLB_LAP_044', "Ricoh", "bcye2ew.222ac", "XEN53C-bdgT", "Operativo", "", "", "", '', '', '', '', '', '', "", '', '', '', '', '', "etiquetar22"],
+            ["", "HLB_CBL_1231", "Fuente de poder", 'HLB_LAP_044', "Ricoh", "ii2ew.222ac", "gllaa6-NCF4", "Operativo", "", "", "", '', '', '', '', '', '', "", '', '', '', '', '', "etiquer22"],
+            ["", "HLB_CSBC_121", "Regulador", 'HLB_LAP_044', "Ricoh", "ncje54.222ac", "XEN53C-bdgT", "Operativo", "", "", "", '', '', '', '', '', '', "", '', '', '', '', '', "etiquetar22"],
+            ["", "HLB_PRX_231", "Tarjeta Madre", 'HLB_LAP_044', "Ricoh", "ii2ew.csxd3", "gllaa6-NCas2", "Operativo", "", "", "", '', '', '', '', '', '', "DDR4", '32 GB', '4', '', '', '3', "etiquer22"],
+        ];
+        return FunAuxImport.generateData(titlesnames, values);
+    }
+
 
     static generateData(titlesnames, values) {
         let titles = [];

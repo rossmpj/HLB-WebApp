@@ -25,4 +25,7 @@ export default class AxiosDesktop {
     return AxiosDesktop.instanceAxios.get(`/listado_codigos`);
   }
 
+  static reg_masivo_desktops = (desktops) => {
+    return AxiosDesktop.instanceAxios.post(`/masivo_desktops`, desktops);
+  }
 }
