@@ -35,6 +35,7 @@ import VistaCorreo from './Inventario_Correo/VistaCorreo';
 import LoginHLB from './Login/Login';
 import UpdatePass from './Login/UpdatePass';
 import Home from './Home/Home';
+import HomeEF from './Home/HomeEF';
 import HomeRoute from './Routes/HomeRoute';
 import EmployLayout from './Routes/Layouts/EmployLayout';
 import GeneralLayout from './Routes/Layouts/GeneralLayout';
@@ -61,13 +62,13 @@ class App extends React.Component {
           <PublicRoute exact path='/cambiar_password' component={UpdatePass} layout = {PublicLayout}  />
 
           {/* Routes para empleados institucionales */}
-          <PrivateRouteEmpleado exact path = '/empleado' component = {Home} layout = {EmployLayout} />
+          <PrivateRouteEmpleado exact path = '/empleado' component = {HomeEF} layout = {EmployLayout} />
           <PrivateRouteEmpleado exact path = '/empleado/solicitud/form' component = {VistaSolicitud} layout = {EmployLayout} />
           <PrivateRouteEmpleado exact path = '/empleado/solicitudes' component = {TablaSolicitudUser} layout = {EmployLayout} />
           <PrivateRouteEmpleado exact path = '/empleado/perfil/' component = {PerfilUser} layout = {EmployLayout} />
 
           {/* Routes para finanzas */}
-          <PrivateRouteFinanzas exact path = '/finanzas' component = {Home} layout = {FinanzasLayout} />
+          <PrivateRouteFinanzas exact path = '/finanzas' component = {HomeEF} layout = {FinanzasLayout} />
           <PrivateRouteFinanzas exact path = '/finanzas/perfil/' component = {PerfilUser} layout = {FinanzasLayout} />
           <PrivateRouteFinanzas exact path='/finanzas/router' component={TablaRouter} layout = {FinanzasLayout} />
           <PrivateRouteFinanzas exact path='/finanzas/router/view/:id' component={DetalleRouter} layout = {FinanzasLayout} />

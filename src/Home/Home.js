@@ -64,7 +64,7 @@ class Home extends React.Component {
                 }
                 datos_tabla.push(obj);
             })
-            this.setState({ datos_tabla: datos_tabla }, () => { console.log(this.state.datos_tabla)})
+            this.setState({ datos_tabla: datos_tabla }, () => { console.log(this.state.datos_tabla) })
         })
     }
 
@@ -343,7 +343,7 @@ class Home extends React.Component {
                 </Row>
                 <Divider orientation="left" dashed style={{ fontSize: "38px" }}>Actividades Recientes de Solicitudes</Divider>
 
-                <Table dataSource={this.state.datos_tabla} columns={columns} loading={this.state.datos_tabla.length === 0}/>;
+                <Table dataSource={this.state.datos_tabla} columns={columns} loading={this.state.datos_tabla.length === 0} />;
             </>
         )
     }
